@@ -2,7 +2,7 @@
 **Product Requirements Document**
 **Versión:** 1.0.0
 **Fecha:** 2026-03-30
-**Estado:** Borrador — Pendiente de revisión
+**Estado:** Aprobado — v1.0.0
 
 ---
 
@@ -44,7 +44,7 @@
 El frontend es un consumidor puro de la API REST del backend. Todas las decisiones de negocio, validación de permisos, y lógica de datos reside en el backend. El frontend actúa como:
 
 - **Renderer**: renderiza la UI según los datos recibidos
-- **Validador de UX**: validación前端 de formularios antes de enviar
+- **Validador de UX**: validación de formularios antes de enviar
 - **Orquestador de estado**: gestión de cache, optimizaciones de rendering, offline
 - **Presenter**: formatea datos para visualización (fechas, números, monedas)
 
@@ -65,15 +65,18 @@ El frontend recibe el `predio_id` activo del contexto de tenant del backend (hea
 
 | Capa | Tecnología | Versión | Justificación |
 |------|-----------|---------|---------------|
-| Framework | Next.js | 16.x | App Router, RSC, template base |
-| UI Library | React | 19.x | Concurrent features, use() hook |
+| Framework | Next.js | 15.x | App Router, RSC, template base |
+| UI Library | React | 18.x | Concurrent features, stable hooks |
 | Lenguaje | TypeScript | 5.9.x | Strict mode |
 | Estilos | Tailwind CSS | 4.x | Template base, CSS-first config |
 | Server State | TanStack Query | 5.x | Cache, paginación, offline |
 | Client State | Zustand | 5.x | Auth tokens, predio activo, UI |
 | Context API | React Context | (built-in) | Sidebar/theme del template |
 | Forms | React Hook Form | 7.x | Performance, validación |
+| Form Resolvers | @hookform/resolvers | latest | Zod integration para RHF |
 | Validación | Zod | 3.x | Schemas compartidos con backend |
+| Query Persist | @tanstack/react-query-persist-client | latest | PersistQueryClientProvider + IndexedDB |
+| IndexedDB | idb-keyval | latest | Persistence para TanStack Query offline |
 | Tablas | TanStack Table | 8.x | Headless, server-side |
 | HTTP Client | ky | latest | Fetch-based, interceptors |
 | Auth Cookies | — | — | httpOnly cookie vía API |
@@ -176,7 +179,7 @@ El frontend recibe el `predio_id` activo del contexto de tenant del backend (hea
 ```
 ganatrack/
 ├── apps/
-│   └── web/                                    # App Next.js 16
+│   └── web/                                    # App Next.js 15
 │       ├── public/
 │       │   ├── manifest.json                   # PWA manifest
 │       │   ├── sw.ts                          # Serwist SW entry
@@ -561,42 +564,41 @@ Los Zod schemas viven en `packages/shared-types/src/schemas/` y se consumen desd
 - Frontend: `modules/*/schemas/` re-exportan y extienden
 - Backend: importación directa para validación
 
-**Ejemplo: Schema de Animal (compartido)**
+> **Nota sobre convenciones de nomenclatura:** Los schemas compartidos usan `camelCase` para todos los campos de request/response, coherente con la convención del Backend API. Todos los campos de tipo ID (PK/FK) usan `z.number().int()` (integer) — **no UUIDs** — ya que el backend usa integer PKs/FKs con Drizzle ORM. Ver `packages/shared-types/src/schemas/animal.schema.ts` para el schema completo.
+
+**Ejemplo: Schema de Animal (compartido — actualizado para coincidir con Backend API)**
 
 ```typescript
 // packages/shared-types/src/schemas/animal.schema.ts
 import { z } from 'zod';
 import { SexoEnum, EstadoAnimalEnum, OrigenAnimalEnum } from '../enums';
 
+// NOTE: Todos los campos usan camelCase (no snake_case)
+// NOTE: Todos los IDs usan z.number().int() (no z.string().uuid())
 export const createAnimalSchema = z.object({
+  // FIX CRITICAL-1: predioId requerido - valor来自于predioActivo.id del store
+  predioId: z.number().int({ required_error: 'Predio requerido' }),
   codigo: z.string().min(1, 'Código requerido').max(50),
   nombre: z.string().max(100).optional(),
-  sexo: z.nativeEnum(SexoEnum, { required_error: 'Sexo requerido' }),
-  fecha_nacimiento: z.coerce.date({ required_error: 'Fecha de nacimiento requerida' }),
-  raza_id: z.string().uuid('Raza requerida'),
-  color_id: z.string().uuid().optional(),
-  condicion_corporal_id: z.string().uuid().optional(),
-  potrero_id: z.string().uuid().optional(),
-  grupo_id: z.string().uuid().optional(),
-  lote_id: z.string().uuid().optional(),
-  origen: z.nativeEnum(OrigenAnimalEnum).default(OrigenAnimalEnum.NACIDO),
-  peso_nacimiento: z.coerce.number().positive().optional(),
-  observaciones: z.string().max(500).optional(),
-  lugar_compra_id: z.string().uuid().optional(),
-  fecha_compra: z.coerce.date().optional(),
-  precio_compra: z.coerce.number().positive().optional(),
-  madre_id: z.string().uuid().optional(),
-  padre_id: z.string().uuid().optional(),
-  codigo_arete_padre: z.string().max(50).optional(),
-  codigo_arete_madre: z.string().max(50).optional(),
-}).superRefine((data, ctx) => {
-  if (data.origen === OrigenAnimalEnum.COMPRADO && !data.lugar_compra_id) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: 'Lugar de compra requerido para animales comprados',
-      path: ['lugar_compra_id'],
-    });
-  }
+  fechaNacimiento: z.coerce.date({ required_error: 'Fecha de nacimiento requerida' }),
+  sexoKey: z.number().int().default(0),
+  tipoIngresoId: z.number().int().default(0),
+  configRazasId: z.number().int({ required_error: 'Raza requerida' }),
+  potreroId: z.number().int().optional(),
+  // FIX WARNING-2: nullish para aceptar explicit null del backend
+  madreId: z.number().int().nullish(),
+  padreId: z.number().int().nullish(),
+  // FIX WARNING-1: codigoMadre/codigoPadre faltantes en frontend
+  codigoMadre: z.string().max(50).optional(),
+  codigoPadre: z.string().max(50).optional(),
+  tipoPadreKey: z.number().int().default(0),
+  precioCompra: z.coerce.number().nonnegative().optional(),
+  pesoCompra: z.coerce.number().nonnegative().optional(),
+  codigoRfid: z.string().max(50).optional(),
+  codigoArete: z.string().max(50).optional(),
+  estadoAnimalKey: z.number().int().default(0),
+  saludAnimalKey: z.number().int().default(0),
+  // Validación equivalente al backend: dominio valida lugar_compra_id cuando tipoIngresoId indica COMPRADO
 });
 
 export type CreateAnimalDto = z.infer<typeof createAnimalSchema>;
@@ -691,7 +693,6 @@ const handle401: AfterResponseHook = async (request, _options, response) => {
     return ky(request);
   } catch {
     logout();
-    window.location.href = '/login';
     throw new ApiError('SESSION_EXPIRED', 'Sesión expirada', 401);
   } finally {
     refreshPromise = null;
@@ -811,9 +812,9 @@ export const queryKeys = {
     list: (params: AnimalListParams) =>
       [...queryKeys.animales.lists(), params] as const,
     details: () => [...queryKeys.animales.all, 'detail'] as const,
-    detail: (id: string) =>
+    detail: (id: number) =>
       [...queryKeys.animales.details(), id] as const,
-    genealogia: (id: string) =>
+    genealogia: (id: number) =>
       [...queryKeys.animales.all, 'genealogia', id] as const,
   },
   predios: {
@@ -821,13 +822,13 @@ export const queryKeys = {
     lists: () => [...queryKeys.predios.all, 'list'] as const,
     list: (params?: PredioListParams) =>
       [...queryKeys.predios.lists(), params] as const,
-    detail: (id: string) =>
+    detail: (id: number) =>
       [...queryKeys.predios.all, 'detail', id] as const,
-    potreros: (predioId: string) =>
+    potreros: (predioId: number) =>
       [...queryKeys.predios.all, predioId, 'potreros'] as const,
-    lotes: (predioId: string) =>
+    lotes: (predioId: number) =>
       [...queryKeys.predios.all, predioId, 'lotes'] as const,
-    grupos: (predioId: string) =>
+    grupos: (predioId: number) =>
       [...queryKeys.predios.all, predioId, 'grupos'] as const,
   },
   servicios: {
@@ -836,7 +837,7 @@ export const queryKeys = {
       all: ['servicios', 'palpaciones'] as const,
       list: (params: PaginationParams) =>
         ['servicios', 'palpaciones', 'list', params] as const,
-      detail: (id: string) =>
+      detail: (id: number) =>
         ['servicios', 'palpaciones', 'detail', id] as const,
     },
     inseminaciones: {
@@ -936,10 +937,10 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
 interface User {
-  id: string;
-  email: string;
+  id: number;
   nombre: string;
-  rol: string;
+  roles: string[];
+  // email no viene en /auth/login — obtener via GET /usuarios/me si es necesario
 }
 
 interface AuthState {
@@ -968,7 +969,7 @@ export const useAuthStore = create<AuthState>()(
       logout: () =>
         set({ accessToken: null, user: null, permissions: [] }, false, 'logout'),
     }),
-    { name: 'auth-store' }
+    process.env.NODE_ENV === 'development' ? { name: 'auth-store' } : false
   )
 );
 ```
@@ -980,8 +981,10 @@ export const useAuthStore = create<AuthState>()(
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
+// FIX CRITICAL-2: Predio.id debe ser number (backend usa integer PKs)
+// La conversión a string para headers se hace en api-client, no en el store
 interface Predio {
-  id: string;
+  id: number;
   nombre: string;
   ubicacion?: string;
 }
@@ -990,7 +993,7 @@ interface PredioState {
   predioActivo: Predio | null;
   prediosList: Predio[];
   setPredios: (predios: Predio[]) => void;
-  switchPredio: (predioId: string) => void;
+  switchPredio: (predioId: number) => void;
   reset: () => void;
 }
 
@@ -1000,22 +1003,29 @@ export const usePredioStore = create<PredioState>()(
       predioActivo: null,
       prediosList: [],
       setPredios: (predios) => {
-        const saved = sessionStorage.getItem('ganatrack_predio_id');
-        const activo = predios.find((p) => p.id === saved) ?? predios[0] ?? null;
+        let saved: string | null = null;
+        try {
+          saved = sessionStorage.getItem('ganatrack_predio_id');
+        } catch { saved = null; }
+        const activo = predios.find((p) => p.id === Number(saved)) ?? predios[0] ?? null;
         set({ prediosList: predios, predioActivo: activo }, false, 'setPredios');
       },
       switchPredio: (predioId) => {
-        const predio = get().prediosList.find((p) => p.id === predicId);
+        const predio = get().prediosList.find((p) => p.id === predioId);
         if (!predio) return;
-        sessionStorage.setItem('ganatrack_predio_id', predicId);
-        set({ predioActivo: predic }, false, 'switchPredio');
+        try {
+          sessionStorage.setItem('ganatrack_predio_id', String(predioId));
+        } catch { /* ignore */ }
+        set({ predioActivo: predio }, false, 'switchPredio');
       },
       reset: () => {
-        sessionStorage.removeItem('ganatrack_predio_id');
+        try {
+          sessionStorage.removeItem('ganatrack_predio_id');
+        } catch { /* ignore */ }
         set({ predioActivo: null, prediosList: [] }, false, 'reset');
       },
     }),
-    { name: 'predio-store' }
+    process.env.NODE_ENV === 'development' ? { name: 'predio-store' } : false
   )
 );
 ```
@@ -1064,7 +1074,7 @@ export function useSwitchPredio() {
   const switchPredio = usePredioStore((s) => s.switchPredio);
 
   return (predioId: string) => {
-    switchPredio(predioId);
+    switchPredio(Number(predioId));
     queryClient.invalidateQueries();
     navigator.serviceWorker?.controller?.postMessage({
       type: 'CLEAR_DYNAMIC_CACHE',
@@ -1097,11 +1107,14 @@ POST /auth/login (email, password)
 
 - **accessToken**: almacenado en `authStore` (memoria JavaScript). Nunca en localStorage ni sessionStorage
 - **refreshToken**: almacenado en cookie httpOnly (enviado automáticamente por el browser en cada request)
-- **tempToken** (2FA): JWT opaco de corta duración (5 min), codifica el `usuarioId` internamente
+- **tempToken** (2FA): token de referencia (reference token) de corta duración (5 min), no contiene información sensible — solo una referencia al servidor que valida el `usuarioId` internamente
 
 ### 8.3 Auto-refresh de Token
 
-El interceptor `handle401` de ky captura respuestas 401 y ejecuta refresh transparente. Las peticiones paralelas durante un refresh en progreso se encolan y procesan tras el refresh exitoso.
+El interceptor `handle401` de ky captura respuestas 401 y ejecuta refresh transparente. Las peticiones paralelas durante un refresh en progreso se implementan con:
+- Un array de resolve functions como cola (`let pendingRequests: Array<(token: string) => void> = []`)
+- Cuando refresh completa, resolver todas las promesas pendientes con el nuevo token
+- Alternativa: usar plugin de retry de ky con lógica personalizada
 
 ### 8.4 Protección de Rutas (middleware.ts)
 
@@ -1450,9 +1463,58 @@ export function Modal({ open, onClose, title, children, size = 'md' }: ModalProp
 }
 ```
 
----
+### 11.4 Code Splitting y Lazy Loading
 
-## 12. Sistema de Navegación y Layout
+**React.lazy() para páginas debajo del fold**:
+```typescript
+// app/(dashboard)/layout.tsx
+import { lazy, Suspense } from 'react';
+
+const ReportesPage = lazy(() => import('@/app/(dashboard)/reportes/page'));
+const AnimalesPage = lazy(() => import('@/app/(dashboard)/animales/page'));
+
+function DashboardLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <AdminLayout>
+      <Suspense fallback={<PageSkeleton />}>
+        {children}
+      </Suspense>
+    </AdminLayout>
+  );
+}
+```
+
+**next/dynamic para componentes heavy**:
+```typescript
+// modules/reportes/components/reporte-chart.tsx
+import dynamic from 'next/dynamic';
+
+const ApexCharts = dynamic(() => import('react-apexcharts'), {
+  ssr: false,
+  loading: () => <ChartSkeleton height={300} />,
+});
+
+const FullCalendar = dynamic(() => import('@fullcalendar/react'), {
+  ssr: false,
+  loading: () => <CalendarSkeleton />,
+});
+```
+
+**Suspense boundaries**:
+- Cada lazy component envolvido en `<Suspense>` con fallback apropiado
+- Fallback coincide visualmente con el contenido (skeleton de tabla, skeleton de gráfico)
+- Error boundary para manejar fallos de carga de chunks
+
+**Reglas de splits**:
+| Ruta/Componente | Estrategia | Justificación |
+|-----------------|------------|---------------|
+| `/reportes/*` | React.lazy | Debajo del fold, no crítico para primera carga |
+| `/productos/*` | React.lazy | Módulo secundario |
+| ApexCharts | next/dynamic | Heavy (150kb+), solo en páginas de reportes |
+| FullCalendar | next/dynamic | Solo en vista de eventos |
+| Modales de edición | inline (no lazy) | UX penalty por delay |
+
+---
 
 ### 12.1 Estructura del Sidebar
 
@@ -1527,6 +1589,19 @@ Generados desde `usePathname()`, usando mapa de labels y overrides para entidade
 - **Estado change**: Modal con campos condicionales (venta: +precio/lugar; muerte: +causa)
 - **Bulk operations**: Selección múltiple, mover a potrero/grupo/lote
 
+**Integración API Backend (endpoints)**:
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `GET` | `/animales` | Listado con filtros y paginación |
+| `GET` | `/animales/:id` | Detalle de animal |
+| `POST` | `/animales` | Registrar animal |
+| `PUT` | `/animales/:id` | Actualizar animal |
+| `DELETE` | `/animales/:id` | Desactivar animal |
+| `GET` | `/animales/:id/genealogia` | Árbol genealógico (3 generaciones) |
+| `GET` | `/animales/:id/historial` | Historial de eventos (`?tipo=servicios,partos,veterinario`) |
+| `PATCH` | `/animales/:id/estado` | Cambiar estado (vendido/muerto) |
+| `GET` | `/animales/estadisticas` | Conteos por categoría edad/sexo |
+
 ### 13.3 Módulo Servicios (patrón wizard master-detail)
 
 Wizard de 3 pasos:
@@ -1548,7 +1623,7 @@ Estado del wizard persiste en Zustand para recuperación ante navegación accide
 - **Bell badge**: polling `/notificaciones/resumen` cada 60s
 - **Panel**: últimas 20 notificaciones, marcar leída individual y masiva
 - **Preferencias**: toggles por tipo (PARTO_PROXIMO, CELO_ESTIMADO, VACUNA_PENDIENTE, ANIMAL_ENFERMO)
-- **Push**: registro FCM al primer login,抗拒 no vuelve a preguntar por 7 días
+- **Push**: registro FCM al primer login; si拒绝 no vuelve a preguntar por 7 días
 
 ---
 
@@ -1613,7 +1688,42 @@ serwist.addEventListeners();
 
 Los formularios de registro de animal, palpación y parto se encolan en IndexedDB cuando no hay conexión. Al reconectar, el service worker procesa la cola FIFO. UI muestra badge "X elementos pendientes de sincronización".
 
-### 14.4 Detección Offline y UI Feedback
+### 14.4 Estrategia "Refresh-Before-Replay" para Background Sync
+
+Antes de replay de mutations offline, el sistema debe:
+
+1. **Verificar frescura del token**: Al reconectar, antes de procesar la cola de mutations, verificar si el `accessToken` está próximo a expirar (buffer de 5 minutos antes del expiry)
+2. **Mecanismo de token expiry para Service Worker**: 
+   - Guardar `tokenExpiry` (timestamp Unix) en IndexedDB (separado del auth store en memoria)
+   - El Service Worker lee `tokenExpiry` de IndexedDB al procesar la cola de Background Sync
+   - El `accessToken` NUNCA se persiste fuera de la memoria Zustand
+   - Si `(tokenExpiry - Date.now()) < 5 minutos`, hacer refresh de token ANTES de replay
+   - Alternativa: usar `postMessage` desde la página principal al SW para comunicar el expiry
+3. **Manejo de expiración durante offline**: Si el token expira durante horas offline:
+   - La cola de mutations debe marcar cada entry con `timestamp` de creación
+   - Al reconectar, si el token es inválido, el queue debe intentar refresh de token primero
+   - Si refresh falla, no hacer replay de las mutations — notificar al usuario que debe re-autenticarse
+4. **Validación de freshness**: Mutations con timestamp mayor a 24 horas deben ser marcadas como `stale` y requerir confirmación del usuario antes de replay
+
+### 14.5 Conflict Resolution para IndexedDB
+
+Cuando un animal es eliminado en el servidor mientras está en cola offline:
+
+1. **Detección de stale data**: Antes de replay, verificar que la entidad referenciada aún existe en el servidor:
+   - GET `/{entity}/{id}` previo al replay con check de `updatedAt`
+   - Si el servidor responde 404 → marcar mutation como `stale` en la cola
+   - Para batches de 50 animales: primera request falla → pausar cola, notificar usuario inmediatamente
+2. **Estrategia de resolución para modificaciones concurrentes**:
+   - Usar optimistic locking con `updatedAt`: cada mutation en cola incluye el `updatedAt` de la entidad al momento de crearla
+   - Al replay, enviar `If-Unmodified-Since` header o incluir `updatedAt` en el body
+   - Si el servidor responde 409 Conflict → marcar mutation como `stale`, notificar al usuario
+3. **Estrategia por batch**: 
+   - Si la primera request de un batch falla (404 o 409), pausar la cola
+   - Notificar al usuario: "X operaciones no pudieron sincronizarse. Revisar o descartar."
+   - No continuar con siguientes items hasta que el usuario decida
+4. **UI de conflicto**: Toast de warning con detalle de qué no se sincronizó y opción de descarte o reintento
+
+### 14.6 Detección Offline y UI Feedback
 
 ```typescript
 // shared/hooks/use-online-status.ts
@@ -1644,11 +1754,42 @@ export function OfflineBanner() {
 }
 ```
 
-### 14.5 Invalidación de Cache por Cambio de Predio
+**Estrategia para 401 post-reconnect**: Cuando una queued mutation devuelve 401 después de reconectar:
+1. Marcar TODAS las mutations en cola como `stale`
+2. Mostrar toast: "Tu sesión expiró. Los cambios pendientes se descartaron. Por favor recarga la página."
+3. No hacer logout automático — dejar que el usuario decida
+4. El Service Worker marca cada mutation con `sessionExpired: true` y la cola queda en estado de error
+
+### 14.7 Invalidación de Cache por Cambio de Predio
 
 Al ejecutar `switchPredio()`:
 1. `queryClient.invalidateQueries()` — limpia todo el cache TanStack Query
 2. Mensaje al Service Worker: `{ type: 'CLEAR_DYNAMIC_CACHE' }` — limpia caches dinámicos
+
+### 14.8 Service Worker Update Lifecycle
+
+**SkipWaiting + ClientsClaim**:
+- `skipWaiting: true`: El nuevo SW se activa inmediatamente sin esperar al viejo
+- `clientsClaim: true`: El SW recién activado toma control de todos los clients inmediatamente
+- Esto garantiza que la app siempre corra con la última versión del SW
+
+**Notificación al usuario de nueva versión**:
+- Cuando un nuevo SW entra en estado `installed` (pero no activo porque hay uno controlling), mostrar toast o banner: "Nueva versión disponible"
+- UI con botón "Actualizar" que llama `registration.waiting?.postMessage({ type: 'SKIP_WAITING' })`
+- Alternativa auto-actualizar: forzar `registration.update()` periódicamente (ej. cada 6 horas)
+
+**Flujo recomendado**:
+```
+┌─────────────────────────────────────────────────────────────┐
+│ SW v1 controlling → nueva versión v2 downloaded             │
+│                                                             │
+│ 1. Mostrar UI: "Nueva versión disponible. [Actualizar]"      │
+│ 2. Usuario click → postMessage 'SKIP_WAITING' a v2          │
+│ 3. v2 llama skipWaiting() → se activa inmediatamente         │
+│ 4. v2 llama clientsClaim() → toma control de todos tabs     │
+│ 5. Página hace reload() para obtener assets actualizados    │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ---
 
@@ -1671,12 +1812,16 @@ Cada página y módulo tiene sus propios archivos de loading y error para granul
 ```typescript
 // shared/constants/routes.ts
 export const ROUTE_PERMISSIONS: Record<string, string> = {
-  '/animales': 'animales:ver',
-  '/animales/nuevo': 'animales:crear',
-  '/servicios/palpaciones': 'servicios:ver',
-  '/usuarios': 'usuarios:ver',
-  '/reportes': 'reportes:ver',
-  '/configuracion': 'configuracion:ver',
+  '/animales': 'animales:read',
+  '/animales/nuevo': 'animales:write',
+  '/animales/[id]/editar': 'animales:write',
+  '/servicios/palpaciones': 'servicios:read',
+  '/servicios/inseminaciones': 'servicios:read',
+  '/servicios/partos': 'servicios:read',
+  '/servicios/veterinarios': 'servicios:read',
+  '/usuarios': 'usuarios:admin',
+  '/reportes': 'reportes:read',
+  '/configuracion': 'configuracion:admin',
 };
 ```
 
@@ -1699,14 +1844,36 @@ app/error.tsx                    ← Raíz global (500)
 |--------|--------|
 | 400 | `setError()` en RHF → mensaje bajo campo |
 | 401 | Interceptor refresh → retry o logout |
-| 403 | Toast "No tienes permiso" |
-| 404 | not-found.tsx de Next.js |
+| 403 | Toast "No tienes permiso para esta acción" |
+| 404 | Página con illustration + CTA "Volver al inicio" |
 | 422 | Toast warning con mensaje del server |
-| 429 | Toast "Demasiadas solicitudes" |
+| 429 | Toast "Demasiadas solicitudes. Intenta más tarde" |
 | 500 | Error boundary → UI retry + toast genérico |
 | Offline | OfflineBanner + cache SW |
 
-### 16.3 Sistema de Toasts
+### 16.3 Errores 403 y 404 por Módulo
+
+**Errores 403 (Prohibido) — Toast con mensaje específico**:
+
+| Módulo | Mensaje |
+|--------|---------|
+| Animales | "No tienes permiso para modificar animales" |
+| Servicios | "No tienes permiso para registrar servicios" |
+| Usuarios | "Solo administradores pueden gestionar usuarios" |
+| Configuración | "No tienes permiso para modificar configuración" |
+| Predios | "No tienes permiso para gestionar predios" |
+
+**Errores 404 (No encontrado) — Página con illustration + CTA**:
+
+| Módulo | Illustration | CTA |
+|--------|--------------|-----|
+| Animales | "Animal no encontrado" + illustación bovino | "Volver al listado" → `/animales` |
+| Servicios | "Servicio no encontrado" | "Ver servicios" → `/servicios` |
+| Predios | "Predio no encontrado" | "Cambiar de predio" → selector en header |
+| Productos | "Producto no encontrado" | "Ver productos" → `/productos` |
+| Genérico | "Página no encontrada" | "Ir al dashboard" → `/` |
+
+### 16.4 Sistema de Toasts
 
 ```typescript
 // store/ui.store.ts — toasts con auto-dismiss 5s
@@ -1954,6 +2121,7 @@ El sistema DEBE autenticar al usuario mediante credenciales email/password envia
 - **RF-ANIM-01.2**: Filtros sincronizados con URL query params
 - **RF-ANIM-01.3**: Prefetch de siguiente página
 - **RF-ANIM-01.4**: Columnas: código, nombre, sexo, raza, estado, potrero, fecha nacimiento, acciones
+- **RF-ANIM-01.5**: KPIs de inventario via `GET /animales/estadisticas`
 
 ### ANIM-02: Formulario de Registro de Animal
 
@@ -1978,6 +2146,8 @@ El sistema DEBE autenticar al usuario mediante credenciales email/password envia
 - **RF-ANIM-05.1**: Estados: ACTIVO, VENDIDO, MUERTO, DADO_DE_BAJA
 - **RF-ANIM-05.2**: Venta requiere: fecha, motivo, lugar; Muerte requiere: fecha, causa
 - **RF-ANIM-05.3**: Modal de confirmación con formulario embebido
+- **RF-ANIM-05.4**: Endpoint: `PATCH /animales/:id/estado` con `{ estado_animal_key, fecha, motivo_id? }`
+- **RF-ANIM-05.5**: Historial de eventos via `GET /animales/:id/historial` (`?tipo=servicios,partos,veterinario`)
 
 ### ANIM-06: Operaciones en Lote
 
@@ -2065,6 +2235,240 @@ El sistema DEBE autenticar al usuario mediante credenciales email/password envia
 
 - **RF-INFRA-04.1**: Error boundary en `app/layout.tsx`
 - **RF-INFRA-04.2**: Toasts: success, error, warning, info con auto-dismiss 5s
+
+### USU-01: Listado de Usuarios
+
+- **RF-USU-01.1**: Tabla con columnas: nombre, email, rol, estado (activo/inactivo), acciones
+- **RF-USU-01.2**: Búsqueda por nombre o email
+- **RF-USU-01.3**: Paginación server-side con TanStack Table
+- **RF-USU-01.4**: Solo visible para usuarios con rol ADMIN
+
+**Escenario: Listado vacío**
+- DADO que no existen usuarios en el sistema
+- CUANDO el admin accede a `/usuarios`
+- ENTONCES se muestra empty state con mensaje "No hay usuarios registrados"
+
+### USU-02: Crear Usuario
+
+- **RF-USU-02.1**: Formulario con campos: nombre, email, password, rol, predios asignados (multi-select)
+- **RF-USU-02.2**: Validación con Zod schema (email válido, password min 8 chars)
+- **RF-USU-02.3**: Predios asignados opcionales según rol
+
+**Escenario: Crear usuario con rol admin**
+- DADO que el admin está en `/usuarios/nuevo`
+- CUANDO completa el formulario con rol ADMIN y selecciona 2 predios
+- ENTONCES el sistema crea el usuario y muestra toast "Usuario creado exitosamente"
+- Y redirige al listado de usuarios
+
+### USU-03: Editar Usuario
+
+- **RF-USU-03.1**: Formulario pre-poblado con datos del usuario
+- **RF-USU-03.2**: Puede cambiar: nombre, rol, estado (activar/desactivar), predios asignados
+- **RF-USU-03.3**: Password solo se muestra si se va a cambiar (no se pre-popula por seguridad)
+
+**Escenario: Reasignar predios a usuario**
+- DADO que el admin edita un usuario con 2 predios asignados
+- CUANDO remove 1 predio y agrega 1 nuevo
+- ENTONCES el sistema actualiza los predios y muestra toast "Usuario actualizado"
+
+### USU-04: Eliminar Usuario
+
+- **RF-USU-04.1**: Soft delete (marca como inactivo, no elimina registro)
+- **RF-USU-04.2**: Modal de confirmación antes de desactivar
+- **RF-USU-04.3**: No permite eliminar el último usuario admin del sistema
+
+**Escenario: Desactivar usuario activo**
+- DADO que el admin intenta desactivar un usuario activo
+- CUANDO confirma la acción en el modal
+- ENTONCES el usuario pasa a estado "inactivo" y no puede hacer login
+
+### USU-05: Matriz de Permisos
+
+- **RF-USU-05.1**: Grid de permisos por rol (rows: módulos, columns: acciones: ver, crear, editar, eliminar)
+- **RF-USU-05.2**: Checkboxes solo editables por ADMIN
+- **RF-USU-05.3**: Permisos predefinidos por rol (ADMIN: todos, OPERADOR: leer+crear en animales/servicios)
+
+### MAEST-01: Listado Genérico de Catálogos
+
+- **RF-MAEST-01.1**: Tabla genérica reutilizable para los 8 catálogos
+- **RF-MAEST-01.2**: Columnas: nombre, descripción, estado, acciones (editar/eliminar)
+- **RF-MAEST-01.3**: Búsqueda por nombre
+- **RF-MAEST-01.4**: Toggle para mostrar/ocultar inactivos
+
+**MaestroTable: Routing a endpoints Backend**
+
+El componente `MaestroTable` recibe un prop `resource` que determina el endpoint API:
+
+| Recurso (prop) | Backend Endpoint | Ejemplo de ruta |
+|---------------|-----------------|-----------------|
+| `veterinarios` | `/maestros/veterinarios` | `/maestros/veterinarios/:id` |
+| `propietarios` | `/maestros/propietarios` | `/maestros/propietarios/:id` |
+| `hierros` | `/maestros/hierros` | `/maestros/hierros/:id` |
+| `diagnosticos` | `/maestros/diagnosticos` | `/maestros/diagnosticos/:id` |
+| `motivos-ventas` | `/maestros/motivos-ventas` | `/maestros/motivos-ventas/:id` |
+| `causas-muerte` | `/maestros/causas-muerte` | `/maestros/causas-muerte/:id` |
+| `lugares-compras` | `/maestros/lugares-compras` | `/maestros/lugares-compras/:id` |
+| `lugares-ventas` | `/maestros/lugares-ventas` | `/maestros/lugares-ventas/:id` |
+
+**Escenario: Listar veterinarios**
+- DADO que existen veterinarios registrados
+- CUANDO el usuario accede a `/maestros/veterinarios`
+- ENTONCES ve tabla con nombre, especialidad, teléfono de cada veterinario
+
+### MAEST-02: CRUD por Catálogo
+
+- **RF-MAEST-02.1**: Create/Edit via modal con formulario genérico
+- **RF-MAEST-02.2**: Delete con confirmación (soft delete)
+- **RF-MAEST-02.3**: Campos específicos por catálogo:
+  - Veterinarios: nombre, matricula, especialidad, teléfono
+  - Propietarios: nombre, documento, teléfono, dirección
+  - Hierros: nombre, descripción, imagen (SVG/PNG del dibujo)
+  - Diagnósticos: nombre, descripción, requiere tratamiento (boolean)
+  - Motivos Venta: nombre, descripción
+  - Causas Muerte: nombre, descripción
+  - Lugares Compra: nombre, ubicación, contacto
+  - Lugares Venta: nombre, ubicación, contacto
+
+**Escenario: Crear hierro con logo**
+- DADO que el usuario está en `/maestros/hierros/nuevo`
+- CUANDO sube una imagen SVG del hierro y completa el nombre
+- ENTONCES el sistema guarda el hierro con la imagen asociada
+
+**Escenario: Editar diagnóstico**
+- DADO que existe un diagnóstico "Anaplasmosis"
+- CUANDO el usuario lo edita para marcar "requiere tratamiento"
+- ENTONCES el cambio se guarda y se refleja en futuras búsquedas
+
+### CONFIG-01: Catálogo de Parámetros del Sistema
+
+- **RF-CONFIG-01.1**: Tabla de parámetros: clave, valor actual, descripción, tipo
+- **RF-CONFIG-01.2**: Tipos: texto, número, fecha, booleano, lista
+- **RF-CONFIG-01.3**: Solo usuarios ADMIN pueden modificar
+
+**Escenario: Ver parámetros**
+- DADO que el admin accede a `/configuracion`
+- CUANDO ve la lista de parámetros
+- ENTONCES ve clave, valor, descripción y tipo de cada uno
+
+### CONFIG-02: Valores por Defecto
+
+- **RF-CONFIG-02.1**: Formato de fecha (DD/MM/YYYY, MM/DD/YYYY)
+- **RF-CONFIG-02.2**: Moneda (COP, USD)
+- **RF-CONFIG-02.3**: Formato de peso (kg, @)
+- **RF-CONFIG-02.4**: Estos valores se aplican globalmente en formatting
+
+### CONFIG-03: UI para Cambiar Parámetros
+
+- **RF-CONFIG-03.1**: Modal de edición con campo según tipo (input, select, toggle)
+- **RF-CONFIG-03.2**: Validación de rango para tipos numéricos
+- **RF-CONFIG-03.3**: Toast de confirmación al guardar
+
+**Escenario: Cambiar formato de fecha**
+- DADO que el admin está en `/configuracion`
+- CUANDO cambia el formato de fecha de DD/MM/YYYY a MM/DD/YYYY
+- ENTONCES todos los datepickers de la app usan el nuevo formato
+
+### IMAGEN-01: Upload de Imágenes
+
+- **RF-IMAGEN-01.1**: Drag & drop con react-dropzone
+- **RF-IMAGEN-01.2**: Límite de tamaño: 5MB por imagen
+- **RF-IMAGEN-01.3**: Formatos aceptados: JPEG, PNG, WebP
+- **RF-IMAGEN-01.4**: Preview antes de subir
+- **RF-IMAGEN-01.5**: Progress bar durante upload
+
+**Escenario: Upload exitoso**
+- DADO que el usuario arrastra una imagen JPEG de 2MB
+- CUANDO hace drop en el área de upload
+- ENTONCES ve preview de la imagen y puede confirmar o cancelar
+
+**Escenario: Archivo demasiado grande**
+- DADO que el usuario intenta subir imagen de 8MB
+- CUANDO hace drop
+- ENTONCES ve error "El archivo excede el límite de 5MB"
+
+### IMAGEN-02: Galería por Entidad
+
+- **RF-IMAGEN-02.1**: Galería de imágenes asociada a animal o producto
+- **RF-IMAGEN-02.2**: Grid de thumbnails con lightbox al click
+- **RF-IMAGEN-02.3**: Imagen principal marcada con badge "Principal"
+- **RF-IMAGEN-02.4**: Slider/carrusel para producto
+
+### IMAGEN-03: Límites y Formatos
+
+- **RF-IMAGEN-03.1**: Imágenes cacheadas en Service Worker (CacheFirst 7d)
+- **RF-IMAGEN-03.2**: Compresión automática en backend si > 1920px en cualquier dimensión
+- **RF-IMAGEN-03.3**: Generación de thumbnails (200x200) para galleries
+
+### IMAGEN-04: Imágenes Offline
+
+- **RF-IMAGEN-04.1**: Imágenes de animales/productos disponibles offline via CacheFirst
+- **RF-IMAGEN-04.2**: Placeholder blur mientras carga imagen real
+- **RF-IMAGEN-04.3**: Símbolo de "offline" en thumbnail si no está en cache
+
+### PROD-01: Listado de Productos
+
+- **RF-PROD-01.1**: Tabla con columnas: código, nombre, categoría, precio, stock, imagen (thumbnail)
+- **RF-PROD-01.2**: Búsqueda por nombre o código
+- **RF-PROD-01.3**: Filtro por categoría
+- **RF-PROD-01.4**: Indicador visual de stock bajo (rojo si < stock mínimo)
+
+**Escenario: Listar productos con stock bajo**
+- DADO que existe un producto con stock 3 y stock mínimo 10
+- CUANDO se muestra en la tabla
+- ENTONCES el stock aparece en rojo con icono de warning
+
+### PROD-02: CRUD de Producto
+
+- **RF-PROD-02.1**: Campos: código, nombre, descripción, categoría_id, precio, stock mínimo, imagen principal
+- **RF-PROD-02.2**: React Hook Form + Zod validación
+- **RF-PROD-02.3**: Upload de imagen principal con react-dropzone
+- **RF-PROD-02.4**: Galería adicional de imágenes (hasta 5)
+
+**Escenario: Crear producto con imagen**
+- DADO que el usuario está en `/productos/nuevo`
+- CUANDO completa el formulario y sube imagen principal
+- ENTONCES el producto se crea con la imagen y redirige al detalle
+
+**Escenario: Actualizar stock**
+- DADO que el usuario edita un producto existente
+- CUANDO cambia el stock de 20 a 15
+- ENTONCES se guarda y la tabla refleja el nuevo valor
+
+### PROD-03: Galería de Imágenes del Producto
+
+- **RF-PROD-03.1**: Hasta 5 imágenes adicionales además de la principal
+- **RF-PROD-03.2**: Reordenar imágenes con drag & drop
+- **RF-PROD-03.3**: Eliminar imagen individual con confirmación
+
+### I18N-01: Externalización de Strings
+
+- **RF-I18N-01.1**: Todos los strings de UI externalizados a JSON files
+- **RF-I18N-01.2**: Archivos en `/src/i18n/messages/es.json` y `en.json`
+- **RF-I18N-01.3**: Uso via `useTranslations()` de next-intl
+- **RF-I18N-01.4**: Namespace por módulo para evitar conflictos
+
+**Ejemplo estructura**:
+```json
+{
+  "Animales": {
+    "list": { "title": "Listado de Animales", "empty": "No hay animales" },
+    "form": { "codigo": "Código", "nombre": "Nombre", "sexo": "Sexo" }
+  }
+}
+```
+
+### I18N-02: Zod Schemas para Mensajes i18n
+
+- **RF-I18N-02.1**: JSON schemas para validar estructura de archivos i18n
+- **RF-I18N-02.2**: Asegura que todas las claves usadas en código existan en JSON
+- **RF-I18N-02.3**: Build-time validation en CI pipeline
+
+### ZOD-01: Schemas Compartidos Frontend-Backend
+
+- **RF-ZOD-01.1**: Todos los Zod schemas definidos en `packages/shared-types/src/schemas/`
+- **RF-ZOD-01.2**: Frontend importa desde `@ganatrack/shared-types`
+- **RF-ZOD-01.3**: Schemas incluyen: animal.schema.ts, usuario.schema.ts, producto.schema.ts, common.schema.ts
+- **RF-ZOD-01.4**: Validación frontend replica validación backend para UX inmediata
 
 ---
 

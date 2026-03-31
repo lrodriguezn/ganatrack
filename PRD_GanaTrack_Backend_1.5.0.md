@@ -346,7 +346,7 @@ erDiagram
 | Método | Ruta | Descripción | Body / Params clave |
 |--------|------|-------------|---------------------|
 | `POST` | `/auth/login` | Inicio de sesión | `{ email, password }` |
-| `POST` | `/auth/refresh` | Renovar access token | `{ refreshToken }` |
+| `POST` | `/auth/refresh` | Renovar access token | — (token en httpOnly cookie) |
 | `POST` | `/auth/logout` | Cerrar sesión | — (token en header) |
 | `POST` | `/auth/2fa/verify` | Verificar código 2FA | `{ tempToken, codigo }` |
 | `POST` | `/auth/2fa/resend` | Reenviar código 2FA | `{ tempToken, metodo }` |
@@ -366,6 +366,8 @@ erDiagram
   "usuario": { "id": 1, "nombre": "Admin", "roles": ["ADMIN"] }
 }
 ```
+
+> **Nota:** El campo `email` no se incluye en la respuesta de login por razones de seguridad (evita enumeración). Si el frontend necesita el email del usuario, debe obtenerlo via `GET /usuarios/me` después del login.
 
 ---
 
@@ -468,6 +470,8 @@ Patrón uniforme para los cuatro sub-recursos (reemplazar `{recurso}` por `potre
 }
 ```
 
+> **Validación de origen:** La validación de `lugar_compra_id` requerido cuando `tipoIngresoId` indica COMPRADO existe en el domain service `AnimalDomainService.crear()`. El frontend NO debe confiar exclusivamente en esta validación — el backend es la fuente de verdad.
+
 > **Convención de nomenclatura para DTOs:** todos los campos de request/response usan `camelCase` puro. La conversión a `snake_case` de columnas DB happens en el mapper de infraestructura. Ver §10.4.
 
 ---
@@ -489,13 +493,13 @@ Patrón uniforme para los cuatro sub-recursos (reemplazar `{recurso}` por `potre
 **Body de animal en palpación:**
 ```json
 {
-  "animales_id": 5,
-  "veterinarios_id": 1,
-  "diagnosticos_veterinarios_id": 2,
-  "config_condiciones_corporales_id": 3,
+  "animalesId": 5,
+  "veterinariosId": 1,
+  "diagnosticosVeterinariosId": 2,
+  "configCondicionesCorporalesId": 3,
   "fecha": "2026-01-10T08:00:00Z",
-  "dias_gestacion": 45,
-  "fecha_parto": "2026-04-25T00:00:00Z",
+  "diasGestacion": 45,
+  "fechaParto": "2026-04-25T00:00:00Z",
   "comentarios": ""
 }
 ```
@@ -611,6 +615,7 @@ Catálogos de sistema. Algunos son de solo lectura (seed), otros son editables p
 - **Access Token:** TTL de 15 minutos. Firmado con `HS256`. Payload: `{ sub: userId, roles: [], predioIds: number[], iat, exp }`. El campo `predioIds` contiene todos los predios a los que el usuario tiene acceso (del cual se selecciona el activo vía `X-Predio-Id`). El middleware `TenantContext` **obligatoriamente** valida que el `X-Predio-Id` del request esté presente en `predioIds` del token — si no coincide, responde `403 Forbidden`.
 - **Refresh Token:** TTL de 7 días. Almacenado en tabla `Usuarios_Login` con flag `exitoso = true`. Rotación en cada uso (refresh token rotation).
 - **Revocación:** Al hacer logout, el refresh token se marca como inactivo.
+- **Tenant Middleware:** El header `X-Predio-Id` se recibe como string y se parsea a `integer` en el middleware `TenantContext` antes de ser usado en los repositories.
 
 ### 8.2 Flujo 2FA
 
