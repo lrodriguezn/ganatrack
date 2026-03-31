@@ -32,6 +32,9 @@ Thumbs.db
 *.swp
 *.swo
 
+# Template (external, tracked separately)
+free-nextjs-admin-dashboard/
+
 # Misc
 *.bak
 *.tmp
