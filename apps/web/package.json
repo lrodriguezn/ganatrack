@@ -11,13 +11,18 @@
   },
   "dependencies": {
     "@ganatrack/shared-types": "workspace:*",
+    "@hookform/resolvers": "^3.9.0",
+    "ky": "^1.7.0",
     "next": "15.1.6",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-hook-form": "^7.54.0",
     "tailwind-merge": "^2.6.0",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/postcss": "^4.1.17",
-    "autoprefixer": "^10.4.22"
+    "autoprefixer": "^10.4.22",
+    "zod": "^3.23.0",
+    "zustand": "^5.0.0"
   },
   "devDependencies": {
     "@ganatrack/tsconfig": "workspace:*",

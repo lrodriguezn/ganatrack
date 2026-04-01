@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
+import { AppProviders } from "@/shared/providers/app-providers";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -18,7 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${outfit.className} dark:bg-gray-900`}>{children}</body>
+      <body className={`${outfit.className} dark:bg-gray-900`}>
+        <AppProviders>{children}</AppProviders>
+      </body>
     </html>
   );
 }
