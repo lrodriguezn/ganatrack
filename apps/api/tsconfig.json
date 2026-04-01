@@ -1,0 +1,13 @@
+{
+  "extends": "@ganatrack/tsconfig/node.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "paths": {
+      "@ganatrack/shared-types": ["../../packages/shared-types/src"],
+      "@ganatrack/database": ["../../packages/database/src"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["dist", "node_modules"]
+}

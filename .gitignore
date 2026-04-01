@@ -35,6 +35,15 @@ Thumbs.db
 # Template (external, tracked separately)
 free-nextjs-admin-dashboard/
 
+# Next.js build output
+.next/
+
+# Test coverage
+coverage/
+
+# TypeScript incremental build info
+*.tsbuildinfo
+
 # Misc
 *.bak
 *.tmp
