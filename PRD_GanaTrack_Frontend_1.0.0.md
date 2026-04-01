@@ -65,8 +65,8 @@ El frontend recibe el `predio_id` activo del contexto de tenant del backend (hea
 
 | Capa | Tecnología | Versión | Justificación |
 |------|-----------|---------|---------------|
-| Framework | Next.js | 15.x | App Router, RSC, template base |
-| UI Library | React | 18.x | Concurrent features, stable hooks |
+| Framework | Next.js | 16.x | App Router, RSC, template base (free-nextjs-admin-dashboard) |
+| UI Library | React | 19.x | Concurrent features, Server Components, stable hooks |
 | Lenguaje | TypeScript | 5.9.x | Strict mode |
 | Estilos | Tailwind CSS | 4.x | Template base, CSS-first config |
 | Server State | TanStack Query | 5.x | Cache, paginación, offline |
@@ -179,7 +179,7 @@ El frontend recibe el `predio_id` activo del contexto de tenant del backend (hea
 ```
 ganatrack/
 ├── apps/
-│   └── web/                                    # App Next.js 15
+│   └── web/                                    # App Next.js 16
 │       ├── public/
 │       │   ├── manifest.json                   # PWA manifest
 │       │   ├── sw.ts                          # Serwist SW entry
