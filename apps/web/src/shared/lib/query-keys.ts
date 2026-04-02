@@ -37,5 +37,12 @@ export function createQueryKeys<T extends string>(module: T): QueryKeys {
 export const queryKeys = {
   animales: createQueryKeys('animales'),
   sitios: createQueryKeys('sitios'),
-  predios: createQueryKeys('predios'),
+  predios: {
+    ...createQueryKeys('predios'),
+    // Sub-recursos — nested under predioId
+    potreros: (predioId: number) => ['predios', predioId, 'potreros'] as const,
+    sectores: (predioId: number) => ['predios', predioId, 'sectores'] as const,
+    lotes: (predioId: number) => ['predios', predioId, 'lotes'] as const,
+    grupos: (predioId: number) => ['predios', predioId, 'grupos'] as const,
+  },
 } as const;

@@ -26,7 +26,7 @@ interface PredioState {
 
 interface PredioActions {
   setPredios(predios: Predio[]): void;
-  switchPredio(id: string): void;
+  switchPredio(id: number): void;
   clearPredios(): void;
 }
 
@@ -87,7 +87,7 @@ export const usePredioStore = create<PredioStore>((set, get) => ({
 // Helpers
 // ============================================================================
 
-function predsContains(predios: Predio[], id: string | undefined): boolean {
+function predsContains(predios: Predio[], id: number | undefined): boolean {
   if (!id) return false;
   return predios.some((p) => p.id === id);
 }

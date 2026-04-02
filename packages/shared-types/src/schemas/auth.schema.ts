@@ -19,21 +19,8 @@ export const UserSchema = z.object({
 
 export type User = z.infer<typeof UserSchema>;
 
-/**
- * Predio schema for multi-predio support.
- * Area is in hectares (número positivo).
- * Estado: activo | inactivo per PRD §4.2
- */
-export const PredioSchema = z.object({
-  id: z.string().uuid(),
-  nombre: z.string().min(1),
-  departamento: z.string(),
-  municipio: z.string(),
-  area: z.number().positive(),
-  estado: z.enum(['activo', 'inactivo']),
-});
-
-export type Predio = z.infer<typeof PredioSchema>;
+// Re-export PredioSchema from predicates schema for backward compatibility
+export { PredioSchema, type Predio } from './predio.schema';
 
 // ============================================================================
 // Permission (RBAC)
