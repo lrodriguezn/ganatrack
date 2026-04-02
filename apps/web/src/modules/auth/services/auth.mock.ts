@@ -48,7 +48,7 @@ const MOCK_USERS: MockUser[] = [
     password: 'Admin123!',
     nombre: 'Administrador',
     rol: 'admin',
-    permissions: ['*:*'],
+    permissions: ['*:*', 'predios:read'],
     has2FA: false,
   },
   {
@@ -60,6 +60,8 @@ const MOCK_USERS: MockUser[] = [
     permissions: [
       'animales:read',
       'animales:write',
+      'predios:read',
+      'predios:write',
       'servicios:read',
       'servicios:write',
       'reportes:read',
@@ -89,22 +91,53 @@ const MOCK_USERS: MockUser[] = [
 // Valid 2FA code
 const VALID_2FA_CODE = '123456';
 
-// Mock Predios
+// Mock Predios — synchronized with predios.mock.ts schema (id: number, hectares, tipo)
 const MOCK_PREDIOS: Predio[] = [
   {
-    id: 'predio-001',
+    id: 1,
     nombre: 'Finca La Esperanza',
     departamento: 'Antioquia',
-    municipio: 'Medellín',
-    area: 150.5,
+    municipio: 'Rionegro',
+    vereda: 'La Palma',
+    hectares: 150.5,
+    tipo: 'doble propósito',
     estado: 'activo',
   },
   {
-    id: 'predio-002',
+    id: 2,
     nombre: 'Hacienda El Roble',
     departamento: 'Cundinamarca',
-    municipio: 'Bogotá',
-    area: 320.0,
+    municipio: 'Zipaquirá',
+    hectares: 320.0,
+    tipo: 'lechería',
+    estado: 'activo',
+  },
+  {
+    id: 3,
+    nombre: 'Finca San José',
+    departamento: 'Caldas',
+    municipio: 'Manizales',
+    hectares: 85.3,
+    tipo: 'cría',
+    estado: 'activo',
+  },
+  {
+    id: 4,
+    nombre: 'Hacienda Santa María',
+    departamento: 'Tolima',
+    municipio: 'Ibagué',
+    hectares: 450.0,
+    tipo: 'engorde',
+    estado: 'activo',
+  },
+  {
+    id: 5,
+    nombre: 'Finca El Porvenir',
+    departamento: 'Santander',
+    municipio: 'Bucaramanga',
+    vereda: 'Cerro Largo',
+    hectares: 200.75,
+    tipo: 'doble propósito',
     estado: 'activo',
   },
 ];

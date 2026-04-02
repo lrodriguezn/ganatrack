@@ -136,6 +136,13 @@ const veterinarios = leaf(
 // ============================================================================
 // Predios children
 // ============================================================================
+const predios = leaf(
+  'Predios',
+  '/dashboard/predios',
+  MapPinIcon,
+  MapPinIconSolidOutline,
+  'predios:read',
+);
 const potreros = leaf(
   'Potreros',
   '/dashboard/predios/potreros',
@@ -289,7 +296,7 @@ export const NAVIGATION_ITEMS: NavItem[] = [
     MapPinIcon,
     MapPinIconSolidOutline,
     'predios:read',
-    [potreros, sectores, lotes, grupos],
+    [predios, potreros, sectores, lotes, grupos],
   ),
 
   // 5. Maestros (group)
