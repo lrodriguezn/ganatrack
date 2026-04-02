@@ -55,8 +55,14 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         // We use a placeholder that indicates rehydration happened
 
         // Restore permissions from sessionStorage (stored during login/2FA success)
-        const storedPermissions = sessionStorage.getItem('ganatrack-auth-permissions');
-        const permissions = storedPermissions ? JSON.parse(storedPermissions) : [];
+        let permissions: string[] = [];
+        try {
+          const storedPermissions = sessionStorage.getItem('ganatrack-auth-permissions');
+          permissions = storedPermissions ? JSON.parse(storedPermissions) : [];
+        } catch {
+          // Corrupted data — clear and continue with empty permissions
+          sessionStorage.removeItem('ganatrack-auth-permissions');
+        }
 
         useAuthStore.getState().setAuth({
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

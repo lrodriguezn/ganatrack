@@ -33,6 +33,11 @@ export default function PrediosListPage(): JSX.Element {
     setPageSize(newPageSize);
   };
 
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPageIndex(0); // Reset to first page on search
+  };
+
   const handleEdit = (predio: typeof predios[number]) => {
     router.push(`/dashboard/predios/${predio.id}/edit`);
   };
@@ -86,7 +91,7 @@ export default function PrediosListPage(): JSX.Element {
           onPaginationChange={handlePaginationChange}
           onEdit={handleEdit}
           searchValue={search}
-          onSearchChange={setSearch}
+          onSearchChange={handleSearchChange}
         />
       )}
     </div>
