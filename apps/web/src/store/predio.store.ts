@@ -26,6 +26,9 @@ interface PredioState {
 
 interface PredioActions {
   setPredios(predios: Predio[]): void;
+  addPredio(predio: Predio): void;
+  updatePredio(predio: Predio): void;
+  removePredio(id: number): void;
   switchPredio(id: number): void;
   clearPredios(): void;
 }
@@ -51,6 +54,43 @@ export const usePredioStore = create<PredioStore>((set, get) => ({
       predioActivo: predsContains(predios, get().predioActivo?.id)
         ? get().predioActivo
         : null,
+    });
+  },
+
+  /**
+   * Add a single Predio to the array.
+   * Used for granular sync after CRUD operations.
+   */
+  addPredio: (predio) => {
+    set((state) => ({
+      predios: [...state.predios, predios],
+    }));
+  },
+
+  /**
+   * Update an existing Predio in the array by id.
+   * Also updates activo if it was the active one.
+   */
+  updatePredio: (predio) => {
+    set((state) => ({
+      predios: state.predios.map((p) => (p.id === predios.id ? predios : p)),
+      predicateActivo:
+        state.predicateActivo?.id === predios.id ? predios : state.predicateActivo,
+    }));
+  },
+
+  /**
+   * Remove a Predio from the array by id.
+   * If the removed Predio was activo, switches to another or clears.
+   */
+  removePredio: (id) => {
+    set((state) => {
+      const newPredios = state.predios.filter((p) => p.id !== id);
+      let newActivo = state.predioActivo;
+      if (state.predioActivo?.id === id) {
+        newActivo = newPredios[0] ?? null;
+      }
+      return { predios: newPredios, predioActivo: newActivo };
     });
   },
 
