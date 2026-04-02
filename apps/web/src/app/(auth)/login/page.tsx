@@ -10,11 +10,41 @@
 'use client';
 
 import { Suspense } from 'react';
+import { useRouter } from 'next/navigation';
 import { LoginForm } from '@/modules/auth/components/login-form';
 import { useLogin } from '@/modules/auth/hooks/use-login';
+import { useAuthStore } from '@/store/auth.store';
+import { usePredioStore } from '@/store/predio.store';
+import { Button } from '@/shared/components/ui/button';
 
 function LoginContent(): JSX.Element {
+  const router = useRouter();
   const { form, error, isLoading, onSubmit } = useLogin();
+
+  // Quick access for testing - bypass login form
+  const handleQuickAccess = () => {
+    // Set mock auth state directly
+    useAuthStore.getState().setAuth({
+      accessToken: 'mock-token-admin',
+      user: {
+        id: '11111111-1111-1111-1111-111111111111',
+        email: 'admin@ganatrack.com',
+        nombre: 'Administrador',
+        rol: 'admin',
+      },
+      permissions: ['*:*', 'predios:read', 'predios:write'],
+    });
+    // Set sessionStorage for persistence
+    sessionStorage.setItem('ganatrack-auth-permissions', JSON.stringify(['*:*', 'predios:read', 'predios:write']));
+    // Set mock cookie
+    document.cookie = 'ganatrack-refresh=mock-token; path=/; max-age=604800';
+    // Set predios
+    usePredioStore.getState().setPredios([
+      { id: 1, nombre: 'Finca La Esperanza', departamento: 'Antioquia', municipio: 'Rionegro', hectares: 150.5, tipo: 'doble propósito', estado: 'activo' },
+      { id: 2, nombre: 'Hacienda El Roble', departamento: 'Cundinamarca', municipio: 'Zipaquirá', hectares: 320.0, tipo: 'lechería', estado: 'activo' },
+    ]);
+    router.push('/dashboard');
+  };
 
   return (
     <div className="w-full px-4">
@@ -30,6 +60,18 @@ function LoginContent(): JSX.Element {
 
       {/* Login form */}
       <LoginForm form={form} onSubmit={onSubmit} error={error} isLoading={isLoading} />
+
+      {/* Quick access button for testing */}
+      <div className="mt-6 text-center">
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={handleQuickAccess}
+          className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400"
+        >
+          Acceso rápido (desarrollo)
+        </Button>
+      </div>
     </div>
   );
 }
