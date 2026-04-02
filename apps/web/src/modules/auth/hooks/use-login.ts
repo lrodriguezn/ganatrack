@@ -76,6 +76,10 @@ export function useLogin(): UseLoginReturn {
         permissions: authData.permissions,
       });
 
+      // DEV ONLY: Set cookie so middleware can detect authenticated state
+      // In production, the backend sets httpOnly refreshToken cookie
+      document.cookie = 'ganatrack-refresh=mock-token; path=/; max-age=604800';
+
       // Fetch predios after successful auth
       const predios = await authService.getPredios();
       setPredios(predios);

@@ -104,5 +104,7 @@ export const config = {
      * - static/*, favicon.ico, etc. (static assets)
      */
     '/((?!_next/|api/|static/|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Explicitly allow routes with route groups: /dashboard, /animales, etc.
+    '/(dashboard|login|verificar-2fa)/:path*',
   ],
 };
