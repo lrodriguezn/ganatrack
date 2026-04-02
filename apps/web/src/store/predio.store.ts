@@ -63,7 +63,7 @@ export const usePredioStore = create<PredioStore>((set, get) => ({
    */
   addPredio: (predio) => {
     set((state) => ({
-      predios: [...state.predios, predios],
+      predios: [...state.predios, predio],
     }));
   },
 
@@ -73,9 +73,9 @@ export const usePredioStore = create<PredioStore>((set, get) => ({
    */
   updatePredio: (predio) => {
     set((state) => ({
-      predios: state.predios.map((p) => (p.id === predios.id ? predios : p)),
-      predicateActivo:
-        state.predicateActivo?.id === predios.id ? predios : state.predicateActivo,
+      predios: state.predios.map((p) => (p.id === predio.id ? predio : p)),
+      predioActivo:
+        state.predioActivo?.id === predio.id ? predio : state.predioActivo,
     }));
   },
 

@@ -38,7 +38,9 @@ export function useLogout(): UseLogoutReturn {
 
     // DEV ONLY: Clear the mock cookie
     // In production, the backend clears the httpOnly cookie
-    document.cookie = 'ganatrack-refresh=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    if (process.env.NODE_ENV === 'development') {
+      document.cookie = 'ganatrack-refresh=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    }
 
     // Redirect to login
     router.push('/login');

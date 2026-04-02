@@ -13,6 +13,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Plus } from 'lucide-react';
 import { usePredios } from '@/modules/predios/hooks';
 import { PredioTable } from '@/modules/predios/components/predio-table';
@@ -20,6 +21,7 @@ import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 
 export default function PrediosListPage(): JSX.Element {
+  const router = useRouter();
   const [search, setSearch] = useState('');
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -32,7 +34,7 @@ export default function PrediosListPage(): JSX.Element {
   };
 
   const handleEdit = (predio: typeof predios[number]) => {
-    window.location.href = `/dashboard/predios/${predio.id}/edit`;
+    router.push(`/dashboard/predios/${predio.id}/edit`);
   };
 
   if (error) {

@@ -36,7 +36,6 @@ export function useDeletePredio(
   const { onSuccess, onError } = options;
 
   const queryClient = useQueryClient();
-  const { predios, switchPredio, setPredios } = usePredioStore.getState();
 
   const { mutate, mutateAsync, isPending, error } = useMutation({
     mutationFn: (id: number) => prediosService.deletePredio(id),
@@ -74,16 +73,16 @@ export function useDeletePredio(
       // Invalidate all predios queries
       queryClient.invalidateQueries({ queryKey: queryKeys.predios.all });
 
-      // Sync with store
-      const currentPredios = usePredioStore.getState().predios;
-      const updatedPredios = currentPredios.filter(p => p.id !== deletedId);
-      setPredios(updatedPredios);
+      // Sync with store — access fresh state each time
+      const store = usePredioStore.getState();
+      const updatedPredios = store.predios.filter(p => p.id !== deletedId);
+      store.setPredios(updatedPredios);
 
       // If deleted the activo predio, switch to next available
-      const activo = usePredioStore.getState().predioActivo;
+      const activo = store.predioActivo;
       if (activo?.id === deletedId) {
         if (updatedPredios.length > 0) {
-          switchPredio(updatedPredios[0].id);
+          store.switchPredio(updatedPredios[0].id);
         }
       }
 
