@@ -59,4 +59,25 @@ export const queryKeys = {
     ...createQueryKeys('configuracion'),
     byTipo: (tipo: string) => ['configuracion', tipo] as const,
   },
+  servicios: {
+    all: ['servicios'] as const,
+    palpaciones: {
+      all: ['servicios', 'palpaciones'] as const,
+      list: (params?: Record<string, unknown>) =>
+        params ? (['servicios', 'palpaciones', 'list', params] as const) : (['servicios', 'palpaciones', 'list'] as const),
+      detail: (id: number) => ['servicios', 'palpaciones', 'detail', id] as const,
+    },
+    inseminaciones: {
+      all: ['servicios', 'inseminaciones'] as const,
+      list: (params?: Record<string, unknown>) =>
+        params ? (['servicios', 'inseminaciones', 'list', params] as const) : (['servicios', 'inseminaciones', 'list'] as const),
+      detail: (id: number) => ['servicios', 'inseminaciones', 'detail', id] as const,
+    },
+    partos: {
+      all: ['servicios', 'partos'] as const,
+      list: (params?: Record<string, unknown>) =>
+        params ? (['servicios', 'partos', 'list', params] as const) : (['servicios', 'partos', 'list'] as const),
+      detail: (id: number) => ['servicios', 'partos', 'detail', id] as const,
+    },
+  },
 } as const;
