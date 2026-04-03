@@ -117,7 +117,7 @@ const partos = leaf(
   ClipboardDocumentCheckIcon,
   'servicios:read',
 );
-const veterinarios = leaf(
+const serviciosVeterinarios = leaf(
   'Servicios Veterinarios',
   '/dashboard/servicios/veterinarios',
   ShieldCheckIcon,
@@ -279,7 +279,7 @@ export const NAVIGATION_ITEMS: NavItem[] = [
     ClipboardDocumentListIcon,
     ClipboardDocumentListIconSolid,
     'servicios:read',
-    [palpaciones, inseminaciones, partos, veterinarios],
+    [palpaciones, inseminaciones, partos, serviciosVeterinarios],
   ),
 
   // 4. Predios (group)
