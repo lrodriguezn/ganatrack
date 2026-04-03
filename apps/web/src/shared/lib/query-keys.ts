@@ -35,7 +35,13 @@ export function createQueryKeys<T extends string>(module: T): QueryKeys {
  * Query key factories for all entities.
  */
 export const queryKeys = {
-  animales: createQueryKeys('animales'),
+  animales: {
+    ...createQueryKeys('animales'),
+    // Sub-recursos
+    genealogia: (id: number) => ['animales', id, 'genealogia'] as const,
+    historial: (id: number) => ['animales', id, 'historial'] as const,
+    estadisticas: (predioId: number) => ['animales', 'estadisticas', predioId] as const,
+  },
   sitios: createQueryKeys('sitios'),
   predios: {
     ...createQueryKeys('predios'),
@@ -44,5 +50,13 @@ export const queryKeys = {
     sectores: (predioId: number) => ['predios', predioId, 'sectores'] as const,
     lotes: (predioId: number) => ['predios', predioId, 'lotes'] as const,
     grupos: (predioId: number) => ['predios', predioId, 'grupos'] as const,
+  },
+  maestros: {
+    ...createQueryKeys('maestros'),
+    byTipo: (tipo: string) => ['maestros', tipo] as const,
+  },
+  configuracion: {
+    ...createQueryKeys('configuracion'),
+    byTipo: (tipo: string) => ['configuracion', tipo] as const,
   },
 } as const;

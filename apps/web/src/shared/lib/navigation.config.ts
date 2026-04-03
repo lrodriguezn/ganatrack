@@ -24,7 +24,6 @@ import {
   ChartBarIcon,
   BellIcon,
   UsersIcon,
-  WrenchScrewdriverIcon,
   BeakerIcon,
   ShieldCheckIcon,
   HeartIcon,
@@ -34,16 +33,9 @@ import {
   RectangleStackIcon,
   Square3Stack3DIcon,
   UserGroupIcon,
-  ClipboardIcon,
   ArchiveBoxArrowDownIcon,
   MapPinIcon as MapPinIconSolid,
-  RectangleGroupIcon,
-  CogIcon,
-  BellAlertIcon,
-  ListBulletIcon,
-  ArrowPathIcon,
   ExclamationTriangleIcon,
-  UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import {
   HomeIcon as HomeIconSolid,
@@ -173,62 +165,62 @@ const grupos = leaf(
 );
 
 // ============================================================================
-// Maestros children
+// Maestros children — 8 entidades maestro
 // ============================================================================
-const animales = leaf(
-  'Animales',
-  '/dashboard/maestros/animales',
-  CpuChipIcon,
-  CpuChipIconSolid,
+const veterinarios = leaf(
+  'Veterinarios',
+  '/dashboard/maestros/veterinarios',
+  ShieldCheckIcon,
+  ShieldCheckIcon,
   'maestros:read',
 );
-const empleados = leaf(
-  'Empleados',
-  '/dashboard/maestros/empleados',
+const propietarios = leaf(
+  'Propietarios',
+  '/dashboard/maestros/propietarios',
   UsersIcon,
   UsersIconSolid,
   'maestros:read',
 );
-const medicamentos = leaf(
-  'Medicamentos',
-  '/dashboard/maestros/medicamentos',
-  BeakerIcon,
-  BeakerIcon,
-  'maestros:read',
-);
-const insumos = leaf(
-  'Insumos',
-  '/dashboard/maestros/insumos',
+const hierros = leaf(
+  'Hierros',
+  '/dashboard/maestros/hierros',
   ArchiveBoxIcon,
   ArchiveBoxIconSolid,
   'maestros:read',
 );
-const equipos = leaf(
-  'Equipos',
-  '/dashboard/maestros/equipos',
-  WrenchScrewdriverIcon,
-  WrenchScrewdriverIcon,
+const diagnosticos = leaf(
+  'Diagnósticos',
+  '/dashboard/maestros/diagnosticos',
+  BeakerIcon,
+  BeakerIcon,
   'maestros:read',
 );
-const razas = leaf(
-  'Razas',
-  '/dashboard/maestros/razas',
-  HeartIcon,
-  HeartIcon,
+const motivosVentas = leaf(
+  'Motivos de Venta',
+  '/dashboard/maestros/motivos-ventas',
+  TruckIcon,
+  TruckIcon,
   'maestros:read',
 );
-const estados = leaf(
-  'Estados',
-  '/dashboard/maestros/estados',
-  ListBulletIcon,
-  ListBulletIcon,
+const causasMuerte = leaf(
+  'Causas de Muerte',
+  '/dashboard/maestros/causas-muerte',
+  ExclamationTriangleIcon,
+  ExclamationTriangleIcon,
   'maestros:read',
 );
-const alertas = leaf(
-  'Alertas',
-  '/dashboard/maestros/alertas',
-  BellAlertIcon,
-  BellAlertIcon,
+const lugaresCompras = leaf(
+  'Lugares de Compra',
+  '/dashboard/maestros/lugares-compras',
+  MapPinIcon,
+  MapPinIconSolidOutline,
+  'maestros:read',
+);
+const lugaresVentas = leaf(
+  'Lugares de Venta',
+  '/dashboard/maestros/lugares-ventas',
+  MapPinIconSolid,
+  MapPinIconSolid,
   'maestros:read',
 );
 
@@ -305,7 +297,7 @@ export const NAVIGATION_ITEMS: NavItem[] = [
     FolderOpenIcon,
     FolderOpenIconSolid,
     'maestros:read',
-    [animales, empleados, medicamentos, insumos, equipos, razas, estados, alertas],
+    [veterinarios, propietarios, hierros, diagnosticos, motivosVentas, causasMuerte, lugaresCompras, lugaresVentas],
   ),
 
   // 6. Configuración
