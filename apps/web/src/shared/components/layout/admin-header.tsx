@@ -18,6 +18,7 @@ import { Bars3Icon } from '@heroicons/react/24/outline';
 import { useSidebarStore } from '@/store/sidebar.store';
 import { SitioSelector } from './sitio-selector';
 import { NotificationBell } from './notification-bell';
+import { ThemeToggle } from './theme-toggle';
 import { UserDropdown } from './user-dropdown';
 import { Breadcrumbs } from './breadcrumbs/breadcrumbs';
 import { NotificationCenter } from '@/modules/notificaciones/components/notification-center';
@@ -53,10 +54,11 @@ export function AdminHeader({ onMobileMenuToggle }: AdminHeaderProps): JSX.Eleme
           <Breadcrumbs />
         </div>
 
-        {/* Right: SitioSelector + NotificationBell + UserDropdown */}
+        {/* Right: SitioSelector + NotificationBell + ThemeToggle + UserDropdown */}
         <div className="flex items-center gap-2">
           <SitioSelector />
           <NotificationBell />
+          <ThemeToggle />
           <UserDropdown />
         </div>
       </header>
