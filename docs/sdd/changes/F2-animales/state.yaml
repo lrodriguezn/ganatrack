@@ -1,0 +1,10 @@
+name: F2-animales
+status: completed
+phase: apply
+created: "2026-04-03"
+completed: "2026-04-03"
+description: "Core cattle management module — CRUD for animals, genealogy tree, bulk ops, state changes"
+phases:
+  apply: completed
+  verify: completed
+notes: "No explore, proposal, spec, design artifacts exist. Was implemented as part of F2-NÚCLEO pipeline. Tasks defined in PRD Frontend task breakdown (obs #11)."

@@ -18,5 +18,11 @@ interface DashboardLayoutProps {
 export default function DashboardLayout({
   children,
 }: DashboardLayoutProps): JSX.Element {
-  return <AdminLayout>{children}</AdminLayout>;
+  return (
+    <AdminLayout>
+      <main id="main-content" role="main" tabIndex={-1}>
+        {children}
+      </main>
+    </AdminLayout>
+  );
 }

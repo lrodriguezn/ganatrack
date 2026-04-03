@@ -1,0 +1,14 @@
+name: F4-reportes
+status: completed
+phase: archive
+created: "2026-04-03"
+completed: "2026-04-03"
+description: "Módulo Reportes — 5 dashboards con ApexCharts, exportación async, filtros sincronizados"
+phases:
+  propose: completed
+  spec: completed
+  design: completed
+  tasks: completed
+  apply: completed
+  verify: completed
+  archive: completed

@@ -1,0 +1,10 @@
+name: F2-maestros
+status: completed
+phase: apply
+created: "2026-04-03"
+completed: "2026-04-03"
+description: "Generic CRUD for 8 Colombian cattle farm master data entities — implemented without separate SDD planning artifacts"
+phases:
+  apply: completed
+  verify: completed
+notes: "No explore, proposal, spec, design, or tasks artifacts exist for this change. Was implemented as part of F2-NÚCLEO pipeline or directly."

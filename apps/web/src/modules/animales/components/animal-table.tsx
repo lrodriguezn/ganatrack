@@ -23,6 +23,7 @@
 
 'use client';
 
+import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { Animal } from '../types/animal.types';
@@ -110,7 +111,7 @@ export function AnimalTable({
 }: AnimalTableProps): JSX.Element {
   const router = useRouter();
 
-  const columns: ColumnDef<Animal>[] = [
+  const columns: ColumnDef<Animal>[] = useMemo(() => [
     {
       id: 'codigo',
       accessorKey: 'codigo',
@@ -180,6 +181,9 @@ export function AnimalTable({
       accessorKey: 'fechaNacimiento',
       header: 'Fecha Nac.',
       cell: ({ row }) => {
+        if (!row.original.fechaNacimiento) {
+          return <span className="text-gray-400 dark:text-gray-500">—</span>;
+        }
         const date = new Date(row.original.fechaNacimiento);
         return (
           <span className="text-gray-700 dark:text-gray-300">
@@ -203,7 +207,13 @@ export function AnimalTable({
               dark:text-blue-400 dark:hover:bg-blue-500/10
               transition-colors
             "
-            aria-label="Editar"
+            aria-label={`Editar ${row.original.nombre || row.original.codigo}`}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                router.push(`/dashboard/animales/${row.original.id}/editar`);
+              }
+            }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -221,7 +231,13 @@ export function AnimalTable({
               dark:text-red-400 dark:hover:bg-red-500/10
               transition-colors
             "
-            aria-label="Eliminar"
+            aria-label={`Eliminar ${row.original.nombre || row.original.codigo}`}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onDelete?.(row.original);
+              }
+            }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <polyline points="3 6 5 6 21 6" />
@@ -235,7 +251,7 @@ export function AnimalTable({
         </div>
       ),
     },
-  ];
+  ], [router, onRowClick, onBulkAction]);
 
   const handleRowClick = (animal: Animal) => {
     if (onRowClick) {

@@ -1,13 +1,11 @@
-// apps/web/src/app/(dashboard)/page.tsx
+// apps/web/src/app/dashboard/page.tsx
 /**
- * Dashboard home page — basic overview with mock data.
+ * Dashboard home page — KPIs from API + recent activity.
  *
  * Displays:
- * - KPI stat cards (total animales, en ordeño, producción, alertas)
+ * - KPI stat cards (from useDashboardKPIs — real API data)
  * - Recent activity table
  * - Quick actions
- *
- * All data is MOCK — will be replaced with real API calls in future phases.
  */
 
 'use client';
@@ -22,112 +20,34 @@ import {
   Plus,
   Syringe,
   TrendingUp,
+  TrendingDown,
+  AlertTriangle,
+  XCircle,
 } from 'lucide-react';
-/* ------------------------------------------------------------------ */
-/*  Mock data                                                          */
-/* ------------------------------------------------------------------ */
+import { useDashboardKPIs } from '@/modules/reportes/hooks/use-dashboard-kpis';
+import { usePredioStore } from '@/store/predio.store';
+import { KpiCard } from '@/modules/reportes/components/dashboard/kpi-card';
+import Link from 'next/link';
 
-const stats = [
-  {
-    label: 'Total Animales',
-    value: '1,247',
-    change: '+12 este mes',
-    icon: Beef,
-    color: 'text-emerald-600 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-950',
-  },
-  {
-    label: 'En Ordeño',
-    value: '342',
-    change: '27.4% del hato',
-    icon: Droplets,
-    color: 'text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-950',
-  },
-  {
-    label: 'Producción Diaria',
-    value: '2,856 L',
-    change: '+5.2% vs semana anterior',
-    icon: TrendingUp,
-    color: 'text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-950',
-  },
-  {
-    label: 'Alertas Activas',
-    value: '8',
-    change: '3 urgentes',
-    icon: Bell,
-    color: 'text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-950',
-  },
-];
-
-const recentActivity = [
-  {
-    id: 1,
-    action: 'Registro de parto',
-    animal: 'Vaca #0247 — Luna',
-    date: '02 Abr 2026, 08:30',
-    user: 'Dr. García',
-    status: 'completado' as const,
-  },
-  {
-    id: 2,
-    action: 'Vacunación Aftosa',
-    animal: 'Lote Norte — 85 animales',
-    date: '01 Abr 2026, 15:00',
-    user: 'Carlos M.',
-    status: 'completado' as const,
-  },
-  {
-    id: 3,
-    action: 'Control de peso',
-    animal: 'Lote Engorde — 120 animales',
-    date: '01 Abr 2026, 10:00',
-    user: 'María L.',
-    status: 'en_progreso' as const,
-  },
-  {
-    id: 4,
-    action: 'Alerta sanitaria',
-    animal: 'Vaca #0189 — Estrella',
-    date: '31 Mar 2026, 16:45',
-    user: 'Sistema',
-    status: 'pendiente' as const,
-  },
-  {
-    id: 5,
-    action: 'Inseminación artificial',
-    animal: 'Vaca #0312 — Paloma',
-    date: '31 Mar 2026, 09:00',
-    user: 'Dr. García',
-    status: 'completado' as const,
-  },
-];
+/* ------------------------------------------------------------------ */
+/*  Quick actions (keep static)                                        */
+/* ------------------------------------------------------------------ */
 
 const quickActions = [
-  { label: 'Registrar Animal', icon: Plus, description: 'Agregar nuevo animal al hato' },
-  { label: 'Nuevo Evento Sanitario', icon: Syringe, description: 'Vacunación, desparasitación, etc.' },
-  { label: 'Registrar Producción', icon: BarChart3, description: 'Litros de leche por ordeño' },
-  { label: 'Programar Evento', icon: CalendarDays, description: 'Agendar próxima actividad' },
+  { label: 'Registrar Animal', icon: Plus, description: 'Agregar nuevo animal al hato', href: '/dashboard/animales/nuevo' },
+  { label: 'Nuevo Evento Sanitario', icon: Syringe, description: 'Vacunación, desparasitación, etc.', href: '/dashboard/servicios/palpaciones/nuevo' },
+  { label: 'Ver Reportes', icon: BarChart3, description: 'Inventario, reproductivo, mortalidad', href: '/dashboard/reportes' },
+  { label: 'Programar Evento', icon: CalendarDays, description: 'Agendar próxima actividad', href: '/dashboard/servicios' },
 ];
-
-const statusMap = {
-  completado: { label: 'Completado', className: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' },
-  en_progreso: { label: 'En Progreso', className: 'bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300' },
-  pendiente: { label: 'Pendiente', className: 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300' },
-} as const;
-
-function StatusBadge({ status }: { status: keyof typeof statusMap }) {
-  const { label, className } = statusMap[status];
-  return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${className}`}>
-      {label}
-    </span>
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /*  Component                                                          */
 /* ------------------------------------------------------------------ */
 
 export default function DashboardPage(): JSX.Element {
+  const { predioActivo } = usePredioStore();
+  const { data, isLoading, error, refetch } = useDashboardKPIs(predioActivo?.id ?? 0);
+
   return (
     <div className="space-y-6">
       {/* Page title */}
@@ -140,92 +60,92 @@ export default function DashboardPage(): JSX.Element {
         </p>
       </div>
 
-      {/* KPI Cards */}
+      {/* Error state */}
+      {error && (
+        <div className="flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-950">
+          <XCircle className="h-5 w-5 text-red-600 dark:text-red-400" />
+          <div className="flex-1">
+            <p className="text-sm text-red-600 dark:text-red-400">
+              Error al cargar los KPIs: {error.message}
+            </p>
+          </div>
+          <button
+            onClick={() => refetch()}
+            className="rounded-md bg-red-100 px-3 py-1.5 text-sm font-medium text-red-700 hover:bg-red-200 dark:bg-red-900 dark:text-red-300 dark:hover:bg-red-800"
+          >
+            Reintentar
+          </button>
+        </div>
+      )}
+
+      {/* KPI Cards — real API data */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <div
-              key={stat.label}
-              className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900"
-            >
-              <div className="flex items-center gap-3">
-                <div className={`rounded-lg p-2.5 ${stat.color}`}>
-                  <Icon className="h-5 w-5" />
-                </div>
-                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                  {stat.label}
-                </span>
-              </div>
-              <p className="mt-3 text-3xl font-bold text-gray-900 dark:text-gray-100">
-                {stat.value}
-              </p>
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                {stat.change}
-              </p>
-            </div>
-          );
-        })}
+        <KpiCard
+          label="Total Animales"
+          value={data?.totalAnimales.toLocaleString('es-CO') ?? '—'}
+          change={isLoading ? undefined : 'En el predio activo'}
+          icon={Beef}
+          color="text-emerald-600 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-950"
+          loading={isLoading}
+        />
+        <KpiCard
+          label="En Ordeño"
+          value={data?.enOrdeno.toLocaleString('es-CO') ?? '—'}
+          change={data ? `${data.totalAnimales > 0 ? ((data.enOrdeno / data.totalAnimales) * 100).toFixed(1) : 0}% del hato` : undefined}
+          icon={Droplets}
+          color="text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-950"
+          loading={isLoading}
+        />
+        <KpiCard
+          label="Tasa de Preñez"
+          value={data ? `${data.tasaPrenez.toFixed(1)}%` : '—'}
+          change="Período actual"
+          icon={(data?.tasaPrenez ?? 0) >= 50 ? TrendingUp : TrendingDown}
+          color={(data?.tasaPrenez ?? 0) >= 50
+            ? 'text-emerald-600 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-950'
+            : 'text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-950'}
+          loading={isLoading}
+        />
+        <KpiCard
+          label="Mortalidad Mensual"
+          value={data ? `${data.mortalidadMensual.toFixed(1)}%` : '—'}
+          change={data && data.mortalidadMensual > 5 ? 'Por encima del umbral' : 'Dentro de lo normal'}
+          icon={data && data.mortalidadMensual > 5 ? AlertTriangle : Bell}
+          color={data && data.mortalidadMensual > 5
+            ? 'text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-950'
+            : 'text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-950'}
+          loading={isLoading}
+        />
       </div>
 
-      {/* Two-column: Activity + Quick Actions */}
+      {/* Two-column: Movements summary + Quick Actions */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Recent Activity */}
+        {/* Compras/Ventas del mes */}
         <div className="lg:col-span-2 rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
           <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800">
             <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
-              Actividad Reciente
+              Movimientos del Mes
             </h2>
-            <button className="flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 dark:text-emerald-400">
-              Ver todo <MoveRight className="h-4 w-4" />
-            </button>
+            <Link
+              href="/dashboard/reportes/movimiento"
+              className="flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 dark:text-emerald-400"
+            >
+              Ver reporte <MoveRight className="h-4 w-4" />
+            </Link>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-100 dark:border-gray-800">
-                  <th className="px-5 py-3 text-left font-medium text-gray-500 dark:text-gray-400">
-                    Acción
-                  </th>
-                  <th className="px-5 py-3 text-left font-medium text-gray-500 dark:text-gray-400">
-                    Animal / Lote
-                  </th>
-                  <th className="px-5 py-3 text-left font-medium text-gray-500 dark:text-gray-400 hidden md:table-cell">
-                    Fecha
-                  </th>
-                  <th className="px-5 py-3 text-left font-medium text-gray-500 dark:text-gray-400 hidden sm:table-cell">
-                    Usuario
-                  </th>
-                  <th className="px-5 py-3 text-left font-medium text-gray-500 dark:text-gray-400">
-                    Estado
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentActivity.map((item) => (
-                  <tr
-                    key={item.id}
-                    className="border-b border-gray-50 last:border-0 dark:border-gray-800/50"
-                  >
-                    <td className="px-5 py-3 font-medium text-gray-900 dark:text-gray-100">
-                      {item.action}
-                    </td>
-                    <td className="px-5 py-3 text-gray-600 dark:text-gray-400">
-                      {item.animal}
-                    </td>
-                    <td className="px-5 py-3 text-gray-500 dark:text-gray-400 hidden md:table-cell">
-                      {item.date}
-                    </td>
-                    <td className="px-5 py-3 text-gray-500 dark:text-gray-400 hidden sm:table-cell">
-                      {item.user}
-                    </td>
-                    <td className="px-5 py-3">
-                      <StatusBadge status={item.status} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="grid grid-cols-2 gap-4 p-5">
+            <div className="rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50">
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Compras</p>
+              <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-gray-100">
+                {data?.comprasMes.toLocaleString('es-CO') ?? '—'}
+              </p>
+            </div>
+            <div className="rounded-lg border border-gray-100 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-800/50">
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Ventas</p>
+              <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-gray-100">
+                {data?.ventasMes.toLocaleString('es-CO') ?? '—'}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -240,8 +160,9 @@ export default function DashboardPage(): JSX.Element {
             {quickActions.map((action) => {
               const Icon = action.icon;
               return (
-                <button
+                <Link
                   key={action.label}
+                  href={action.href}
                   className="flex w-full items-center gap-3 px-5 py-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50"
                 >
                   <div className="rounded-lg bg-emerald-50 p-2 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400">
@@ -255,7 +176,7 @@ export default function DashboardPage(): JSX.Element {
                       {action.description}
                     </p>
                   </div>
-                </button>
+                </Link>
               );
             })}
           </div>

@@ -1,0 +1,13 @@
+name: shared-components
+status: completed
+phase: apply
+created: "2026-04-02"
+completed: "2026-04-02"
+description: "Reusable component library — Input, Select, DataTable, Toast, Dialog, Pagination, Query keys"
+phases:
+  explore: completed
+  propose: completed
+  spec: completed
+  design: completed
+  tasks: completed
+  apply: completed

@@ -1,0 +1,11 @@
+name: F2-predios
+status: in-progress
+phase: tasks
+created: "2026-04-02"
+description: "Módulo completo de Predios con CRUD — predios, potreros, sectores, lotes, grupos"
+phases:
+  explore: completed
+  propose: completed
+  spec: completed
+  design: completed
+  tasks: completed

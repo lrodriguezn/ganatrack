@@ -141,7 +141,7 @@ export function DataTable<TData>({
           <div className="absolute inset-0 bg-white/50 dark:bg-gray-900/50 z-10" />
         )}
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" role="region" aria-label="Tabla de datos" tabIndex={0}>
           <table className="w-full text-left text-sm">
             <thead className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
               {table.getHeaderGroups().map((headerGroup) => (

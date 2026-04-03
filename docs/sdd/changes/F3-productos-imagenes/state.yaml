@@ -1,0 +1,8 @@
+name: F3-productos-imagenes
+status: in-progress
+phase: design
+created: "2026-04-03"
+description: "Phase 3 — Productos CRUD + Imágenes Upload/Gallery modules (Weeks 5-6)"
+phases:
+  propose: completed
+  design: completed

@@ -1,0 +1,14 @@
+name: layout-navigation
+status: completed
+phase: archive
+created: "2026-04-01"
+completed: "2026-04-01"
+description: "Authenticated dashboard shell — sidebar, header, breadcrumbs, notification bell, user dropdown"
+phases:
+  explore: completed
+  propose: completed
+  spec: completed
+  design: completed
+  tasks: completed
+  apply: completed
+  verify: completed

@@ -1,0 +1,12 @@
+name: F3-servicios
+status: in-progress
+phase: apply
+created: "2026-04-03"
+description: "Módulo Servicios Reproductivos — palpaciones, inseminaciones, partos (35 archivos nuevos)"
+phases:
+  explore: completed
+  propose: completed
+  spec: completed
+  design: completed
+  tasks: completed
+  apply: completed

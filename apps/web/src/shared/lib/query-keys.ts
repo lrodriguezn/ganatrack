@@ -80,4 +80,41 @@ export const queryKeys = {
       detail: (id: number) => ['servicios', 'partos', 'detail', id] as const,
     },
   },
+  reportes: {
+    all: ['reportes'] as const,
+    dashboard: (predioId: number) => ['reportes', 'dashboard', predioId] as const,
+    inventario: (filtros: { predioId: number; fechaInicio: string; fechaFin: string }) =>
+      ['reportes', 'inventario', filtros] as const,
+    reproductivo: (filtros: { predioId: number; fechaInicio: string; fechaFin: string }) =>
+      ['reportes', 'reproductivo', filtros] as const,
+    mortalidad: (filtros: { predioId: number; fechaInicio: string; fechaFin: string }) =>
+      ['reportes', 'mortalidad', filtros] as const,
+    movimiento: (filtros: { predioId: number; fechaInicio: string; fechaFin: string }) =>
+      ['reportes', 'movimiento', filtros] as const,
+    sanitario: (filtros: { predioId: number; fechaInicio: string; fechaFin: string }) =>
+      ['reportes', 'sanitario', filtros] as const,
+    exportStatus: (jobId: string) => ['reportes', 'export', jobId] as const,
+  },
+  productos: {
+    ...createQueryKeys('productos'),
+  },
+  imagenes: {
+    all: ['imagenes'] as const,
+    byEntity: (tipo: string, id: number) => ['imagenes', tipo, id] as const,
+    detail: (id: number) => ['imagenes', 'detail', id] as const,
+  },
+  notificaciones: {
+    all: ['notificaciones'] as const,
+    resumen: (predioId: number) => ['notificaciones', 'resumen', predioId] as const,
+    list: (predioId: number, params?: Record<string, unknown>) =>
+      params
+        ? (['notificaciones', 'list', predioId, params] as const)
+        : (['notificaciones', 'list', predioId] as const),
+    preferencias: () => ['notificaciones', 'preferencias'] as const,
+  },
+  usuarios: {
+    ...createQueryKeys('usuarios'),
+    roles: () => ['usuarios', 'roles'] as const,
+    rolePermisos: (rolId: number) => ['usuarios', 'roles', rolId, 'permisos'] as const,
+  },
 } as const;

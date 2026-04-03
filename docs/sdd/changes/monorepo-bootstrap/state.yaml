@@ -1,0 +1,14 @@
+name: monorepo-bootstrap
+status: completed
+phase: archive
+created: "2026-03-31"
+completed: "2026-04-01"
+description: "Bootstrap Turborepo + pnpm monorepo for GanaTrack"
+phases:
+  explore: completed
+  propose: completed
+  spec: completed
+  design: completed
+  tasks: completed
+  apply: completed
+  verify: completed

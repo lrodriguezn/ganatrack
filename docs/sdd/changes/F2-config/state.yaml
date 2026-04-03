@@ -1,0 +1,10 @@
+name: F2-config
+status: completed
+phase: apply
+created: "2026-04-03"
+completed: "2026-04-03"
+description: "Configuration module — 5 editable catalogs (razas, condiciones corporales, tipos explotación, calidad animal, colores)"
+phases:
+  apply: completed
+  verify: completed
+notes: "No explore, proposal, spec, design artifacts exist. Implemented directly. Reuses MaestroTable/MaestroForm from maestros module."

@@ -1,0 +1,201 @@
+name: Quality Gates
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm --filter @ganatrack/web typecheck
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm --filter @ganatrack/web lint
+
+  test:
+    name: Unit & Component Tests
+    runs-on: ubuntu-latest
+    needs: [typecheck, lint]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Vitest
+        run: pnpm --filter @ganatrack/web test:coverage
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: apps/web/coverage/
+          retention-days: 30
+
+  e2e:
+    name: E2E Tests (Playwright)
+    runs-on: ubuntu-latest
+    needs: [test]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm --filter @ganatrack/web exec playwright install --with-deps chromium firefox
+
+      - name: Run E2E tests
+        run: pnpm --filter @ganatrack/web test:e2e
+        env:
+          CI: true
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report/
+          retention-days: 30
+
+  lighthouse:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    needs: [e2e]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Lighthouse CI
+        run: pnpm add -g @lhci/cli@0.14.x
+
+      - name: Build app
+        run: pnpm --filter @ganatrack/web build
+
+      - name: Start server and run Lighthouse
+        run: |
+          pnpm --filter @ganatrack/web start &
+          npx wait-on http://localhost:3000 --timeout 30000
+          lhci autorun
+        working-directory: apps/web
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: Upload Lighthouse report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-report
+          path: apps/web/.lighthouseci/
+          retention-days: 30
+
+  a11y:
+    name: Accessibility Audit (axe-core)
+    runs-on: ubuntu-latest
+    needs: [e2e]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm --filter @ganatrack/web exec playwright install --with-deps chromium
+
+      - name: Run Playwright a11y tests
+        run: pnpm --filter @ganatrack/web exec playwright test --project=chromium --grep-invert="@skip-ci"
+        env:
+          CI: true

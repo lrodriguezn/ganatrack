@@ -1,0 +1,14 @@
+name: auth-frontend
+status: completed
+phase: archive
+created: "2026-04-01"
+completed: "2026-04-01"
+description: "Complete frontend authentication system — login, 2FA, token refresh, route protection, RBAC, multi-predio switching"
+phases:
+  explore: completed
+  propose: completed
+  spec: completed
+  design: completed
+  tasks: completed
+  apply: completed
+  verify: completed
