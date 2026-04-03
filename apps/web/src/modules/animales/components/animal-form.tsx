@@ -19,6 +19,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { createAnimalSchema } from '@ganatrack/shared-types';
 import { SexoEnum, OrigenAnimalEnum } from '@ganatrack/shared-types';
 import { FormField } from '@/shared/components/ui/form-field';
@@ -179,7 +180,7 @@ export function AnimalForm({
           label="Código"
           control={control}
           rules={{ required: 'Código requerido' }}
-          render={({ field }) => (
+          render={(field) => (
             <Input
               {...field}
               value={field.value ?? ''}
@@ -195,7 +196,7 @@ export function AnimalForm({
           label="Raza"
           control={control}
           rules={{ required: 'Raza requerida' }}
-          render={({ field }) => (
+          render={(field) => (
             <select
               {...field}
               value={field.value ?? 0}
@@ -219,7 +220,7 @@ export function AnimalForm({
           name="nombre"
           label="Nombre (opcional)"
           control={control}
-          render={({ field }) => (
+          render={(field) => (
             <Input
               {...field}
               value={field.value ?? ''}
@@ -234,7 +235,7 @@ export function AnimalForm({
           label="Fecha de Nacimiento"
           control={control}
           rules={{ required: 'Fecha requerida' }}
-          render={({ field }) => (
+          render={(field) => (
             <DatePicker
               value={field.value}
               onChange={(date) => field.onChange(date)}
@@ -253,7 +254,7 @@ export function AnimalForm({
           label="Sexo"
           control={control}
           rules={{ required: 'Sexo requerido' }}
-          render={({ field }) => (
+          render={(field) => (
             <select
               {...field}
               value={field.value ?? 0}
@@ -270,7 +271,7 @@ export function AnimalForm({
           name="tipoIngresoId"
           label="Origen"
           control={control}
-          render={({ field }) => (
+          render={(field) => (
             <select
               {...field}
               value={field.value ?? 0}
@@ -291,7 +292,7 @@ export function AnimalForm({
             name="precioCompra"
             label="Precio de Compra (COP)"
             control={control}
-            render={({ field }) => (
+            render={(field) => (
               <Input
                 {...field}
                 type="number"
@@ -307,7 +308,7 @@ export function AnimalForm({
             name="pesoCompra"
             label="Peso de Compra (kg)"
             control={control}
-            render={({ field }) => (
+            render={(field) => (
               <Input
                 {...field}
                 type="number"
@@ -327,7 +328,7 @@ export function AnimalForm({
           name="codigoArete"
           label="Código Arete (opcional)"
           control={control}
-          render={({ field }) => (
+          render={(field) => (
             <Input
               {...field}
               value={field.value ?? ''}
@@ -341,7 +342,7 @@ export function AnimalForm({
           name="codigoRfid"
           label="Código RFID (opcional)"
           control={control}
-          render={({ field }) => (
+          render={(field) => (
             <Input
               {...field}
               value={field.value ?? ''}
@@ -364,7 +365,7 @@ export function AnimalForm({
                 name="madreId"
                 label="ID Madre (opcional)"
                 control={control}
-                render={({ field }) => (
+                render={(field) => (
                   <Input
                     {...field}
                     type="number"
@@ -380,7 +381,7 @@ export function AnimalForm({
                 name="codigoMadre"
                 label="Código Madre (opcional)"
                 control={control}
-                render={({ field }) => (
+                render={(field) => (
                   <Input
                     {...field}
                     value={field.value ?? ''}
@@ -400,7 +401,7 @@ export function AnimalForm({
           name="tipoPadreKey"
           label="Tipo de Padre"
           control={control}
-          render={({ field }) => (
+          render={(field) => (
             <select
               {...field}
               value={field.value ?? 0}
