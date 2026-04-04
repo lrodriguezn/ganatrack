@@ -1,8 +1,8 @@
-// apps/web/src/app/dashboard/productos/[id]/page.tsx
+// apps/web/src/app/dashboard/maestros/productos/[id]/page.tsx
 /**
  * Producto detail page — shows full product info with inline image gallery.
  *
- * Route: /dashboard/productos/:id
+ * Route: /dashboard/maestros/productos/:id
  */
 
 'use client';
@@ -58,7 +58,7 @@ export default function ProductoDetailPage(): JSX.Element {
     try {
       setIsDeleting(true);
       await productoService.delete(productoId);
-      router.push('/dashboard/productos');
+      router.push('/dashboard/maestros/productos');
     } catch (err) {
       console.error('Error deleting producto:', err);
       setIsDeleting(false);
@@ -81,7 +81,7 @@ export default function ProductoDetailPage(): JSX.Element {
         <p className="text-gray-500 dark:text-gray-400">
           Producto no encontrado
         </p>
-        <Link href="/dashboard/productos">
+        <Link href="/dashboard/maestros/productos">
           <Button className="mt-4">
             <ArrowLeft className="h-4 w-4 mr-1" />
             Volver al listado
@@ -95,7 +95,7 @@ export default function ProductoDetailPage(): JSX.Element {
     <div className="space-y-6">
       {/* Back navigation */}
       <div className="flex items-center gap-4">
-        <Link href="/dashboard/productos">
+        <Link href="/dashboard/maestros/productos">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="h-4 w-4 mr-1" />
             Volver

@@ -19,6 +19,9 @@ import type {
   CreatePartoDto,
   PaginationParams,
   PaginatedEventos,
+  ServicioVeterinarioEvento,
+  CreateServicioVeterinarioEventoDto,
+  PaginatedServiciosVeterinarios,
 } from '../types/servicios.types';
 
 // ============================================================================
@@ -40,6 +43,11 @@ export interface ServiciosService {
   getPartos(params: PaginationParams): Promise<PaginatedEventos<Parto>>;
   getPartoById(id: number): Promise<Parto>;
   createParto(data: CreatePartoDto): Promise<Parto>;
+
+  // Servicios Veterinarios
+  getServiciosVeterinarios(filters: { predioId: number; page: number; limit: number }): Promise<PaginatedServiciosVeterinarios>;
+  getServicioVeterinarioById(id: number): Promise<ServicioVeterinarioEvento>;
+  createServicioVeterinario(data: CreateServicioVeterinarioEventoDto): Promise<ServicioVeterinarioEvento>;
 }
 
 // ============================================================================

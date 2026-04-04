@@ -39,6 +39,9 @@ function sanitizeRedirect(redirect: string | null): string {
   // No redirect → default to dashboard
   if (!redirect) return '/dashboard';
 
+  // Root path → dashboard (user came from home page)
+  if (redirect === '/') return '/dashboard';
+
   // Must start with / (same-origin only)
   if (!redirect.startsWith('/')) return '/dashboard';
 

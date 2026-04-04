@@ -19,6 +19,7 @@ import { useSidebarStore } from '@/store/sidebar.store';
 import { AdminSidebar } from './admin-sidebar';
 import { MobileSidebar } from './mobile-sidebar';
 import { AdminHeader } from './admin-header';
+import { twMerge } from 'tailwind-merge';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -26,6 +27,7 @@ interface AdminLayoutProps {
 
 export function AdminLayout({ children }: AdminLayoutProps): JSX.Element {
   const isMobileOpen = useSidebarStore((s) => s.isMobileOpen);
+  const isCollapsed = useSidebarStore((s) => s.isCollapsed);
 
   return (
     <TooltipProvider>
@@ -36,8 +38,12 @@ export function AdminLayout({ children }: AdminLayoutProps): JSX.Element {
         {/* Mobile overlay sidebar */}
         <MobileSidebar />
 
-        {/* Main content area */}
-        <div className="flex flex-1 flex-col xl:ml-[280px] md:ml-[72px]">
+        {/* Main content area — margin adjusts to sidebar collapsed state */}
+        <div className={twMerge(
+          'flex flex-1 flex-col transition-all duration-200 ease-in-out',
+          'md:ml-[72px]',
+          isCollapsed ? 'xl:ml-[72px]' : 'xl:ml-[280px]',
+        )}>
           {/* Header */}
           <AdminHeader onMobileMenuToggle={() => {}} />
 

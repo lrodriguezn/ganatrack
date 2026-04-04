@@ -26,6 +26,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { authService } from '@/modules/auth/services/auth.service';
 import { useAuthStore } from '@/store/auth.store';
+import { usePredioStore } from '@/store/predio.store';
 import { ApiError } from '@/shared/lib/errors';
 
 interface AuthProviderProps {
@@ -42,7 +43,6 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   const [isHydrating, setIsHydrating] = useState(true);
   const router = useRouter();
   const clearAuth = useAuthStore((s) => s.clearAuth);
-  const user = useAuthStore((s) => s.user);
 
   useEffect(() => {
     const rehydrateAuth = async (): Promise<void> => {
@@ -64,19 +64,78 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           sessionStorage.removeItem('ganatrack-auth-permissions');
         }
 
+        // Restore active predio ID from sessionStorage
+        let savedPredioId: number | null = null;
+        try {
+          const storedPredioId = sessionStorage.getItem('ganatrack-predio-activo-id');
+          savedPredioId = storedPredioId ? Number(storedPredioId) : null;
+        } catch { /* ignore */ }
+
         useAuthStore.getState().setAuth({
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           accessToken: '', // Empty string — will trigger 401 on API calls, which triggers refresh
           user: userData,
           permissions,
         });
+
+        // Load predios and restore active selection
+        try {
+          const predios = await authService.getPredios();
+          usePredioStore.getState().setPredios(predios);
+
+          // Restore saved predio if it exists in the list
+          if (savedPredioId && predios.some((p) => p.id === savedPredioId)) {
+            usePredioStore.getState().switchPredio(savedPredioId);
+          }
+        } catch {
+          // Predios failed to load — continue without them
+        }
       } catch (error) {
         // 401 means session expired or invalid
         if (error instanceof ApiError && error.status === 401) {
-          clearAuth();
-          // Redirect to login if not already there
-          if (!window.location.pathname.startsWith('/login')) {
-            router.push('/login');
+          // DEV MODE: Auto-login as admin when mocks are enabled and no session exists
+          const useMocks = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
+          if (useMocks) {
+            // Call mock login to set internal mockLoggedInUser state
+            // (required for getMe() and getPredios() to work in mock mode)
+            const loginResult = await authService.login({
+              email: 'admin@ganatrack.com',
+              password: 'Admin123!',
+            });
+
+            if (!('requires2FA' in loginResult)) {
+              useAuthStore.getState().setAuth({
+                accessToken: loginResult.accessToken,
+                user: loginResult.user,
+                permissions: loginResult.permissions,
+              });
+              sessionStorage.setItem('ganatrack-auth-permissions', JSON.stringify(loginResult.permissions));
+
+              // Load predios from mock service
+              try {
+                const predios = await authService.getPredios();
+                usePredioStore.getState().setPredios(predios);
+
+                // Restore saved predio if it exists
+                let savedPredioId: number | null = null;
+                try {
+                  const storedPredioId = sessionStorage.getItem('ganatrack-predio-activo-id');
+                  savedPredioId = storedPredioId ? Number(storedPredioId) : null;
+                } catch { /* ignore */ }
+
+                if (savedPredioId && predios.some((p) => p.id === savedPredioId)) {
+                  usePredioStore.getState().switchPredio(savedPredioId);
+                }
+              } catch {
+                // Mock predios failed — ignore
+              }
+            }
+          } else {
+            clearAuth();
+            // Redirect to login if not already there
+            if (!window.location.pathname.startsWith('/login')) {
+              router.push('/login');
+            }
           }
         }
         // Other errors — ignore, user stays unauthenticated

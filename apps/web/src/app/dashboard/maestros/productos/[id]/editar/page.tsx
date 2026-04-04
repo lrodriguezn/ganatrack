@@ -1,8 +1,8 @@
-// apps/web/src/app/dashboard/productos/[id]/editar/page.tsx
+// apps/web/src/app/dashboard/maestros/productos/[id]/editar/page.tsx
 /**
  * Editar Producto page — edit form for existing product.
  *
- * Route: /dashboard/productos/:id/editar
+ * Route: /dashboard/maestros/productos/:id/editar
  */
 
 'use client';
@@ -52,7 +52,7 @@ export default function EditarProductoPage(): JSX.Element {
     setSubmitError(null);
     try {
       await mutateAsync({ id, data });
-      router.push(`/dashboard/productos/${id}`);
+      router.push(`/dashboard/maestros/productos/${id}`);
     } catch (err) {
       setSubmitError(err as Error);
     }
@@ -73,7 +73,7 @@ export default function EditarProductoPage(): JSX.Element {
         <p className="text-gray-500 dark:text-gray-400">
           Producto no encontrado
         </p>
-        <Link href="/dashboard/productos">
+        <Link href="/dashboard/maestros/productos">
           <Button className="mt-4">
             <ArrowLeft className="h-4 w-4 mr-1" />
             Volver al listado
@@ -87,7 +87,7 @@ export default function EditarProductoPage(): JSX.Element {
     <div className="space-y-6">
       {/* Page header */}
       <div className="flex items-center gap-4">
-        <Link href={`/dashboard/productos/${id}`}>
+        <Link href={`/dashboard/maestros/productos/${id}`}>
           <Button variant="ghost" size="sm">
             <ArrowLeft className="h-4 w-4 mr-1" />
             Volver
@@ -117,7 +117,7 @@ export default function EditarProductoPage(): JSX.Element {
         <ProductoForm
           initialData={producto}
           onSubmit={handleSubmit}
-          onCancel={() => router.push(`/dashboard/productos/${id}`)}
+          onCancel={() => router.push(`/dashboard/maestros/productos/${id}`)}
           isLoading={isPending}
         />
       </div>

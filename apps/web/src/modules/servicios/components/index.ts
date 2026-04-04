@@ -7,6 +7,7 @@ export { AnimalSelector } from './animal-selector';
 export { PalpacionesTable } from './palpaciones-table';
 export { InseminacionesTable } from './inseminaciones-table';
 export { PartosTable } from './partos-table';
+export { ServiciosVeterinariosTable } from './servicios-veterinarios-table';
 export { ServicioGrupalWizard } from './servicio-grupal-wizard';
 export {
   PalpacionEventoForm,
@@ -21,3 +22,9 @@ export {
   type InseminacionEventoFormRef,
 } from './inseminacion-form';
 export { PartoForm } from './parto-form';
+export {
+  ServicioVeterinarioEventoForm,
+  ServicioVeterinarioAnimalesStep,
+  ServicioVeterinarioResultadosStep,
+  type ServicioVeterinarioEventoFormRef,
+} from './servicio-veterinario-form';

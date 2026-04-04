@@ -175,7 +175,7 @@ export function ProductoTable({
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              router.push(`/dashboard/productos/${row.original.id}`);
+              router.push(`/dashboard/maestros/productos/${row.original.id}`);
             }}
             className="inline-flex items-center rounded-md px-2.5 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-white/5 transition-colors"
             aria-label="Ver detalle"
@@ -186,7 +186,7 @@ export function ProductoTable({
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              router.push(`/dashboard/productos/${row.original.id}/editar`);
+              router.push(`/dashboard/maestros/productos/${row.original.id}/editar`);
             }}
             className="inline-flex items-center rounded-md px-2.5 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-500/10 transition-colors"
             aria-label="Editar"

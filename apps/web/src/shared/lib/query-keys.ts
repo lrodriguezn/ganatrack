@@ -79,6 +79,12 @@ export const queryKeys = {
         params ? (['servicios', 'partos', 'list', params] as const) : (['servicios', 'partos', 'list'] as const),
       detail: (id: number) => ['servicios', 'partos', 'detail', id] as const,
     },
+    veterinarios: {
+      all: ['servicios', 'veterinarios'] as const,
+      list: (params?: Record<string, unknown>) =>
+        params ? (['servicios', 'veterinarios', 'list', params] as const) : (['servicios', 'veterinarios', 'list'] as const),
+      detail: (id: number) => ['servicios', 'veterinarios', 'detail', id] as const,
+    },
   },
   reportes: {
     all: ['reportes'] as const,

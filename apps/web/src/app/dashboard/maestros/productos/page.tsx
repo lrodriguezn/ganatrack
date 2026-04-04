@@ -1,4 +1,4 @@
-// apps/web/src/app/dashboard/productos/page.tsx
+// apps/web/src/app/dashboard/maestros/productos/page.tsx
 /**
  * Productos list page — main listing with search, filters, and table.
  *
@@ -6,10 +6,10 @@
  * - Search bar with debounce
  * - Filters: tipo, estado
  * - ProductoTable with server-side pagination
- * - "Nuevo Producto" button → /dashboard/productos/nuevo
- * - Row click → /dashboard/productos/:id
+ * - "Nuevo Producto" button → /dashboard/maestros/productos/nuevo
+ * - Row click → /dashboard/maestros/productos/:id
  *
- * Route: /dashboard/productos
+ * Route: /dashboard/maestros/productos
  */
 
 'use client';
@@ -142,7 +142,7 @@ export default function ProductosListPage(): JSX.Element {
             Gestiona el inventario de productos veterinarios de tu predio
           </p>
         </div>
-        <Link href="/dashboard/productos/nuevo">
+        <Link href="/dashboard/maestros/productos/nuevo">
           <Button>
             <Plus className="h-4 w-4 mr-2" />
             Nuevo Producto

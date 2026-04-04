@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import { AppProviders } from "@/shared/providers/app-providers";
+import { ToastProvider } from "@/shared/components/feedback";
 import { SerwistProvider } from "./serwist";
 import "./globals.css";
 
@@ -91,6 +92,8 @@ export default function RootLayout({
         <SerwistProvider swUrl="/sw.js">
           <AppProviders>{children}</AppProviders>
         </SerwistProvider>
+
+        <ToastProvider />
       </body>
     </html>
   );

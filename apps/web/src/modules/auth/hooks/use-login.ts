@@ -95,7 +95,7 @@ export function useLogin(): UseLoginReturn {
 
       // Redirect to dashboard or original requested page
       const redirectUrl = searchParams.get('redirect');
-      if (redirectUrl && isValidRedirect(redirectUrl)) {
+      if (redirectUrl && isValidRedirect(redirectUrl) && redirectUrl !== '/') {
         router.push(redirectUrl);
       } else {
         router.push('/dashboard');

@@ -251,7 +251,7 @@ export function AnimalTable({
         </div>
       ),
     },
-  ], [router, onRowClick, onBulkAction]);
+  ], [router, onDelete]);
 
   const handleRowClick = (animal: Animal) => {
     if (onRowClick) {

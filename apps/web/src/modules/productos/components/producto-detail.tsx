@@ -11,7 +11,7 @@
  * @example
  * <ProductoDetail
  *   producto={data}
- *   onEdit={() => router.push(`/dashboard/productos/${id}/editar`)}
+ *   onEdit={() => router.push(`/dashboard/maestros/productos/${id}/editar`)}
  *   onDelete={() => handleDelete(id)}
  * />
  */
@@ -93,7 +93,7 @@ export function ProductoDetail({
         <div className="flex items-center gap-2">
           <Button
             variant="secondary"
-            onClick={() => router.push(`/dashboard/productos/${producto.id}/editar`)}
+            onClick={() => router.push(`/dashboard/maestros/productos/${producto.id}/editar`)}
           >
             <Pencil className="h-4 w-4 mr-1.5" />
             Editar

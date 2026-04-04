@@ -12,7 +12,7 @@
 'use client';
 
 interface ServicioGrupalWizardProps {
-  type: 'palpacion' | 'inseminacion';
+  type: 'palpacion' | 'inseminacion' | 'veterinario';
   step: 1 | 2 | 3;
   onStepChange: (step: 1 | 2 | 3) => void;
   onNextFromStep1?: () => void;
@@ -40,7 +40,12 @@ export function ServicioGrupalWizard({
     { number: 3, label: 'Registrar Resultados' },
   ];
 
-  const title = type === 'palpacion' ? 'Nueva Palpación' : 'Nueva Inseminación';
+  const title =
+    type === 'palpacion'
+      ? 'Nueva Palpación'
+      : type === 'inseminacion'
+        ? 'Nueva Inseminación'
+        : 'Nuevo Servicio Veterinario';
 
   return (
     <div className="mx-auto max-w-4xl">

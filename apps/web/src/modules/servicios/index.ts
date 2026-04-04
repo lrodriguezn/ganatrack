@@ -38,12 +38,16 @@ export { useInseminacion } from './hooks/use-inseminacion';
 export { useCreateInseminacion } from './hooks/use-create-inseminacion';
 export { usePartos } from './hooks/use-partos';
 export { useCreateParto } from './hooks/use-create-parto';
+export { useServiciosVeterinarios } from './hooks/use-servicios-veterinarios';
+export { useServicioVeterinario } from './hooks/use-servicio-veterinario';
+export { useCreateServicioVeterinario } from './hooks/use-create-servicio-veterinario';
 
 // Components
 export { AnimalSelector } from './components/animal-selector';
 export { PalpacionesTable } from './components/palpaciones-table';
 export { InseminacionesTable } from './components/inseminaciones-table';
 export { PartosTable } from './components/partos-table';
+export { ServiciosVeterinariosTable } from './components/servicios-veterinarios-table';
 export { ServicioGrupalWizard } from './components/servicio-grupal-wizard';
 export {
   PalpacionEventoForm,

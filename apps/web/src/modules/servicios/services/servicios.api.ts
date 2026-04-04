@@ -16,6 +16,9 @@ import type {
   CreatePartoDto,
   PaginationParams,
   PaginatedEventos,
+  ServicioVeterinarioEvento,
+  CreateServicioVeterinarioEventoDto,
+  PaginatedServiciosVeterinarios,
 } from '../types/servicios.types';
 import type { ServiciosService } from './servicios.service';
 
@@ -78,5 +81,21 @@ export class RealServiciosService implements ServiciosService {
   async createParto(data: CreatePartoDto): Promise<Parto> {
     const response = await apiClient.post('servicios/partos', { json: data });
     return response.json();
+  }
+
+  // Servicios Veterinarios
+  async getServiciosVeterinarios(filters: { predioId: number; page: number; limit: number }): Promise<PaginatedServiciosVeterinarios> {
+    const response = await apiClient.get('servicios/veterinarios', { searchParams: filters });
+    return response.json() as Promise<PaginatedServiciosVeterinarios>;
+  }
+
+  async getServicioVeterinarioById(id: number): Promise<ServicioVeterinarioEvento> {
+    const response = await apiClient.get(`servicios/veterinarios/${id}`);
+    return response.json() as Promise<ServicioVeterinarioEvento>;
+  }
+
+  async createServicioVeterinario(data: CreateServicioVeterinarioEventoDto): Promise<ServicioVeterinarioEvento> {
+    const response = await apiClient.post('servicios/veterinarios', { json: data });
+    return response.json() as Promise<ServicioVeterinarioEvento>;
   }
 }

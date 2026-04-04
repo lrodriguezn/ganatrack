@@ -65,7 +65,7 @@ function createRealService(): AnimalService {
 
 /**
  * Animal service singleton — mock or real based on NEXT_PUBLIC_USE_MOCKS.
- * Default to mock when env var is not set (falsy).
+ * Default to real when env var is not set (falsy).
  */
 export const animalService: AnimalService = USE_MOCKS
   ? createMockService()

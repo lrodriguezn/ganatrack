@@ -47,13 +47,25 @@ export const usePredioStore = create<PredioStore>((set, get) => ({
   ...initialState,
 
   setPredios: (predios) => {
+    // Restore saved predio ID from sessionStorage
+    let savedPredioId: number | null = null;
+    try {
+      const stored = sessionStorage.getItem('ganatrack-predio-activo-id');
+      savedPredioId = stored ? Number(stored) : null;
+    } catch { /* ignore */ }
+
+    // Determine active predio: saved ID if in list, otherwise first, otherwise null
+    const hasSaved = savedPredioId && predsContains(predios, savedPredioId);
+    const newActivo = hasSaved
+      ? predios.find((p) => p.id === savedPredioId) ?? null
+      : predsContains(predios, get().predioActivo?.id)
+        ? get().predioActivo
+        : (predios[0] ?? null);
+
     set({
       predios,
       isLoading: false,
-      // Clear active if it's not in the new list
-      predioActivo: predsContains(predios, get().predioActivo?.id)
-        ? get().predioActivo
-        : null,
+      predioActivo: newActivo,
     });
   },
 
@@ -111,6 +123,11 @@ export const usePredioStore = create<PredioStore>((set, get) => ({
     if (!found) {
       return;
     }
+
+    // Persist active predio ID to sessionStorage for rehydration on refresh
+    try {
+      sessionStorage.setItem('ganatrack-predio-activo-id', String(id));
+    } catch { /* ignore — sessionStorage may be unavailable */ }
 
     set({
       predioActivo: found,

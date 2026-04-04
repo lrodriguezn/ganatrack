@@ -18,6 +18,9 @@ import type {
   CreatePartoDto,
   PaginationParams,
   PaginatedEventos,
+  ServicioVeterinarioEvento,
+  CreateServicioVeterinarioEventoDto,
+  PaginatedServiciosVeterinarios,
 } from '../types/servicios.types';
 import type { ServiciosService } from './servicios.service';
 import { ApiError } from '@/shared/lib/errors';
@@ -82,6 +85,53 @@ const SEED_INSEMINACIONES: InseminacionEvento[] = [
 ];
 
 // ============================================================================
+// Seed Data — Servicios Veterinarios
+// ============================================================================
+
+const SEED_SERVICIOS_VETERINARIOS: ServicioVeterinarioEvento[] = [
+  {
+    id: 1, predioId: 1, codigo: 'SV-2025-001', fecha: '2025-03-15',
+    veterinariosId: 1, observaciones: 'Campaña de desparasitación trimestral',
+    veterinarioNombre: 'Dr. Carlos Méndez', totalAnimales: 3, createdAt: '2025-03-15T08:00:00Z',
+    animales: [
+      { id: 1, eventoId: 1, animalesId: 1, diagnosticosVeterinariosId: 2, medicamentos: 'Ivermectina 1%', dosis: '1ml/50kg', proximaAplicacion: '2025-06-15', observaciones: '', animalCodigo: 'GAN-001', diagnosticoNombre: 'Desparasitación' },
+      { id: 2, eventoId: 1, animalesId: 2, diagnosticosVeterinariosId: 2, medicamentos: 'Ivermectina 1%', dosis: '1ml/50kg', proximaAplicacion: '2025-06-15', observaciones: '', animalCodigo: 'GAN-002', diagnosticoNombre: 'Desparasitación' },
+      { id: 3, eventoId: 1, animalesId: 3, diagnosticosVeterinariosId: 2, medicamentos: 'Ivermectina 1%', dosis: '1ml/50kg', proximaAplicacion: '2025-06-15', observaciones: 'Animal con parásitos visibles', animalCodigo: 'GAN-003', diagnosticoNombre: 'Desparasitación' },
+    ],
+  },
+  {
+    id: 2, predioId: 1, codigo: 'SV-2025-002', fecha: '2025-04-01',
+    veterinariosId: 1, observaciones: 'Vacunación contra aftosa',
+    veterinarioNombre: 'Dr. Carlos Méndez', totalAnimales: 4, createdAt: '2025-04-01T08:00:00Z',
+    animales: [
+      { id: 4, eventoId: 2, animalesId: 4, diagnosticosVeterinariosId: 4, medicamentos: 'Vacuna Aftosa', dosis: '2ml IM', proximaAplicacion: '2025-10-01', observaciones: '', animalCodigo: 'GAN-004', diagnosticoNombre: 'Vacunación' },
+      { id: 5, eventoId: 2, animalesId: 5, diagnosticosVeterinariosId: 4, medicamentos: 'Vacuna Aftosa', dosis: '2ml IM', proximaAplicacion: '2025-10-01', observaciones: '', animalCodigo: 'GAN-005', diagnosticoNombre: 'Vacunación' },
+      { id: 6, eventoId: 2, animalesId: 6, diagnosticosVeterinariosId: 4, medicamentos: 'Vacuna Aftosa', dosis: '2ml IM', proximaAplicacion: '2025-10-01', observaciones: '', animalCodigo: 'GAN-006', diagnosticoNombre: 'Vacunación' },
+      { id: 7, eventoId: 2, animalesId: 7, diagnosticosVeterinariosId: 4, medicamentos: 'Vacuna Aftosa', dosis: '2ml IM', proximaAplicacion: '2025-10-01', observaciones: '', animalCodigo: 'GAN-007', diagnosticoNombre: 'Vacunación' },
+    ],
+  },
+  {
+    id: 3, predioId: 2, codigo: 'SV-2025-003', fecha: '2025-04-10',
+    veterinariosId: 2, observaciones: 'Suplemento vitamínico pre-parto',
+    veterinarioNombre: 'Dra. María López', totalAnimales: 3, createdAt: '2025-04-10T08:00:00Z',
+    animales: [
+      { id: 8, eventoId: 3, animalesId: 8, diagnosticosVeterinariosId: 1, medicamentos: 'Vitamina AD3E', dosis: '5ml IM', proximaAplicacion: '2025-05-10', observaciones: '', animalCodigo: 'GAN-008', diagnosticoNombre: 'Vitaminas' },
+      { id: 9, eventoId: 3, animalesId: 9, diagnosticosVeterinariosId: 1, medicamentos: 'Vitamina AD3E', dosis: '5ml IM', proximaAplicacion: '2025-05-10', observaciones: '', animalCodigo: 'GAN-009', diagnosticoNombre: 'Vitaminas' },
+      { id: 10, eventoId: 3, animalesId: 10, diagnosticosVeterinariosId: 1, medicamentos: 'Vitamina AD3E', dosis: '5ml IM', proximaAplicacion: '2025-05-10', observaciones: 'Ganado delgado', animalCodigo: 'GAN-010', diagnosticoNombre: 'Vitaminas' },
+    ],
+  },
+  {
+    id: 4, predioId: 1, codigo: 'SV-2025-004', fecha: '2025-05-01',
+    veterinariosId: 1, observaciones: 'Tratamiento mastitis',
+    veterinarioNombre: 'Dr. Carlos Méndez', totalAnimales: 2, createdAt: '2025-05-01T08:00:00Z',
+    animales: [
+      { id: 11, eventoId: 4, animalesId: 11, diagnosticosVeterinariosId: 3, medicamentos: 'Cefalexina intramamaria', dosis: '1 tubo/cuarto', proximaAplicacion: '2025-05-04', observaciones: 'Mastitis clínica grado 2', animalCodigo: 'GAN-011', diagnosticoNombre: 'Tratamiento' },
+      { id: 12, eventoId: 4, animalesId: 12, diagnosticosVeterinariosId: 3, medicamentos: 'Cefalexina intramamaria', dosis: '1 tubo/cuarto', proximaAplicacion: '2025-05-04', observaciones: '', animalCodigo: 'GAN-012', diagnosticoNombre: 'Tratamiento' },
+    ],
+  },
+];
+
+// ============================================================================
 // Seed Data — Partos
 // ============================================================================
 
@@ -110,6 +160,10 @@ let palpacionAnimalIdCounter = SEED_PALPACION_ANIMALES.length + 1;
 let inseminacionIdCounter = SEED_INSEMINACIONES.length + 1;
 let inseminacionAnimalIdCounter = SEED_INSEMINACION_ANIMALES.length + 1;
 let partoIdCounter = SEED_PARTOS.length + 1;
+
+let storeServiciosVeterinarios: ServicioVeterinarioEvento[] = SEED_SERVICIOS_VETERINARIOS.map(e => ({ ...e, animales: [...e.animales] }));
+let idCounterVeterinarios = Math.max(...SEED_SERVICIOS_VETERINARIOS.map(e => e.id)) + 1;
+let servicioVeterinarioAnimalIdCounter = Math.max(...SEED_SERVICIOS_VETERINARIOS.flatMap(e => e.animales.map(a => a.id))) + 1;
 
 const storePalpaciones: PalpacionEvento[] = SEED_PALPACIONES.map(p => ({ ...p, animales: [...p.animales] }));
 const storeInseminaciones: InseminacionEvento[] = SEED_INSEMINACIONES.map(i => ({ ...i, animales: [...i.animales] }));
@@ -252,6 +306,53 @@ export class MockServiciosService implements ServiciosService {
     storePartos.unshift(newParto);
     return { ...newParto };
   }
+
+  // Servicios Veterinarios
+  async getServiciosVeterinarios(filters: { predioId: number; page: number; limit: number }): Promise<PaginatedServiciosVeterinarios> {
+    await delay(300);
+    const filtered = storeServiciosVeterinarios.filter(e => e.predioId === filters.predioId);
+    const start = (filters.page - 1) * filters.limit;
+    const pageData = filtered.slice(start, start + filters.limit);
+    return {
+      data: pageData,
+      total: filtered.length,
+      page: filters.page,
+      limit: filters.limit,
+      totalPages: Math.ceil(filtered.length / filters.limit),
+    };
+  }
+
+  async getServicioVeterinarioById(id: number): Promise<ServicioVeterinarioEvento> {
+    await delay(300);
+    const evento = storeServiciosVeterinarios.find(e => e.id === id);
+    if (!evento) {
+      throw new ApiError(404, 'NOT_FOUND', `Servicio veterinario con ID ${id} no encontrado`);
+    }
+    return { ...evento, animales: [...evento.animales] };
+  }
+
+  async createServicioVeterinario(data: CreateServicioVeterinarioEventoDto): Promise<ServicioVeterinarioEvento> {
+    await delay(300);
+    const newEvento: ServicioVeterinarioEvento = {
+      id: idCounterVeterinarios++,
+      predioId: data.predioId,
+      codigo: data.codigo,
+      fecha: data.fecha,
+      veterinariosId: data.veterinariosId,
+      observaciones: data.observaciones,
+      veterinarioNombre: 'Veterinario Mock',
+      totalAnimales: data.animales.length,
+      createdAt: new Date().toISOString(),
+      animales: data.animales.map((a) => ({
+        id: servicioVeterinarioAnimalIdCounter++,
+        eventoId: 0, // Will be set after creation
+        ...a,
+      })),
+    };
+    newEvento.animales.forEach(a => { a.eventoId = newEvento.id; });
+    storeServiciosVeterinarios.unshift(newEvento);
+    return { ...newEvento, animales: [...newEvento.animales] };
+  }
 }
 
 // ============================================================================
@@ -265,9 +366,18 @@ export function resetServiciosMock(): void {
   storeInseminaciones.push(...SEED_INSEMINACIONES.map(i => ({ ...i, animales: [...i.animales] })));
   storePartos.length = 0;
   storePartos.push(...SEED_PARTOS.map(p => ({ ...p })));
+  storeServiciosVeterinarios = SEED_SERVICIOS_VETERINARIOS.map(e => ({ ...e, animales: [...e.animales] }));
   palpacionIdCounter = SEED_PALPACIONES.length + 1;
   palpacionAnimalIdCounter = SEED_PALPACION_ANIMALES.length + 1;
   inseminacionIdCounter = SEED_INSEMINACIONES.length + 1;
   inseminacionAnimalIdCounter = SEED_INSEMINACION_ANIMALES.length + 1;
   partoIdCounter = SEED_PARTOS.length + 1;
+  idCounterVeterinarios = Math.max(...SEED_SERVICIOS_VETERINARIOS.map(e => e.id)) + 1;
+  servicioVeterinarioAnimalIdCounter = Math.max(...SEED_SERVICIOS_VETERINARIOS.flatMap(e => e.animales.map(a => a.id))) + 1;
+}
+
+export function resetServiciosVeterinariosMock(): void {
+  storeServiciosVeterinarios = SEED_SERVICIOS_VETERINARIOS.map(e => ({ ...e, animales: [...e.animales] }));
+  idCounterVeterinarios = Math.max(...SEED_SERVICIOS_VETERINARIOS.map(e => e.id)) + 1;
+  servicioVeterinarioAnimalIdCounter = Math.max(...SEED_SERVICIOS_VETERINARIOS.flatMap(e => e.animales.map(a => a.id))) + 1;
 }

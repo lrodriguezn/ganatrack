@@ -176,3 +176,52 @@ export interface PartosKPIs {
   totalMuertos: number;
   totalCriasVivas: number;
 }
+
+// ============================================================================
+// Servicios Veterinarios
+// ============================================================================
+
+export interface ServicioVeterinarioAnimal {
+  id: number;
+  eventoId: number;
+  animalesId: number;
+  diagnosticosVeterinariosId?: number;
+  medicamentos?: string;
+  dosis?: string;
+  proximaAplicacion?: string;
+  observaciones?: string;
+  // Joined fields
+  animalCodigo?: string;
+  animalNombre?: string;
+  diagnosticoNombre?: string;
+}
+
+export interface ServicioVeterinarioEvento extends EventoGrupal {
+  animales: ServicioVeterinarioAnimal[];
+}
+
+export interface CreateServicioVeterinarioAnimalDto {
+  animalesId: number;
+  diagnosticosVeterinariosId?: number;
+  medicamentos?: string;
+  dosis?: string;
+  proximaAplicacion?: string;
+  observaciones?: string;
+}
+
+export interface CreateServicioVeterinarioEventoDto {
+  predioId: number;
+  codigo: string;
+  fecha: string;
+  veterinariosId: number;
+  observaciones?: string;
+  animales: CreateServicioVeterinarioAnimalDto[];
+}
+
+export interface PaginatedServiciosVeterinarios {
+  data: ServicioVeterinarioEvento[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}

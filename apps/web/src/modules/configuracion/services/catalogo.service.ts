@@ -41,7 +41,7 @@ function createRealService(): CatalogoService {
 
 /**
  * Catalogo service singleton — mock or real based on NEXT_PUBLIC_USE_MOCKS.
- * Default to mock when env var is not set (falsy).
+ * Default to real when env var is not set (falsy).
  */
 export const catalogoService: CatalogoService = USE_MOCKS
   ? createMockService()

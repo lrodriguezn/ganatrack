@@ -87,7 +87,7 @@ function createRealService(): PrediosService {
 
 /**
  * Predios service singleton — mock or real based on NEXT_PUBLIC_USE_MOCKS.
- * Default to mock when env var is not set (falsy).
+ * Default to real when env var is not set (falsy).
  */
 export const prediosService: PrediosService = USE_MOCKS
   ? createMockService()

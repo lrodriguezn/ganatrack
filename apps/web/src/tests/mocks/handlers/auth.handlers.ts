@@ -1,7 +1,7 @@
 // apps/web/src/tests/mocks/handlers/auth.handlers.ts
 /**
  * MSW v2 handlers for auth endpoints.
- * Covers: login (success, 2FA, error), logout, refresh
+ * Covers: login (success, 2FA, error), logout, refresh, me, 2fa/verify
  */
 import { http, HttpResponse } from 'msw';
 
@@ -11,6 +11,34 @@ const BASE_URL = 'http://localhost:3000';
 const VALID_EMAIL = 'admin@ganatrack.com';
 const VALID_PASSWORD = 'password123';
 const TWO_FA_EMAIL = '2fa@ganatrack.com';
+
+// Estado de sesión para handlers de me y 2fa/verify
+let mockLoggedInUser: {
+  id: string;
+  email: string;
+  nombre: string;
+  rol: string;
+} | null = null;
+
+let mockPending2FAUser: {
+  id: string;
+  email: string;
+  nombre: string;
+  rol: string;
+} | null = null;
+
+// Helpers para tests externos
+export function setMockLoggedInUser(
+  user: { id: string; email: string; nombre: string; rol: string } | null,
+) {
+  mockLoggedInUser = user;
+}
+
+export function setMockPending2FAUser(
+  user: { id: string; email: string; nombre: string; rol: string } | null,
+) {
+  mockPending2FAUser = user;
+}
 
 export const authHandlers = [
   /**
@@ -81,5 +109,47 @@ export const authHandlers = [
     return HttpResponse.json({
       accessToken: 'mock-access-token-refreshed-xyz',
     });
+  }),
+
+  /**
+   * GET /api/v1/auth/me
+   * Returns the currently logged-in user or 401 if not authenticated.
+   */
+  http.get(`${BASE_URL}/api/v1/auth/me`, () => {
+    if (mockLoggedInUser) {
+      return HttpResponse.json(mockLoggedInUser, { status: 200 });
+    }
+    return HttpResponse.json(
+      { error: 'No autenticado' },
+      { status: 401 },
+    );
+  }),
+
+  /**
+   * POST /api/v1/auth/2fa/verify
+   * Verifies a 2FA code for a pending 2FA session.
+   */
+  http.post(`${BASE_URL}/api/v1/auth/2fa/verify`, async ({ request }) => {
+    const body = await request.json() as { tempToken: string; code: string };
+
+    if (!mockPending2FAUser) {
+      return HttpResponse.json(
+        { error: 'No hay sesión 2FA pendiente' },
+        { status: 400 },
+      );
+    }
+
+    if (body.code === '123456') {
+      return HttpResponse.json({
+        accessToken: 'mock-access-token',
+        user: mockPending2FAUser,
+        permissions: ['*:*'],
+      }, { status: 200 });
+    }
+
+    return HttpResponse.json(
+      { error: 'Código inválido' },
+      { status: 401 },
+    );
   }),
 ];

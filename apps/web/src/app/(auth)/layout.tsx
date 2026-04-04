@@ -4,9 +4,13 @@
  *
  * Uses flexbox to center content vertically and horizontally.
  * Full viewport height with a neutral background.
+ *
+ * Feedback components:
+ * - ErrorBoundary: catches render errors in auth pages
  */
 
 import type { ReactNode } from 'react';
+import { ErrorBoundary } from '@/shared/components/feedback';
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -14,8 +18,10 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps): JSX.Element {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
-      {children}
-    </div>
+    <ErrorBoundary>
+      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+        {children}
+      </div>
+    </ErrorBoundary>
   );
 }

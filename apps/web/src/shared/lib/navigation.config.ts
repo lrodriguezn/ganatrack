@@ -165,7 +165,7 @@ const grupos = leaf(
 );
 
 // ============================================================================
-// Maestros children — 8 entidades maestro
+// Maestros children — 8 entidades maestro + Productos
 // ============================================================================
 const veterinarios = leaf(
   'Veterinarios',
@@ -222,6 +222,13 @@ const lugaresVentas = leaf(
   MapPinIconSolid,
   MapPinIconSolid,
   'maestros:read',
+);
+const productos = leaf(
+  'Productos',
+  '/dashboard/maestros/productos',
+  ArchiveBoxIcon,
+  ArchiveBoxIconSolid,
+  'productos:read',
 );
 
 // ============================================================================
@@ -297,16 +304,13 @@ export const NAVIGATION_ITEMS: NavItem[] = [
     FolderOpenIcon,
     FolderOpenIconSolid,
     'maestros:read',
-    [veterinarios, propietarios, hierros, diagnosticos, motivosVentas, causasMuerte, lugaresCompras, lugaresVentas],
+    [veterinarios, propietarios, hierros, diagnosticos, motivosVentas, causasMuerte, lugaresCompras, lugaresVentas, productos],
   ),
 
   // 6. Configuración
   leaf('Configuración', '/dashboard/configuracion', Cog6ToothIcon, Cog6ToothIconSolid, 'configuracion:read'),
 
-  // 7. Productos
-  leaf('Productos', '/dashboard/productos', ArchiveBoxIcon, ArchiveBoxIconSolid, 'productos:read'),
-
-  // 8. Reportes (group)
+  // 7. Reportes (group)
   group(
     'Reportes',
     ChartBarIcon,

@@ -13,14 +13,19 @@ import { ArrowLeft } from 'lucide-react';
 import { AnimalForm } from '@/modules/animales/components/animal-form';
 import { Button } from '@/shared/components/ui/button';
 import { useCreateAnimal } from '@/modules/animales/hooks';
+import { usePredioStore } from '@/store/predio.store';
 
 export default function NuevoAnimalPage(): JSX.Element {
   const router = useRouter();
+  const { predioActivo } = usePredioStore();
   const { mutateAsync, isPending, error } = useCreateAnimal();
 
   const handleSubmit = async (data: Parameters<typeof mutateAsync>[0]) => {
     try {
-      await mutateAsync(data);
+      await mutateAsync({
+        ...data,
+        predioId: predioActivo?.id ?? 0,
+      });
       router.push('/dashboard/animales');
     } catch (err) {
       console.error('Error creating animal:', err);

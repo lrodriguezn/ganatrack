@@ -68,6 +68,7 @@ export function AnimalForm({
       sexoKey: SexoEnum.MASCULINO,
       tipoIngresoId: OrigenAnimalEnum.NACIDO_PREDIO,
       configRazasId: 0,
+      predioId: predioActivo?.id ?? 0,
       potreroId: undefined,
       madreId: undefined,
       padreId: undefined,
@@ -80,7 +81,6 @@ export function AnimalForm({
       codigoArete: '',
       estadoAnimalKey: 0,
       saludAnimalKey: 0,
-      ...initialData,
     },
   });
 
@@ -120,6 +120,7 @@ export function AnimalForm({
         sexoKey: initialData.sexoKey ?? SexoEnum.MASCULINO,
         tipoIngresoId: initialData.tipoIngresoId ?? OrigenAnimalEnum.NACIDO_PREDIO,
         configRazasId: initialData.configRazasId ?? 0,
+        predioId: initialData.predioId ?? (predioActivo?.id ?? 0),
         potreroId: initialData.potreroId,
         madreId: initialData.madreId,
         padreId: initialData.padreId,
@@ -141,6 +142,7 @@ export function AnimalForm({
         sexoKey: SexoEnum.MASCULINO,
         tipoIngresoId: OrigenAnimalEnum.NACIDO_PREDIO,
         configRazasId: 0,
+        predioId: predioActivo?.id ?? 0,
         potreroId: undefined,
         madreId: undefined,
         padreId: undefined,
@@ -155,7 +157,7 @@ export function AnimalForm({
         saludAnimalKey: 0,
       });
     }
-  }, [initialData, reset]);
+  }, [initialData, reset, predioActivo?.id]);
 
   const onFormSubmit = (data: AnimalFormData) => {
     // Ensure predioId is set from active predio
@@ -164,14 +166,18 @@ export function AnimalForm({
       fechaNacimiento: data.fechaNacimiento,
       predioId: data.predioId ?? (predioActivo?.id ?? 0),
     };
+    console.log('✅ AnimalForm submit:', JSON.stringify(submitData, null, 2));
     onSubmit(submitData);
+  };
+
+  const onInvalid = (data: unknown) => {
+    console.error('❌ AnimalForm validation errors:', data);
   };
 
   return (
     <form
-      onSubmit={handleSubmit(onFormSubmit)}
+      onSubmit={handleSubmit(onFormSubmit, onInvalid)}
       className="flex flex-col gap-4"
-      noValidate
     >
       {/* Row 1: Código + Raza */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -200,6 +206,7 @@ export function AnimalForm({
             <select
               {...field}
               value={field.value ?? 0}
+              onChange={(e) => field.onChange(Number(e.target.value))}
               disabled={isLoading || isLoadingRazas}
               className="flex h-10 w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-2 text-base text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-brand-500 dark:focus:border-brand-400 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:focus:ring-brand-400 disabled:cursor-not-allowed disabled:opacity-50"
             >
@@ -258,6 +265,7 @@ export function AnimalForm({
             <select
               {...field}
               value={field.value ?? 0}
+              onChange={(e) => field.onChange(Number(e.target.value))}
               disabled={isLoading}
               className="flex h-10 w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-2 text-base text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-brand-500 dark:focus:border-brand-400 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:focus:ring-brand-400 disabled:cursor-not-allowed disabled:opacity-50"
             >
@@ -275,6 +283,7 @@ export function AnimalForm({
             <select
               {...field}
               value={field.value ?? 0}
+              onChange={(e) => field.onChange(Number(e.target.value))}
               disabled={isLoading}
               className="flex h-10 w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-2 text-base text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-brand-500 dark:focus:border-brand-400 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:focus:ring-brand-400 disabled:cursor-not-allowed disabled:opacity-50"
             >
@@ -405,6 +414,7 @@ export function AnimalForm({
             <select
               {...field}
               value={field.value ?? 0}
+              onChange={(e) => field.onChange(Number(e.target.value))}
               disabled={isLoading}
               className="flex h-10 w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-2 text-base text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-brand-500 dark:focus:border-brand-400 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:focus:ring-brand-400 disabled:cursor-not-allowed disabled:opacity-50"
             >

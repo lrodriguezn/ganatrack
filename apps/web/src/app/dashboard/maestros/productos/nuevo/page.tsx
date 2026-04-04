@@ -1,8 +1,8 @@
-// apps/web/src/app/dashboard/productos/nuevo/page.tsx
+// apps/web/src/app/dashboard/maestros/productos/nuevo/page.tsx
 /**
  * Nuevo Producto page — create form.
  *
- * Route: /dashboard/productos/nuevo
+ * Route: /dashboard/maestros/productos/nuevo
  */
 
 'use client';
@@ -26,14 +26,14 @@ export default function NuevoProductoPage(): JSX.Element {
       ...data,
       predioId: predioActivo?.id ?? 0,
     });
-    router.push('/dashboard/productos');
+    router.push('/dashboard/maestros/productos');
   };
 
   return (
     <div className="space-y-6">
       {/* Page header */}
       <div className="flex items-center gap-4">
-        <Link href="/dashboard/productos">
+        <Link href="/dashboard/maestros/productos">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="h-4 w-4 mr-1" />
             Volver
@@ -62,7 +62,7 @@ export default function NuevoProductoPage(): JSX.Element {
       <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6">
         <ProductoForm
           onSubmit={handleSubmit}
-          onCancel={() => router.push('/dashboard/productos')}
+          onCancel={() => router.push('/dashboard/maestros/productos')}
           isLoading={isPending}
         />
       </div>

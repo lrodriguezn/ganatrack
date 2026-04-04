@@ -7,3 +7,5 @@
 - Wizard state se maneja en page (useState), no en componente wizard
 - Mock data con 5 palpaciones, 5 inseminaciones, 10 partos realistas
 - 0 errores TypeScript en el módulo al compilar
+- Error de tipos: `diagnosticosVeterinariosId` debe ser opcional (`?`) tanto en DTO como en interface
+- Event handlers en React necesitan cast con `as unknown as { value: string }` para acceder a `.value`
