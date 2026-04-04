@@ -17,14 +17,17 @@ import { Bars3Icon } from '@heroicons/react/24/outline';
 import { Bars3Icon as Bars3IconSolid } from '@heroicons/react/24/solid';
 import { twMerge } from 'tailwind-merge';
 
-function Logo(): JSX.Element {
+function Logo({ isCollapsed }: { isCollapsed: boolean }): JSX.Element {
   return (
     <div className="flex items-center gap-3 px-4 py-5">
       {/* GanaTrack logo placeholder */}
-      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600">
+      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 shrink-0">
         <span className="text-sm font-bold text-white">GT</span>
       </div>
-      <span className="text-lg font-semibold text-gray-900 dark:text-white">
+      <span className={twMerge(
+        "text-lg font-semibold text-gray-900 dark:text-white whitespace-nowrap transition-all duration-200",
+        isCollapsed && "opacity-0 w-0 overflow-hidden"
+      )}>
         GanaTrack
       </span>
     </div>
@@ -46,7 +49,7 @@ export function AdminSidebar(): JSX.Element {
         )}
       >
         {/* Logo */}
-        <Logo />
+        <Logo isCollapsed={isCollapsed} />
 
         {/* Collapse toggle — desktop only */}
         <div className="px-3 pb-2">

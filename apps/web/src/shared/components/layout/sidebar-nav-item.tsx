@@ -157,11 +157,10 @@ function SidebarNavItemInner({ item, isCollapsed, depth = 0 }: SidebarNavItemPro
         )}
       </div>
 
-      {/* Children accordion */}
-      {hasChildren && isExpanded && (
+      {/* Children accordion - hidden when collapsed */}
+      {hasChildren && isExpanded && !isCollapsed && (
         <div
           className="ml-4 space-y-1 border-l border-gray-200 pl-4 dark:border-gray-700"
-          style={{ marginLeft: `${(depth + 1) * 16}px` }}
         >
           {item.children!.map((child) => (
             <SidebarNavItemInner
