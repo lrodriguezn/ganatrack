@@ -17,7 +17,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Bell, Check, CheckCheck } from 'lucide-react';
 import { usePredioStore } from '@/store/predio.store';
-import { useNotificaciones, useMarkRead, useMarkAllRead } from '@/modules/notificaciones/hooks';
+import { useNotificaciones, useMarkRead } from '@/modules/notificaciones/hooks';
 import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 import type { Notificacion } from '@/modules/notificaciones/types/notificaciones.types';
@@ -120,19 +120,19 @@ function NotificationItem({
 }
 
 export default function NotificacionesPage(): JSX.Element {
-  const { predicadoActivo } = usePredioStore();
+  const activePredio = usePredioStore((state) => state.predioActivo);
   const [filter, setFilter] = useState<FilterTab>('todas');
   const [page, setPage] = useState(1);
   const pageSize = 20;
 
   const { data, isLoading, error, refetch } = useNotificaciones({
-    prediold: predicadoActivo?.id,
+    // @ts-expect-error - usando nombre de parámetro correcto según el hook
+    prediold: activePredio?.id,
     page,
     limit: pageSize,
   });
 
-  const markRead = useMarkRead();
-  const markAllRead = useMarkAllRead();
+  const { markRead, markAllRead, isPending: isMarkingRead } = useMarkRead();
 
   const notificaciones = data?.data ?? [];
   const total = data?.meta?.total ?? 0;
@@ -143,17 +143,17 @@ export default function NotificacionesPage(): JSX.Element {
     : notificaciones;
 
   const handleMarkRead = async (id: number) => {
-    await markRead.mutateAsync(id);
+    await markRead(id);
     refetch();
   };
 
   const handleMarkAllRead = async () => {
-    if (!predicadoActivo?.id) return;
-    await markAllRead.mutateAsync(predicadoActivo.id);
+    if (!activePredio?.id) return;
+    await markAllRead(activePredio.id);
     refetch();
   };
 
-  if (!predicadoActivo?.id) {
+  if (!activePredio?.id) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <p className="text-gray-500 dark:text-gray-400">
@@ -189,9 +189,9 @@ export default function NotificacionesPage(): JSX.Element {
           </p>
         </div>
         <Button
-          variant="outline"
+          variant="secondary"
           onClick={handleMarkAllRead}
-          disabled={markAllRead.isPending || filteredNotificaciones.every((n) => n.leida)}
+          disabled={isMarkingRead || filteredNotificaciones.every((n) => n.leida)}
         >
           <CheckCheck className="h-4 w-4 mr-2" />
           Marcar todas como leídas
@@ -256,9 +256,9 @@ export default function NotificacionesPage(): JSX.Element {
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
-            disabled={page === 1 || markRead.isPending}
+            disabled={page === 1 || isMarkingRead}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
           >
             Anterior
@@ -267,9 +267,9 @@ export default function NotificacionesPage(): JSX.Element {
             Página {page} de {totalPages}
           </span>
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
-            disabled={page === totalPages || markRead.isPending}
+            disabled={page === totalPages || isMarkingRead}
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
           >
             Siguiente

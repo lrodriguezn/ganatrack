@@ -18,7 +18,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { notificacionesService } from '../services';
 import { useNotificacionesStore } from '@/store/notificaciones.store';
 
-export function useMarkRead() {
+export interface UseMarkReadReturn {
+  markRead: (id: number) => Promise<void>;
+  markAllRead: (predioId: number) => Promise<void>;
+  isPending: boolean;
+  error: Error | null;
+}
+
+export function useMarkRead(): UseMarkReadReturn {
   const queryClient = useQueryClient();
   // Use selectors instead of getState() to avoid stale references
   const decrementUnread = useNotificacionesStore((s) => s.decrementUnread);
@@ -56,8 +63,8 @@ export function useMarkRead() {
   });
 
   return {
-    markRead: mutation.mutate,
-    markAllRead: markAllMutation.mutate,
+    markRead: mutation.mutateAsync,
+    markAllRead: markAllMutation.mutateAsync,
     isPending: mutation.isPending || markAllMutation.isPending,
     error: (mutation.error ?? markAllMutation.error) as Error | null,
   };
