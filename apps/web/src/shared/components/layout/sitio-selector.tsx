@@ -62,7 +62,7 @@ export function SitioSelector(): JSX.Element | null {
                 <span className="text-xs text-gray-500 dark:text-gray-400">{predio.municipio}</span>
               )}
             </div>
-            {activo?.id === prediold.id && (
+            {activo?.id === predio.id && (
               <CheckIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
             )}
           </DropdownMenuItem>
