@@ -17,6 +17,7 @@
 'use client';
 
 import * as Dialog from '@radix-ui/react-dialog';
+import Link from 'next/link';
 import { XMarkIcon, CheckCircleIcon, BellAlertIcon } from '@heroicons/react/24/outline';
 import { useNotificacionesStore, selectPanelOpen } from '@/store/notificaciones.store';
 import { useNotificacionesResumen, useMarkRead } from '../hooks';
@@ -167,15 +168,15 @@ export function NotificationCenter(): JSX.Element {
 
           {/* Footer */}
           <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-800">
-            <a
-              href="/notificaciones"
-              className="
-                block text-center text-sm text-blue-600 dark:text-blue-400
-                hover:text-blue-800 dark:hover:text-blue-300 transition-colors
-              "
-            >
-              Ver todas las notificaciones →
-            </a>
+              <Link
+                href="/dashboard/notificaciones"
+                className="
+                  block text-center text-sm text-blue-600 dark:text-blue-400
+                  hover:text-blue-800 dark:hover:text-blue-300 transition-colors
+                "
+              >
+                Ver todas las notificaciones →
+              </Link>
           </div>
         </Dialog.Content>
       </Dialog.Portal>
