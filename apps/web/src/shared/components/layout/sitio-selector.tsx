@@ -44,26 +44,26 @@ export function SitioSelector(): JSX.Element | null {
   // Multiple predios — dropdown selector
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
+      <DropdownMenuTrigger className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
         <span>{activo?.nombre ?? 'Seleccionar predio'}</span>
-        <ChevronDownIcon className="h-4 w-4 text-gray-500" />
+        <ChevronDownIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="min-w-[200px]">
+      <DropdownMenuContent align="end" className="min-w-[200px] dark:bg-gray-800 dark:border-gray-600">
         {predios.map((predio) => (
           <DropdownMenuItem
             key={predio.id}
             onClick={() => switchPredio(predio.id)}
-            className="flex items-center justify-between"
+            className="flex items-center justify-between dark:focus:bg-gray-700 dark:focus:text-gray-100"
           >
             <div className="flex flex-col">
-              <span className="font-medium">{predio.nombre}</span>
+              <span className="font-medium dark:text-gray-100">{predio.nombre}</span>
               {predio.municipio && (
-                <span className="text-xs text-gray-500">{predio.municipio}</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">{predio.municipio}</span>
               )}
             </div>
-            {activo?.id === predio.id && (
-              <CheckIcon className="h-4 w-4 text-blue-600" />
+            {activo?.id === prediold.id && (
+              <CheckIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
             )}
           </DropdownMenuItem>
         ))}
