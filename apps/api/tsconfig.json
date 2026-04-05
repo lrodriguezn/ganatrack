@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
+    "experimentalDecorators": true,
     "paths": {
       "@ganatrack/shared-types": ["../../packages/shared-types/src"],
       "@ganatrack/database": ["../../packages/database/src"]
