@@ -12,6 +12,11 @@ import { registerConfiguracionModule, registerConfiguracionModuleRoutes } from '
 import { registerPrediosModule, registerPrediosModuleRoutes } from './modules/predios/index.js'
 import { registerMaestrosModule, registerMaestrosModuleRoutes } from './modules/maestros/index.js'
 import { registerAnimalesModule, registerAnimalesModuleRoutes } from './modules/animales/index.js'
+import { registerServiciosModule, registerServiciosModuleRoutes } from './modules/servicios/index.js'
+import { registerProductosModule, registerProductosModuleRoutes } from './modules/productos/index.js'
+import { registerImagenesModule, registerImagenesModuleRoutes } from './modules/imagenes/index.js'
+import { registerNotificacionesModule, registerNotificacionesModuleRoutes } from './modules/notificaciones/index.js'
+import schedulerPlugin from './plugins/scheduler.plugin.js'
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
@@ -28,6 +33,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(cookiePlugin)
   await app.register(jwtPlugin)
   await app.register(rateLimitPlugin)
+  await app.register(schedulerPlugin)
 
   // Decorate app with middleware for use in routes
   app.decorate('authenticate', authMiddleware)
@@ -56,6 +62,22 @@ export async function buildApp(): Promise<FastifyInstance> {
   // Register animales module and routes
   registerAnimalesModule()
   await app.register(async (instance) => registerAnimalesModuleRoutes(instance), { prefix: '/api/v1' })
+
+  // Register servicios module and routes
+  registerServiciosModule()
+  await app.register(async (instance) => registerServiciosModuleRoutes(instance), { prefix: '/api/v1' })
+
+  // Register productos module and routes
+  registerProductosModule()
+  await app.register(async (instance) => registerProductosModuleRoutes(instance), { prefix: '/api/v1' })
+
+  // Register imagenes module and routes
+  registerImagenesModule()
+  await app.register(async (instance) => registerImagenesModuleRoutes(instance), { prefix: '/api/v1' })
+
+  // Register notificaciones module and routes
+  registerNotificacionesModule()
+  await app.register(async (instance) => registerNotificacionesModuleRoutes(instance), { prefix: '/api/v1' })
 
   // Health check
   app.get('/health', async () => {
