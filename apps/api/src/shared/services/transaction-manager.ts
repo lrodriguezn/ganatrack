@@ -1,6 +1,5 @@
-import { injectable } from 'tsyringe'
+import { injectable, inject } from 'tsyringe'
 import type { DbClient } from '@ganatrack/database'
-import { createClient } from '@ganatrack/database'
 import type { ITransactionManager, TransactionCallback } from '../types/transaction.js'
 
 /**
@@ -9,11 +8,7 @@ import type { ITransactionManager, TransactionCallback } from '../types/transact
  */
 @injectable()
 export class DrizzleTransactionManager implements ITransactionManager {
-  private readonly db: DbClient
-
-  constructor() {
-    this.db = createClient()
-  }
+  constructor(@inject('DbClient') private readonly db: DbClient) {}
 
   async execute<T>(callback: TransactionCallback<T>): Promise<T> {
     const provider = process.env.DATABASE_PROVIDER ?? 'sqlite'
@@ -30,7 +25,9 @@ export class DrizzleTransactionManager implements ITransactionManager {
     // We need to wrap it for async compatibility
     return new Promise((resolve, reject) => {
       try {
-        const sqliteDb = (this.db as any).db // Access underlying better-sqlite3 instance
+        // Access underlying better-sqlite3 instance from Drizzle client
+        // Drizzle v0.x wraps better-sqlite3 and exposes it via .db property
+        const sqliteDb = (this.db as unknown as { db: { exec: (sql: string) => void } }).db
         const savepointName = `sp_${Date.now()}`
 
         sqliteDb.exec(`SAVEPOINT ${savepointName}`)
