@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { PROPIETARIO_REPOSITORY } from '../../domain/repositories/propietario.repository.js'
 import type { IPropietarioRepository } from '../../domain/repositories/propietario.repository.js'
 import type { PropietarioResponseDto } from '../dtos/maestros.dto.js'

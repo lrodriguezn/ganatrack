@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { CONFIG_RANGO_EDAD_REPOSITORY } from '../../domain/repositories/config-rango-edad.repository.js'
 import type { IConfigRangoEdadRepository } from '../../domain/repositories/config-rango-edad.repository.js'
-import type { UpdateConfigRangoEdadDto, ConfigRangoEdadResponseDto } from '../dtos/configuracion.dto.js'
+import type { ConfigRangoEdadResponseDto, UpdateConfigRangoEdadDto } from '../dtos/configuracion.dto.js'
 import { ConfigRangoEdadMapper } from '../../infrastructure/mappers/configuracion.mapper.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'
 

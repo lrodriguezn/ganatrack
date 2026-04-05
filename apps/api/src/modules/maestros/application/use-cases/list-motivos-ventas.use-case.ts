@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { MOTIVO_VENTA_REPOSITORY } from '../../domain/repositories/motivo-venta.repository.js'
 import type { IMotivoVentaRepository } from '../../domain/repositories/motivo-venta.repository.js'
 import type { MotivoVentaResponseDto } from '../dtos/maestros.dto.js'

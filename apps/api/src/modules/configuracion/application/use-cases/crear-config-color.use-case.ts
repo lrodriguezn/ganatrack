@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { CONFIG_COLOR_REPOSITORY } from '../../domain/repositories/config-color.repository.js'
 import type { IConfigColorRepository } from '../../domain/repositories/config-color.repository.js'
-import type { CreateConfigColorDto, ConfigColorResponseDto } from '../dtos/configuracion.dto.js'
+import type { ConfigColorResponseDto, CreateConfigColorDto } from '../dtos/configuracion.dto.js'
 import { ConfigColorMapper } from '../../infrastructure/mappers/configuracion.mapper.js'
 
 @injectable()

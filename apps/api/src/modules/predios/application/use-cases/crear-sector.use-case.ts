@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { SECTOR_REPOSITORY } from '../../domain/repositories/sector.repository.js'
 import type { ISectorRepository } from '../../domain/repositories/sector.repository.js'
 import type { CreateSectorDto, SectorResponseDto } from '../dtos/predios.dto.js'

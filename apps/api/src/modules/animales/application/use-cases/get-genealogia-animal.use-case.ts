@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { ANIMAL_REPOSITORY } from '../../domain/repositories/animal.repository.js'
 import type { IAnimalRepository } from '../../domain/repositories/animal.repository.js'
 import type { GenealogiaResponseDto } from '../dtos/animal.dto.js'

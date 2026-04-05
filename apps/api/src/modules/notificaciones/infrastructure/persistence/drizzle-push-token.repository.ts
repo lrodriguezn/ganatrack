@@ -1,11 +1,11 @@
 import { injectable } from 'tsyringe'
-import { eq, and } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { notificacionesPushTokens } from '@ganatrack/database/schema'
 import type { IPushTokenRepository } from '../../domain/repositories/push-token.repository.js'
 import type {
-  NotificacionPushToken,
   CrearPushTokenParams,
+  NotificacionPushToken,
 } from '../../domain/entities/push-token.entity.js'
 
 @injectable()

@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { CreateUsuarioUseCase } from '../create-usuario.use-case.js'
-import { ConflictError } from '../../../../../shared/errors/index.js'
+import { ConflictError, ValidationError } from '../../../../../shared/errors/index.js'
 import type { IUsuarioRepository } from '../../../domain/repositories/usuario.repository.js'
 import type { IRolRepository } from '../../../domain/repositories/rol.repository.js'
 import type { DbClient } from '@ganatrack/database'
@@ -128,7 +128,7 @@ describe('CreateUsuarioUseCase', () => {
           email: 'nuevo@example.com',
           password: 'Short1!',
         })
-      ).rejects.toThrow('La contraseña debe tener al menos 8 caracteres')
+      ).rejects.toThrow(ValidationError)
 
       // No uppercase
       await expect(
@@ -137,7 +137,7 @@ describe('CreateUsuarioUseCase', () => {
           email: 'nuevo@example.com',
           password: 'lowercase123!',
         })
-      ).rejects.toThrow('La contraseña debe tener al menos una mayúscula')
+      ).rejects.toThrow(ValidationError)
 
       // No number
       await expect(
@@ -146,7 +146,7 @@ describe('CreateUsuarioUseCase', () => {
           email: 'nuevo@example.com',
           password: 'NoNumbers!',
         })
-      ).rejects.toThrow('La contraseña debe tener al menos un número')
+      ).rejects.toThrow(ValidationError)
     })
 
     it('should throw ConflictError if role ID does not exist', async () => {

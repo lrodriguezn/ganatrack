@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and, like, or, desc, count } from 'drizzle-orm'
+import { and, count, desc, eq, like, or } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { configRazas } from '@ganatrack/database/schema'
 import type { IConfigRazaRepository } from '../../domain/repositories/config-raza.repository.js'
@@ -21,12 +21,13 @@ export class DrizzleConfigRazaRepository implements IConfigRazaRepository {
     const conditions = [eq(configRazas.activo, 1)]
 
     if (search) {
-      conditions.push(
-        or(
-          like(configRazas.nombre, `%${search}%`),
-          like(configRazas.descripcion, `%${search}%`),
-        )!,
+      const searchCondition = or(
+        like(configRazas.nombre, `%${search}%`),
+        like(configRazas.descripcion, `%${search}%`),
       )
+      if (searchCondition) {
+        conditions.push(searchCondition)
+      }
     }
 
     const rows = await this.db

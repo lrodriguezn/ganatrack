@@ -1,9 +1,9 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { AUTH_REPOSITORY } from '../../domain/repositories/auth.repository.js'
 import type { IAuthRepository } from '../../domain/repositories/auth.repository.js'
-import { AuthDomainService } from '../../domain/services/auth.domain-service.js'
+import type { AuthDomainService } from '../../domain/services/auth.domain-service.js'
 import { UnauthorizedError } from '../../../../shared/errors/index.js'
-import { verifyPassword, hashPassword } from '../../../../shared/utils/password.utils.js'
+import { hashPassword, verifyPassword } from '../../../../shared/utils/password.utils.js'
 import type { ChangePasswordDto } from '../dtos/login.dto.js'
 
 const PASSWORD_HISTORY_LIMIT = 5

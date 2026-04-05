@@ -1,7 +1,7 @@
 import { injectable } from 'tsyringe'
 import PDFDocument from 'pdfkit'
 import type { IPdfGenerator } from '../../domain/services/export-generator.service.js'
-import type { ReporteTipo, ReporteFiltros } from '../../domain/entities/reporte-exportacion.entity.js'
+import type { ReporteFiltros, ReporteTipo } from '../../domain/entities/reporte-exportacion.entity.js'
 
 @injectable()
 export class PdfGeneratorService implements IPdfGenerator {

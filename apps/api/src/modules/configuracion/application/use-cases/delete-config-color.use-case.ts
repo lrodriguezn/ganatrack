@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { CONFIG_COLOR_REPOSITORY } from '../../domain/repositories/config-color.repository.js'
 import type { IConfigColorRepository } from '../../domain/repositories/config-color.repository.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'

@@ -1,4 +1,4 @@
-import type { FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyReply, FastifyRequest } from 'fastify'
 import { ForbiddenError } from '../errors/forbidden.error.js'
 
 export async function tenantContextMiddleware(request: FastifyRequest, _reply: FastifyReply): Promise<void> {

@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { LOTE_REPOSITORY } from '../../domain/repositories/lote.repository.js'
 import type { ILoteRepository } from '../../domain/repositories/lote.repository.js'
-import type { UpdateLoteDto, LoteResponseDto } from '../dtos/predios.dto.js'
+import type { LoteResponseDto, UpdateLoteDto } from '../dtos/predios.dto.js'
 import { LoteMapper } from '../../infrastructure/mappers/predios.mapper.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'
 

@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest'
-import { DrizzleNotificacionRepository } from '../infrastructure/persistence/drizzle-notificacion.repository.js'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { DrizzleNotificacionRepository } from '../drizzle-notificacion.repository.js'
 
 // Simple mock repository for unit testing
 describe('DrizzleNotificacionRepository', () => {

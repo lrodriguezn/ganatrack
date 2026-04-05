@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { IMAGEN_REPOSITORY } from '../../domain/repositories/imagen.repository.js'
 import type { IImagenRepository } from '../../domain/repositories/imagen.repository.js'
 import type { ImagenResponseDto } from '../dtos/animal.dto.js'

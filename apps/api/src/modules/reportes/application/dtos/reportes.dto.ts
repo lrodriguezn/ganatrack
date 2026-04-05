@@ -1,6 +1,6 @@
 // Reportes DTOs - All filter and response DTOs for 5 report types + export
 
-import type { ReporteTipo, ExportFormato, ReporteFiltros } from '../../domain/entities/reporte-exportacion.entity.js'
+import type { ExportFormato, ReporteFiltros, ReporteTipo } from '../../domain/entities/reporte-exportacion.entity.js'
 
 // ============================================================================
 // Filter DTOs

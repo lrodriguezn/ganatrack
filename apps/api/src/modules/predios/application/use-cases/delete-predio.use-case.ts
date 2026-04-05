@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { PREDIO_REPOSITORY } from '../../domain/repositories/predio.repository.js'
 import type { IPredioRepository } from '../../domain/repositories/predio.repository.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'

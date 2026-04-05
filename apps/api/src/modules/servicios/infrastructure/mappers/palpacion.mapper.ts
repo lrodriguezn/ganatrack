@@ -1,5 +1,5 @@
-import type { PalpacionGrupalEntity, PalpacionAnimalEntity } from '../../domain/entities/palpacion.entity.js'
-import type { PalpacionGrupalResponseDto, PalpacionAnimalResponseDto } from '../../application/dtos/palpacion.dto.js'
+import type { PalpacionAnimalEntity, PalpacionGrupalEntity } from '../../domain/entities/palpacion.entity.js'
+import type { PalpacionAnimalResponseDto, PalpacionGrupalResponseDto } from '../../application/dtos/palpacion.dto.js'
 
 export class PalpacionGrupalMapper {
   static toResponse(e: PalpacionGrupalEntity): PalpacionGrupalResponseDto {

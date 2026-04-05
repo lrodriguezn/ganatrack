@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { AUTH_REPOSITORY } from '../../domain/repositories/auth.repository.js'
 import type { IAuthRepository } from '../../domain/repositories/auth.repository.js'
-import { AuthDomainService } from '../../domain/services/auth.domain-service.js'
+import type { AuthDomainService } from '../../domain/services/auth.domain-service.js'
 import { UnauthorizedError } from '../../../../shared/errors/index.js'
 import jwt from 'jsonwebtoken'
 

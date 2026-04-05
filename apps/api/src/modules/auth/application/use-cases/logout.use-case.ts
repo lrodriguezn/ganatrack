@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { AUTH_REPOSITORY } from '../../domain/repositories/auth.repository.js'
 import type { IAuthRepository } from '../../domain/repositories/auth.repository.js'
 

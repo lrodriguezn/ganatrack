@@ -3,21 +3,21 @@ import { container } from 'tsyringe'
 import { PrediosController } from '../controllers/predios.controller.js'
 import { authMiddleware, requirePermission } from '../../../../../shared/middleware/index.js'
 import {
-  createPredioBodySchema, updatePredioBodySchema,
-  createPotreroBodySchema, updatePotreroBodySchema,
-  createSectorBodySchema, updateSectorBodySchema,
-  createLoteBodySchema, updateLoteBodySchema,
-  createGrupoBodySchema, updateGrupoBodySchema,
-  createConfigParametroPredioBodySchema, updateConfigParametroPredioBodySchema,
-  listQuerySchema, idParamsSchema, entityIdParamsSchema,
+  createConfigParametroPredioBodySchema, createGrupoBodySchema,
+  createLoteBodySchema, createPotreroBodySchema,
+  createPredioBodySchema, createSectorBodySchema,
+  entityIdParamsSchema, idParamsSchema,
+  listQuerySchema, updateConfigParametroPredioBodySchema,
+  updateGrupoBodySchema, updateLoteBodySchema,
+  updatePotreroBodySchema, updatePredioBodySchema, updateSectorBodySchema,
 } from '../schemas/predios.schema.js'
 import type {
-  CreatePredioDto, UpdatePredioDto,
-  CreatePotreroDto, UpdatePotreroDto,
-  CreateSectorDto, UpdateSectorDto,
-  CreateLoteDto, UpdateLoteDto,
-  CreateGrupoDto, UpdateGrupoDto,
-  CreateConfigParametroPredioDto, UpdateConfigParametroPredioDto,
+  CreateConfigParametroPredioDto, CreateGrupoDto,
+  CreateLoteDto, CreatePotreroDto,
+  CreatePredioDto, CreateSectorDto,
+  UpdateConfigParametroPredioDto, UpdateGrupoDto,
+  UpdateLoteDto, UpdatePotreroDto,
+  UpdatePredioDto, UpdateSectorDto,
 } from '../../../application/dtos/predios.dto.js'
 
 // Common types

@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { PROPIETARIO_REPOSITORY } from '../../domain/repositories/propietario.repository.js'
 import type { IPropietarioRepository } from '../../domain/repositories/propietario.repository.js'
-import type { UpdatePropietarioDto, PropietarioResponseDto } from '../dtos/maestros.dto.js'
+import type { PropietarioResponseDto, UpdatePropietarioDto } from '../dtos/maestros.dto.js'
 import { PropietarioMapper } from '../../infrastructure/mappers/maestros.mapper.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'
 

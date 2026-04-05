@@ -1,13 +1,13 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { ANIMAL_REPOSITORY } from '../../domain/repositories/animal.repository.js'
 import { IMAGEN_REPOSITORY } from '../../domain/repositories/imagen.repository.js'
 import { ANIMAL_IMAGEN_REPOSITORY } from '../../domain/repositories/animal-imagen.repository.js'
 import type { IAnimalRepository } from '../../domain/repositories/animal.repository.js'
 import type { IImagenRepository } from '../../domain/repositories/imagen.repository.js'
 import type { IAnimalImagenRepository } from '../../domain/repositories/animal-imagen.repository.js'
-import type { AssignImagenDto, AnimalResponseDto } from '../dtos/animal.dto.js'
+import type { AnimalResponseDto, AssignImagenDto } from '../dtos/animal.dto.js'
 import { AnimalMapper } from '../../infrastructure/mappers/animal.mapper.js'
-import { NotFoundError, ConflictError } from '../../../../shared/errors/index.js'
+import { ConflictError, NotFoundError } from '../../../../shared/errors/index.js'
 
 @injectable()
 export class AssignImagenToAnimalUseCase {

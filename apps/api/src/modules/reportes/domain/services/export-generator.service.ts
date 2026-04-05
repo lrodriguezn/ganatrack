@@ -1,4 +1,4 @@
-import type { ReporteTipo, ExportFormato, ReporteFiltros } from '../entities/reporte-exportacion.entity.js'
+import type { ExportFormato, ReporteFiltros, ReporteTipo } from '../entities/reporte-exportacion.entity.js'
 
 // Result of generating an export - contains the raw data to be formatted
 export interface ExportDataResult {

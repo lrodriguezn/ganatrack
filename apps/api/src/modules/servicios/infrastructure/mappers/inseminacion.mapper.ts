@@ -1,5 +1,5 @@
-import type { InseminacionGrupalEntity, InseminacionAnimalEntity } from '../../domain/entities/inseminacion.entity.js'
-import type { InseminacionGrupalResponseDto, InseminacionAnimalResponseDto } from '../../application/dtos/inseminacion.dto.js'
+import type { InseminacionAnimalEntity, InseminacionGrupalEntity } from '../../domain/entities/inseminacion.entity.js'
+import type { InseminacionAnimalResponseDto, InseminacionGrupalResponseDto } from '../../application/dtos/inseminacion.dto.js'
 
 export class InseminacionGrupalMapper {
   static toResponse(e: InseminacionGrupalEntity): InseminacionGrupalResponseDto {

@@ -1,4 +1,4 @@
-import type { FastifyError, FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyError, FastifyReply, FastifyRequest } from 'fastify'
 import { DomainError } from '../errors/index.js'
 
 export function errorHandler(

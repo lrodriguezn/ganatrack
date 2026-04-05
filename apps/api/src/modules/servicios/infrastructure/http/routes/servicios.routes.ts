@@ -5,38 +5,38 @@ import { authMiddleware, requirePermission } from '../../../../../shared/middlew
 
 // Palpaciones schemas
 import {
-  createPalpacionGrupalBodySchema,
-  updatePalpacionGrupalBodySchema,
-  listPalpacionesQuerySchema,
   createPalpacionAnimalBodySchema,
-  updatePalpacionAnimalBodySchema,
-  idParamsSchema,
+  createPalpacionGrupalBodySchema,
   grupalIdParamsSchema,
+  idParamsSchema,
+  listPalpacionesQuerySchema,
+  updatePalpacionAnimalBodySchema,
+  updatePalpacionGrupalBodySchema,
 } from '../schemas/palpaciones.schema.js'
 
 // Inseminaciones schemas
 import {
-  createInseminacionGrupalBodySchema,
-  updateInseminacionGrupalBodySchema,
-  listInseminacionesQuerySchema,
   createInseminacionAnimalBodySchema,
+  createInseminacionGrupalBodySchema,
+  listInseminacionesQuerySchema,
   updateInseminacionAnimalBodySchema,
+  updateInseminacionGrupalBodySchema,
 } from '../schemas/inseminaciones.schema.js'
 
 // Partos schemas
 import {
   createPartoAnimalBodySchema,
-  updatePartoAnimalBodySchema,
   listPartosQuerySchema,
+  updatePartoAnimalBodySchema,
 } from '../schemas/partos.schema.js'
 
 // Veterinarios schemas
 import {
-  createVeterinarioGrupalBodySchema,
-  updateVeterinarioGrupalBodySchema,
-  listVeterinariosQuerySchema,
   createVeterinarioAnimalBodySchema,
+  createVeterinarioGrupalBodySchema,
+  listVeterinariosQuerySchema,
   updateVeterinarioAnimalBodySchema,
+  updateVeterinarioGrupalBodySchema,
 } from '../schemas/veterinarios.schema.js'
 
 export async function registerServiciosRoutes(app: FastifyInstance): Promise<void> {

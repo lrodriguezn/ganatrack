@@ -1,20 +1,20 @@
 import { injectable } from 'tsyringe'
-import type { FastifyRequest, FastifyReply } from 'fastify'
-import { ListarNotificacionesUseCase } from '../../../application/use-cases/listar-notificaciones.use-case.js'
-import { ObtenerResumenUseCase } from '../../../application/use-cases/obtener-resumen.use-case.js'
-import { MarcarLeidaUseCase } from '../../../application/use-cases/marcar-leida.use-case.js'
-import { MarcarTodasLeidasUseCase } from '../../../application/use-cases/marcar-todas-leidas.use-case.js'
-import { EliminarNotificacionUseCase } from '../../../application/use-cases/eliminar-notificacion.use-case.js'
-import { ObtenerPreferenciasUseCase } from '../../../application/use-cases/obtener-preferencias.use-case.js'
-import { ActualizarPreferenciaUseCase } from '../../../application/use-cases/actualizar-preferencia.use-case.js'
-import { RegistrarPushTokenUseCase } from '../../../application/use-cases/registrar-push-token.use-case.js'
-import { EliminarPushTokenUseCase } from '../../../application/use-cases/eliminar-push-token.use-case.js'
-import { EvaluarAlertasUseCase } from '../../../application/use-cases/evaluar-alertas.use-case.js'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import type { ListarNotificacionesUseCase } from '../../../application/use-cases/listar-notificaciones.use-case.js'
+import type { ObtenerResumenUseCase } from '../../../application/use-cases/obtener-resumen.use-case.js'
+import type { MarcarLeidaUseCase } from '../../../application/use-cases/marcar-leida.use-case.js'
+import type { MarcarTodasLeidasUseCase } from '../../../application/use-cases/marcar-todas-leidas.use-case.js'
+import type { EliminarNotificacionUseCase } from '../../../application/use-cases/eliminar-notificacion.use-case.js'
+import type { ObtenerPreferenciasUseCase } from '../../../application/use-cases/obtener-preferencias.use-case.js'
+import type { ActualizarPreferenciaUseCase } from '../../../application/use-cases/actualizar-preferencia.use-case.js'
+import type { RegistrarPushTokenUseCase } from '../../../application/use-cases/registrar-push-token.use-case.js'
+import type { EliminarPushTokenUseCase } from '../../../application/use-cases/eliminar-push-token.use-case.js'
+import type { EvaluarAlertasUseCase } from '../../../application/use-cases/evaluar-alertas.use-case.js'
 import type {
-  ListNotificacionesQueryDto,
   ActualizarPreferenciaBodyDto,
-  RegistrarPushTokenBodyDto,
   EvaluarAlertasBodyDto,
+  ListNotificacionesQueryDto,
+  RegistrarPushTokenBodyDto,
 } from '../../../application/dtos/notificacion.dto.js'
 import type { NotificacionTipo } from '../../../domain/entities/notificacion.entity.js'
 

@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { GRUPO_REPOSITORY } from '../../domain/repositories/grupo.repository.js'
 import type { IGrupoRepository } from '../../domain/repositories/grupo.repository.js'
 import type { GrupoResponseDto } from '../dtos/predios.dto.js'

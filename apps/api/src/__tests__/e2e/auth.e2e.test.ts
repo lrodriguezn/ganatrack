@@ -11,7 +11,7 @@
  * 2. Or run in an environment with Node.js v20.x
  */
 
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Try to load better-sqlite3, skip tests if unavailable
 let Database: typeof import('better-sqlite3').default

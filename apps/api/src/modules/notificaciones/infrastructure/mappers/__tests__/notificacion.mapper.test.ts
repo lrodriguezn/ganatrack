@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest'
-import { NotificacionMapper } from '../infrastructure/mappers/notificacion.mapper.js'
-import type { Notificacion } from '../domain/entities/notificacion.entity.js'
+import { describe, expect, it } from 'vitest'
+import { NotificacionMapper } from '../notificacion.mapper.js'
+import type { Notificacion } from '../../domain/entities/notificacion.entity.js'
 
 describe('NotificacionMapper', () => {
   describe('toResponseDto', () => {

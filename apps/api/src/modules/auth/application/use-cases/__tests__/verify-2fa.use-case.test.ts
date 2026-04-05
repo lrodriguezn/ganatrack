@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Verify2faUseCase } from '../verify-2fa.use-case.js'
 import { AuthDomainService } from '../../../domain/services/auth.domain-service.js'
 import { UnauthorizedError, ValidationError } from '../../../../../shared/errors/index.js'

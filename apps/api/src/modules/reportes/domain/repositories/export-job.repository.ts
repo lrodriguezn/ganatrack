@@ -1,4 +1,4 @@
-import type { ReporteExportacionEntity, ReporteFiltros, ExportEstado } from '../entities/reporte-exportacion.entity.js'
+import type { ExportEstado, ReporteExportacionEntity, ReporteFiltros } from '../entities/reporte-exportacion.entity.js'
 
 export interface IExportJobRepository {
   // Create a new export job

@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and, like, or, desc, count } from 'drizzle-orm'
+import { and, count, desc, eq, like, or } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { sectores } from '@ganatrack/database/schema'
 import type { ISectorRepository } from '../../domain/repositories/sector.repository.js'
@@ -19,12 +19,13 @@ export class DrizzleSectorRepository implements ISectorRepository {
     const conditions = [eq(sectores.predioId, predioId), eq(sectores.activo, 1)]
 
     if (search) {
-      conditions.push(
-        or(
-          like(sectores.nombre, `%${search}%`),
-          like(sectores.codigo, `%${search}%`),
-        )!,
+      const searchCondition = or(
+        like(sectores.nombre, `%${search}%`),
+        like(sectores.codigo, `%${search}%`),
       )
+      if (searchCondition) {
+        conditions.push(searchCondition)
+      }
     }
 
     const rows = await this.db

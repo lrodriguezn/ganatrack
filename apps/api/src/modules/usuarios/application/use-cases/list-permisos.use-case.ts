@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { PERMISO_REPOSITORY } from '../../domain/repositories/permiso.repository.js'
 import type { IPermisoRepository } from '../../domain/repositories/permiso.repository.js'
 import type { PermisoResponseDto } from '../dtos/usuario.dto.js'

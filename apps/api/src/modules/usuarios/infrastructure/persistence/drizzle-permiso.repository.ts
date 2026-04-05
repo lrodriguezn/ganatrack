@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, desc } from 'drizzle-orm'
+import { desc, eq } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { usuariosPermisos } from '@ganatrack/database/schema'
 import type { IPermisoRepository } from '../../domain/repositories/permiso.repository.js'

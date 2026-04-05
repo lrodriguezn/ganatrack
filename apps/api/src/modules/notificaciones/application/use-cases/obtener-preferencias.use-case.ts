@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { PREFERENCIA_REPOSITORY } from '../../domain/repositories/preferencia.repository.js'
 import type { IPreferenciaRepository } from '../../domain/repositories/preferencia.repository.js'
 import type { PreferenciaResponseDto } from '../dtos/notificacion.dto.js'

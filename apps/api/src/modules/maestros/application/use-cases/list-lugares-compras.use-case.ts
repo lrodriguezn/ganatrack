@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { LUGAR_COMPRA_REPOSITORY } from '../../domain/repositories/lugar-compra.repository.js'
 import type { ILugarCompraRepository } from '../../domain/repositories/lugar-compra.repository.js'
 import type { LugarCompraResponseDto } from '../dtos/maestros.dto.js'

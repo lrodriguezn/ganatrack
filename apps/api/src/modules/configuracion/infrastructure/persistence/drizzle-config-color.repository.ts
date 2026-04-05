@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and, like, or, desc, count } from 'drizzle-orm'
+import { and, count, desc, eq, like, or } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { configColores } from '@ganatrack/database/schema'
 import type { IConfigColorRepository } from '../../domain/repositories/config-color.repository.js'
@@ -21,12 +21,13 @@ export class DrizzleConfigColorRepository implements IConfigColorRepository {
     const conditions = [eq(configColores.activo, 1)]
 
     if (search) {
-      conditions.push(
-        or(
-          like(configColores.nombre, `%${search}%`),
-          like(configColores.codigo, `%${search}%`),
-        )!,
+      const searchCondition = or(
+        like(configColores.nombre, `%${search}%`),
+        like(configColores.codigo, `%${search}%`),
       )
+      if (searchCondition) {
+        conditions.push(searchCondition)
+      }
     }
 
     const rows = await this.db

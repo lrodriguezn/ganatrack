@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { ROL_REPOSITORY } from '../../domain/repositories/rol.repository.js'
 import type { IRolRepository } from '../../domain/repositories/rol.repository.js'
 import type { RolResponseDto } from '../dtos/usuario.dto.js'

@@ -1,6 +1,6 @@
-import { injectable, inject } from 'tsyringe'
-import { ROL_REPOSITORY } from '../../domain/repositories/rol.repository.js'
+import { inject, injectable } from 'tsyringe'
 import type { IRolRepository } from '../../domain/repositories/rol.repository.js'
+import { ROL_REPOSITORY } from '../../domain/repositories/rol.repository.js'
 import type { CreateRolDto, RolResponseDto } from '../dtos/usuario.dto.js'
 
 @injectable()

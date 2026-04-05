@@ -1,9 +1,9 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { PARTO_ANIMAL_REPOSITORY } from '../../domain/repositories/parto-animal.repository.js'
 import { PARTO_CRIA_REPOSITORY } from '../../domain/repositories/parto-cria.repository.js'
 import type { IPartoAnimalRepository } from '../../domain/repositories/parto-animal.repository.js'
 import type { IPartoCriaRepository } from '../../domain/repositories/parto-cria.repository.js'
-import type { CreatePartoAnimalDto, PartoAnimalResponseDto, CreatePartoCriaDto } from '../dtos/parto.dto.js'
+import type { CreatePartoAnimalDto, CreatePartoCriaDto, PartoAnimalResponseDto } from '../dtos/parto.dto.js'
 import { PartoAnimalMapper, PartoCriaMapper } from '../../infrastructure/mappers/parto.mapper.js'
 import type { ITransactionManager } from '../../../../shared/types/transaction.js'
 

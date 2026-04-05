@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { MarcarTodasLeidasUseCase } from '../application/use-cases/marcar-todas-leidas.use-case.js'
-import { NOTIFICACION_REPOSITORY } from '../domain/repositories/notificacion.repository.js'
-import type { INotificacionRepository } from '../domain/repositories/notificacion.repository.js'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { MarcarTodasLeidasUseCase } from '../marcar-todas-leidas.use-case.js'
+import { NOTIFICACION_REPOSITORY } from '../../../domain/repositories/notificacion.repository.js'
+import type { INotificacionRepository } from '../../../domain/repositories/notificacion.repository.js'
 
 describe('MarcarTodasLeidasUseCase', () => {
   let useCase: MarcarTodasLeidasUseCase

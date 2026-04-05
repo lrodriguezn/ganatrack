@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { NotFoundError } from '../../../../shared/errors/index.js'
 import { EXPORT_JOB_REPOSITORY } from '../../domain/repositories/export-job.repository.js'
 import type { IExportJobRepository } from '../../domain/repositories/export-job.repository.js'

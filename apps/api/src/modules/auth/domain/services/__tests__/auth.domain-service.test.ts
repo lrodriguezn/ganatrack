@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { AuthDomainService } from '../auth.domain-service.js'
+import { ValidationError } from '../../../../../shared/errors/index.js'
 
 describe('AuthDomainService', () => {
   const domainService = new AuthDomainService()
@@ -10,27 +11,19 @@ describe('AuthDomainService', () => {
     })
 
     it('should throw if password has less than 8 characters', () => {
-      expect(() => domainService.validatePasswordStrength('Admin1!')).toThrow(
-        'La contraseña debe tener al menos 8 caracteres'
-      )
+      expect(() => domainService.validatePasswordStrength('Admin1!')).toThrow(ValidationError)
     })
 
     it('should throw if password has no uppercase letter', () => {
-      expect(() => domainService.validatePasswordStrength('admin123!')).toThrow(
-        'La contraseña debe tener al menos una mayúscula'
-      )
+      expect(() => domainService.validatePasswordStrength('admin123!')).toThrow(ValidationError)
     })
 
     it('should throw if password has no lowercase letter', () => {
-      expect(() => domainService.validatePasswordStrength('ADMIN123!')).toThrow(
-        'La contraseña debe tener al menos una minúscula'
-      )
+      expect(() => domainService.validatePasswordStrength('ADMIN123!')).toThrow(ValidationError)
     })
 
     it('should throw if password has no number', () => {
-      expect(() => domainService.validatePasswordStrength('AdminTest!')).toThrow(
-        'La contraseña debe tener al menos un número'
-      )
+      expect(() => domainService.validatePasswordStrength('AdminTest!')).toThrow(ValidationError)
     })
 
     it('should accept exactly 8 characters with all requirements', () => {

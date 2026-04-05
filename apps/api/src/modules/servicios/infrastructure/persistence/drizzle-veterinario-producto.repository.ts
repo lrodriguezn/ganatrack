@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { serviciosVeterinariosProductos } from '@ganatrack/database/schema'
 import type { IVeterinarioProductoRepository } from '../../domain/repositories/veterinario-producto.repository.js'

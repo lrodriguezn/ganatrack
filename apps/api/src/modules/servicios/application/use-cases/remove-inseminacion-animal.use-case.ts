@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { INSEMINACION_ANIMAL_REPOSITORY } from '../../domain/repositories/inseminacion-animal.repository.js'
 import type { IInseminacionAnimalRepository } from '../../domain/repositories/inseminacion-animal.repository.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'

@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and, like, desc, count } from 'drizzle-orm'
+import { and, count, desc, eq, like } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { lugaresCompras } from '@ganatrack/database/schema'
 import type { ILugarCompraRepository } from '../../domain/repositories/lugar-compra.repository.js'

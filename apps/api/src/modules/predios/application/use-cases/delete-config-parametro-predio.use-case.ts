@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { CONFIG_PARAMETRO_PREDIO_REPOSITORY } from '../../domain/repositories/config-parametro-predio.repository.js'
 import type { IConfigParametroPredioRepository } from '../../domain/repositories/config-parametro-predio.repository.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'

@@ -1,4 +1,4 @@
-import type { FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyReply, FastifyRequest } from 'fastify'
 import { UnauthorizedError } from '../errors/index.js'
 import { verifyToken } from '../utils/jwt.utils.js'
 

@@ -1,6 +1,6 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import type { Notificacion } from '../../domain/entities/notificacion.entity.js'
-import type { ICanalNotificacion, CanalResult, DestinatarioInfo } from '../../domain/services/canal-notificacion.interface.js'
+import type { CanalResult, DestinatarioInfo, ICanalNotificacion } from '../../domain/services/canal-notificacion.interface.js'
 import { NOTIFICACION_REPOSITORY } from '../../domain/repositories/notificacion.repository.js'
 import type { INotificacionRepository } from '../../domain/repositories/notificacion.repository.js'
 

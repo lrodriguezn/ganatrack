@@ -1,9 +1,9 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { SECTOR_REPOSITORY } from '../../domain/repositories/sector.repository.js'
 import type { ISectorRepository } from '../../domain/repositories/sector.repository.js'
-import type { UpdateSectorDto, SectorResponseDto } from '../dtos/predios.dto.js'
+import type { SectorResponseDto, UpdateSectorDto } from '../dtos/predios.dto.js'
 import { SectorMapper } from '../../infrastructure/mappers/predios.mapper.js'
-import { NotFoundError, ConflictError } from '../../../../shared/errors/index.js'
+import { ConflictError, NotFoundError } from '../../../../shared/errors/index.js'
 
 @injectable()
 export class UpdateSectorUseCase {

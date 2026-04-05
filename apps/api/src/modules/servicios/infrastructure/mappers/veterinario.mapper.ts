@@ -1,5 +1,5 @@
-import type { VeterinarioGrupalEntity, VeterinarioAnimalEntity, VeterinarioProductoEntity } from '../../domain/entities/veterinario.entity.js'
-import type { VeterinarioGrupalResponseDto, VeterinarioAnimalResponseDto, VeterinarioProductoResponseDto } from '../../application/dtos/veterinario.dto.js'
+import type { VeterinarioAnimalEntity, VeterinarioGrupalEntity, VeterinarioProductoEntity } from '../../domain/entities/veterinario.entity.js'
+import type { VeterinarioAnimalResponseDto, VeterinarioGrupalResponseDto, VeterinarioProductoResponseDto } from '../../application/dtos/veterinario.dto.js'
 
 export class VeterinarioGrupalMapper {
   static toResponse(e: VeterinarioGrupalEntity): VeterinarioGrupalResponseDto {

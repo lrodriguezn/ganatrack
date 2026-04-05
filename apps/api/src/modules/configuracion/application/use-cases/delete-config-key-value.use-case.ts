@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { CONFIG_KEY_VALUE_REPOSITORY } from '../../domain/repositories/config-key-value.repository.js'
 import type { IConfigKeyValueRepository } from '../../domain/repositories/config-key-value.repository.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'

@@ -1,25 +1,25 @@
-import type { FastifyRequest, FastifyReply } from 'fastify'
-import { injectable, inject } from 'tsyringe'
-import { CrearAnimalUseCase } from '../../../application/use-cases/crear-animal.use-case.js'
-import { GetAnimalUseCase } from '../../../application/use-cases/get-animal.use-case.js'
-import { ListAnimalesUseCase } from '../../../application/use-cases/list-animales.use-case.js'
-import { UpdateAnimalUseCase } from '../../../application/use-cases/update-animal.use-case.js'
-import { DeleteAnimalUseCase } from '../../../application/use-cases/delete-animal.use-case.js'
-import { GetGenealogiaAnimalUseCase } from '../../../application/use-cases/get-genealogia-animal.use-case.js'
-import { CrearImagenUseCase } from '../../../application/use-cases/crear-imagen.use-case.js'
-import { GetImagenUseCase } from '../../../application/use-cases/get-imagen.use-case.js'
-import { ListImagenesUseCase } from '../../../application/use-cases/list-imagenes.use-case.js'
-import { UpdateImagenUseCase } from '../../../application/use-cases/update-imagen.use-case.js'
-import { DeleteImagenUseCase } from '../../../application/use-cases/delete-imagen.use-case.js'
-import { AssignImagenToAnimalUseCase } from '../../../application/use-cases/assign-imagen-to-animal.use-case.js'
-import { ListAnimalImagenesUseCase } from '../../../application/use-cases/list-animal-imagenes.use-case.js'
-import { ListImagenAnimalesUseCase } from '../../../application/use-cases/list-imagen-animales.use-case.js'
-import { RemoveImagenFromAnimalUseCase } from '../../../application/use-cases/remove-imagen-from-animal.use-case.js'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import { inject, injectable } from 'tsyringe'
+import type { CrearAnimalUseCase } from '../../../application/use-cases/crear-animal.use-case.js'
+import type { GetAnimalUseCase } from '../../../application/use-cases/get-animal.use-case.js'
+import type { ListAnimalesUseCase } from '../../../application/use-cases/list-animales.use-case.js'
+import type { UpdateAnimalUseCase } from '../../../application/use-cases/update-animal.use-case.js'
+import type { DeleteAnimalUseCase } from '../../../application/use-cases/delete-animal.use-case.js'
+import type { GetGenealogiaAnimalUseCase } from '../../../application/use-cases/get-genealogia-animal.use-case.js'
+import type { CrearImagenUseCase } from '../../../application/use-cases/crear-imagen.use-case.js'
+import type { GetImagenUseCase } from '../../../application/use-cases/get-imagen.use-case.js'
+import type { ListImagenesUseCase } from '../../../application/use-cases/list-imagenes.use-case.js'
+import type { UpdateImagenUseCase } from '../../../application/use-cases/update-imagen.use-case.js'
+import type { DeleteImagenUseCase } from '../../../application/use-cases/delete-imagen.use-case.js'
+import type { AssignImagenToAnimalUseCase } from '../../../application/use-cases/assign-imagen-to-animal.use-case.js'
+import type { ListAnimalImagenesUseCase } from '../../../application/use-cases/list-animal-imagenes.use-case.js'
+import type { ListImagenAnimalesUseCase } from '../../../application/use-cases/list-imagen-animales.use-case.js'
+import type { RemoveImagenFromAnimalUseCase } from '../../../application/use-cases/remove-imagen-from-animal.use-case.js'
 import type {
-  CreateAnimalDto,
-  UpdateAnimalDto,
-  CreateImagenDto,
   AssignImagenDto,
+  CreateAnimalDto,
+  CreateImagenDto,
+  UpdateAnimalDto,
 } from '../../../application/dtos/animal.dto.js'
 
 @injectable()

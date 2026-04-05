@@ -18,8 +18,8 @@ import { DrizzlePreferenciaRepository } from './infrastructure/persistence/drizz
 import { DrizzlePushTokenRepository } from './infrastructure/persistence/drizzle-push-token.repository.js'
 
 // Domain services
-import { AlertEngineService, ALERT_ENGINE_SERVICE } from './domain/services/alert-engine.service.js'
-import { AlertaSchedulerService, ALERTA_SCHEDULER_SERVICE } from './infrastructure/scheduler/alerta-scheduler.service.js'
+import { ALERT_ENGINE_SERVICE, AlertEngineService } from './domain/services/alert-engine.service.js'
+import { ALERTA_SCHEDULER_SERVICE, AlertaSchedulerService } from './infrastructure/scheduler/alerta-scheduler.service.js'
 
 // Channel adapters
 import { InAppChannelAdapter } from './infrastructure/channels/in-app.adapter.js'

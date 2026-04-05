@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { CONFIG_RANGO_EDAD_REPOSITORY } from '../../domain/repositories/config-rango-edad.repository.js'
 import type { IConfigRangoEdadRepository } from '../../domain/repositories/config-rango-edad.repository.js'
 import type { ConfigRangoEdadResponseDto } from '../dtos/configuracion.dto.js'

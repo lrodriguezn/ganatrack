@@ -1,10 +1,10 @@
-import type { FastifyRequest, FastifyReply } from 'fastify'
-import { injectable, inject } from 'tsyringe'
-import { ListProductosUseCase } from '../../application/use-cases/list-productos.use-case.js'
-import { GetProductoUseCase } from '../../application/use-cases/get-producto.use-case.js'
-import { CrearProductoUseCase } from '../../application/use-cases/crear-producto.use-case.js'
-import { UpdateProductoUseCase } from '../../application/use-cases/update-producto.use-case.js'
-import { DeleteProductoUseCase } from '../../application/use-cases/delete-producto.use-case.js'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import { inject, injectable } from 'tsyringe'
+import type { ListProductosUseCase } from '../../application/use-cases/list-productos.use-case.js'
+import type { GetProductoUseCase } from '../../application/use-cases/get-producto.use-case.js'
+import type { CrearProductoUseCase } from '../../application/use-cases/crear-producto.use-case.js'
+import type { UpdateProductoUseCase } from '../../application/use-cases/update-producto.use-case.js'
+import type { DeleteProductoUseCase } from '../../application/use-cases/delete-producto.use-case.js'
 import type { CreateProductoDto, UpdateProductoDto } from '../../application/dtos/producto.dto.js'
 
 @injectable()

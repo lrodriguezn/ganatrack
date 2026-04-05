@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { CONFIG_CALIDAD_ANIMAL_REPOSITORY } from '../../domain/repositories/config-calidad-animal.repository.js'
 import type { IConfigCalidadAnimalRepository } from '../../domain/repositories/config-calidad-animal.repository.js'
-import type { UpdateConfigCalidadAnimalDto, ConfigCalidadAnimalResponseDto } from '../dtos/configuracion.dto.js'
+import type { ConfigCalidadAnimalResponseDto, UpdateConfigCalidadAnimalDto } from '../dtos/configuracion.dto.js'
 import { ConfigCalidadAnimalMapper } from '../../infrastructure/mappers/configuracion.mapper.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'
 

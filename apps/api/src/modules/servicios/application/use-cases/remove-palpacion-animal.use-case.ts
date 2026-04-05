@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { PALPACION_ANIMAL_REPOSITORY } from '../../domain/repositories/palpacion-animal.repository.js'
 import type { IPalpacionAnimalRepository } from '../../domain/repositories/palpacion-animal.repository.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'

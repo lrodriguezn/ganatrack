@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { VETERINARIO_GRUPAL_REPOSITORY } from '../../domain/repositories/veterinario-grupal.repository.js'
 import type { IVeterinarioGrupalRepository } from '../../domain/repositories/veterinario-grupal.repository.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'

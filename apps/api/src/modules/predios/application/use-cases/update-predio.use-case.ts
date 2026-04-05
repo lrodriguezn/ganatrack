@@ -1,9 +1,9 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { PREDIO_REPOSITORY } from '../../domain/repositories/predio.repository.js'
 import type { IPredioRepository } from '../../domain/repositories/predio.repository.js'
-import type { UpdatePredioDto, PredioResponseDto } from '../dtos/predios.dto.js'
+import type { PredioResponseDto, UpdatePredioDto } from '../dtos/predios.dto.js'
 import { PredioMapper } from '../../infrastructure/mappers/predios.mapper.js'
-import { NotFoundError, ConflictError } from '../../../../shared/errors/index.js'
+import { ConflictError, NotFoundError } from '../../../../shared/errors/index.js'
 
 @injectable()
 export class UpdatePredioUseCase {

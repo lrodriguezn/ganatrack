@@ -1,6 +1,6 @@
 import { injectable } from 'tsyringe'
-import type { IJobQueue, ExportJob } from '../../domain/services/job-queue.service.js'
-import type { ReporteTipo, ExportFormato, ReporteFiltros } from '../../domain/entities/reporte-exportacion.entity.js'
+import type { ExportJob, IJobQueue } from '../../domain/services/job-queue.service.js'
+import type { ExportFormato, ReporteFiltros, ReporteTipo } from '../../domain/entities/reporte-exportacion.entity.js'
 
 // In-memory job storage (in production, use Redis or BullMQ)
 const jobs = new Map<string, ExportJob>()

@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { CONFIG_RAZA_REPOSITORY } from '../../domain/repositories/config-raza.repository.js'
 import type { IConfigRazaRepository } from '../../domain/repositories/config-raza.repository.js'
 import type { ConfigRazaResponseDto } from '../dtos/configuracion.dto.js'

@@ -1,12 +1,12 @@
 import { injectable } from 'tsyringe'
 import type { DbClient } from '@ganatrack/database'
-import { eq, and, gte, lte, desc } from 'drizzle-orm'
+import { and, desc, eq, gte, lte } from 'drizzle-orm'
 import {
   animales,
-  serviciosPalpacionesAnimales,
-  serviciosInseminacionAnimales,
-  serviciosVeterinariosAnimales,
   predios,
+  serviciosInseminacionAnimales,
+  serviciosPalpacionesAnimales,
+  serviciosVeterinariosAnimales,
 } from '@ganatrack/database/schema'
 import type { NotificacionTipo } from '../../domain/entities/notificacion.entity.js'
 import { notificaciones } from '@ganatrack/database/schema'

@@ -1,4 +1,4 @@
-import type { Notificacion, NotificacionTipo, CrearNotificacionParams } from '../entities/notificacion.entity.js'
+import type { CrearNotificacionParams, Notificacion, NotificacionTipo } from '../entities/notificacion.entity.js'
 
 export interface ListNotificacionesOptions {
   page: number

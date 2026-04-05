@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and, like, or, desc, count } from 'drizzle-orm'
+import { and, count, desc, eq, like, or } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { configRangosEdades } from '@ganatrack/database/schema'
 import type { IConfigRangoEdadRepository } from '../../domain/repositories/config-rango-edad.repository.js'
@@ -21,12 +21,13 @@ export class DrizzleConfigRangoEdadRepository implements IConfigRangoEdadReposit
     const conditions = [eq(configRangosEdades.activo, 1)]
 
     if (search) {
-      conditions.push(
-        or(
-          like(configRangosEdades.nombre, `%${search}%`),
-          like(configRangosEdades.descripcion, `%${search}%`),
-        )!,
+      const searchCondition = or(
+        like(configRangosEdades.nombre, `%${search}%`),
+        like(configRangosEdades.descripcion, `%${search}%`),
       )
+      if (searchCondition) {
+        conditions.push(searchCondition)
+      }
     }
 
     const rows = await this.db

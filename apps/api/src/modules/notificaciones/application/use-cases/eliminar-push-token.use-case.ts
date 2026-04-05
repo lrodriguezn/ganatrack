@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { PUSH_TOKEN_REPOSITORY } from '../../domain/repositories/push-token.repository.js'
 import type { IPushTokenRepository } from '../../domain/repositories/push-token.repository.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'

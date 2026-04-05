@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { ALERTA_SCHEDULER_SERVICE } from '../../infrastructure/scheduler/alerta-scheduler.service.js'
 import type { AlertaSchedulerService } from '../../infrastructure/scheduler/alerta-scheduler.service.js'
 import type { EvaluarAlertasResponseDto } from '../dtos/notificacion.dto.js'

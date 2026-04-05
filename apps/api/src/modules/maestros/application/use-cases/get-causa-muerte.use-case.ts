@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { CAUSA_MUERTE_REPOSITORY } from '../../domain/repositories/causa-muerte.repository.js'
 import type { ICausaMuerteRepository } from '../../domain/repositories/causa-muerte.repository.js'
 import type { CausaMuerteResponseDto } from '../dtos/maestros.dto.js'

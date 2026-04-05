@@ -1,9 +1,9 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { PRODUCTO_REPOSITORY } from '../../domain/repositories/producto.repository.js'
 import type { IProductoRepository } from '../../domain/repositories/producto.repository.js'
-import type { UpdateProductoDto, ProductoResponseDto } from '../dtos/producto.dto.js'
+import type { ProductoResponseDto, UpdateProductoDto } from '../dtos/producto.dto.js'
 import { ProductoMapper } from '../../infrastructure/mappers/producto.mapper.js'
-import { NotFoundError, ConflictError } from '../../../../shared/errors/index.js'
+import { ConflictError, NotFoundError } from '../../../../shared/errors/index.js'
 
 @injectable()
 export class UpdateProductoUseCase {

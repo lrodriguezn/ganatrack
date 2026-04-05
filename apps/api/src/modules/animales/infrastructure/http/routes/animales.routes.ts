@@ -3,15 +3,15 @@ import { container } from 'tsyringe'
 import { AnimalesController } from '../controllers/animales.controller.js'
 import { authMiddleware, requirePermission } from '../../../../../shared/middleware/index.js'
 import {
-  createAnimalBodySchema,
-  updateAnimalBodySchema,
-  listAnimalesQuerySchema,
-  createImagenBodySchema,
-  updateImagenBodySchema,
-  listImagenesQuerySchema,
   assignImagenBodySchema,
-  idParamsSchema,
+  createAnimalBodySchema,
+  createImagenBodySchema,
   genealogiaParamsSchema,
+  idParamsSchema,
+  listAnimalesQuerySchema,
+  listImagenesQuerySchema,
+  updateAnimalBodySchema,
+  updateImagenBodySchema,
 } from '../schemas/animales.schema.js'
 
 export async function registerAnimalesRoutes(app: FastifyInstance): Promise<void> {

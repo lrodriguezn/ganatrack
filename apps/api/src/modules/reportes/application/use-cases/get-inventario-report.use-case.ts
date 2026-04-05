@@ -1,7 +1,7 @@
 import { injectable } from 'tsyringe'
-import { eq, and } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
-import { animales, potreros, configRazas } from '@ganatrack/database/schema'
+import { animales, configRazas, potreros } from '@ganatrack/database/schema'
 import type { InventarioReportDto, ReporteFiltrosDto } from '../dtos/reportes.dto.js'
 
 @injectable()

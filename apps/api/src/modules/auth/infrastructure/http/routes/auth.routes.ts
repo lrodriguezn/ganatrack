@@ -1,14 +1,14 @@
-import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { container } from 'tsyringe'
 import { AuthController } from '../controllers/auth.controller.js'
 import { authMiddleware } from '../../../../../shared/middleware/auth.middleware.js'
 import {
-  loginBodySchema,
-  verify2faBodySchema,
-  resend2faBodySchema,
   changePasswordBodySchema,
+  loginBodySchema,
+  resend2faBodySchema,
+  verify2faBodySchema,
 } from '../schemas/auth.schema.js'
-import type { LoginDto, Verify2faDto, ChangePasswordDto } from '../../../application/dtos/login.dto.js'
+import type { ChangePasswordDto, LoginDto, Verify2faDto } from '../../../application/dtos/login.dto.js'
 
 export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
   const controller = container.resolve(AuthController)

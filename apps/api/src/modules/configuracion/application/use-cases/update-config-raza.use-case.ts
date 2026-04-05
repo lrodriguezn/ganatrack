@@ -1,9 +1,9 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { CONFIG_RAZA_REPOSITORY } from '../../domain/repositories/config-raza.repository.js'
 import type { IConfigRazaRepository } from '../../domain/repositories/config-raza.repository.js'
-import type { UpdateConfigRazaDto, ConfigRazaResponseDto } from '../dtos/configuracion.dto.js'
+import type { ConfigRazaResponseDto, UpdateConfigRazaDto } from '../dtos/configuracion.dto.js'
 import { ConfigRazaMapper } from '../../infrastructure/mappers/configuracion.mapper.js'
-import { NotFoundError, ConflictError } from '../../../../shared/errors/index.js'
+import { ConflictError, NotFoundError } from '../../../../shared/errors/index.js'
 
 @injectable()
 export class UpdateConfigRazaUseCase {

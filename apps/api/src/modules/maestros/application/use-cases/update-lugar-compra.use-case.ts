@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { LUGAR_COMPRA_REPOSITORY } from '../../domain/repositories/lugar-compra.repository.js'
 import type { ILugarCompraRepository } from '../../domain/repositories/lugar-compra.repository.js'
-import type { UpdateLugarCompraDto, LugarCompraResponseDto } from '../dtos/maestros.dto.js'
+import type { LugarCompraResponseDto, UpdateLugarCompraDto } from '../dtos/maestros.dto.js'
 import { LugarCompraMapper } from '../../infrastructure/mappers/maestros.mapper.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'
 

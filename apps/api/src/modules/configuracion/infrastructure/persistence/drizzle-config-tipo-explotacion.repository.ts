@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and, like, or, desc, count } from 'drizzle-orm'
+import { and, count, desc, eq, like, or } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { configTiposExplotacion } from '@ganatrack/database/schema'
 import type { IConfigTipoExplotacionRepository } from '../../domain/repositories/config-tipo-explotacion.repository.js'

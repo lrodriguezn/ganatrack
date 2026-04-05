@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { CONFIG_CONDICION_CORPORAL_REPOSITORY } from '../../domain/repositories/config-condicion-corporal.repository.js'
 import type { IConfigCondicionCorporalRepository } from '../../domain/repositories/config-condicion-corporal.repository.js'
-import type { UpdateConfigCondicionCorporalDto, ConfigCondicionCorporalResponseDto } from '../dtos/configuracion.dto.js'
+import type { ConfigCondicionCorporalResponseDto, UpdateConfigCondicionCorporalDto } from '../dtos/configuracion.dto.js'
 import { ConfigCondicionCorporalMapper } from '../../infrastructure/mappers/configuracion.mapper.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'
 

@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { GRUPO_REPOSITORY } from '../../domain/repositories/grupo.repository.js'
 import type { IGrupoRepository } from '../../domain/repositories/grupo.repository.js'
-import type { UpdateGrupoDto, GrupoResponseDto } from '../dtos/predios.dto.js'
+import type { GrupoResponseDto, UpdateGrupoDto } from '../dtos/predios.dto.js'
 import { GrupoMapper } from '../../infrastructure/mappers/predios.mapper.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'
 

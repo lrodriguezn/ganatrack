@@ -1,7 +1,7 @@
 import type { UsuarioEntity } from '../../domain/entities/usuario.entity.js'
 import type { RolEntity } from '../../domain/entities/rol.entity.js'
 import type { PermisoEntity } from '../../domain/entities/permiso.entity.js'
-import type { UsuarioResponseDto, RolResponseDto, PermisoResponseDto } from '../../application/dtos/usuario.dto.js'
+import type { PermisoResponseDto, RolResponseDto, UsuarioResponseDto } from '../../application/dtos/usuario.dto.js'
 
 export class UsuarioMapper {
   static toResponse(usuario: UsuarioEntity, roles: string[]): UsuarioResponseDto {

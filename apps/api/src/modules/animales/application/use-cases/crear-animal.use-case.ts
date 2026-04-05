@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { ANIMAL_REPOSITORY } from '../../domain/repositories/animal.repository.js'
 import type { IAnimalRepository } from '../../domain/repositories/animal.repository.js'
-import type { CreateAnimalDto, AnimalResponseDto } from '../dtos/animal.dto.js'
+import type { AnimalResponseDto, CreateAnimalDto } from '../dtos/animal.dto.js'
 import { AnimalMapper } from '../../infrastructure/mappers/animal.mapper.js'
 import { ConflictError } from '../../../../shared/errors/index.js'
 

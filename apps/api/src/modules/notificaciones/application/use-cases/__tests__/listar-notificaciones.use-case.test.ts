@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { ListarNotificacionesUseCase } from '../application/use-cases/listar-notificaciones.use-case.js'
-import { NOTIFICACION_REPOSITORY } from '../domain/repositories/notificacion.repository.js'
-import type { INotificacionRepository } from '../domain/repositories/notificacion.repository.js'
-import type { Notificacion } from '../domain/entities/notificacion.entity.js'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { ListarNotificacionesUseCase } from '../listar-notificaciones.use-case.js'
+import { NOTIFICACION_REPOSITORY } from '../../../domain/repositories/notificacion.repository.js'
+import type { INotificacionRepository } from '../../../domain/repositories/notificacion.repository.js'
+import type { Notificacion } from '../../../domain/entities/notificacion.entity.js'
 
 describe('ListarNotificacionesUseCase', () => {
   let useCase: ListarNotificacionesUseCase

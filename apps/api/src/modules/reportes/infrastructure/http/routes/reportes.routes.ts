@@ -3,12 +3,12 @@ import { container } from 'tsyringe'
 import { ReportesController } from '../controllers/reportes.controller.js'
 import { authMiddleware, requirePermission } from '../../../../../shared/middleware/index.js'
 import {
-  reportesQuerySchema,
-  exportRequestBodySchema,
   exportJobsQuerySchema,
+  exportRequestBodySchema,
   idParamsSchema,
   jobIdParamsSchema,
   reportTipoParamsSchema,
+  reportesQuerySchema,
 } from '../schemas/reportes.schema.js'
 
 export async function registerReportesRoutes(app: FastifyInstance): Promise<void> {

@@ -1,9 +1,9 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { POTRERO_REPOSITORY } from '../../domain/repositories/potrero.repository.js'
 import type { IPotreroRepository } from '../../domain/repositories/potrero.repository.js'
-import type { UpdatePotreroDto, PotreroResponseDto } from '../dtos/predios.dto.js'
+import type { PotreroResponseDto, UpdatePotreroDto } from '../dtos/predios.dto.js'
 import { PotreroMapper } from '../../infrastructure/mappers/predios.mapper.js'
-import { NotFoundError, ConflictError } from '../../../../shared/errors/index.js'
+import { ConflictError, NotFoundError } from '../../../../shared/errors/index.js'
 
 @injectable()
 export class UpdatePotreroUseCase {

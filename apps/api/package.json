@@ -8,6 +8,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "test": "vitest run",
     "test:unit": "vitest run --dir src/modules",
     "test:integration": "vitest run --dir src/__tests__/integration",
@@ -36,6 +38,7 @@
     "zod-to-json-schema": "^3.25.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.4",
     "@ganatrack/tsconfig": "workspace:*",
     "@types/bcrypt": "^6.0.0",
     "@types/better-sqlite3": "^7.6.13",
@@ -44,8 +47,11 @@
     "@types/pdfkit": "^0.13.9",
     "@vitest/coverage-v8": "^2.1.9",
     "better-sqlite3": "^12.8.0",
+    "eslint": "9",
+    "globals": "^17.4.0",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0",
+    "typescript-eslint": "8",
     "vitest": "^2.1.9"
   }
 }

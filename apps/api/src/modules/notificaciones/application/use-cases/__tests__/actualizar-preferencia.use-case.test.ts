@@ -1,9 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { ActualizarPreferenciaUseCase } from '../application/use-cases/actualizar-preferencia.use-case.js'
-import { PREFERENCIA_REPOSITORY } from '../domain/repositories/preferencia.repository.js'
-import type { IPreferenciaRepository } from '../domain/repositories/preferencia.repository.js'
-import { ValidationError } from '../../../shared/errors/index.js'
-import type { NotificacionPreferencia } from '../domain/entities/preferencia.entity.js'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { ActualizarPreferenciaUseCase } from '../actualizar-preferencia.use-case.js'
+import { PREFERENCIA_REPOSITORY } from '../../../domain/repositories/preferencia.repository.js'
+import type { IPreferenciaRepository } from '../../../domain/repositories/preferencia.repository.js'
+import { ValidationError } from '../../../../../shared/errors/index.js'
+import type { NotificacionPreferencia } from '../../../domain/entities/preferencia.entity.js'
 
 describe('ActualizarPreferenciaUseCase', () => {
   let useCase: ActualizarPreferenciaUseCase

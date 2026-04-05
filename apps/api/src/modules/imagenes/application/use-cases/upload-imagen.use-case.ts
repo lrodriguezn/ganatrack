@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { IMAGEN_REPOSITORY } from '../../domain/repositories/imagen.repository.js'
 import type { IImagenRepository } from '../../domain/repositories/imagen.repository.js'
-import type { UploadImagenDto, ImagenResponseDto } from '../dtos/imagen.dto.js'
+import type { ImagenResponseDto, UploadImagenDto } from '../dtos/imagen.dto.js'
 import { ImagenMapper } from '../../infrastructure/mappers/imagen.mapper.js'
 
 @injectable()

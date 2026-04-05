@@ -26,8 +26,9 @@ rules:
     - Use hierarchical numbering (1.1, 1.2, etc.)
     - Keep tasks small enough to complete in one session
   apply:
-    - Follow existing code patterns and conventions
-    - Load relevant coding skills for the project stack
+    rules:
+      - Follow existing code patterns and conventions
+      - Load relevant coding skills for the project stack
     tdd: false
     test_command: ""
   verify:
@@ -38,28 +39,32 @@ rules:
     - Warn before merging destructive deltas (large removals)
 
 testing:
-  ## Testing Capabilities
-  **Strict TDD Mode**: disabled
-  **Detected**: 2026-04-04
-
-  ### Test Runner
-  - Command: `pnpm --filter @ganatrack/web test` (Vitest)
-  - Framework: Vitest v2
-
-  ### Test Layers
-  | Layer | Available | Tool |
-  |-------|-----------|------|
-  | Unit | ✅ | Vitest + @testing-library/react (web) |
-  | Integration | ✅ | @testing-library/react + msw (web) |
-  | E2E | ✅ | Playwright (Chromium + Firefox) |
-
-  ### Coverage
-  - Available: ✅
-  - Command: `pnpm --filter @ganatrack/web test:coverage` (v8, 80% thresholds)
-
-  ### Quality Tools
-  | Tool | Available | Command |
-  |------|-----------|---------|
-  | Linter | ✅ | `pnpm --filter @ganatrack/web lint` (ESLint 9) |
-  | Type checker | ✅ | `pnpm typecheck` (tsc --noEmit, strict) |
-  | Formatter | ❌ | — |
+  strict_tdd_mode: false
+  detected: "2026-04-04"
+  test_runner:
+    command: "pnpm --filter @ganatrack/web test"
+    framework: "Vitest v2"
+  test_layers:
+    unit:
+      available: true
+      tool: "Vitest + @testing-library/react (web)"
+    integration:
+      available: true
+      tool: "@testing-library/react + msw (web)"
+    e2e:
+      available: true
+      tool: "Playwright (Chromium + Firefox)"
+  coverage:
+    available: true
+    command: "pnpm --filter @ganatrack/web test:coverage"
+    details: "v8, 80% thresholds"
+  quality_tools:
+    linter:
+      available: true
+      command: "pnpm --filter @ganatrack/web lint (ESLint 9)"
+    type_checker:
+      available: true
+      command: "pnpm typecheck (tsc --noEmit, strict)"
+    formatter:
+      available: false
+      command: null

@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and, like, or, desc, count } from 'drizzle-orm'
+import { and, count, desc, eq, like, or } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { predios } from '@ganatrack/database/schema'
 import type { IPredioRepository } from '../../domain/repositories/predio.repository.js'
@@ -19,13 +19,14 @@ export class DrizzlePredioRepository implements IPredioRepository {
     const conditions = [eq(predios.activo, 1)]
 
     if (search) {
-      conditions.push(
-        or(
-          like(predios.nombre, `%${search}%`),
-          like(predios.codigo, `%${search}%`),
-          like(predios.departamento, `%${search}%`),
-        )!,
+      const searchCondition = or(
+        like(predios.nombre, `%${search}%`),
+        like(predios.codigo, `%${search}%`),
+        like(predios.departamento, `%${search}%`),
       )
+      if (searchCondition) {
+        conditions.push(searchCondition)
+      }
     }
 
     const rows = await this.db

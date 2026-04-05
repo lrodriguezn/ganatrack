@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from 'vitest'
-import { AlertEngineService } from '../domain/services/alert-engine.service.js'
+import { beforeEach, describe, expect, it } from 'vitest'
+import { AlertEngineService } from '../alert-engine.service.js'
 
 describe('AlertEngineService', () => {
   let service: AlertEngineService

@@ -1,55 +1,55 @@
-import type { FastifyRequest, FastifyReply } from 'fastify'
-import { injectable, inject } from 'tsyringe'
-import { CrearConfigRazaUseCase } from '../../../application/use-cases/crear-config-raza.use-case.js'
-import { GetConfigRazaUseCase } from '../../../application/use-cases/get-config-raza.use-case.js'
-import { ListConfigRazasUseCase } from '../../../application/use-cases/list-config-razas.use-case.js'
-import { UpdateConfigRazaUseCase } from '../../../application/use-cases/update-config-raza.use-case.js'
-import { DeleteConfigRazaUseCase } from '../../../application/use-cases/delete-config-raza.use-case.js'
-import { CrearConfigCondicionCorporalUseCase } from '../../../application/use-cases/crear-config-condicion-corporal.use-case.js'
-import { GetConfigCondicionCorporalUseCase } from '../../../application/use-cases/get-config-condicion-corporal.use-case.js'
-import { ListConfigCondicionesCorporalesUseCase } from '../../../application/use-cases/list-config-condiciones-corporales.use-case.js'
-import { UpdateConfigCondicionCorporalUseCase } from '../../../application/use-cases/update-config-condicion-corporal.use-case.js'
-import { DeleteConfigCondicionCorporalUseCase } from '../../../application/use-cases/delete-config-condicion-corporal.use-case.js'
-import { CrearConfigTipoExplotacionUseCase } from '../../../application/use-cases/crear-config-tipo-explotacion.use-case.js'
-import { GetConfigTipoExplotacionUseCase } from '../../../application/use-cases/get-config-tipo-explotacion.use-case.js'
-import { ListConfigTiposExplotacionUseCase } from '../../../application/use-cases/list-config-tipos-explotacion.use-case.js'
-import { UpdateConfigTipoExplotacionUseCase } from '../../../application/use-cases/update-config-tipo-explotacion.use-case.js'
-import { DeleteConfigTipoExplotacionUseCase } from '../../../application/use-cases/delete-config-tipo-explotacion.use-case.js'
-import { CrearConfigCalidadAnimalUseCase } from '../../../application/use-cases/crear-config-calidad-animal.use-case.js'
-import { GetConfigCalidadAnimalUseCase } from '../../../application/use-cases/get-config-calidad-animal.use-case.js'
-import { ListConfigCalidadesAnimalesUseCase } from '../../../application/use-cases/list-config-calidades-animales.use-case.js'
-import { UpdateConfigCalidadAnimalUseCase } from '../../../application/use-cases/update-config-calidad-animal.use-case.js'
-import { DeleteConfigCalidadAnimalUseCase } from '../../../application/use-cases/delete-config-calidad-animal.use-case.js'
-import { CrearConfigColorUseCase } from '../../../application/use-cases/crear-config-color.use-case.js'
-import { GetConfigColorUseCase } from '../../../application/use-cases/get-config-color.use-case.js'
-import { ListConfigColoresUseCase } from '../../../application/use-cases/list-config-colores.use-case.js'
-import { UpdateConfigColorUseCase } from '../../../application/use-cases/update-config-color.use-case.js'
-import { DeleteConfigColorUseCase } from '../../../application/use-cases/delete-config-color.use-case.js'
-import { CrearConfigRangoEdadUseCase } from '../../../application/use-cases/crear-config-rango-edad.use-case.js'
-import { GetConfigRangoEdadUseCase } from '../../../application/use-cases/get-config-rango-edad.use-case.js'
-import { ListConfigRangosEdadesUseCase } from '../../../application/use-cases/list-config-rangos-edades.use-case.js'
-import { UpdateConfigRangoEdadUseCase } from '../../../application/use-cases/update-config-rango-edad.use-case.js'
-import { DeleteConfigRangoEdadUseCase } from '../../../application/use-cases/delete-config-rango-edad.use-case.js'
-import { CrearConfigKeyValueUseCase } from '../../../application/use-cases/crear-config-key-value.use-case.js'
-import { GetConfigKeyValueUseCase } from '../../../application/use-cases/get-config-key-value.use-case.js'
-import { ListConfigKeyValuesUseCase } from '../../../application/use-cases/list-config-key-values.use-case.js'
-import { UpdateConfigKeyValueUseCase } from '../../../application/use-cases/update-config-key-value.use-case.js'
-import { DeleteConfigKeyValueUseCase } from '../../../application/use-cases/delete-config-key-value.use-case.js'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import { inject, injectable } from 'tsyringe'
+import type { CrearConfigRazaUseCase } from '../../../application/use-cases/crear-config-raza.use-case.js'
+import type { GetConfigRazaUseCase } from '../../../application/use-cases/get-config-raza.use-case.js'
+import type { ListConfigRazasUseCase } from '../../../application/use-cases/list-config-razas.use-case.js'
+import type { UpdateConfigRazaUseCase } from '../../../application/use-cases/update-config-raza.use-case.js'
+import type { DeleteConfigRazaUseCase } from '../../../application/use-cases/delete-config-raza.use-case.js'
+import type { CrearConfigCondicionCorporalUseCase } from '../../../application/use-cases/crear-config-condicion-corporal.use-case.js'
+import type { GetConfigCondicionCorporalUseCase } from '../../../application/use-cases/get-config-condicion-corporal.use-case.js'
+import type { ListConfigCondicionesCorporalesUseCase } from '../../../application/use-cases/list-config-condiciones-corporales.use-case.js'
+import type { UpdateConfigCondicionCorporalUseCase } from '../../../application/use-cases/update-config-condicion-corporal.use-case.js'
+import type { DeleteConfigCondicionCorporalUseCase } from '../../../application/use-cases/delete-config-condicion-corporal.use-case.js'
+import type { CrearConfigTipoExplotacionUseCase } from '../../../application/use-cases/crear-config-tipo-explotacion.use-case.js'
+import type { GetConfigTipoExplotacionUseCase } from '../../../application/use-cases/get-config-tipo-explotacion.use-case.js'
+import type { ListConfigTiposExplotacionUseCase } from '../../../application/use-cases/list-config-tipos-explotacion.use-case.js'
+import type { UpdateConfigTipoExplotacionUseCase } from '../../../application/use-cases/update-config-tipo-explotacion.use-case.js'
+import type { DeleteConfigTipoExplotacionUseCase } from '../../../application/use-cases/delete-config-tipo-explotacion.use-case.js'
+import type { CrearConfigCalidadAnimalUseCase } from '../../../application/use-cases/crear-config-calidad-animal.use-case.js'
+import type { GetConfigCalidadAnimalUseCase } from '../../../application/use-cases/get-config-calidad-animal.use-case.js'
+import type { ListConfigCalidadesAnimalesUseCase } from '../../../application/use-cases/list-config-calidades-animales.use-case.js'
+import type { UpdateConfigCalidadAnimalUseCase } from '../../../application/use-cases/update-config-calidad-animal.use-case.js'
+import type { DeleteConfigCalidadAnimalUseCase } from '../../../application/use-cases/delete-config-calidad-animal.use-case.js'
+import type { CrearConfigColorUseCase } from '../../../application/use-cases/crear-config-color.use-case.js'
+import type { GetConfigColorUseCase } from '../../../application/use-cases/get-config-color.use-case.js'
+import type { ListConfigColoresUseCase } from '../../../application/use-cases/list-config-colores.use-case.js'
+import type { UpdateConfigColorUseCase } from '../../../application/use-cases/update-config-color.use-case.js'
+import type { DeleteConfigColorUseCase } from '../../../application/use-cases/delete-config-color.use-case.js'
+import type { CrearConfigRangoEdadUseCase } from '../../../application/use-cases/crear-config-rango-edad.use-case.js'
+import type { GetConfigRangoEdadUseCase } from '../../../application/use-cases/get-config-rango-edad.use-case.js'
+import type { ListConfigRangosEdadesUseCase } from '../../../application/use-cases/list-config-rangos-edades.use-case.js'
+import type { UpdateConfigRangoEdadUseCase } from '../../../application/use-cases/update-config-rango-edad.use-case.js'
+import type { DeleteConfigRangoEdadUseCase } from '../../../application/use-cases/delete-config-rango-edad.use-case.js'
+import type { CrearConfigKeyValueUseCase } from '../../../application/use-cases/crear-config-key-value.use-case.js'
+import type { GetConfigKeyValueUseCase } from '../../../application/use-cases/get-config-key-value.use-case.js'
+import type { ListConfigKeyValuesUseCase } from '../../../application/use-cases/list-config-key-values.use-case.js'
+import type { UpdateConfigKeyValueUseCase } from '../../../application/use-cases/update-config-key-value.use-case.js'
+import type { DeleteConfigKeyValueUseCase } from '../../../application/use-cases/delete-config-key-value.use-case.js'
 import type {
-  CreateConfigRazaDto,
-  UpdateConfigRazaDto,
-  CreateConfigCondicionCorporalDto,
-  UpdateConfigCondicionCorporalDto,
-  CreateConfigTipoExplotacionDto,
-  UpdateConfigTipoExplotacionDto,
   CreateConfigCalidadAnimalDto,
-  UpdateConfigCalidadAnimalDto,
   CreateConfigColorDto,
-  UpdateConfigColorDto,
-  CreateConfigRangoEdadDto,
-  UpdateConfigRangoEdadDto,
+  CreateConfigCondicionCorporalDto,
   CreateConfigKeyValueDto,
+  CreateConfigRangoEdadDto,
+  CreateConfigRazaDto,
+  CreateConfigTipoExplotacionDto,
+  UpdateConfigCalidadAnimalDto,
+  UpdateConfigColorDto,
+  UpdateConfigCondicionCorporalDto,
   UpdateConfigKeyValueDto,
+  UpdateConfigRangoEdadDto,
+  UpdateConfigRazaDto,
+  UpdateConfigTipoExplotacionDto,
 } from '../../../application/dtos/configuracion.dto.js'
 
 @injectable()

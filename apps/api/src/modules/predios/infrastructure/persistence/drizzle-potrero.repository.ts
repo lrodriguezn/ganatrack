@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and, like, or, desc, count } from 'drizzle-orm'
+import { and, count, desc, eq, like, or } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { potreros } from '@ganatrack/database/schema'
 import type { IPotreroRepository } from '../../domain/repositories/potrero.repository.js'
@@ -19,12 +19,13 @@ export class DrizzlePotreroRepository implements IPotreroRepository {
     const conditions = [eq(potreros.predioId, predioId), eq(potreros.activo, 1)]
 
     if (search) {
-      conditions.push(
-        or(
-          like(potreros.nombre, `%${search}%`),
-          like(potreros.codigo, `%${search}%`),
-        )!,
+      const searchCondition = or(
+        like(potreros.nombre, `%${search}%`),
+        like(potreros.codigo, `%${search}%`),
       )
+      if (searchCondition) {
+        conditions.push(searchCondition)
+      }
     }
 
     const rows = await this.db

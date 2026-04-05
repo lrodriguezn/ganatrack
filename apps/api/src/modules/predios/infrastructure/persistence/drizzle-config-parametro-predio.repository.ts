@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and, desc, count } from 'drizzle-orm'
+import { and, count, desc, eq } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { configParametrosPredio } from '@ganatrack/database/schema'
 import type { IConfigParametroPredioRepository } from '../../domain/repositories/config-parametro-predio.repository.js'

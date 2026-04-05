@@ -5,12 +5,12 @@ import type { LoteEntity } from '../../domain/entities/lote.entity.js'
 import type { GrupoEntity } from '../../domain/entities/grupo.entity.js'
 import type { ConfigParametroPredioEntity } from '../../domain/entities/config-parametro-predio.entity.js'
 import type {
-  PredioResponseDto,
-  PotreroResponseDto,
-  SectorResponseDto,
-  LoteResponseDto,
-  GrupoResponseDto,
   ConfigParametroPredioResponseDto,
+  GrupoResponseDto,
+  LoteResponseDto,
+  PotreroResponseDto,
+  PredioResponseDto,
+  SectorResponseDto,
 } from '../../application/dtos/predios.dto.js'
 
 export class PredioMapper {

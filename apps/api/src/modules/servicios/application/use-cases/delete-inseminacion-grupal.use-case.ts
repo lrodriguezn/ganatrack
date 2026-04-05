@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { INSEMINACION_GRUPAL_REPOSITORY } from '../../domain/repositories/inseminacion-grupal.repository.js'
 import type { IInseminacionGrupalRepository } from '../../domain/repositories/inseminacion-grupal.repository.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'

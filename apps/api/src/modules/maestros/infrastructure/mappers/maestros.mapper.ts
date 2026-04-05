@@ -7,9 +7,9 @@ import type { CausaMuerteEntity } from '../../domain/entities/causa-muerte.entit
 import type { LugarCompraEntity } from '../../domain/entities/lugar-compra.entity.js'
 import type { LugarVentaEntity } from '../../domain/entities/lugar-venta.entity.js'
 import type {
-  VeterinarioResponseDto, PropietarioResponseDto, HierroResponseDto,
-  DiagnosticoVeterinarioResponseDto, MotivoVentaResponseDto, CausaMuerteResponseDto,
-  LugarCompraResponseDto, LugarVentaResponseDto,
+  CausaMuerteResponseDto, DiagnosticoVeterinarioResponseDto, HierroResponseDto,
+  LugarCompraResponseDto, LugarVentaResponseDto, MotivoVentaResponseDto,
+  PropietarioResponseDto, VeterinarioResponseDto,
 } from '../../application/dtos/maestros.dto.js'
 
 export class VeterinarioMapper {

@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { VETERINARIO_REPOSITORY } from '../../domain/repositories/veterinario.repository.js'
 import type { IVeterinarioRepository } from '../../domain/repositories/veterinario.repository.js'
 import type { CreateVeterinarioDto, VeterinarioResponseDto } from '../dtos/maestros.dto.js'

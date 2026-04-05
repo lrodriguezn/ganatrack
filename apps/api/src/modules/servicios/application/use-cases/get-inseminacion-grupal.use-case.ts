@@ -1,10 +1,10 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { INSEMINACION_GRUPAL_REPOSITORY } from '../../domain/repositories/inseminacion-grupal.repository.js'
 import { INSEMINACION_ANIMAL_REPOSITORY } from '../../domain/repositories/inseminacion-animal.repository.js'
 import type { IInseminacionGrupalRepository } from '../../domain/repositories/inseminacion-grupal.repository.js'
 import type { IInseminacionAnimalRepository } from '../../domain/repositories/inseminacion-animal.repository.js'
 import type { InseminacionGrupalResponseDto } from '../dtos/inseminacion.dto.js'
-import { InseminacionGrupalMapper, InseminacionAnimalMapper } from '../../infrastructure/mappers/inseminacion.mapper.js'
+import { InseminacionAnimalMapper, InseminacionGrupalMapper } from '../../infrastructure/mappers/inseminacion.mapper.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'
 
 @injectable()

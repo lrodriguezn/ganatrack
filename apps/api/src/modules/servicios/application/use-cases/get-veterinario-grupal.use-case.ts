@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { VETERINARIO_GRUPAL_REPOSITORY } from '../../domain/repositories/veterinario-grupal.repository.js'
 import { VETERINARIO_ANIMAL_REPOSITORY } from '../../domain/repositories/veterinario-animal.repository.js'
 import { VETERINARIO_PRODUCTO_REPOSITORY } from '../../domain/repositories/veterinario-producto.repository.js'
@@ -6,7 +6,7 @@ import type { IVeterinarioGrupalRepository } from '../../domain/repositories/vet
 import type { IVeterinarioAnimalRepository } from '../../domain/repositories/veterinario-animal.repository.js'
 import type { IVeterinarioProductoRepository } from '../../domain/repositories/veterinario-producto.repository.js'
 import type { VeterinarioGrupalResponseDto } from '../dtos/veterinario.dto.js'
-import { VeterinarioGrupalMapper, VeterinarioAnimalMapper, VeterinarioProductoMapper } from '../../infrastructure/mappers/veterinario.mapper.js'
+import { VeterinarioAnimalMapper, VeterinarioGrupalMapper, VeterinarioProductoMapper } from '../../infrastructure/mappers/veterinario.mapper.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'
 
 @injectable()

@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and, like, or, desc, count } from 'drizzle-orm'
+import { and, count, desc, eq, like, or } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { configCalidadAnimal } from '@ganatrack/database/schema'
 import type { IConfigCalidadAnimalRepository } from '../../domain/repositories/config-calidad-animal.repository.js'
@@ -21,12 +21,13 @@ export class DrizzleConfigCalidadAnimalRepository implements IConfigCalidadAnima
     const conditions = [eq(configCalidadAnimal.activo, 1)]
 
     if (search) {
-      conditions.push(
-        or(
-          like(configCalidadAnimal.nombre, `%${search}%`),
-          like(configCalidadAnimal.descripcion, `%${search}%`),
-        )!,
+      const searchCondition = or(
+        like(configCalidadAnimal.nombre, `%${search}%`),
+        like(configCalidadAnimal.descripcion, `%${search}%`),
       )
+      if (searchCondition) {
+        conditions.push(searchCondition)
+      }
     }
 
     const rows = await this.db

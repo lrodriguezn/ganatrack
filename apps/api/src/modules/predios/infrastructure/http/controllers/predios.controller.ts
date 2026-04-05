@@ -1,42 +1,42 @@
-import type { FastifyRequest, FastifyReply } from 'fastify'
-import { injectable, inject } from 'tsyringe'
-import { CrearPredioUseCase } from '../../../application/use-cases/crear-predio.use-case.js'
-import { GetPredioUseCase } from '../../../application/use-cases/get-predio.use-case.js'
-import { ListPrediosUseCase } from '../../../application/use-cases/list-predios.use-case.js'
-import { UpdatePredioUseCase } from '../../../application/use-cases/update-predio.use-case.js'
-import { DeletePredioUseCase } from '../../../application/use-cases/delete-predio.use-case.js'
-import { CrearPotreroUseCase } from '../../../application/use-cases/crear-potrero.use-case.js'
-import { GetPotreroUseCase } from '../../../application/use-cases/get-potrero.use-case.js'
-import { ListPotrerosUseCase } from '../../../application/use-cases/list-potreros.use-case.js'
-import { UpdatePotreroUseCase } from '../../../application/use-cases/update-potrero.use-case.js'
-import { DeletePotreroUseCase } from '../../../application/use-cases/delete-potrero.use-case.js'
-import { CrearSectorUseCase } from '../../../application/use-cases/crear-sector.use-case.js'
-import { GetSectorUseCase } from '../../../application/use-cases/get-sector.use-case.js'
-import { ListSectoresUseCase } from '../../../application/use-cases/list-sectores.use-case.js'
-import { UpdateSectorUseCase } from '../../../application/use-cases/update-sector.use-case.js'
-import { DeleteSectorUseCase } from '../../../application/use-cases/delete-sector.use-case.js'
-import { CrearLoteUseCase } from '../../../application/use-cases/crear-lote.use-case.js'
-import { GetLoteUseCase } from '../../../application/use-cases/get-lote.use-case.js'
-import { ListLotesUseCase } from '../../../application/use-cases/list-lotes.use-case.js'
-import { UpdateLoteUseCase } from '../../../application/use-cases/update-lote.use-case.js'
-import { DeleteLoteUseCase } from '../../../application/use-cases/delete-lote.use-case.js'
-import { CrearGrupoUseCase } from '../../../application/use-cases/crear-grupo.use-case.js'
-import { GetGrupoUseCase } from '../../../application/use-cases/get-grupo.use-case.js'
-import { ListGruposUseCase } from '../../../application/use-cases/list-grupos.use-case.js'
-import { UpdateGrupoUseCase } from '../../../application/use-cases/update-grupo.use-case.js'
-import { DeleteGrupoUseCase } from '../../../application/use-cases/delete-grupo.use-case.js'
-import { CrearConfigParametroPredioUseCase } from '../../../application/use-cases/crear-config-parametro-predio.use-case.js'
-import { GetConfigParametroPredioUseCase } from '../../../application/use-cases/get-config-parametro-predio.use-case.js'
-import { ListConfigParametrosPredioUseCase } from '../../../application/use-cases/list-config-parametros-predio.use-case.js'
-import { UpdateConfigParametroPredioUseCase } from '../../../application/use-cases/update-config-parametro-predio.use-case.js'
-import { DeleteConfigParametroPredioUseCase } from '../../../application/use-cases/delete-config-parametro-predio.use-case.js'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import { inject, injectable } from 'tsyringe'
+import type { CrearPredioUseCase } from '../../../application/use-cases/crear-predio.use-case.js'
+import type { GetPredioUseCase } from '../../../application/use-cases/get-predio.use-case.js'
+import type { ListPrediosUseCase } from '../../../application/use-cases/list-predios.use-case.js'
+import type { UpdatePredioUseCase } from '../../../application/use-cases/update-predio.use-case.js'
+import type { DeletePredioUseCase } from '../../../application/use-cases/delete-predio.use-case.js'
+import type { CrearPotreroUseCase } from '../../../application/use-cases/crear-potrero.use-case.js'
+import type { GetPotreroUseCase } from '../../../application/use-cases/get-potrero.use-case.js'
+import type { ListPotrerosUseCase } from '../../../application/use-cases/list-potreros.use-case.js'
+import type { UpdatePotreroUseCase } from '../../../application/use-cases/update-potrero.use-case.js'
+import type { DeletePotreroUseCase } from '../../../application/use-cases/delete-potrero.use-case.js'
+import type { CrearSectorUseCase } from '../../../application/use-cases/crear-sector.use-case.js'
+import type { GetSectorUseCase } from '../../../application/use-cases/get-sector.use-case.js'
+import type { ListSectoresUseCase } from '../../../application/use-cases/list-sectores.use-case.js'
+import type { UpdateSectorUseCase } from '../../../application/use-cases/update-sector.use-case.js'
+import type { DeleteSectorUseCase } from '../../../application/use-cases/delete-sector.use-case.js'
+import type { CrearLoteUseCase } from '../../../application/use-cases/crear-lote.use-case.js'
+import type { GetLoteUseCase } from '../../../application/use-cases/get-lote.use-case.js'
+import type { ListLotesUseCase } from '../../../application/use-cases/list-lotes.use-case.js'
+import type { UpdateLoteUseCase } from '../../../application/use-cases/update-lote.use-case.js'
+import type { DeleteLoteUseCase } from '../../../application/use-cases/delete-lote.use-case.js'
+import type { CrearGrupoUseCase } from '../../../application/use-cases/crear-grupo.use-case.js'
+import type { GetGrupoUseCase } from '../../../application/use-cases/get-grupo.use-case.js'
+import type { ListGruposUseCase } from '../../../application/use-cases/list-grupos.use-case.js'
+import type { UpdateGrupoUseCase } from '../../../application/use-cases/update-grupo.use-case.js'
+import type { DeleteGrupoUseCase } from '../../../application/use-cases/delete-grupo.use-case.js'
+import type { CrearConfigParametroPredioUseCase } from '../../../application/use-cases/crear-config-parametro-predio.use-case.js'
+import type { GetConfigParametroPredioUseCase } from '../../../application/use-cases/get-config-parametro-predio.use-case.js'
+import type { ListConfigParametrosPredioUseCase } from '../../../application/use-cases/list-config-parametros-predio.use-case.js'
+import type { UpdateConfigParametroPredioUseCase } from '../../../application/use-cases/update-config-parametro-predio.use-case.js'
+import type { DeleteConfigParametroPredioUseCase } from '../../../application/use-cases/delete-config-parametro-predio.use-case.js'
 import type {
-  CreatePredioDto, UpdatePredioDto,
-  CreatePotreroDto, UpdatePotreroDto,
-  CreateSectorDto, UpdateSectorDto,
-  CreateLoteDto, UpdateLoteDto,
-  CreateGrupoDto, UpdateGrupoDto,
-  CreateConfigParametroPredioDto, UpdateConfigParametroPredioDto,
+  CreateConfigParametroPredioDto, CreateGrupoDto,
+  CreateLoteDto, CreatePotreroDto,
+  CreatePredioDto, CreateSectorDto,
+  UpdateConfigParametroPredioDto, UpdateGrupoDto,
+  UpdateLoteDto, UpdatePotreroDto,
+  UpdatePredioDto, UpdateSectorDto,
 } from '../../../application/dtos/predios.dto.js'
 
 @injectable()

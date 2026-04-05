@@ -1,27 +1,27 @@
 import type { FastifyInstance, FastifyRequest } from 'fastify'
 import { container } from 'tsyringe'
 import { MaestrosController } from '../controllers/maestros.controller.js'
-import { authMiddleware, tenantContextMiddleware, requirePermission } from '../../../../../shared/middleware/index.js'
+import { authMiddleware, requirePermission, tenantContextMiddleware } from '../../../../../shared/middleware/index.js'
 import {
-  createVeterinarioBodySchema, updateVeterinarioBodySchema,
-  createPropietarioBodySchema, updatePropietarioBodySchema,
-  createHierroBodySchema, updateHierroBodySchema,
-  createDiagnosticoVeterinarioBodySchema, updateDiagnosticoVeterinarioBodySchema,
-  createMotivoVentaBodySchema, updateMotivoVentaBodySchema,
-  createCausaMuerteBodySchema, updateCausaMuerteBodySchema,
-  createLugarCompraBodySchema, updateLugarCompraBodySchema,
-  createLugarVentaBodySchema, updateLugarVentaBodySchema,
-  listQuerySchema, idParamsSchema,
+  createCausaMuerteBodySchema, createDiagnosticoVeterinarioBodySchema,
+  createHierroBodySchema, createLugarCompraBodySchema,
+  createLugarVentaBodySchema, createMotivoVentaBodySchema,
+  createPropietarioBodySchema, createVeterinarioBodySchema,
+  idParamsSchema, listQuerySchema,
+  updateCausaMuerteBodySchema, updateDiagnosticoVeterinarioBodySchema,
+  updateHierroBodySchema, updateLugarCompraBodySchema,
+  updateLugarVentaBodySchema, updateMotivoVentaBodySchema,
+  updatePropietarioBodySchema, updateVeterinarioBodySchema,
 } from '../schemas/maestros.schema.js'
 import type {
-  CreateVeterinarioDto, UpdateVeterinarioDto,
-  CreatePropietarioDto, UpdatePropietarioDto,
-  CreateHierroDto, UpdateHierroDto,
-  CreateDiagnosticoVeterinarioDto, UpdateDiagnosticoVeterinarioDto,
-  CreateMotivoVentaDto, UpdateMotivoVentaDto,
-  CreateCausaMuerteDto, UpdateCausaMuerteDto,
-  CreateLugarCompraDto, UpdateLugarCompraDto,
-  CreateLugarVentaDto, UpdateLugarVentaDto,
+  CreateCausaMuerteDto, CreateDiagnosticoVeterinarioDto,
+  CreateHierroDto, CreateLugarCompraDto,
+  CreateLugarVentaDto, CreateMotivoVentaDto,
+  CreatePropietarioDto, CreateVeterinarioDto,
+  UpdateCausaMuerteDto, UpdateDiagnosticoVeterinarioDto,
+  UpdateHierroDto, UpdateLugarCompraDto,
+  UpdateLugarVentaDto, UpdateMotivoVentaDto,
+  UpdatePropietarioDto, UpdateVeterinarioDto,
 } from '../../../application/dtos/maestros.dto.js'
 
 // Tenant-scoped: predioId from X-Predio-Id header via tenantContextMiddleware

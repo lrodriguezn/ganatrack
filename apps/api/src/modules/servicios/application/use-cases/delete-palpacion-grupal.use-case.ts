@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { PALPACION_GRUPAL_REPOSITORY } from '../../domain/repositories/palpacion-grupal.repository.js'
 import type { IPalpacionGrupalRepository } from '../../domain/repositories/palpacion-grupal.repository.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'

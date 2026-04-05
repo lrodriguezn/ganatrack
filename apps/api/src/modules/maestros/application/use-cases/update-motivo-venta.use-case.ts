@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { MOTIVO_VENTA_REPOSITORY } from '../../domain/repositories/motivo-venta.repository.js'
 import type { IMotivoVentaRepository } from '../../domain/repositories/motivo-venta.repository.js'
-import type { UpdateMotivoVentaDto, MotivoVentaResponseDto } from '../dtos/maestros.dto.js'
+import type { MotivoVentaResponseDto, UpdateMotivoVentaDto } from '../dtos/maestros.dto.js'
 import { MotivoVentaMapper } from '../../infrastructure/mappers/maestros.mapper.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'
 

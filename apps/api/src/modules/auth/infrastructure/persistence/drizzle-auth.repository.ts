@@ -1,18 +1,18 @@
 import { injectable } from 'tsyringe'
-import { eq, and, desc } from 'drizzle-orm'
+import { and, desc, eq } from 'drizzle-orm'
 import bcrypt from 'bcrypt'
 import type { DbClient } from '@ganatrack/database'
 import {
+  rolesPermisos,
   usuarios,
+  usuariosAutenticacionDosFactores,
   usuariosContrasena,
   usuariosHistorialContrasenas,
   usuariosLogin,
-  usuariosAutenticacionDosFactores,
+  usuariosPermisos,
+  usuariosPredios,
   usuariosRoles,
   usuariosRolesAsignacion,
-  usuariosPermisos,
-  rolesPermisos,
-  usuariosPredios,
 } from '@ganatrack/database/schema'
 import { AUTH_REPOSITORY } from '../../domain/repositories/auth.repository.js'
 import type { IAuthRepository } from '../../domain/repositories/auth.repository.js'

@@ -3,15 +3,15 @@ import { container } from 'tsyringe'
 import { UsuarioController } from '../controllers/usuario.controller.js'
 import { authMiddleware } from '../../../../../shared/middleware/auth.middleware.js'
 import {
-  createUsuarioBodySchema,
-  updateUsuarioBodySchema,
   assignRolesBodySchema,
   createRolBodySchema,
-  updateRolBodySchema,
-  listUsuariosQuerySchema,
+  createUsuarioBodySchema,
   idParamsSchema,
+  listUsuariosQuerySchema,
+  updateRolBodySchema,
+  updateUsuarioBodySchema,
 } from '../schemas/usuario.schema.js'
-import type { CreateUsuarioDto, UpdateUsuarioDto, CreateRolDto, UpdateRolDto } from '../../../application/dtos/usuario.dto.js'
+import type { CreateRolDto, CreateUsuarioDto, UpdateRolDto, UpdateUsuarioDto } from '../../../application/dtos/usuario.dto.js'
 
 export async function registerUsuarioRoutes(app: FastifyInstance): Promise<void> {
   const controller = container.resolve(UsuarioController)

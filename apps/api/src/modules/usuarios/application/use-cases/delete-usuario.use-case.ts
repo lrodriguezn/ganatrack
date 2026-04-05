@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { USUARIO_REPOSITORY } from '../../domain/repositories/usuario.repository.js'
 import type { IUsuarioRepository } from '../../domain/repositories/usuario.repository.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'

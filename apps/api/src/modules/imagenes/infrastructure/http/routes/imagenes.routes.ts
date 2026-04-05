@@ -3,9 +3,9 @@ import { container } from 'tsyringe'
 import { ImagenesController } from '../controllers/imagenes.controller.js'
 import { authMiddleware, requirePermission } from '../../../../../shared/middleware/index.js'
 import {
-  uploadImagenBodySchema,
-  listImagenesQuerySchema,
   idParamsSchema,
+  listImagenesQuerySchema,
+  uploadImagenBodySchema,
 } from '../schemas/imagenes.schema.js'
 
 export async function registerImagenesRoutes(app: FastifyInstance): Promise<void> {

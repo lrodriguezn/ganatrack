@@ -1,9 +1,9 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { AUTH_REPOSITORY } from '../../domain/repositories/auth.repository.js'
 import type { IAuthRepository } from '../../domain/repositories/auth.repository.js'
 import { UnauthorizedError } from '../../../../shared/errors/index.js'
-import { verifyToken, signAccessToken, signRefreshToken } from '../../../../shared/utils/jwt.utils.js'
-import type { RefreshResponseDto, LoginResponseDto } from '../dtos/login.dto.js'
+import { signAccessToken, signRefreshToken, verifyToken } from '../../../../shared/utils/jwt.utils.js'
+import type { LoginResponseDto, RefreshResponseDto } from '../dtos/login.dto.js'
 import type { JwtPayload } from '../../../../shared/utils/jwt.utils.js'
 
 const ACCESS_TOKEN_TTL_SECONDS = 900 // 15 minutes

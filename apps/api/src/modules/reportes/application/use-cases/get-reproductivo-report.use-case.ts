@@ -1,8 +1,8 @@
 import { injectable } from 'tsyringe'
-import { eq, and, gte, lte } from 'drizzle-orm'
+import { and, eq, gte, lte } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
-import { serviciosInseminacionAnimales, serviciosInseminacionGrupal, serviciosPartosAnimales, animales } from '@ganatrack/database/schema'
-import type { ReproductivoReportDto, ReporteFiltrosDto } from '../dtos/reportes.dto.js'
+import { animales, serviciosInseminacionAnimales, serviciosInseminacionGrupal, serviciosPartosAnimales } from '@ganatrack/database/schema'
+import type { ReporteFiltrosDto, ReproductivoReportDto } from '../dtos/reportes.dto.js'
 
 @injectable()
 export class GetReproductivoReportUseCase {

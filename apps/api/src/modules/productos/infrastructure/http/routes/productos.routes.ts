@@ -4,9 +4,9 @@ import { ProductosController } from '../controllers/productos.controller.js'
 import { authMiddleware, requirePermission } from '../../../../../shared/middleware/index.js'
 import {
   createProductoBodySchema,
-  updateProductoBodySchema,
-  listProductosQuerySchema,
   idParamsSchema,
+  listProductosQuerySchema,
+  updateProductoBodySchema,
 } from '../schemas/productos.schema.js'
 
 export async function registerProductosRoutes(app: FastifyInstance): Promise<void> {

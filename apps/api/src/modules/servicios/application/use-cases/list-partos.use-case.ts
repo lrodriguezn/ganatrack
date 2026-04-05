@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { PARTO_ANIMAL_REPOSITORY } from '../../domain/repositories/parto-animal.repository.js'
 import type { IPartoAnimalRepository } from '../../domain/repositories/parto-animal.repository.js'
 import type { PartoAnimalResponseDto } from '../dtos/parto.dto.js'

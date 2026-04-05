@@ -3,21 +3,21 @@ import { container } from 'tsyringe'
 import { NotificacionesController } from '../controllers/notificaciones.controller.js'
 import { authMiddleware, requirePermission, tenantContextMiddleware } from '../../../../../shared/middleware/index.js'
 import {
-  listNotificacionesQuerySchema,
-  idParamsSchema,
-  tipoParamsSchema,
-  tokenParamsSchema,
   actualizarPreferenciaBodySchema,
-  registrarPushTokenBodySchema,
   evaluarAlertasBodySchema,
-  notificacionResponseSchema,
+  evaluarAlertasResponseSchema,
+  idParamsSchema,
+  listNotificacionesQuerySchema,
+  messageResponseSchema,
   notificacionListResponseSchema,
-  resumenResponseSchema,
+  notificacionResponseSchema,
   preferenciaListResponseSchema,
   preferenciaResponseSchema,
   pushTokenResponseSchema,
-  evaluarAlertasResponseSchema,
-  messageResponseSchema,
+  registrarPushTokenBodySchema,
+  resumenResponseSchema,
+  tipoParamsSchema,
+  tokenParamsSchema,
 } from '../schemas/notificaciones.schema.js'
 
 export async function registerNotificacionesRoutes(app: FastifyInstance): Promise<void> {

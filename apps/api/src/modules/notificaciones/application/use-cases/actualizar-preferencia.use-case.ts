@@ -1,9 +1,9 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { PREFERENCIA_REPOSITORY } from '../../domain/repositories/preferencia.repository.js'
 import type { IPreferenciaRepository } from '../../domain/repositories/preferencia.repository.js'
 import type { NotificacionTipo } from '../../domain/entities/notificacion.entity.js'
 import { ValidationError } from '../../../../shared/errors/index.js'
-import type { PreferenciaResponseDto, ActualizarPreferenciaBodyDto } from '../dtos/notificacion.dto.js'
+import type { ActualizarPreferenciaBodyDto, PreferenciaResponseDto } from '../dtos/notificacion.dto.js'
 import { PreferenciaMapper } from '../../infrastructure/mappers/preferencia.mapper.js'
 import { NOTIFICACION_TIPOS } from '../dtos/notificacion.dto.js'
 

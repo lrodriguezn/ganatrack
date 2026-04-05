@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { HIERRO_REPOSITORY } from '../../domain/repositories/hierro.repository.js'
 import type { IHierroRepository } from '../../domain/repositories/hierro.repository.js'
 import type { HierroResponseDto } from '../dtos/maestros.dto.js'

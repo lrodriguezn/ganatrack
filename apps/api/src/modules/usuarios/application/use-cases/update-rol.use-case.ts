@@ -1,9 +1,9 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { ROL_REPOSITORY } from '../../domain/repositories/rol.repository.js'
 import type { IRolRepository } from '../../domain/repositories/rol.repository.js'
 import { UsuariosDomainService } from '../../domain/services/usuarios.domain-service.js'
-import type { UpdateRolDto, RolResponseDto } from '../dtos/usuario.dto.js'
-import { NotFoundError, ConflictError } from '../../../../shared/errors/index.js'
+import type { RolResponseDto, UpdateRolDto } from '../dtos/usuario.dto.js'
+import { ConflictError, NotFoundError } from '../../../../shared/errors/index.js'
 
 @injectable()
 export class UpdateRolUseCase {

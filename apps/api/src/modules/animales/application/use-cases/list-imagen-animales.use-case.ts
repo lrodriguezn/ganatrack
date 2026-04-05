@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { ANIMAL_REPOSITORY } from '../../domain/repositories/animal.repository.js'
 import { IMAGEN_REPOSITORY } from '../../domain/repositories/imagen.repository.js'
 import { ANIMAL_IMAGEN_REPOSITORY } from '../../domain/repositories/animal-imagen.repository.js'

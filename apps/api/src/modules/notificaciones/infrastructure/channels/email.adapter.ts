@@ -1,6 +1,6 @@
 import { injectable } from 'tsyringe'
 import type { Notificacion } from '../../domain/entities/notificacion.entity.js'
-import type { ICanalNotificacion, CanalResult, DestinatarioInfo } from '../../domain/services/canal-notificacion.interface.js'
+import type { CanalResult, DestinatarioInfo, ICanalNotificacion } from '../../domain/services/canal-notificacion.interface.js'
 
 // Email adapter using nodemailer - stub implementation
 // In production, this would use nodemailer with SMTP config

@@ -6,13 +6,13 @@ import type { ConfigColorEntity } from '../../domain/entities/config-color.entit
 import type { ConfigRangoEdadEntity } from '../../domain/entities/config-rango-edad.entity.js'
 import type { ConfigKeyValueEntity } from '../../domain/entities/config-key-value.entity.js'
 import type {
-  ConfigRazaResponseDto,
-  ConfigCondicionCorporalResponseDto,
-  ConfigTipoExplotacionResponseDto,
   ConfigCalidadAnimalResponseDto,
   ConfigColorResponseDto,
-  ConfigRangoEdadResponseDto,
+  ConfigCondicionCorporalResponseDto,
   ConfigKeyValueResponseDto,
+  ConfigRangoEdadResponseDto,
+  ConfigRazaResponseDto,
+  ConfigTipoExplotacionResponseDto,
 } from '../../application/dtos/configuracion.dto.js'
 
 export class ConfigRazaMapper {

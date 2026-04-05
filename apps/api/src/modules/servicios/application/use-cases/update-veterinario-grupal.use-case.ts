@@ -1,9 +1,9 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { VETERINARIO_GRUPAL_REPOSITORY } from '../../domain/repositories/veterinario-grupal.repository.js'
 import type { IVeterinarioGrupalRepository } from '../../domain/repositories/veterinario-grupal.repository.js'
 import type { UpdateVeterinarioGrupalDto, VeterinarioGrupalResponseDto } from '../dtos/veterinario.dto.js'
 import { VeterinarioGrupalMapper } from '../../infrastructure/mappers/veterinario.mapper.js'
-import { NotFoundError, ConflictError } from '../../../../shared/errors/index.js'
+import { ConflictError, NotFoundError } from '../../../../shared/errors/index.js'
 import type { VeterinarioGrupalEntity } from '../../domain/entities/veterinario.entity.js'
 
 @injectable()

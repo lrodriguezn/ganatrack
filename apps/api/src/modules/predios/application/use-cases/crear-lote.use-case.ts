@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { LOTE_REPOSITORY } from '../../domain/repositories/lote.repository.js'
 import type { ILoteRepository } from '../../domain/repositories/lote.repository.js'
 import type { CreateLoteDto, LoteResponseDto } from '../dtos/predios.dto.js'

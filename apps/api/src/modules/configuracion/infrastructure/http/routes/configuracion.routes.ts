@@ -3,24 +3,24 @@ import { container } from 'tsyringe'
 import { ConfiguracionController } from '../controllers/configuracion.controller.js'
 import { authMiddleware, requirePermission } from '../../../../../shared/middleware/index.js'
 import {
-  createConfigRazaBodySchema,
-  updateConfigRazaBodySchema,
-  createConfigCondicionCorporalBodySchema,
-  updateConfigCondicionCorporalBodySchema,
-  createConfigTipoExplotacionBodySchema,
-  updateConfigTipoExplotacionBodySchema,
   createConfigCalidadAnimalBodySchema,
-  updateConfigCalidadAnimalBodySchema,
   createConfigColorBodySchema,
-  updateConfigColorBodySchema,
-  createConfigRangoEdadBodySchema,
-  updateConfigRangoEdadBodySchema,
+  createConfigCondicionCorporalBodySchema,
   createConfigKeyValueBodySchema,
-  updateConfigKeyValueBodySchema,
-  listQuerySchema,
+  createConfigRangoEdadBodySchema,
+  createConfigRazaBodySchema,
+  createConfigTipoExplotacionBodySchema,
   idParamsSchema,
+  listQuerySchema,
+  updateConfigCalidadAnimalBodySchema,
+  updateConfigColorBodySchema,
+  updateConfigCondicionCorporalBodySchema,
+  updateConfigKeyValueBodySchema,
+  updateConfigRangoEdadBodySchema,
+  updateConfigRazaBodySchema,
+  updateConfigTipoExplotacionBodySchema,
 } from '../schemas/configuracion.schema.js'
-import type { CreateConfigRazaDto, UpdateConfigRazaDto, CreateConfigCondicionCorporalDto, UpdateConfigCondicionCorporalDto, CreateConfigTipoExplotacionDto, UpdateConfigTipoExplotacionDto, CreateConfigCalidadAnimalDto, UpdateConfigCalidadAnimalDto, CreateConfigColorDto, UpdateConfigColorDto, CreateConfigRangoEdadDto, UpdateConfigRangoEdadDto, CreateConfigKeyValueDto, UpdateConfigKeyValueDto } from '../../../application/dtos/configuracion.dto.js'
+import type { CreateConfigCalidadAnimalDto, CreateConfigColorDto, CreateConfigCondicionCorporalDto, CreateConfigKeyValueDto, CreateConfigRangoEdadDto, CreateConfigRazaDto, CreateConfigTipoExplotacionDto, UpdateConfigCalidadAnimalDto, UpdateConfigColorDto, UpdateConfigCondicionCorporalDto, UpdateConfigKeyValueDto, UpdateConfigRangoEdadDto, UpdateConfigRazaDto, UpdateConfigTipoExplotacionDto } from '../../../application/dtos/configuracion.dto.js'
 
 // Common type for list queries
 type ListQuery = { Querystring: { page?: number; limit?: number; search?: string } }

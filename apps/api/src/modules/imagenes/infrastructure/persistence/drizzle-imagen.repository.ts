@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and, desc, count } from 'drizzle-orm'
+import { and, count, desc, eq } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { imagenes } from '@ganatrack/database/schema'
 import type { IImagenRepository } from '../../domain/repositories/imagen.repository.js'

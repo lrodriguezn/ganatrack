@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { POTRERO_REPOSITORY } from '../../domain/repositories/potrero.repository.js'
 import type { IPotreroRepository } from '../../domain/repositories/potrero.repository.js'
 import type { CreatePotreroDto, PotreroResponseDto } from '../dtos/predios.dto.js'

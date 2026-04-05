@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { CONFIG_KEY_VALUE_REPOSITORY } from '../../domain/repositories/config-key-value.repository.js'
 import type { IConfigKeyValueRepository } from '../../domain/repositories/config-key-value.repository.js'
-import type { CreateConfigKeyValueDto, ConfigKeyValueResponseDto } from '../dtos/configuracion.dto.js'
+import type { ConfigKeyValueResponseDto, CreateConfigKeyValueDto } from '../dtos/configuracion.dto.js'
 import { ConfigKeyValueMapper } from '../../infrastructure/mappers/configuracion.mapper.js'
 import { ConflictError } from '../../../../shared/errors/index.js'
 

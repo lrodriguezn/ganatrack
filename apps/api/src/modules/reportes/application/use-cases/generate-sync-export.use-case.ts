@@ -1,14 +1,14 @@
-import { injectable, inject } from 'tsyringe'
-import type { ReporteTipo, ExportFormato, ReporteFiltros } from '../../domain/entities/reporte-exportacion.entity.js'
+import { inject, injectable } from 'tsyringe'
+import type { ExportFormato, ReporteFiltros, ReporteTipo } from '../../domain/entities/reporte-exportacion.entity.js'
 import { FILE_STORAGE } from '../../domain/services/file-storage.service.js'
 import type { IFileStorage } from '../../domain/services/file-storage.service.js'
 import { EXPORT_GENERATOR } from '../../domain/services/export-generator.service.js'
 import type { IExportGenerator } from '../../domain/services/export-generator.service.js'
-import { GetInventarioReportUseCase } from './get-inventario-report.use-case.js'
-import { GetReproductivoReportUseCase } from './get-reproductivo-report.use-case.js'
-import { GetMortalidadReportUseCase } from './get-mortalidad-report.use-case.js'
-import { GetMovimientoReportUseCase } from './get-movimiento-report.use-case.js'
-import { GetSanitarioReportUseCase } from './get-sanitario-report.use-case.js'
+import type { GetInventarioReportUseCase } from './get-inventario-report.use-case.js'
+import type { GetReproductivoReportUseCase } from './get-reproductivo-report.use-case.js'
+import type { GetMortalidadReportUseCase } from './get-mortalidad-report.use-case.js'
+import type { GetMovimientoReportUseCase } from './get-movimiento-report.use-case.js'
+import type { GetSanitarioReportUseCase } from './get-sanitario-report.use-case.js'
 
 @injectable()
 export class GenerateSyncExportUseCase {

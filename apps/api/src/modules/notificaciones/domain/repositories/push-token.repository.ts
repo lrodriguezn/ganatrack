@@ -1,4 +1,4 @@
-import type { NotificacionPushToken, Plataforma, CrearPushTokenParams } from '../entities/push-token.entity.js'
+import type { CrearPushTokenParams, NotificacionPushToken, Plataforma } from '../entities/push-token.entity.js'
 
 export interface IPushTokenRepository {
   findByUsuario(usuarioId: number): Promise<NotificacionPushToken[]>

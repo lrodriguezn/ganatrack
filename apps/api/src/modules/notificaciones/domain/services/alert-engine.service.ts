@@ -1,6 +1,6 @@
 // Alert Engine Domain Service - evaluates 5 alert types
 import { injectable } from 'tsyringe'
-import type { NotificacionTipo, CrearNotificacionParams } from '../entities/notificacion.entity.js'
+import type { CrearNotificacionParams, NotificacionTipo } from '../entities/notificacion.entity.js'
 import type { PreferenciaCanal } from '../entities/preferencia.entity.js'
 
 // Alert result types

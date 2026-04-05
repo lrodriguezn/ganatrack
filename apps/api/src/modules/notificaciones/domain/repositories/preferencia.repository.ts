@@ -1,4 +1,4 @@
-import type { NotificacionPreferencia, NotificacionTipo, CrearPreferenciaParams } from '../entities/preferencia.entity.js'
+import type { CrearPreferenciaParams, NotificacionPreferencia, NotificacionTipo } from '../entities/preferencia.entity.js'
 
 export interface IPreferenciaRepository {
   findByUsuario(usuarioId: number): Promise<NotificacionPreferencia[]>

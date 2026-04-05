@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { CONFIG_TIPO_EXPLOTACION_REPOSITORY } from '../../domain/repositories/config-tipo-explotacion.repository.js'
 import type { IConfigTipoExplotacionRepository } from '../../domain/repositories/config-tipo-explotacion.repository.js'
-import type { CreateConfigTipoExplotacionDto, ConfigTipoExplotacionResponseDto } from '../dtos/configuracion.dto.js'
+import type { ConfigTipoExplotacionResponseDto, CreateConfigTipoExplotacionDto } from '../dtos/configuracion.dto.js'
 import { ConfigTipoExplotacionMapper } from '../../infrastructure/mappers/configuracion.mapper.js'
 
 @injectable()

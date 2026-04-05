@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and, like, or, desc, count } from 'drizzle-orm'
+import { and, count, desc, eq, like, or } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { usuarios } from '@ganatrack/database/schema'
 import type { IUsuarioRepository } from '../../domain/repositories/usuario.repository.js'
@@ -23,12 +23,13 @@ export class DrizzleUsuarioRepository implements IUsuarioRepository {
     const conditions = [eq(usuarios.activo, activo)]
 
     if (search) {
-      conditions.push(
-        or(
-          like(usuarios.nombre, `%${search}%`),
-          like(usuarios.email, `%${search}%`),
-        )!,
+      const searchCondition = or(
+        like(usuarios.nombre, `%${search}%`),
+        like(usuarios.email, `%${search}%`),
       )
+      if (searchCondition) {
+        conditions.push(searchCondition)
+      }
     }
 
     const rows = await this.db

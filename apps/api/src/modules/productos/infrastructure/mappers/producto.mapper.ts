@@ -1,5 +1,5 @@
 import type { ProductoEntity, ProductoImagenEntity } from '../../domain/entities/producto.entity.js'
-import type { ProductoResponseDto, ProductoImagenResponseDto } from '../../application/dtos/producto.dto.js'
+import type { ProductoImagenResponseDto, ProductoResponseDto } from '../../application/dtos/producto.dto.js'
 
 export class ProductoMapper {
   static toResponse(e: ProductoEntity): ProductoResponseDto {

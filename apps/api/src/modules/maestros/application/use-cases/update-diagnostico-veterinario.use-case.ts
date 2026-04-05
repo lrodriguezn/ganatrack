@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { DIAGNOSTICO_VETERINARIO_REPOSITORY } from '../../domain/repositories/diagnostico-veterinario.repository.js'
 import type { IDiagnosticoVeterinarioRepository } from '../../domain/repositories/diagnostico-veterinario.repository.js'
-import type { UpdateDiagnosticoVeterinarioDto, DiagnosticoVeterinarioResponseDto } from '../dtos/maestros.dto.js'
+import type { DiagnosticoVeterinarioResponseDto, UpdateDiagnosticoVeterinarioDto } from '../dtos/maestros.dto.js'
 import { DiagnosticoVeterinarioMapper } from '../../infrastructure/mappers/maestros.mapper.js'
 import { NotFoundError } from '../../../../shared/errors/index.js'
 

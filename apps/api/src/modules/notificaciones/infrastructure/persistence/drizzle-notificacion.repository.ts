@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and, desc, count, gte, lte } from 'drizzle-orm'
+import { and, count, desc, eq, gte, lte } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { notificaciones } from '@ganatrack/database/schema'
 import type {
@@ -7,9 +7,9 @@ import type {
   ListNotificacionesOptions,
 } from '../../domain/repositories/notificacion.repository.js'
 import type {
+  CrearNotificacionParams,
   Notificacion,
   NotificacionTipo,
-  CrearNotificacionParams,
 } from '../../domain/entities/notificacion.entity.js'
 
 @injectable()

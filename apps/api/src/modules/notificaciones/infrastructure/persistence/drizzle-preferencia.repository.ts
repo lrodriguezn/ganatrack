@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/better-sqlite3'
 import Database from 'better-sqlite3'
 import type { DbClient } from '@ganatrack/database'
@@ -8,9 +8,9 @@ import type {
   IPreferenciaRepository,
 } from '../../domain/repositories/preferencia.repository.js'
 import type {
+  CrearPreferenciaParams,
   NotificacionPreferencia,
   NotificacionTipo,
-  CrearPreferenciaParams,
 } from '../../domain/entities/preferencia.entity.js'
 
 @injectable()

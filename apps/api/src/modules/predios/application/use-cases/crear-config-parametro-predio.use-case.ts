@@ -1,7 +1,7 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { CONFIG_PARAMETRO_PREDIO_REPOSITORY } from '../../domain/repositories/config-parametro-predio.repository.js'
 import type { IConfigParametroPredioRepository } from '../../domain/repositories/config-parametro-predio.repository.js'
-import type { CreateConfigParametroPredioDto, ConfigParametroPredioResponseDto } from '../dtos/predios.dto.js'
+import type { ConfigParametroPredioResponseDto, CreateConfigParametroPredioDto } from '../dtos/predios.dto.js'
 import { ConfigParametroPredioMapper } from '../../infrastructure/mappers/predios.mapper.js'
 import { ConflictError } from '../../../../shared/errors/index.js'
 

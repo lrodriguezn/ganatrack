@@ -1,9 +1,9 @@
-import { injectable, inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { JOB_QUEUE } from '../../domain/services/job-queue.service.js'
 import type { IJobQueue } from '../../domain/services/job-queue.service.js'
 import { EXPORT_JOB_REPOSITORY } from '../../domain/repositories/export-job.repository.js'
 import type { IExportJobRepository } from '../../domain/repositories/export-job.repository.js'
-import type { ReporteTipo, ExportFormato, ReporteFiltros } from '../../domain/entities/reporte-exportacion.entity.js'
+import type { ExportFormato, ReporteFiltros, ReporteTipo } from '../../domain/entities/reporte-exportacion.entity.js'
 import type { ExportJobResponseDto } from '../dtos/reportes.dto.js'
 
 @injectable()

@@ -1,9 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { MarcarLeidaUseCase } from '../application/use-cases/marcar-leida.use-case.js'
-import { NOTIFICACION_REPOSITORY } from '../domain/repositories/notificacion.repository.js'
-import type { INotificacionRepository } from '../domain/repositories/notificacion.repository.js'
-import { NotFoundError } from '../../../shared/errors/index.js'
-import type { Notificacion } from '../domain/entities/notificacion.entity.js'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { MarcarLeidaUseCase } from '../marcar-leida.use-case.js'
+import { NOTIFICACION_REPOSITORY } from '../../../domain/repositories/notificacion.repository.js'
+import type { INotificacionRepository } from '../../../domain/repositories/notificacion.repository.js'
+import { NotFoundError } from '../../../../../shared/errors/index.js'
+import type { Notificacion } from '../../../domain/entities/notificacion.entity.js'
 
 describe('MarcarLeidaUseCase', () => {
   let useCase: MarcarLeidaUseCase

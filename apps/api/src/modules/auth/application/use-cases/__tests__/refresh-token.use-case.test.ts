@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { RefreshTokenUseCase } from '../refresh-token.use-case.js'
 import { UnauthorizedError } from '../../../../../shared/errors/index.js'
 import { signRefreshToken } from '../../../../../shared/utils/jwt.utils.js'

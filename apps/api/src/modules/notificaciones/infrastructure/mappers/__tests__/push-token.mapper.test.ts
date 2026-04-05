@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest'
-import { PushTokenMapper } from '../infrastructure/mappers/push-token.mapper.js'
-import type { NotificacionPushToken } from '../domain/entities/push-token.entity.js'
+import { describe, expect, it } from 'vitest'
+import { PushTokenMapper } from '../push-token.mapper.js'
+import type { NotificacionPushToken } from '../../domain/entities/push-token.entity.js'
 
 describe('PushTokenMapper', () => {
   describe('toResponseDto', () => {

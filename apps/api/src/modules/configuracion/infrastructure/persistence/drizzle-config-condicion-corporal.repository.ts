@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe'
-import { eq, and, like, or, desc, count } from 'drizzle-orm'
+import { and, count, desc, eq, like, or } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
 import { configCondicionesCorporales } from '@ganatrack/database/schema'
 import type { IConfigCondicionCorporalRepository } from '../../domain/repositories/config-condicion-corporal.repository.js'
@@ -21,12 +21,13 @@ export class DrizzleConfigCondicionCorporalRepository implements IConfigCondicio
     const conditions = [eq(configCondicionesCorporales.activo, 1)]
 
     if (search) {
-      conditions.push(
-        or(
-          like(configCondicionesCorporales.nombre, `%${search}%`),
-          like(configCondicionesCorporales.descripcion, `%${search}%`),
-        )!,
+      const searchCondition = or(
+        like(configCondicionesCorporales.nombre, `%${search}%`),
+        like(configCondicionesCorporales.descripcion, `%${search}%`),
       )
+      if (searchCondition) {
+        conditions.push(searchCondition)
+      }
     }
 
     const rows = await this.db
