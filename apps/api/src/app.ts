@@ -16,6 +16,7 @@ import { registerServiciosModule, registerServiciosModuleRoutes } from './module
 import { registerProductosModule, registerProductosModuleRoutes } from './modules/productos/index.js'
 import { registerImagenesModule, registerImagenesModuleRoutes } from './modules/imagenes/index.js'
 import { registerNotificacionesModule, registerNotificacionesModuleRoutes } from './modules/notificaciones/index.js'
+import { registerReportesModule, registerReportesModuleRoutes } from './modules/reportes/index.js'
 import schedulerPlugin from './plugins/scheduler.plugin.js'
 
 export async function buildApp(): Promise<FastifyInstance> {
@@ -78,6 +79,10 @@ export async function buildApp(): Promise<FastifyInstance> {
   // Register notificaciones module and routes
   registerNotificacionesModule()
   await app.register(async (instance) => registerNotificacionesModuleRoutes(instance), { prefix: '/api/v1' })
+
+  // Register reportes module and routes
+  registerReportesModule()
+  await app.register(async (instance) => registerReportesModuleRoutes(instance), { prefix: '/api/v1' })
 
   // Health check
   app.get('/health', async () => {
