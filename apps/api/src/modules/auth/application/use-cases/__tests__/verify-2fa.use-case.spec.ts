@@ -3,6 +3,7 @@ import { Verify2faUseCase } from '../verify-2fa.use-case.js'
 import { AuthDomainService } from '../../../domain/services/auth.domain-service.js'
 import { UnauthorizedError, ValidationError } from '../../../../../shared/errors/index.js'
 import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
 import type { IAuthRepository } from '../../../domain/repositories/auth.repository.js'
 
 describe('Verify2faUseCase', () => {
@@ -10,8 +11,10 @@ describe('Verify2faUseCase', () => {
   let mockAuthRepo: IAuthRepository
 
   const TEMP_TOKEN_SECRET = process.env.JWT_SECRET ?? 'super-secret-key-change-in-production'
+  const OTP_CODE = '123456'
+  let hashedOtpCode: string
 
-  beforeEach(() => {
+  beforeEach(async () => {
     mockAuthRepo = {
       findUsuarioById: vi.fn(),
       findUsuarioByEmail: vi.fn(),
@@ -32,6 +35,9 @@ describe('Verify2faUseCase', () => {
       revokeAllUserTokens: vi.fn(),
     }
 
+    // Generate bcrypt hash for OTP code (must match what the implementation compares against)
+    hashedOtpCode = await bcrypt.hash(OTP_CODE, 10)
+
     verify2faUseCase = new Verify2faUseCase(mockAuthRepo, new AuthDomainService())
   })
 
@@ -44,16 +50,20 @@ describe('Verify2faUseCase', () => {
       )
     }
 
-    const validTwoFactor = {
-      habilitado: 1,
-      metodo: 'email',
-      codigo: '123456',
-      fechaExpiracion: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes from now
-      intentosFallidos: 0,
+    function createValidTwoFactor(overrides?: Partial<{ fechaExpiracion: Date; intentosFallidos: number }>) {
+      return {
+        habilitado: 1,
+        metodo: 'email',
+        codigo: hashedOtpCode, // bcrypt hash, not plain text
+        fechaExpiracion: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes from now
+        intentosFallidos: 0,
+        ...overrides,
+      }
     }
 
     it('should return AuthSession on correct code (happy path)', async () => {
       const tempToken = createTempToken(1)
+      const validTwoFactor = createValidTwoFactor()
 
       vi.mocked(mockAuthRepo.getTwoFactor).mockResolvedValue(validTwoFactor)
       vi.mocked(mockAuthRepo.resetTwoFactorAttempts).mockResolvedValue(undefined)
@@ -70,7 +80,7 @@ describe('Verify2faUseCase', () => {
 
       const result = await verify2faUseCase.execute({
         tempToken,
-        codigo: '123456',
+        codigo: OTP_CODE,
       })
 
       expect(result).toHaveProperty('accessToken')
@@ -83,6 +93,7 @@ describe('Verify2faUseCase', () => {
 
     it('should throw UnauthorizedError on wrong code and increment attempts', async () => {
       const tempToken = createTempToken(1)
+      const validTwoFactor = createValidTwoFactor()
 
       vi.mocked(mockAuthRepo.getTwoFactor).mockResolvedValue(validTwoFactor)
       vi.mocked(mockAuthRepo.incrementTwoFactorAttempts).mockResolvedValue(undefined)
@@ -98,10 +109,9 @@ describe('Verify2faUseCase', () => {
     })
 
     it('should throw UnauthorizedError on expired code', async () => {
-      const expiredTwoFactor = {
-        ...validTwoFactor,
+      const expiredTwoFactor = createValidTwoFactor({
         fechaExpiracion: new Date(Date.now() - 60000), // 1 minute ago
-      }
+      })
       const tempToken = createTempToken(1)
 
       vi.mocked(mockAuthRepo.getTwoFactor).mockResolvedValue(expiredTwoFactor)
@@ -109,23 +119,22 @@ describe('Verify2faUseCase', () => {
       await expect(
         verify2faUseCase.execute({
           tempToken,
-          codigo: '123456',
+          codigo: OTP_CODE,
         })
       ).rejects.toThrow(UnauthorizedError)
 
       await expect(
         verify2faUseCase.execute({
           tempToken,
-          codigo: '123456',
+          codigo: OTP_CODE,
         })
       ).rejects.toThrow('Código expirado. Solicita un nuevo código')
     })
 
     it('should throw UnauthorizedError when locked (3 failed attempts)', async () => {
-      const lockedTwoFactor = {
-        ...validTwoFactor,
+      const lockedTwoFactor = createValidTwoFactor({
         intentosFallidos: 3,
-      }
+      })
       const tempToken = createTempToken(1)
 
       vi.mocked(mockAuthRepo.getTwoFactor).mockResolvedValue(lockedTwoFactor)
@@ -133,14 +142,14 @@ describe('Verify2faUseCase', () => {
       await expect(
         verify2faUseCase.execute({
           tempToken,
-          codigo: '123456',
+          codigo: OTP_CODE,
         })
       ).rejects.toThrow(UnauthorizedError)
 
       await expect(
         verify2faUseCase.execute({
           tempToken,
-          codigo: '123456',
+          codigo: OTP_CODE,
         })
       ).rejects.toThrow('Demasiados intentos fallidos. Solicita un nuevo código')
     })
@@ -151,7 +160,7 @@ describe('Verify2faUseCase', () => {
       await expect(
         verify2faUseCase.execute({
           tempToken: invalidToken,
-          codigo: '123456',
+          codigo: OTP_CODE,
         })
       ).rejects.toThrow(UnauthorizedError)
     })
@@ -167,7 +176,7 @@ describe('Verify2faUseCase', () => {
       await expect(
         verify2faUseCase.execute({
           tempToken: wrongTypeToken,
-          codigo: '123456',
+          codigo: OTP_CODE,
         })
       ).rejects.toThrow(UnauthorizedError)
     })
@@ -180,14 +189,14 @@ describe('Verify2faUseCase', () => {
       await expect(
         verify2faUseCase.execute({
           tempToken,
-          codigo: '123456',
+          codigo: OTP_CODE,
         })
       ).rejects.toThrow(UnauthorizedError)
 
       await expect(
         verify2faUseCase.execute({
           tempToken,
-          codigo: '123456',
+          codigo: OTP_CODE,
         })
       ).rejects.toThrow('2FA no configurado')
     })

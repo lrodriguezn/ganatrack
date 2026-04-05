@@ -200,7 +200,15 @@ describe('Auth E2E Tests', () => {
         },
       })
 
-      expect([200, 401, 500]).toContain(response.statusCode)
+      expect(response.statusCode).toBe(200)
+      const body = response.json()
+      expect(body.success).toBe(true)
+      expect(body.data).toHaveProperty('accessToken')
+      expect(body.data).toHaveProperty('refreshToken')
+      expect(body.data).toHaveProperty('expiresIn')
+      expect(body.data.usuario).toHaveProperty('id')
+      expect(body.data.usuario).toHaveProperty('nombre')
+      expect(body.data.usuario).toHaveProperty('roles')
     })
 
     testOrSkip('should return 401 with wrong password', async () => {
@@ -215,7 +223,10 @@ describe('Auth E2E Tests', () => {
         },
       })
 
-      expect([200, 401, 500]).toContain(response.statusCode)
+      expect(response.statusCode).toBe(401)
+      const body = response.json()
+      expect(body.success).toBe(false)
+      expect(body.error).toHaveProperty('message')
     })
 
     testOrSkip('should return 400 with missing email', async () => {
@@ -229,7 +240,7 @@ describe('Auth E2E Tests', () => {
         },
       })
 
-      expect([400, 500]).toContain(response.statusCode)
+      expect(response.statusCode).toBe(400)
     })
   })
 
@@ -245,7 +256,11 @@ describe('Auth E2E Tests', () => {
         },
       })
 
-      expect([200, 401, 500]).toContain(response.statusCode)
+      expect(response.statusCode).toBe(200)
+      const body = response.json()
+      expect(body.success).toBe(true)
+      expect(body.data).toHaveProperty('accessToken')
+      expect(body.data).toHaveProperty('refreshToken')
     })
 
     testOrSkip('should return 401 without refresh token cookie', async () => {
@@ -256,7 +271,7 @@ describe('Auth E2E Tests', () => {
         url: '/api/v1/auth/refresh',
       })
 
-      expect([401, 500]).toContain(response.statusCode)
+      expect(response.statusCode).toBe(401)
     })
   })
 
@@ -272,7 +287,7 @@ describe('Auth E2E Tests', () => {
         },
       })
 
-      expect([200, 401, 500]).toContain(response.statusCode)
+      expect(response.statusCode).toBe(200)
     })
   })
 
@@ -292,7 +307,7 @@ describe('Auth E2E Tests', () => {
         },
       })
 
-      expect([200, 401, 500]).toContain(response.statusCode)
+      expect(response.statusCode).toBe(200)
     })
 
     testOrSkip('should return 401 without authorization header', async () => {
@@ -307,7 +322,7 @@ describe('Auth E2E Tests', () => {
         },
       })
 
-      expect([401, 500]).toContain(response.statusCode)
+      expect(response.statusCode).toBe(401)
     })
   })
 
@@ -323,7 +338,12 @@ describe('Auth E2E Tests', () => {
         },
       })
 
-      expect([200, 401, 500]).toContain(response.statusCode)
+      expect(response.statusCode).toBe(200)
+      const body = response.json()
+      expect(body.success).toBe(true)
+      expect(body.data).toHaveProperty('id')
+      expect(body.data).toHaveProperty('nombre')
+      expect(body.data).toHaveProperty('email')
     })
 
     testOrSkip('should return 401 without token', async () => {
@@ -334,7 +354,7 @@ describe('Auth E2E Tests', () => {
         url: '/api/v1/usuarios/me',
       })
 
-      expect([401, 500]).toContain(response.statusCode)
+      expect(response.statusCode).toBe(401)
     })
   })
 
@@ -350,7 +370,10 @@ describe('Auth E2E Tests', () => {
         },
       })
 
-      expect([200, 401, 500]).toContain(response.statusCode)
+      expect(response.statusCode).toBe(200)
+      const body = response.json()
+      expect(body.success).toBe(true)
+      expect(body.data).toBeInstanceOf(Array)
     })
 
     testOrSkip('should return 401 without token', async () => {
@@ -361,7 +384,7 @@ describe('Auth E2E Tests', () => {
         url: '/api/v1/usuarios',
       })
 
-      expect([401, 500]).toContain(response.statusCode)
+      expect(response.statusCode).toBe(401)
     })
   })
 
@@ -377,12 +400,17 @@ describe('Auth E2E Tests', () => {
         },
         payload: {
           nombre: 'Nuevo Usuario',
-          email: 'nuevo@test.com',
+          email: `nuevo${Date.now()}@test.com`,
           password: 'ValidPass123!',
         },
       })
 
-      expect([201, 401, 409, 500]).toContain(response.statusCode)
+      expect(response.statusCode).toBe(201)
+      const body = response.json()
+      expect(body.success).toBe(true)
+      expect(body.data).toHaveProperty('id')
+      expect(body.data).toHaveProperty('nombre')
+      expect(body.data).toHaveProperty('email')
     })
 
     testOrSkip('should return 401 without token', async () => {
@@ -398,7 +426,7 @@ describe('Auth E2E Tests', () => {
         },
       })
 
-      expect([401, 500]).toContain(response.statusCode)
+      expect(response.statusCode).toBe(401)
     })
   })
 })
