@@ -54,6 +54,7 @@ const mockPredio3: Predio = {
 // ============================================================================
 
 beforeEach(() => {
+  sessionStorage.clear();
   act(() => {
     usePredioStore.getState().clearPredios();
   });

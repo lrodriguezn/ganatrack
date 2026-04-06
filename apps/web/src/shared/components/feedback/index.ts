@@ -13,3 +13,4 @@ export { ToastProvider, toast } from './toast-provider';
 export { ErrorBoundary } from './error-boundary';
 export { OfflineBanner } from './offline-banner';
 export { EmptyState } from './empty-state';
+export { LoadingSpinner } from './loading-spinner';

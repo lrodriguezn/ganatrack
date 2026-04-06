@@ -54,13 +54,13 @@ export const usePredioStore = create<PredioStore>((set, get) => ({
       savedPredioId = stored ? Number(stored) : null;
     } catch { /* ignore */ }
 
-    // Determine active predio: saved ID if in list, otherwise first, otherwise null
+    // Determine active predio: saved ID if in list, otherwise current if still in list, otherwise null
     const hasSaved = savedPredioId && predsContains(predios, savedPredioId);
     const newActivo = hasSaved
       ? predios.find((p) => p.id === savedPredioId) ?? null
       : predsContains(predios, get().predioActivo?.id)
         ? get().predioActivo
-        : (predios[0] ?? null);
+        : null;
 
     set({
       predios,
