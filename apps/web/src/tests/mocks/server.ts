@@ -16,6 +16,7 @@ import { usuariosHandlers } from './handlers/usuarios.handlers';
 import { maestrosHandlers } from './handlers/maestros.handlers';
 import { reportesHandlers } from './handlers/reportes.handlers';
 import { notificacionesHandlers } from './handlers/notificaciones.handlers';
+import { syncHandlers } from './handlers/sync.handlers';
 
 export const server = setupServer(
   ...authHandlers,
@@ -30,4 +31,5 @@ export const server = setupServer(
   ...maestrosHandlers,
   ...reportesHandlers,
   ...notificacionesHandlers,
+  ...syncHandlers,
 );

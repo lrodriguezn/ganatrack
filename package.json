@@ -15,9 +15,15 @@
   "packageManager": "pnpm@9.15.0",
   "pnpm": {
     "supportedArchitectures": {
-      "os": ["linux"],
-      "cpu": ["x64"],
-      "libc": ["glibc"]
+      "os": [
+        "linux"
+      ],
+      "cpu": [
+        "x64"
+      ],
+      "libc": [
+        "glibc"
+      ]
     }
   }
 }
