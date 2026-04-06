@@ -11,7 +11,13 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "quality:check": "pnpm quality:coverage && pnpm quality:lighthouse",
+    "quality:coverage": "vitest run --coverage",
+    "quality:lighthouse": "lhci autorun",
+    "quality:badges": "tsx scripts/generate-badges.ts",
+    "lighthouse": "pnpm build && lhci autorun",
+    "lighthouse:ci": "pnpm build && lhci autorun"
   },
   "dependencies": {
     "@ganatrack/shared-types": "workspace:*",
@@ -53,6 +59,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@ganatrack/tsconfig": "workspace:*",
+    "@lhci/cli": "^0.14.0",
     "@playwright/test": "^1.59.1",
     "@serwist/turbopack": "^9.5.7",
     "@svgr/webpack": "^8.1.0",
@@ -64,6 +71,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.7.0",
     "@vitest/coverage-v8": "^2.1.9",
+    "badge-maker": "^3.3.1",
     "esbuild": "^0.25.0",
     "eslint": "^9.39.1",
     "eslint-config-next": "16.0.7",
@@ -72,7 +80,9 @@
     "postcss": "^8.5.6",
     "serwist": "^9.5.7",
     "tailwindcss": "^4.1.17",
+    "tsx": "^4.19.0",
     "typescript": "^5.9.3",
-    "vitest": "^2.1.9"
+    "vitest": "^2.1.9",
+    "wait-on": "^8.0.0"
   }
 }

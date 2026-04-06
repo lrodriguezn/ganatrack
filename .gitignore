@@ -49,6 +49,9 @@ playwright-report/
 # TypeScript incremental build info
 *.tsbuildinfo
 
+# Lighthouse CI
+.lighthouseci/
+
 # Misc
 *.bak
 *.tmp

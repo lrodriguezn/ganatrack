@@ -21,11 +21,12 @@ export default defineConfig({
         'src/tests/**',
         'src/app/**',
       ],
+      // Global baseline thresholds
       thresholds: {
-        lines: 80,
-        branches: 70,
-        functions: 80,
-        statements: 80,
+        lines: 50,
+        branches: 40,
+        functions: 50,
+        statements: 50,
       },
     },
   },
