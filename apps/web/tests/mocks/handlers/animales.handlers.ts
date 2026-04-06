@@ -1,9 +1,11 @@
-// apps/web/tests/mocks/handlers/animales.handlers.ts
+// apps/web/src/tests/mocks/handlers/animales.handlers.ts
 /**
  * MSW Handlers for Animales API.
  */
 
 import { http, HttpResponse } from 'msw';
+
+const BASE_URL = 'http://localhost:3000';
 
 const mockAnimales = [
   { id: 1, predioId: 1, codigo: 'GAN-001', nombre: 'Don Toro', fechaNacimiento: '2020-03-15', sexoKey: 0, tipoIngresoId: 0, configRazasId: 1, potreroId: 1, madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0, razaNombre: 'Brahman', potreroNombre: 'Potrero Norte' },
@@ -16,7 +18,7 @@ const mockAnimales = [
 let idCounter = mockAnimales.length + 1;
 
 export const animalesHandlers = [
-  http.get('*/api/v1/animales', ({ request }) => {
+  http.get(`${BASE_URL}/api/v1/animales`, ({ request }) => {
     const url = new URL(request.url);
     const predioId = url.searchParams.get('predioId');
     const page = parseInt(url.searchParams.get('page') || '1', 10);
@@ -38,21 +40,21 @@ export const animalesHandlers = [
     return HttpResponse.json({ data, page, limit, total, totalPages });
   }),
 
-  http.get('*/api/v1/animales/:id', ({ params }) => {
+  http.get(`${BASE_URL}/api/v1/animales/:id`, ({ params }) => {
     const id = Number(params.id);
     const animal = mockAnimales.find(a => a.id === id);
     if (!animal) return HttpResponse.json({ message: `Animal con ID ${id} no encontrado` }, { status: 404 });
     return HttpResponse.json(animal);
   }),
 
-  http.post('*/api/v1/animales', async ({ request }) => {
+  http.post(`${BASE_URL}/api/v1/animales`, async ({ request }) => {
     const body = await request.json() as Record<string, unknown>;
     const newAnimal = { id: idCounter++, predioId: 1, ...body, estadoAnimalKey: 0, saludAnimalKey: 0 };
     mockAnimales.push(newAnimal);
     return HttpResponse.json(newAnimal, { status: 201 });
   }),
 
-  http.put('*/api/v1/animales/:id', async ({ params, request }) => {
+  http.put(`${BASE_URL}/api/v1/animales/:id`, async ({ params, request }) => {
     const id = Number(params.id);
     const index = mockAnimales.findIndex(a => a.id === id);
     if (index === -1) return HttpResponse.json({ message: `Animal con ID ${id} no encontrado` }, { status: 404 });
@@ -61,7 +63,7 @@ export const animalesHandlers = [
     return HttpResponse.json(mockAnimales[index]);
   }),
 
-  http.delete('*/api/v1/animales/:id', ({ params }) => {
+  http.delete(`${BASE_URL}/api/v1/animales/:id`, ({ params }) => {
     const id = Number(params.id);
     const index = mockAnimales.findIndex(a => a.id === id);
     if (index === -1) return HttpResponse.json({ message: `Animal con ID ${id} no encontrado` }, { status: 404 });
@@ -69,7 +71,7 @@ export const animalesHandlers = [
     return new HttpResponse(null, { status: 204 });
   }),
 
-  http.patch('*/api/v1/animales/:id/estado', async ({ params, request }) => {
+  http.patch(`${BASE_URL}/api/v1/animales/:id/estado`, async ({ params, request }) => {
     const id = Number(params.id);
     const index = mockAnimales.findIndex(a => a.id === id);
     if (index === -1) return HttpResponse.json({ message: `Animal con ID ${id} no encontrado` }, { status: 404 });
@@ -78,14 +80,14 @@ export const animalesHandlers = [
     return HttpResponse.json(mockAnimales[index]);
   }),
 
-  http.get('*/api/v1/animales/:id/genealogia', ({ params }) => {
+  http.get(`${BASE_URL}/api/v1/animales/:id/genealogia`, ({ params }) => {
     const id = Number(params.id);
     const animal = mockAnimales.find(a => a.id === id);
     if (!animal) return HttpResponse.json({ message: `Animal con ID ${id} no encontrado` }, { status: 404 });
     return HttpResponse.json({ id: animal.id, codigo: animal.codigo, nombre: animal.nombre, sexoKey: animal.sexoKey, razaNombre: animal.razaNombre, madre: undefined, padre: undefined });
   }),
 
-  http.get('*/api/v1/animales/estadisticas', ({ request }) => {
+  http.get(`${BASE_URL}/api/v1/animales/estadisticas`, ({ request }) => {
     const url = new URL(request.url);
     const predioId = url.searchParams.get('predioId');
     const animals = mockAnimales.filter(a => a.predioId === Number(predioId) && a.estadoAnimalKey !== 99);

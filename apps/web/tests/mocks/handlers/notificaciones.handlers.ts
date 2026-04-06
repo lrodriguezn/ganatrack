@@ -1,4 +1,4 @@
-// apps/web/tests/mocks/handlers/notificaciones.handlers.ts
+// apps/web/src/tests/mocks/handlers/notificaciones.handlers.ts
 /**
  * MSW Handlers for Notificaciones API.
  *
@@ -12,6 +12,8 @@
  */
 
 import { http, HttpResponse } from 'msw';
+
+const BASE_URL = 'http://localhost:3000';
 
 const SEED_NOTIFICACIONES = [
   { id: 1, tipo: 'vacunacion', titulo: 'Vacunación pendiente', mensaje: '5 animales requieren vacunación aftosa', predioId: 1, leida: false, createdAt: '2026-04-03T08:00:00Z' },
@@ -45,7 +47,7 @@ let idCounter = SEED_NOTIFICACIONES.length + 1;
 
 export const notificacionesHandlers = [
   // GET /api/v1/notificaciones/resumen — notification summary
-  http.get('*/api/v1/notificaciones/resumen', ({ request }) => {
+  http.get(`${BASE_URL}/api/v1/notificaciones/resumen`, ({ request }) => {
     const url = new URL(request.url);
     const predioId = url.searchParams.get('predioId');
 
@@ -61,7 +63,7 @@ export const notificacionesHandlers = [
   }),
 
   // GET /api/v1/notificaciones — paginated list
-  http.get('*/api/v1/notificaciones', ({ request }) => {
+  http.get(`${BASE_URL}/api/v1/notificaciones`, ({ request }) => {
     const url = new URL(request.url);
     const predioId = url.searchParams.get('predioId');
     const page = parseInt(url.searchParams.get('page') || '1', 10);
@@ -85,7 +87,7 @@ export const notificacionesHandlers = [
   }),
 
   // POST /api/v1/notificaciones/:id/read — mark as read
-  http.post('*/api/v1/notificaciones/:id/read', ({ params }) => {
+  http.post(`${BASE_URL}/api/v1/notificaciones/:id/read`, ({ params }) => {
     const id = Number(params.id);
     const index = storeNotificaciones.findIndex(n => n.id === id);
 
@@ -101,7 +103,7 @@ export const notificacionesHandlers = [
   }),
 
   // POST /api/v1/notificaciones/read-all — mark all as read
-  http.post('*/api/v1/notificaciones/read-all', ({ request }) => {
+  http.post(`${BASE_URL}/api/v1/notificaciones/read-all`, ({ request }) => {
     const url = new URL(request.url);
     const predioId = url.searchParams.get('predioId');
 
@@ -115,12 +117,12 @@ export const notificacionesHandlers = [
   }),
 
   // GET /api/v1/notificaciones/preferencias
-  http.get('*/api/v1/notificaciones/preferencias', () => {
+  http.get(`${BASE_URL}/api/v1/notificaciones/preferencias`, () => {
     return HttpResponse.json(SEED_PREFERENCIAS);
   }),
 
   // PUT /api/v1/notificaciones/preferencias
-  http.put('*/api/v1/notificaciones/preferencias', async ({ request }) => {
+  http.put(`${BASE_URL}/api/v1/notificaciones/preferencias`, async ({ request }) => {
     const body = await request.json() as Record<string, unknown>;
     return HttpResponse.json({ ...SEED_PREFERENCIAS, ...body });
   }),

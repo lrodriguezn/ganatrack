@@ -1,9 +1,11 @@
-// apps/web/tests/mocks/handlers/config.handlers.ts
+// apps/web/src/tests/mocks/handlers/config.handlers.ts
 /**
  * MSW Handlers for Configuración API (catálogo endpoints).
  */
 
 import { http, HttpResponse } from 'msw';
+
+const BASE_URL = 'http://localhost:3000';
 
 const mockCatalogos: Record<string, { id: number; nombre: string; descripcion?: string }[]> = {
   razas: [
@@ -36,7 +38,7 @@ const mockCatalogos: Record<string, { id: number; nombre: string; descripcion?: 
 };
 
 export const configHandlers = [
-  http.get('*/api/v1/configuracion/:tipo', ({ params }) => {
+  http.get(`${BASE_URL}/api/v1/configuracion/:tipo`, ({ params }) => {
     const tipo = params.tipo as string;
     const data = mockCatalogos[tipo];
     if (!data) {

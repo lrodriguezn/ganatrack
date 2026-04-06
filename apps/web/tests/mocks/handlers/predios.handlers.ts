@@ -1,67 +1,126 @@
-// apps/web/tests/mocks/handlers/predios.handlers.ts
+// apps/web/src/tests/mocks/handlers/predios.handlers.ts
 /**
- * MSW Handlers for Predios API.
+ * MSW v2 handlers for predios endpoints.
+ * Covers: GET list, POST create, PUT update, DELETE remove
  */
-
 import { http, HttpResponse } from 'msw';
+import type { Predio } from '@ganatrack/shared-types';
 
-const mockPredios = [
-  { id: 1, nombre: 'Finca La Esperanza', departamento: 'Antioquia', municipio: 'Jerusalén', vereda: 'El Centro', hectares: 150, tipo: 'doble propósito', estado: 'activo' },
-  { id: 2, nombre: 'Finca El Progreso', departamento: 'Cundinamarca', municipio: 'Villeta', vereda: 'La Mesa', hectares: 200, tipo: 'lechería', estado: 'activo' },
+const BASE_URL = 'http://localhost:3000';
+
+// In-memory predios dataset para tests
+let prediosMock: Predio[] = [
+  {
+    id: 1,
+    nombre: 'Finca La Esperanza',
+    departamento: 'Cundinamarca',
+    municipio: 'Guatavita',
+    vereda: 'El Pantano',
+    hectares: 120,
+    tipo: 'cría',
+    estado: 'activo',
+  },
+  {
+    id: 2,
+    nombre: 'Hacienda San Pedro',
+    departamento: 'Boyacá',
+    municipio: 'Duitama',
+    hectares: 85,
+    tipo: 'lechería',
+    estado: 'activo',
+  },
 ];
 
-let idCounter = mockPredios.length + 1;
+let nextId = 3;
 
 export const prediosHandlers = [
-  http.get('*/api/v1/predios', () => HttpResponse.json(mockPredios)),
-
-  http.get('*/api/v1/predios/:id', ({ params }) => {
-    const id = Number(params.id);
-    const predio = mockPredios.find(p => p.id === id);
-    if (!predio) return HttpResponse.json({ message: `Predio con ID ${id} no encontrado` }, { status: 404 });
-    return HttpResponse.json(predio);
+  /**
+   * GET /api/v1/predios
+   * Returns list of predios.
+   */
+  http.get(`${BASE_URL}/api/v1/predios`, () => {
+    return HttpResponse.json(prediosMock);
   }),
 
-  http.post('*/api/v1/predios', async ({ request }) => {
-    const body = await request.json() as Record<string, unknown>;
-    const newPredio = { id: idCounter++, ...body, estado: 'activo' };
-    mockPredios.push(newPredio);
+  /**
+   * POST /api/v1/predios
+   * Creates a new predio.
+   */
+  http.post(`${BASE_URL}/api/v1/predios`, async ({ request }) => {
+    const body = await request.json() as Omit<Predio, 'id' | 'estado'>;
+    const newPredio: Predio = {
+      ...body,
+      id: nextId++,
+      estado: 'activo',
+    };
+    prediosMock.push(newPredio);
     return HttpResponse.json(newPredio, { status: 201 });
   }),
 
-  http.put('*/api/v1/predios/:id', async ({ params, request }) => {
+  /**
+   * PUT /api/v1/predios/:id
+   * Updates an existing predio.
+   */
+  http.put(`${BASE_URL}/api/v1/predios/:id`, async ({ params, request }) => {
     const id = Number(params.id);
-    const index = mockPredios.findIndex(p => p.id === id);
-    if (index === -1) return HttpResponse.json({ message: `Predio con ID ${id} no encontrado` }, { status: 404 });
-    const body = await request.json() as Record<string, unknown>;
-    mockPredios[index] = { ...mockPredios[index], ...body };
-    return HttpResponse.json(mockPredios[index]);
+    const body = await request.json() as Partial<Predio>;
+
+    const index = prediosMock.findIndex((p) => p.id === id);
+    if (index === -1) {
+      return HttpResponse.json(
+        { message: 'Predio no encontrado', code: 'NOT_FOUND' },
+        { status: 404 },
+      );
+    }
+
+    prediosMock[index] = { ...prediosMock[index], ...body, id };
+    return HttpResponse.json(prediosMock[index]);
   }),
 
-  http.delete('*/api/v1/predios/:id', ({ params }) => {
+  /**
+   * DELETE /api/v1/predios/:id
+   * Removes a predio.
+   */
+  http.delete(`${BASE_URL}/api/v1/predios/:id`, ({ params }) => {
     const id = Number(params.id);
-    const index = mockPredios.findIndex(p => p.id === id);
-    if (index === -1) return HttpResponse.json({ message: `Predio con ID ${id} no encontrado` }, { status: 404 });
-    mockPredios[index].estado = 'inactivo';
+    const index = prediosMock.findIndex((p) => p.id === id);
+
+    if (index === -1) {
+      return HttpResponse.json(
+        { message: 'Predio no encontrado', code: 'NOT_FOUND' },
+        { status: 404 },
+      );
+    }
+
+    prediosMock.splice(index, 1);
     return new HttpResponse(null, { status: 204 });
   }),
-
-  // Sub-resources
-  http.get('*/api/v1/predios/:predioId/potreros', () => HttpResponse.json([
-    { id: 1, predioId: 1, codigo: 'POT-001', nombre: 'Potrero Norte', hectares: 30, tipoPasto: 'Brachiaria', capacidadMaxima: 50, estado: 'activo' },
-    { id: 2, predioId: 1, codigo: 'POT-002', nombre: 'Potrero Sur', hectares: 25, tipoPasto: 'Estrella', capacidadMaxima: 40, estado: 'activo' },
-  ])),
-
-  http.get('*/api/v1/predios/:predioId/sectores', () => HttpResponse.json([])),
-  http.get('*/api/v1/predios/:predioId/lotes', () => HttpResponse.json([])),
-  http.get('*/api/v1/predios/:predioId/grupos', () => HttpResponse.json([])),
 ];
 
+/**
+ * Reset mock data to initial state (use in tests' beforeEach).
+ */
 export function resetPrediosMock(): void {
-  mockPredios.length = 0;
-  mockPredios.push(
-    { id: 1, nombre: 'Finca La Esperanza', departamento: 'Antioquia', municipio: 'Jerusalén', vereda: 'El Centro', hectares: 150, tipo: 'doble propósito', estado: 'activo' },
-    { id: 2, nombre: 'Finca El Progreso', departamento: 'Cundinamarca', municipio: 'Villeta', vereda: 'La Mesa', hectares: 200, tipo: 'lechería', estado: 'activo' },
-  );
-  idCounter = 3;
+  prediosMock = [
+    {
+      id: 1,
+      nombre: 'Finca La Esperanza',
+      departamento: 'Cundinamarca',
+      municipio: 'Guatavita',
+      vereda: 'El Pantano',
+      hectares: 120,
+      tipo: 'cría',
+      estado: 'activo',
+    },
+    {
+      id: 2,
+      nombre: 'Hacienda San Pedro',
+      departamento: 'Boyacá',
+      municipio: 'Duitama',
+      hectares: 85,
+      tipo: 'lechería',
+      estado: 'activo',
+    },
+  ];
+  nextId = 3;
 }

@@ -1,4 +1,4 @@
-// apps/web/tests/mocks/handlers/reportes.handlers.ts
+// apps/web/src/tests/mocks/handlers/reportes.handlers.ts
 /**
  * MSW Handlers for Reportes API.
  *
@@ -11,9 +11,11 @@
 
 import { http, HttpResponse } from 'msw';
 
+const BASE_URL = 'http://localhost:3000';
+
 export const reportesHandlers = [
   // GET /api/v1/reportes/dashboard — dashboard summary
-  http.get('*/api/v1/reportes/dashboard', ({ request }) => {
+  http.get(`${BASE_URL}/api/v1/reportes/dashboard`, ({ request }) => {
     const url = new URL(request.url);
     const predioId = url.searchParams.get('predioId');
 
@@ -40,7 +42,7 @@ export const reportesHandlers = [
   }),
 
   // GET /api/v1/reportes/inventario
-  http.get('*/api/v1/reportes/inventario', ({ request }) => {
+  http.get(`${BASE_URL}/api/v1/reportes/inventario`, ({ request }) => {
     const url = new URL(request.url);
     const predioId = url.searchParams.get('predioId');
 
@@ -76,7 +78,7 @@ export const reportesHandlers = [
   }),
 
   // GET /api/v1/reportes/reproductivo
-  http.get('*/api/v1/reportes/reproductivo', ({ request }) => {
+  http.get(`${BASE_URL}/api/v1/reportes/reproductivo`, ({ request }) => {
     const url = new URL(request.url);
     const predioId = url.searchParams.get('predioId');
 
@@ -97,7 +99,7 @@ export const reportesHandlers = [
   }),
 
   // GET /api/v1/reportes/mortalidad
-  http.get('*/api/v1/reportes/mortalidad', ({ request }) => {
+  http.get(`${BASE_URL}/api/v1/reportes/mortalidad`, ({ request }) => {
     const url = new URL(request.url);
     const predioId = url.searchParams.get('predioId');
 
@@ -118,7 +120,7 @@ export const reportesHandlers = [
   }),
 
   // GET /api/v1/reportes/movimiento
-  http.get('*/api/v1/reportes/movimiento', ({ request }) => {
+  http.get(`${BASE_URL}/api/v1/reportes/movimiento`, ({ request }) => {
     const url = new URL(request.url);
     const predioId = url.searchParams.get('predioId');
 
@@ -141,7 +143,7 @@ export const reportesHandlers = [
   }),
 
   // GET /api/v1/reportes/sanitario
-  http.get('*/api/v1/reportes/sanitario', ({ request }) => {
+  http.get(`${BASE_URL}/api/v1/reportes/sanitario`, ({ request }) => {
     const url = new URL(request.url);
     const predioId = url.searchParams.get('predioId');
 
@@ -160,7 +162,7 @@ export const reportesHandlers = [
   }),
 
   // POST /api/v1/reportes/export — trigger export
-  http.post('*/api/v1/reportes/export', async () => {
+  http.post(`${BASE_URL}/api/v1/reportes/export`, async () => {
     const jobId = `export-${Date.now()}`;
     return HttpResponse.json({
       jobId,
@@ -170,7 +172,7 @@ export const reportesHandlers = [
   }),
 
   // GET /api/v1/reportes/export/:jobId/status — check export status
-  http.get('*/api/v1/reportes/export/:jobId', ({ params }) => {
+  http.get(`${BASE_URL}/api/v1/reportes/export/:jobId`, ({ params }) => {
     return HttpResponse.json({
       jobId: params.jobId,
       status: 'completed',
