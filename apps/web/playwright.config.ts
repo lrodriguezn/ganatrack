@@ -11,7 +11,10 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
   },
+  globalSetup: './tests/e2e/global-setup.ts',
   projects: [
     {
       name: 'chromium',
@@ -21,6 +24,15 @@ export default defineConfig({
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
+    {
+      name: 'mobile-chrome',
+      use: { ...devices['Pixel 5'] },
+    },
+    {
+      name: 'mobile-safari',
+      use: { ...devices['iPhone 12'] },
+    },
+
   ],
   webServer: {
     command: 'pnpm dev',

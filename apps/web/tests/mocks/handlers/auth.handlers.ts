@@ -8,6 +8,12 @@ import { http, HttpResponse } from 'msw';
 const VALID_EMAIL = 'admin@ganatrack.com';
 const VALID_PASSWORD = 'password123';
 const TWO_FA_EMAIL = '2fa@ganatrack.com';
+const TWO_FA_USER = {
+  id: '66666666-6666-6666-6666-666666666666',
+  email: '2fa@ganatrack.com',
+  nombre: 'Veterinario 2FA',
+  rol: 'operario',
+};
 
 let mockLoggedInUser: {
   id: string;
@@ -48,6 +54,8 @@ export const authHandlers = [
     }
 
     if (body.email === TWO_FA_EMAIL) {
+      // Set pending 2FA user so subsequent verify handler can use it
+      mockPending2FAUser = TWO_FA_USER;
       return HttpResponse.json({
         requires2FA: true,
         tempToken: 'temp-token-mock-2fa-xxx',
@@ -55,14 +63,16 @@ export const authHandlers = [
     }
 
     if (body.email === VALID_EMAIL) {
+      const user = {
+        id: '550e8400-e29b-41d4-a716-446655440000',
+        email: VALID_EMAIL,
+        nombre: 'Admin Ganatrack',
+        rol: 'admin',
+      };
+      mockLoggedInUser = user;
       return HttpResponse.json({
         accessToken: 'mock-access-token-xyz',
-        user: {
-          id: '550e8400-e29b-41d4-a716-446655440000',
-          email: VALID_EMAIL,
-          nombre: 'Admin Ganatrack',
-          rol: 'admin',
-        },
+        user,
         permissions: ['*'],
       });
     }
@@ -75,6 +85,8 @@ export const authHandlers = [
 
   // POST /api/v1/auth/logout
   http.post('*/api/v1/auth/logout', () => {
+    mockLoggedInUser = null;
+    mockPending2FAUser = null;
     return HttpResponse.json({ message: 'Sesión cerrada exitosamente' });
   }),
 

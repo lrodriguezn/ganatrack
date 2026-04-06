@@ -41,6 +41,11 @@ free-nextjs-admin-dashboard/
 # Test coverage
 coverage/
 
+# Playwright
+test-results/
+playwright-report/
+.playwright/
+
 # TypeScript incremental build info
 *.tsbuildinfo
 
