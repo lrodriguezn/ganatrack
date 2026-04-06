@@ -1,30 +1,42 @@
 // apps/web/src/shared/hooks/use-failed-sync.ts
 /**
- * useFailedSync — reads failed/conflict queues from IndexedDB (BackgroundSyncPlugin).
+ * useFailedSync — reads failed/conflict queues from IndexedDB using idb-keyval.
  *
- * Returns count and items for UI display.
+ * Returns count, items, and a refetch function for UI display.
  *
  * @example
- * const { failedCount, conflictCount, failedItems, conflictItems } = useFailedSync();
+ * const { failedCount, conflictCount, failedItems, conflictItems, refetch } = useFailedSync();
+ *
+ * @returns FailedSyncState with failed/conflict counts, items arrays, and refetch function
  */
 
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { get } from 'idb-keyval';
 
+/**
+ * Validated sync queue item from IndexedDB.
+ */
 interface SyncQueueItem {
   url: string;
   method: string;
   body?: string;
   timestamp: number;
+  reason?: string;
   error?: string;
+  status?: number;
 }
 
+/**
+ * State returned by useFailedSync hook.
+ */
 interface FailedSyncState {
   failedCount: number;
   conflictCount: number;
   failedItems: SyncQueueItem[];
   conflictItems: SyncQueueItem[];
+  refetch: () => Promise<void>;
 }
 
 const initialState: FailedSyncState = {
@@ -32,82 +44,48 @@ const initialState: FailedSyncState = {
   conflictCount: 0,
   failedItems: [],
   conflictItems: [],
+  refetch: async () => { /* no-op for initial state */ },
 };
+
+/**
+ * Type guard: validates that an unknown value is a SyncQueueItem.
+ */
+function isSyncQueueItem(value: unknown): value is SyncQueueItem {
+  if (typeof value !== 'object' || value === null) return false;
+  const obj = value as Record<string, unknown>;
+  return typeof obj.url === 'string'
+    && typeof obj.method === 'string'
+    && typeof obj.timestamp === 'number';
+}
 
 export function useFailedSync(): FailedSyncState {
   const [state, setState] = useState<FailedSyncState>(initialState);
   const stateRef = useRef(state);
   stateRef.current = state;
 
-  const readQueues = useCallback(async () => {
-    // Check if IndexedDB is available
-    if (!('indexedDB' in window)) {
-      return;
-    }
-
+  const readQueues = useCallback(async (): Promise<void> => {
     try {
-      // Serwist uses workbox-background-sync internally
-      // Try multiple possible database names since Serwist may use different naming
-      const dbNames = [
-        'workbox-background-sync',
-        'bgSync',
-        'serwist-background-sync',
-      ];
+      // Read from idb-keyval stores where SW writes failed/conflict items
+      const failedRaw = await get<unknown[]>('ganatrack-failed-sync') ?? [];
+      const conflictRaw = await get<unknown[]>('ganatrack-conflict-queue') ?? [];
 
-      let allRequests: any[] = [];
-
-      for (const dbName of dbNames) {
-        try {
-          const db = await openDB(dbName, 1);
-          const storeNames = Array.from(db.objectStoreNames);
-          for (const storeName of storeNames) {
-            const tx = db.transaction(storeName, 'readonly');
-            const store = tx.objectStore(storeName);
-            const items = await store.getAll();
-            allRequests = allRequests.concat(items);
-          }
-          db.close();
-          break; // Found a valid DB, stop trying
-        } catch {
-          // Try next DB name
-          continue;
-        }
-      }
-
-      if (allRequests.length === 0) {
-        setState(initialState);
-        return;
-      }
-
-      // Categorize by status
-      const failed: SyncQueueItem[] = [];
-      const conflicts: SyncQueueItem[] = [];
-
-      for (const request of allRequests) {
-        const item: SyncQueueItem = {
-          url: request.url,
-          method: request.method,
-          body: request.body,
-          timestamp: request.timestamp,
-        };
-
-        // Check if this is a conflict (409) or failure (400)
-        if (request.lastError?.status === 409) {
-          conflicts.push(item);
-        } else {
-          failed.push(item);
-        }
-      }
+      // Validate and filter items using type guards
+      const failed: SyncQueueItem[] = failedRaw.filter(isSyncQueueItem);
+      const conflicts: SyncQueueItem[] = conflictRaw.filter(isSyncQueueItem);
 
       setState({
         failedCount: failed.length,
         conflictCount: conflicts.length,
         failedItems: failed,
         conflictItems: conflicts,
+        refetch: readQueues,
       });
     } catch {
       // IndexedDB not accessible or queue doesn't exist yet
-      setState(initialState);
+      setState((prev) => ({
+        ...initialState,
+        refetch: readQueues,
+      }));
     }
   }, []);
 
@@ -131,25 +109,5 @@ export function useFailedSync(): FailedSyncState {
     }
   }, [readQueues]);
 
-  return state;
-}
-
-// ============================================================================
-// Helpers
-// ============================================================================
-
-function openDB(name: string, version: number): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(name, version);
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve(request.result);
-    request.onupgradeneeded = () => {
-      // Don't create stores — we're only reading existing ones
-      const db = request.result;
-      if (!db.objectStoreNames.contains('requests')) {
-        db.close();
-        reject(new Error(`No 'requests' store in ${name}`));
-      }
-    };
-  });
+  return { ...state, refetch: readQueues };
 }

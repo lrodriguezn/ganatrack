@@ -6,7 +6,8 @@
         "http://localhost:3000/dashboard",
         "http://localhost:3000/dashboard/animales",
         "http://localhost:3000/dashboard/predios",
-        "http://localhost:3000/dashboard/usuarios"
+        "http://localhost:3000/dashboard/usuarios",
+        "http://localhost:3000/dashboard/sincronizacion"
       ],
       "settings": {
         "preset": "desktop",

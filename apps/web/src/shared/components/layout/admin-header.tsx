@@ -15,6 +15,8 @@
 'use client';
 
 import { Bars3Icon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { AlertCircle } from 'lucide-react';
 import { useSidebarStore } from '@/store/sidebar.store';
 import { SitioSelector } from './sitio-selector';
 import { NotificationBell } from './notification-bell';
@@ -22,6 +24,7 @@ import { ThemeToggle } from './theme-toggle';
 import { UserDropdown } from './user-dropdown';
 import { Breadcrumbs } from './breadcrumbs/breadcrumbs';
 import { NotificationCenter } from '@/modules/notificaciones/components/notification-center';
+import { useFailedSync } from '@/shared/hooks/use-failed-sync';
 
 interface AdminHeaderProps {
   onMobileMenuToggle: () => void;
@@ -29,6 +32,8 @@ interface AdminHeaderProps {
 
 export function AdminHeader({ onMobileMenuToggle }: AdminHeaderProps): JSX.Element {
   const toggleMobileOpen = useSidebarStore((s) => s.toggleMobile);
+  const { failedCount, conflictCount } = useFailedSync();
+  const total = failedCount + conflictCount;
 
   function handleMobileMenuToggle(): void {
     toggleMobileOpen();
@@ -54,9 +59,18 @@ export function AdminHeader({ onMobileMenuToggle }: AdminHeaderProps): JSX.Eleme
           <Breadcrumbs />
         </div>
 
-        {/* Right: SitioSelector + NotificationBell + ThemeToggle + UserDropdown */}
+        {/* Right: SitioSelector + SyncStatus + NotificationBell + ThemeToggle + UserDropdown */}
         <div className="flex items-center gap-2">
           <SitioSelector />
+          {total > 0 && (
+            <Link
+              href="/dashboard/sincronizacion"
+              className="relative flex items-center gap-1 rounded-md px-2 py-1 text-sm text-amber-600 hover:bg-amber-50 dark:text-amber-400 dark:hover:bg-amber-950"
+            >
+              <AlertCircle className="h-4 w-4" />
+              <span>{total}</span>
+            </Link>
+          )}
           <NotificationBell />
           <ThemeToggle />
           <UserDropdown />

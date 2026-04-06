@@ -5,6 +5,8 @@
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
+  "lang": "es",
+  "categories": ["business", "productivity"],
   "theme_color": "#2563eb",
   "background_color": "#ffffff",
   "icons": [
@@ -19,6 +21,29 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Ver el panel principal",
+      "url": "/dashboard",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Animales",
+      "short_name": "Animales",
+      "description": "Gestionar el hato ganadero",
+      "url": "/dashboard/animales",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Nuevo Animal",
+      "short_name": "Nuevo",
+      "description": "Registrar un nuevo animal",
+      "url": "/dashboard/animales/nuevo",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     }
   ]
 }

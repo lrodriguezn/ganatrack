@@ -1,0 +1,38 @@
+# openspec/changes/pwa-offline/state.yaml
+change:
+  id: pwa-offline
+  name: "PWA Offline — Completar funcionalidad offline para zonas rurales"
+  status: archived
+  artifact_store: hybrid
+  created: "2026-04-05"
+  archived: "2026-04-05"
+  tdd: true
+
+phases:
+  explore: skipped
+  propose: skipped
+  spec: skipped
+  design: complete
+  tasks: complete
+  apply: complete
+  verify: complete
+  archive: complete
+
+artifacts:
+  engram:
+    design: "sdd/prd-frontend/design"
+    design_part2: "sdd/prd-frontend/design-part2"
+    spec: "sdd/prd-frontend/spec"
+    proposal: "sdd/prd-frontend/proposal"
+  openspec:
+    design: "openspec/changes/pwa-offline/design.md"
+    tasks: "openspec/changes/pwa-offline/tasks.md"
+    spec: "openspec/changes/pwa-offline/spec.md"
+
+rationale: |
+  PWA offline es CORE del value proposition de GanaTrack.
+  La app se usa en zonas rurales con conectividad intermitente.
+  El PRD Frontend v1.0.0 ya definió la arquitectura PWA (Serwist).
+  Base implementada: SW, caching, BackgroundSync, manifest.
+  Faltan: query persistence, refresh-before-replay, conflict resolution,
+  sync UI, y offline fallback page.

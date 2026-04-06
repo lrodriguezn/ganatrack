@@ -9,7 +9,7 @@ context: |
   Testing: Vitest (web + api), Playwright E2E (web)
   Style: ESLint 9, TypeScript strict + noUncheckedIndexedAccess, no formatter
 
-strict_tdd: false
+strict_tdd: true
 
 rules:
   proposal:
@@ -29,8 +29,8 @@ rules:
     rules:
       - Follow existing code patterns and conventions
       - Load relevant coding skills for the project stack
-    tdd: false
-    test_command: ""
+    tdd: true
+    test_command: "pnpm --filter @ganatrack/web test"
   verify:
     test_command: "pnpm --filter @ganatrack/web test"
     build_command: "pnpm build"
@@ -39,7 +39,7 @@ rules:
     - Warn before merging destructive deltas (large removals)
 
 testing:
-  strict_tdd_mode: false
+  strict_tdd_mode: true
   detected: "2026-04-04"
   test_runner:
     command: "pnpm --filter @ganatrack/web test"

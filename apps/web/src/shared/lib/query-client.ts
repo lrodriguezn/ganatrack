@@ -20,7 +20,7 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 30_000, // 30 seconds — lists
-      gcTime: 10 * 60_000, // 10 minutes — garbage collection
+      gcTime: 24 * 60 * 60 * 1000, // 24 hours — offline persistence
       retry: 3,
       retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
       refetchOnWindowFocus: true,
