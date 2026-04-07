@@ -131,8 +131,12 @@ export function useVerify2FA(tempToken: string): UseVerify2FAReturn {
 
       setIsLoading(false);
 
+      console.log('[use-verify-2fa] Verification successful, redirecting...');
+      console.log('[use-verify-2fa] predios:', predios);
+
       // Redirect to dashboard or original requested page
       const redirectUrl = searchParams.get('redirect');
+      console.log('[use-verify-2fa] redirectUrl:', redirectUrl);
       if (redirectUrl && isValidRedirect(redirectUrl)) {
         router.push(redirectUrl);
       } else {
