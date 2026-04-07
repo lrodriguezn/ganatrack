@@ -41,7 +41,7 @@ function TwoFactorContent(): JSX.Element {
     useVerify2FA(tempToken);
 
   return (
-    <div className="w-full px-4">
+    <div className="w-full max-w-md px-4">
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">

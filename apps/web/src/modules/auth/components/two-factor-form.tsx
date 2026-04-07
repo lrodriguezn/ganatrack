@@ -158,16 +158,6 @@ export function TwoFactorForm({
         onSubmit={handleSubmit}
         className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm p-6 space-y-6"
       >
-        {/* Header */}
-        <div className="text-center">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            Verificación de dos pasos
-          </h2>
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            Ingresa el código de 6 dígitos enviado a tu correo
-          </p>
-        </div>
-
         {/* OTP Inputs */}
         <div className="flex justify-center gap-2" onPaste={handlePaste}>
           {Array.from({ length: INPUT_COUNT }).map((_, index) => (
