@@ -46,14 +46,9 @@ export class LoginUseCase {
     if (twoFactor && twoFactor.habilitado === 1) {
       // Generate tempToken only - use the predefined 2FA code from DB
       const expiresAt = new Date(Date.now() + TWO_FA_CODE_TTL_MINUTES * 60 * 1000)
-      console.log('[login.use-case] Setting 2FA expiration to:', expiresAt.toISOString(), '(ms:', expiresAt.getTime(), ')')
 
       // Update expiration and reset attempts WITHOUT changing the predefined code
       await this.authRepo.updateTwoFactorExpiry(usuario.id, expiresAt)
-
-      // Verify the update worked
-      const updatedTwoFactor = await this.authRepo.getTwoFactor(usuario.id)
-      console.log('[login.use-case] Updated 2FA record:', updatedTwoFactor)
 
       // Create tempToken with usuarioId encoded
       const tempToken = jwt.sign(

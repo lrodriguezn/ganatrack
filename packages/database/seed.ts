@@ -13,6 +13,9 @@ import {
   usuariosPermisos,
   rolesPermisos,
   usuariosRolesAsignacion,
+  usuariosPredios,
+  usuariosAutenticacionDosFactores,
+  predios,
 } from './src/schema'
 import { eq } from 'drizzle-orm'
 import bcrypt from 'bcrypt'
@@ -203,6 +206,63 @@ async function seed() {
   await db.insert(usuariosRolesAsignacion).values({
     usuarioId: 1,
     rolId: 1,
+    activo: 1,
+  }).onConflictDoNothing()
+
+  // --- Default Predio ---
+  await db.insert(predios).values({
+    id: 1,
+    codigo: 'FINCA-001',
+    nombre: 'Finca Principal',
+    departamento: 'Antioquia',
+    municipio: 'Rionegro',
+    vereda: 'La Esperanza',
+    areaHectareas: 150.5,
+    capacidadMaxima: 200,
+    activo: 1,
+  }).onConflictDoNothing()
+
+  // Assign admin user to the default Predio
+  await db.insert(usuariosPredios).values({
+    usuarioId: 1,
+  	predioId: 1,
+    activo: 1,
+  }).onConflictDoNothing()
+
+  // --- 2FA Test User ---
+  // Create a test user with 2FA enabled for testing the flow
+  const hashedPassword = await bcrypt.hash('test123456', 10)
+
+  await db.insert(usuarios).values({
+    id: 2,
+    email: 'test2fa@ganatrack.com',
+    nombre: 'Usuario 2FA Test',
+    activo: 1,
+  }).onConflictDoNothing()
+
+  await db.insert(usuariosContrasena).values({
+    usuarioId: 2,
+    contrasenaHash: hashedPassword,
+    activo: 1,
+  }).onConflictDoNothing()
+
+  // Assign to OPERARIO role (id: 2)
+  await db.insert(usuariosRolesAsignacion).values({
+    usuarioId: 2,
+    rolId: 2,
+    activo: 1,
+  }).onConflictDoNothing()
+
+  // Enable 2FA for this user - use a pre-computed hash for reliability
+  // Hash for '123456' is: $2b$10$XnGkbZi2XItTP.7S6h4oNu2PE0zfJxPAZJnc3wcGw8sWqUE/xj/nC
+  const twoFactorCodeHash = '$2b$10$XnGkbZi2XItTP.7S6h4oNu2PE0zfJxPAZJnc3wcGw8sWqUE/xj/nC'
+  await db.insert(usuariosAutenticacionDosFactores).values({
+    usuarioId: 2,
+    metodo: 'email',
+    codigo: twoFactorCodeHash,
+    fechaExpiracion: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes from now
+    intentosFallidos: 0,
+    habilitado: 1,
     activo: 1,
   }).onConflictDoNothing()
 
