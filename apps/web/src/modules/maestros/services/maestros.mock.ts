@@ -29,33 +29,33 @@ import type { MaestrosService } from './maestros.service';
 // ============================================================================
 
 const SEED_VETERINARIOS: Veterinario[] = [
-  { id: 1, nombre: 'Dr. Carlos Rodríguez Pérez', especialidad: 'Medicina Interna Bovina', telefono: '3101234567', email: 'c.rodriguez@vetcol.com', activo: true },
-  { id: 2, nombre: 'Dra. Ana María Gómez', especialidad: 'Reproducción Animal', telefono: '3152345678', email: 'a.gomez@clinicaveterinaria.co', activo: true },
-  { id: 3, nombre: 'Dr. Luis Fernando Torres', especialidad: 'Cirugía Veterinaria', telefono: '3003456789', email: 'lf.torres@vet.com', activo: true },
-  { id: 4, nombre: 'Dra. Marcela Ospina Vargas', especialidad: 'Sanidad Animal', telefono: '3204567890', email: 'm.ospina@agropecuaria.com', activo: false },
+  { id: 1, nombre: 'Dr. Carlos Rodríguez Pérez', especialidad: 'Medicina Interna Bovina', telefono: '3101234567', email: 'c.rodriguez@vetcol.com', direccion: null, numeroRegistro: 'RV-001', activo: true },
+  { id: 2, nombre: 'Dra. Ana María Gómez', especialidad: 'Reproducción Animal', telefono: '3152345678', email: 'a.gomez@clinicaveterinaria.co', direccion: null, numeroRegistro: 'RV-002', activo: true },
+  { id: 3, nombre: 'Dr. Luis Fernando Torres', especialidad: 'Cirugía Veterinaria', telefono: '3003456789', email: 'lf.torres@vet.com', direccion: null, numeroRegistro: 'RV-003', activo: true },
+  { id: 4, nombre: 'Dra. Marcela Ospina Vargas', especialidad: 'Sanidad Animal', telefono: '3204567890', email: 'm.ospina@agropecuaria.com', direccion: null, numeroRegistro: 'RV-004', activo: false },
 ];
 
 const SEED_PROPIETARIOS: Propietario[] = [
-  { id: 1, nombre: 'Hernando Martínez Suárez', documento: '17234567', telefono: '3105678901', email: 'hmartinez@gmail.com', activo: true },
-  { id: 2, nombre: 'María Elena Castillo Rojas', documento: '52345678', telefono: '3116789012', email: 'mecastillo@hotmail.com', activo: true },
-  { id: 3, nombre: 'José Alirio Restrepo Montoya', documento: '98765432', telefono: '3127890123', email: 'jarestrepo@yahoo.com', activo: true },
-  { id: 4, nombre: 'Agroganadería La Palma S.A.S.', documento: '900123456', telefono: '6014567890', email: 'info@lapalma.com.co', activo: true },
-  { id: 5, nombre: 'Pedro Antonio Acosta Herrera', documento: '11223344', telefono: '3138901234', email: 'pacosta@correo.co', activo: false },
+  { id: 1, nombre: 'Hernando Martínez Suárez', tipoDocumento: 'CC', numeroDocumento: '17234567', telefono: '3105678901', email: 'hmartinez@gmail.com', direccion: null, activo: true },
+  { id: 2, nombre: 'María Elena Castillo Rojas', tipoDocumento: 'CC', numeroDocumento: '52345678', telefono: '3116789012', email: 'mecastillo@hotmail.com', direccion: null, activo: true },
+  { id: 3, nombre: 'José Alirio Restrepo Montoya', tipoDocumento: 'CC', numeroDocumento: '98765432', telefono: '3127890123', email: 'jarestrepo@yahoo.com', direccion: null, activo: true },
+  { id: 4, nombre: 'Agroganadería La Palma S.A.S.', tipoDocumento: 'NIT', numeroDocumento: '900123456', telefono: '6014567890', email: 'info@lapalma.com.co', direccion: null, activo: true },
+  { id: 5, nombre: 'Pedro Antonio Acosta Herrera', tipoDocumento: 'CC', numeroDocumento: '11223344', telefono: '3138901234', email: 'pacosta@correo.co', direccion: null, activo: false },
 ];
 
 const SEED_HIERROS: Hierro[] = [
-  { id: 1, nombre: 'Hierro Principal Finca La Esperanza', codigo: 'HFE-001', descripcion: 'Marca oficial de la finca para ganado Brahman', activo: true },
-  { id: 2, nombre: 'Hierro Hacienda El Roble', codigo: 'HER-002', descripcion: 'Hierro de identificación para hembras reproductoras', activo: true },
-  { id: 3, nombre: 'Hierro San José Levante', codigo: 'HSJ-003', descripcion: 'Hierro para animales en etapa de levante', activo: true },
-  { id: 4, nombre: 'Hierro Santa María Engorde', codigo: 'HSM-004', descripcion: 'Identificación de lotes de engorde', activo: true },
+  { id: 1, nombre: 'Hierro Principal Finca La Esperanza', descripcion: 'Marca oficial de la finca para ganado Brahman', activo: true },
+  { id: 2, nombre: 'Hierro Hacienda El Roble', descripcion: 'Hierro de identificación para hembras reproductoras', activo: true },
+  { id: 3, nombre: 'Hierro San José Levante', descripcion: 'Hierro para animales en etapa de levante', activo: true },
+  { id: 4, nombre: 'Hierro Santa María Engorde', descripcion: 'Identificación de lotes de engorde', activo: true },
 ];
 
 const SEED_DIAGNOSTICOS: Diagnostico[] = [
-  { id: 1, nombre: 'Brucelosis', descripcion: 'Infección bacteriana causada por Brucella abortus', tipo: 'Enfermedad Infecciosa', activo: true },
-  { id: 2, nombre: 'Fiebre Aftosa', descripcion: 'Enfermedad viral altamente contagiosa de pezuñas y boca', tipo: 'Enfermedad Viral', activo: true },
-  { id: 3, nombre: 'Mastitis Crónica', descripcion: 'Inflamación crónica de la glándula mamaria', tipo: 'Enfermedad de la Ubre', activo: true },
-  { id: 4, nombre: 'Carbón Sintomático', descripcion: 'Enfermedad bacteriana causada por Clostridium chauvoei', tipo: 'Enfermedad Clostridial', activo: true },
-  { id: 5, nombre: 'Estomatitis Vesicular', descripcion: 'Enfermedad viral que afecta mucosas y pezuñas', tipo: 'Enfermedad Viral', activo: false },
+  { id: 1, nombre: 'Brucelosis', descripcion: 'Infección bacteriana causada por Brucella abortus', categoria: 'Enfermedad Infecciosa', activo: true },
+  { id: 2, nombre: 'Fiebre Aftosa', descripcion: 'Enfermedad viral altamente contagiosa de pezuñas y boca', categoria: 'Enfermedad Viral', activo: true },
+  { id: 3, nombre: 'Mastitis Crónica', descripcion: 'Inflamación crónica de la glándula mamaria', categoria: 'Enfermedad de la Ubre', activo: true },
+  { id: 4, nombre: 'Carbón Sintomático', descripcion: 'Enfermedad bacteriana causada por Clostridium chauvoei', categoria: 'Enfermedad Clostridial', activo: true },
+  { id: 5, nombre: 'Estomatitis Vesicular', descripcion: 'Enfermedad viral que afecta mucosas y pezuñas', categoria: 'Enfermedad Viral', activo: false },
 ];
 
 const SEED_MOTIVOS_VENTAS: MotivoVenta[] = [
@@ -74,18 +74,18 @@ const SEED_CAUSAS_MUERTE: CausaMuerte[] = [
 ];
 
 const SEED_LUGARES_COMPRAS: LugarCompra[] = [
-  { id: 1, nombre: 'Subasta Ganadera de Medellín', municipio: 'Medellín', departamento: 'Antioquia', activo: true },
-  { id: 2, nombre: 'Feria de Ganado de Montería', municipio: 'Montería', departamento: 'Córdoba', activo: true },
-  { id: 3, nombre: 'Subasta San Martín', municipio: 'San Martín', departamento: 'Meta', activo: true },
-  { id: 4, nombre: 'Finca El Paraíso - Proveedor', municipio: 'La Ceja', departamento: 'Antioquia', activo: true },
+  { id: 1, nombre: 'Subasta Ganadera de Medellín', tipo: 'Subasta', ubicacion: 'Medellín, Antioquia', contacto: 'Carlos Mario Zapata', telefono: '6042511234', activo: true },
+  { id: 2, nombre: 'Feria de Ganado de Montería', tipo: 'Feria', ubicacion: 'Montería, Córdoba', contacto: 'Pedro Luis Mendoza', telefono: '6047861234', activo: true },
+  { id: 3, nombre: 'Subasta San Martín', tipo: 'Subasta', ubicacion: 'San Martín, Meta', contacto: 'Jorge Eliecer Rodríguez', telefono: '6086321234', activo: true },
+  { id: 4, nombre: 'Finca El Paraíso - Proveedor', tipo: 'Finca', ubicacion: 'La Ceja, Antioquia', contacto: 'Roberto Carlos López', telefono: '6042211234', activo: true },
 ];
 
 const SEED_LUGARES_VENTAS: LugarVenta[] = [
-  { id: 1, nombre: 'Frigorífico Guadalupe', municipio: 'Bogotá', departamento: 'Cundinamarca', activo: true },
-  { id: 2, nombre: 'Frigorífico Concasa', municipio: 'Medellín', departamento: 'Antioquia', activo: true },
-  { id: 3, nombre: 'Cooperativa Lechera de Antioquia - Colanta', municipio: 'Don Matías', departamento: 'Antioquia', activo: true },
-  { id: 4, nombre: 'Subasta Ganadera de Montería', municipio: 'Montería', departamento: 'Córdoba', activo: true },
-  { id: 5, nombre: 'Mercado Ganadero Regional', municipio: 'Villavicencio', departamento: 'Meta', activo: false },
+  { id: 1, nombre: 'Frigorífico Guadalupe', tipo: 'Frigorífico', ubicacion: 'Bogotá, Cundinamarca', contacto: 'Javier Hernández', telefono: '6014561234', activo: true },
+  { id: 2, nombre: 'Frigorífico Concasa', tipo: 'Frigorífico', ubicacion: 'Medellín, Antioquia', contacto: 'Alberto Torres', telefono: '6042341234', activo: true },
+  { id: 3, nombre: 'Cooperativa Lechera de Antioquia - Colanta', tipo: 'Cooperativa', ubicacion: 'Don Matías, Antioquia', contacto: 'María Elena Guerrero', telefono: '6045111234', activo: true },
+  { id: 4, nombre: 'Subasta Ganadera de Montería', tipo: 'Subasta', ubicacion: 'Montería, Córdoba', contacto: 'Luis Fernando Correa', telefono: '6047891234', activo: true },
+  { id: 5, nombre: 'Mercado Ganadero Regional', tipo: 'Mercado', ubicacion: 'Villavicencio, Meta', contacto: 'Andrés Felipe Pérez', telefono: '608661234', activo: false },
 ];
 
 // ============================================================================
@@ -139,6 +139,16 @@ export class MockMaestrosService implements MaestrosService {
   async getAll(tipo: MaestroTipo): Promise<MaestroBase[]> {
     await delay(300);
     return [...(store[tipo] as MaestroBase[])];
+  }
+
+  async getById(tipo: MaestroTipo, id: number): Promise<MaestroBase> {
+    await delay(300);
+    const items = store[tipo] as MaestroBase[];
+    const item = items.find((item) => item.id === id);
+    if (!item) {
+      throw new ApiError(404, 'NOT_FOUND', `Registro con ID ${id} no encontrado`);
+    }
+    return { ...item };
   }
 
   async create(tipo: MaestroTipo, data: CreateMaestroDto): Promise<MaestroBase> {

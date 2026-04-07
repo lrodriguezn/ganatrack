@@ -5,6 +5,9 @@
  * Covers 8 maestro entities:
  * veterinarios, propietarios, hierros, diagnosticos,
  * motivos-ventas, causas-muerte, lugares-compras, lugares-ventas
+ *
+ * IMPORTANT: These types match the backend DTOs for seamless integration.
+ * Field names are aligned with backend response format.
  */
 
 import { z } from 'zod';
@@ -25,88 +28,97 @@ export type MaestroTipo =
 
 // ============================================================================
 // Base interface — all maestros share id, nombre, activo
+// Backend returns activo as number (0/1), frontend converts to boolean
 // ============================================================================
 
 export interface MaestroBase {
   id: number;
   nombre: string;
-  activo: boolean;
+  activo: boolean; // Converted from backend number (0/1)
 }
 
 // ============================================================================
-// Entity interfaces
+// Entity interfaces — aligned with backend Response DTOs
 // ============================================================================
 
 export interface Veterinario extends MaestroBase {
-  especialidad?: string;
-  telefono?: string;
-  email?: string;
+  telefono: string | null;
+  email: string | null;
+  direccion: string | null;
+  numeroRegistro: string | null;
+  especialidad: string | null;
 }
 
 export interface Propietario extends MaestroBase {
-  documento?: string;
-  telefono?: string;
-  email?: string;
+  tipoDocumento: string | null;
+  numeroDocumento: string | null;
+  telefono: string | null;
+  email: string | null;
+  direccion: string | null;
 }
 
 export interface Hierro extends MaestroBase {
-  codigo: string;
-  descripcion?: string;
-  imagen_url?: string;
+  descripcion: string | null;
 }
 
 export interface Diagnostico extends MaestroBase {
-  descripcion?: string;
-  tipo?: string;
+  descripcion: string | null;
+  categoria: string | null;
 }
 
 export interface MotivoVenta extends MaestroBase {
-  descripcion?: string;
+  descripcion: string | null;
 }
 
 export interface CausaMuerte extends MaestroBase {
-  descripcion?: string;
+  descripcion: string | null;
 }
 
 export interface LugarCompra extends MaestroBase {
-  municipio?: string;
-  departamento?: string;
+  tipo: string | null;
+  ubicacion: string | null;
+  contacto: string | null;
+  telefono: string | null;
 }
 
 export interface LugarVenta extends MaestroBase {
-  municipio?: string;
-  departamento?: string;
+  tipo: string | null;
+  ubicacion: string | null;
+  contacto: string | null;
+  telefono: string | null;
 }
 
 // ============================================================================
-// Zod schemas for all 8 entities
+// Zod schemas for all 8 entities — aligned with backend schemas
 // ============================================================================
 
 export const VeterinarioSchema = z.object({
   nombre: z.string().min(1, 'El nombre es requerido'),
-  especialidad: z.string().optional(),
-  telefono: z.string().optional(),
-  email: z.string().email('Email inválido').optional().or(z.literal('')),
+  telefono: z.string().max(20).optional(),
+  email: z.string().max(100).email('Email inválido').optional().or(z.literal('')),
+  direccion: z.string().optional(),
+  numeroRegistro: z.string().max(50).optional(),
+  especialidad: z.string().max(100).optional(),
 });
 
 export const PropietarioSchema = z.object({
   nombre: z.string().min(1, 'El nombre es requerido'),
-  documento: z.string().optional(),
-  telefono: z.string().optional(),
-  email: z.string().email('Email inválido').optional().or(z.literal('')),
+  tipoDocumento: z.string().max(20).optional(),
+  numeroDocumento: z.string().max(50).optional(),
+  telefono: z.string().max(20).optional(),
+  email: z.string().max(100).email('Email inválido').optional().or(z.literal('')),
+  direccion: z.string().optional(),
 });
 
 export const HierroSchema = z.object({
   nombre: z.string().min(1, 'El nombre es requerido'),
-  codigo: z.string().min(1, 'El código es requerido'),
   descripcion: z.string().optional(),
-  imagen_url: z.string().optional(),
 });
 
 export const DiagnosticoSchema = z.object({
   nombre: z.string().min(1, 'El nombre es requerido'),
   descripcion: z.string().optional(),
-  tipo: z.string().optional(),
+  categoria: z.string().max(50).optional(),
 });
 
 export const MotivoVentaSchema = z.object({
@@ -121,14 +133,18 @@ export const CausaMuerteSchema = z.object({
 
 export const LugarCompraSchema = z.object({
   nombre: z.string().min(1, 'El nombre es requerido'),
-  municipio: z.string().optional(),
-  departamento: z.string().optional(),
+  tipo: z.string().max(50).optional(),
+  ubicacion: z.string().optional(),
+  contacto: z.string().optional(),
+  telefono: z.string().max(20).optional(),
 });
 
 export const LugarVentaSchema = z.object({
   nombre: z.string().min(1, 'El nombre es requerido'),
-  municipio: z.string().optional(),
-  departamento: z.string().optional(),
+  tipo: z.string().max(50).optional(),
+  ubicacion: z.string().optional(),
+  contacto: z.string().optional(),
+  telefono: z.string().max(20).optional(),
 });
 
 // ============================================================================
@@ -227,3 +243,21 @@ export type MaestroDtoMap = {
   'lugares-compras': LugarCompraDto;
   'lugares-ventas': LugarVentaDto;
 };
+
+// ============================================================================
+// Utility: Convert backend activo (number 0/1) to frontend boolean
+// ============================================================================
+
+export function parseActivo(value: number | boolean | undefined): boolean {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value === 1;
+  return true;
+}
+
+// ============================================================================
+// Utility: Convert frontend boolean to backend activo (number 0/1)
+// ============================================================================
+
+export function toBackendActivo(value: boolean): number {
+  return value ? 1 : 0;
+}

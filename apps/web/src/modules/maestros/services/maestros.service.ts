@@ -14,6 +14,7 @@ import type { CreateMaestroDto, MaestroBase, MaestroTipo } from '../types/maestr
 
 export interface MaestrosService {
   getAll(tipo: MaestroTipo): Promise<MaestroBase[]>;
+  getById(tipo: MaestroTipo, id: number): Promise<MaestroBase>;
   create(tipo: MaestroTipo, data: CreateMaestroDto): Promise<MaestroBase>;
   update(tipo: MaestroTipo, id: number, data: Partial<CreateMaestroDto>): Promise<MaestroBase>;
   remove(tipo: MaestroTipo, id: number): Promise<void>;

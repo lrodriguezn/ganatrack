@@ -16,6 +16,16 @@ import {
   usuariosPredios,
   usuariosAutenticacionDosFactores,
   predios,
+  // Maestros - tenant-scoped
+  veterinarios,
+  propietarios,
+  hierros,
+  // Maestros - global
+  diagnosticosVeterinarios,
+  motivosVentas,
+  causasMuerte,
+  lugaresCompras,
+  lugaresVentas,
 } from './src/schema'
 import { eq } from 'drizzle-orm'
 import bcrypt from 'bcrypt'
@@ -265,6 +275,53 @@ async function seed() {
     habilitado: 1,
     activo: 1,
   }).onConflictDoNothing()
+
+  // --- Predios (Farms) ---
+  await db.insert(predios).values([
+    {
+      id: 1,
+      codigo: 'GAN001',
+      nombre: 'Finca La Esperanza',
+      departamento: 'Antioquia',
+      municipio: 'Medellín',
+      vereda: 'La Verde',
+      areaHectareas: 50,
+      capacidadMaxima: 200,
+      tipoExplotacionId: 3, // Doble propósito
+      activo: 1,
+    },
+    {
+      id: 2,
+      codigo: 'GAN002',
+      nombre: 'Hacienda El Roble',
+      departamento: 'Córdoba',
+      municipio: 'Montería',
+      vereda: 'El Roble',
+      areaHectareas: 100,
+      capacidadMaxima: 400,
+      tipoExplotacionId: 1, // Cría
+      activo: 1,
+    },
+  ]).onConflictDoNothing()
+
+  // --- MAESTROS: Veterinarios (tenant-scoped) ---
+  // Asignar veterinarians a predioId 1
+  await db.insert(veterinarios).values([
+    { id: 1, predioId: 1, nombre: 'Dr. Carlos Rodríguez Pérez', telefono: '3101234567', email: 'c.rodriguez@vetcol.com', direccion: 'Calle 45 #12-34, Medellín', numeroRegistro: 'RV-001', especialidad: 'Medicina Interna Bovina', activo: 1, createdAt: new Date(), updatedAt: new Date() },
+    { id: 2, predioId: 1, nombre: 'Dra. Ana María Gómez', telefono: '3152345678', email: 'a.gomez@clinicaveterinaria.co', direccion: 'Carrera 30 #8-56, Bogotá', numeroRegistro: 'RV-002', especialidad: 'Reproducción Animal', activo: 1, createdAt: new Date(), updatedAt: new Date() },
+  ]).onConflictDoNothing()
+
+  // --- MAESTROS: Propietarios (tenant-scoped) ---
+  await db.insert(propietarios).values([
+    { id: 1, predioId: 1, nombre: 'Hernando Martínez Suárez', tipoDocumento: 'CC', numeroDocumento: '17234567', telefono: '3105678901', email: 'hmartinez@gmail.com', direccion: 'Carrera 15 #20-30, Medellín', activo: 1, createdAt: new Date(), updatedAt: new Date() },
+    { id: 2, predioId: 1, nombre: 'María Elena Castillo Rojas', tipoDocumento: 'CC', numeroDocumento: '52345678', telefono: '3116789012', email: 'mecastillo@hotmail.com', direccion: 'Calle 10 #15-25, Bogotá', activo: 1, createdAt: new Date(), updatedAt: new Date() },
+  ]).onConflictDoNothing()
+
+  // --- MAESTROS: Hierros (tenant-scoped) ---
+  await db.insert(hierros).values([
+    { id: 1, predioId: 1, nombre: 'Hierro Principal Finca La Esperanza', descripcion: 'Marca oficial de la finca para ganado Brahman', activo: 1, createdAt: new Date(), updatedAt: new Date() },
+    { id: 2, predioId: 1, nombre: 'Hierro Hacienda El Roble', descripcion: 'Hierro de identificación para hembras reproductoras', activo: 1, createdAt: new Date(), updatedAt: new Date() },
+  ]).onConflictDoNothing()
 
   console.log('Seed completed!')
 }
