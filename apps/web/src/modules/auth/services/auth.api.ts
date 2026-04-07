@@ -34,14 +34,71 @@ export class RealAuthService implements AuthService {
         .post('auth/login', {
           json: credentials,
         })
-        .json();
+        .json() as unknown;
 
-      return LoginResponseSchema.parse(response);
+      // Log the response for debugging
+      console.log('[auth.api] Login response:', JSON.stringify(response, null, 2));
+
+      // Unwrap the {success, data} envelope from backend
+      const wrapped = response as { success: boolean; data: unknown };
+      const data = wrapped.data as { 
+        accessToken?: string; 
+        refreshToken?: string;
+        usuario?: { id: number; nombre: string; roles: string[] };
+        permissions?: string[];
+        requires2FA?: boolean;
+        tempToken?: string;
+      };
+
+      // Check if 2FA is required
+      if (data.requires2FA) {
+        return {
+          requires2FA: true,
+          tempToken: data.tempToken || '',
+        };
+      }
+
+      // Validate we have the required fields
+      if (!data.accessToken || !data.usuario) {
+        console.error('[auth.api] Missing required fields in login response:', data);
+        throw new ApiError(500, 'INVALID_RESPONSE', 'Respuesta inválida del servidor');
+      }
+
+      // Transform backend response to frontend format
+      // Backend returns: { accessToken, usuario: { id: number, nombre, roles } }
+      // Permissions are in the JWT token, need to decode to extract them
+      
+      // Decode JWT to get permissions from token payload
+      let permissions: string[] = [];
+      try {
+        const tokenParts = data.accessToken.split('.');
+        if (tokenParts.length === 3) {
+          const payload = JSON.parse(atob(tokenParts[1]));
+          permissions = payload.permisos || [];
+        }
+      } catch (e) {
+        console.warn('[auth.api] Could not decode JWT to extract permissions');
+      }
+      
+      const result = {
+        accessToken: data.accessToken,
+        user: {
+          id: String(data.usuario.id),
+          email: credentials.email,
+          nombre: data.usuario.nombre,
+          rol: (data.usuario.roles[0] || 'operario').toLowerCase(),
+        },
+        permissions,
+      };
+
+      console.log('[auth.api] Transformed result:', JSON.stringify(result, null, 2));
+
+      return result as LoginResponse;
     } catch (error) {
+      console.error('[auth.api] Login error:', error);
       if (error instanceof ApiError) {
         throw error;
       }
-      // This should not happen with ky — ApiError is thrown for non-2xx
       throw new ApiError(500, 'SERVER_ERROR', 'Error del servidor');
     }
   }
@@ -50,11 +107,45 @@ export class RealAuthService implements AuthService {
     try {
       const response = await apiClient
         .post('auth/2fa/verify', {
-          json: { tempToken, code } satisfies Verify2FARequest,
+          json: { tempToken, codigo: code } satisfies Verify2FARequest,
         })
-        .json();
+        .json() as unknown;
 
-      return AuthResponseSchema.parse(response);
+      // Unwrap the {success, data} envelope from backend
+      const wrapped = response as { success: boolean; data: unknown };
+      const data = wrapped.data as {
+        accessToken?: string;
+        usuario?: { id: number; nombre: string; roles: string[] };
+        permissions?: string[];
+      };
+
+      if (!data.accessToken || !data.usuario) {
+        console.error('[auth.api] Missing required fields in 2FA verify response:', data);
+        throw new ApiError(500, 'INVALID_RESPONSE', 'Respuesta inválida del servidor');
+      }
+
+      // Decode JWT to get permissions from token payload
+      let permissions: string[] = [];
+      try {
+        const tokenParts = data.accessToken.split('.');
+        if (tokenParts.length === 3) {
+          const payload = JSON.parse(atob(tokenParts[1]));
+          permissions = payload.permisos || [];
+        }
+      } catch (e) {
+        console.warn('[auth.api] Could not decode JWT to extract permissions');
+      }
+
+      return {
+        accessToken: data.accessToken,
+        user: {
+          id: String(data.usuario.id),
+          email: '', // Not available in 2FA response
+          nombre: data.usuario.nombre,
+          rol: (data.usuario.roles[0] || 'operario').toLowerCase(),
+        },
+        permissions,
+      };
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -96,9 +187,15 @@ export class RealAuthService implements AuthService {
 
   async getMe(): Promise<User> {
     try {
+      console.log('[auth.api] getMe called...');
       const response = await apiClient.get('auth/me').json();
-      return UserSchema.parse(response);
+      console.log('[auth.api] getMe raw response:', response);
+
+      // Unwrap the {success, data} envelope from backend
+      const wrapped = response as { success: boolean; data: unknown };
+      return wrapped.data as User;
     } catch (error) {
+      console.error('[auth.api] getMe error:', error);
       if (error instanceof ApiError) {
         throw error;
       }
@@ -108,9 +205,23 @@ export class RealAuthService implements AuthService {
 
   async getPredios(): Promise<Predio[]> {
     try {
+      console.log('[auth.api] getPredios called...');
       const response = await apiClient.get('predios').json();
-      return PredioArraySchema.parse(response);
+      console.log('[auth.api] getPredios raw response:', response);
+
+      // Unwrap the {success, data} envelope from backend
+      const wrapped = response as { success: boolean; data: unknown; page?: number; limit?: number; total?: number };
+      const data = wrapped.data;
+
+      // Check if data is already an array or needs to be extracted
+      if (Array.isArray(data)) {
+        return data as Predio[];
+      }
+
+      // If it's still an object, try to parse with schema anyway
+      return PredioArraySchema.parse(data);
     } catch (error) {
+      console.error('[auth.api] getPredios error:', error);
       if (error instanceof ApiError) {
         throw error;
       }
