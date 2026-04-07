@@ -55,13 +55,23 @@ export class Verify2faUseCase {
     }
 
     // 4. Compare OTP codes using bcrypt
+    console.log('[verify-2fa] Received code:', dto.codigo)
+    console.log('[verify-2fa] Stored code hash:', twoFactor.codigo ? 'exists' : 'null')
+    console.log('[verify-2fa] Expiration from DB:', twoFactor.fechaExpiracion)
+    console.log('[verify-2fa] Current time:', new Date().toISOString())
+    
     if (!twoFactor.codigo || !(await bcrypt.compare(dto.codigo, twoFactor.codigo))) {
+      console.log('[verify-2fa] Code comparison FAILED')
       await this.authRepo.incrementTwoFactorAttempts(usuarioId)
       throw new ValidationError({ codigo: ['Código inválido'] })
     }
+    
+    console.log('[verify-2fa] Code comparison PASSED')
 
     // 5. Check expiration
-    if (this.domainService.isOtpExpired(twoFactor.fechaExpiracion)) {
+    const isExpired = this.domainService.isOtpExpired(twoFactor.fechaExpiracion)
+    console.log('[verify-2fa] Is expired:', isExpired)
+    if (isExpired) {
       throw new UnauthorizedError('Código expirado. Solicita un nuevo código')
     }
 
