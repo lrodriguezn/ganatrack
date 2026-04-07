@@ -81,8 +81,9 @@ export class DrizzleAuthRepository implements IAuthRepository {
 
   async getPermisos(usuarioId: number): Promise<string[]> {
     // Get permissions from user's roles via roles_permisos
+    // Return format: "modulo:accion" (e.g., "animales:read")
     const rows = await this.db
-      .select({ nombre: usuariosPermisos.nombre })
+      .select({ modulo: usuariosPermisos.modulo, accion: usuariosPermisos.accion })
       .from(usuariosRolesAsignacion)
       .innerJoin(usuariosRoles, eq(usuariosRolesAsignacion.rolId, usuariosRoles.id))
       .innerJoin(rolesPermisos, eq(rolesPermisos.rolId, usuariosRoles.id))
@@ -95,7 +96,12 @@ export class DrizzleAuthRepository implements IAuthRepository {
         eq(usuariosPermisos.activo, 1),
       ))
 
-    return rows.map((r: { nombre: string }) => r.nombre)
+    // Build "modulo:accion" format, deduplicate
+    const permisosSet = new Set<string>()
+    for (const row of rows) {
+      permisosSet.add(`${row.modulo}:${row.accion}`)
+    }
+    return Array.from(permisosSet)
   }
 
   async getPredioIds(usuarioId: number): Promise<number[]> {
@@ -135,6 +141,17 @@ export class DrizzleAuthRepository implements IAuthRepository {
       .update(usuariosAutenticacionDosFactores)
       .set({
         codigo: hashedCode,
+        fechaExpiracion: expiresAt,
+        intentosFallidos: 0,
+        updatedAt: new Date(),
+      })
+      .where(eq(usuariosAutenticacionDosFactores.usuarioId, usuarioId))
+  }
+
+  async updateTwoFactorExpiry(usuarioId: number, expiresAt: Date): Promise<void> {
+    await this.db
+      .update(usuariosAutenticacionDosFactores)
+      .set({
         fechaExpiracion: expiresAt,
         intentosFallidos: 0,
         updatedAt: new Date(),

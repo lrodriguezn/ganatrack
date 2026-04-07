@@ -18,6 +18,7 @@ describe('LoginUseCase', () => {
       getPredioIds: vi.fn(),
       getTwoFactor: vi.fn(),
       saveTwoFactorCode: vi.fn(),
+      updateTwoFactorExpiry: vi.fn(),
       incrementTwoFactorAttempts: vi.fn(),
       resetTwoFactorAttempts: vi.fn(),
       saveRefreshToken: vi.fn(),
@@ -113,7 +114,7 @@ describe('LoginUseCase', () => {
         fechaExpiracion: null,
         intentosFallidos: 0,
       })
-      vi.mocked(mockAuthRepo.saveTwoFactorCode).mockResolvedValue(undefined)
+      vi.mocked(mockAuthRepo.updateTwoFactorExpiry).mockResolvedValue(undefined)
 
       const result = await loginUseCase.execute({
         email: 'test@example.com',

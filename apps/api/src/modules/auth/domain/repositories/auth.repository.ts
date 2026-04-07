@@ -13,6 +13,7 @@ export interface IAuthRepository {
     intentosFallidos: number
   } | null>
   saveTwoFactorCode(usuarioId: number, code: string, expiresAt: Date): Promise<void>
+  updateTwoFactorExpiry(usuarioId: number, expiresAt: Date): Promise<void>
   incrementTwoFactorAttempts(usuarioId: number): Promise<void>
   resetTwoFactorAttempts(usuarioId: number): Promise<void>
   saveRefreshToken(usuarioId: number, refreshToken: string, expiresAt: Date): Promise<void>

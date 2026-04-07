@@ -44,11 +44,11 @@ export class LoginUseCase {
     // 3. Check 2FA enabled
     const twoFactor = await this.authRepo.getTwoFactor(usuario.id)
     if (twoFactor && twoFactor.habilitado === 1) {
-      // Generate OTP and tempToken
-      const otpCode = this.domainService.generateOtpCode()
+      // Generate tempToken only - use the predefined 2FA code from DB
       const expiresAt = new Date(Date.now() + TWO_FA_CODE_TTL_MINUTES * 60 * 1000)
 
-      await this.authRepo.saveTwoFactorCode(usuario.id, otpCode, expiresAt)
+      // Update expiration and reset attempts WITHOUT changing the predefined code
+      await this.authRepo.updateTwoFactorExpiry(usuario.id, expiresAt)
 
       // Create tempToken with usuarioId encoded
       const tempToken = jwt.sign(
