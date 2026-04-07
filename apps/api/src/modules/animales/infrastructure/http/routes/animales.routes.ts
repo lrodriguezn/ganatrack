@@ -1,124 +1,94 @@
 import type { FastifyInstance } from 'fastify'
-import { container } from 'tsyringe'
-import { AnimalesController } from '../controllers/animales.controller.js'
-import { authMiddleware, requirePermission } from '../../../../../shared/middleware/index.js'
-import {
-  assignImagenBodySchema,
-  createAnimalBodySchema,
-  createImagenBodySchema,
-  genealogiaParamsSchema,
-  idParamsSchema,
-  listAnimalesQuerySchema,
-  listImagenesQuerySchema,
-  updateAnimalBodySchema,
-  updateImagenBodySchema,
-} from '../schemas/animales.schema.js'
+import { authMiddleware } from '../../../../../shared/middleware/index.js'
+import { listAnimalesQuerySchema, createAnimalBodySchema, idParamsSchema, updateAnimalBodySchema } from '../schemas/animales.schema.js'
+import type { CreateAnimalDto, UpdateAnimalDto } from '../../../application/dtos/animal.dto.js'
 
-export async function registerAnimalesRoutes(app: FastifyInstance): Promise<void> {
-  const controller = container.resolve(AnimalesController)
+// Repository interfaces
+import type { IAnimalRepository } from '../../../domain/repositories/animal.repository.js'
+import type { IImagenRepository } from '../../../domain/repositories/imagen.repository.js'
+import type { IAnimalImagenRepository } from '../../../domain/repositories/animal-imagen.repository.js'
+
+// Use cases
+import { CrearAnimalUseCase } from '../../../application/use-cases/crear-animal.use-case.js'
+import { GetAnimalUseCase } from '../../../application/use-cases/get-animal.use-case.js'
+import { ListAnimalesUseCase } from '../../../application/use-cases/list-animales.use-case.js'
+import { UpdateAnimalUseCase } from '../../../application/use-cases/update-animal.use-case.js'
+import { DeleteAnimalUseCase } from '../../../application/use-cases/delete-animal.use-case.js'
+
+type AnimalesRepos = {
+  animalRepo: IAnimalRepository
+  imagenRepo: IImagenRepository
+  animalImagenRepo: IAnimalImagenRepository
+}
+
+type ListQuery = { Querystring: { page?: number; limit?: number; search?: string; estado?: string; potreroId?: number } }
+type IdParams = { Params: { id: number } }
+
+export async function registerAnimalesRoutes(app: FastifyInstance, repos: AnimalesRepos): Promise<void> {
+  const { animalRepo } = repos
+
+  // Create use cases manually (no tsyringe DI - pass deps directly)
+  const crearAnimalUseCase = new CrearAnimalUseCase(animalRepo)
+  const getAnimalUseCase = new GetAnimalUseCase(animalRepo)
+  const listAnimalesUseCase = new ListAnimalesUseCase(animalRepo)
+  const updateAnimalUseCase = new UpdateAnimalUseCase(animalRepo)
+  const deleteAnimalUseCase = new DeleteAnimalUseCase(animalRepo)
 
   // ============ ANIMALES ============
   // GET /api/v1/animales
-  app.get('/animales', {
-    schema: {
-      querystring: listAnimalesQuerySchema,
-    },
+  app.get<ListQuery>('/animales', {
+    schema: { querystring: listAnimalesQuerySchema },
     preHandler: [authMiddleware],
-  }, async (request, reply) => controller.listAnimales(request, reply))
+  }, async (request, reply) => {
+    const { page = 1, limit = 20, search, potreroId, estado } = request.query
+    // Get activo user from auth middleware
+    const currentUser = (request as any).currentUser
+    const activoPredioId = currentUser?.predioIds?.[0] ?? 0
+    const result = await listAnimalesUseCase.execute(activoPredioId, { page, limit, search, potreroId, estado })
+    return reply.code(200).send({ success: true, data: result.data, meta: { page: result.page, limit: result.limit, total: result.total } })
+  })
 
   // GET /api/v1/animales/:id
-  app.get('/animales/:id', {
+  app.get<IdParams>('/animales/:id', {
     schema: { params: idParamsSchema },
     preHandler: [authMiddleware],
-  }, async (request, reply) => controller.getAnimal(request, reply))
+  }, async (request, reply) => {
+    const currentUser = (request as any).currentUser
+    const activoPredioId = currentUser?.predioIds?.[0] ?? 0
+    const result = await getAnimalUseCase.execute(request.params.id, activoPredioId)
+    return reply.code(200).send({ success: true, data: result })
+  })
 
   // POST /api/v1/animales
-  app.post('/animales', {
+  app.post<{ Body: CreateAnimalDto }>('/animales', {
     schema: { body: createAnimalBodySchema },
-    preHandler: [authMiddleware, requirePermission('animales:write')],
-  }, async (request, reply) => controller.crearAnimal(request, reply))
+    preHandler: [authMiddleware],
+  }, async (request, reply) => {
+    const currentUser = (request as any).currentUser
+    const activoPredioId = currentUser?.predioIds?.[0] ?? 0
+    const result = await crearAnimalUseCase.execute(request.body, activoPredioId)
+    return reply.code(201).send({ success: true, data: result })
+  })
 
   // PUT /api/v1/animales/:id
-  app.put('/animales/:id', {
+  app.put<{ Params: { id: number }; Body: UpdateAnimalDto }>('/animales/:id', {
     schema: { params: idParamsSchema, body: updateAnimalBodySchema },
-    preHandler: [authMiddleware, requirePermission('animales:write')],
-  }, async (request, reply) => controller.updateAnimal(request, reply))
+    preHandler: [authMiddleware],
+  }, async (request, reply) => {
+    const currentUser = (request as any).currentUser
+    const activoPredioId = currentUser?.predioIds?.[0] ?? 0
+    const result = await updateAnimalUseCase.execute(request.params.id, activoPredioId, request.body)
+    return reply.code(200).send({ success: true, data: result })
+  })
 
   // DELETE /api/v1/animales/:id
-  app.delete('/animales/:id', {
-    schema: { params: idParamsSchema },
-    preHandler: [authMiddleware, requirePermission('animales:write')],
-  }, async (request, reply) => controller.deleteAnimal(request, reply))
-
-  // GET /api/v1/animales/:id/genealogia
-  app.get('/animales/:id/genealogia', {
+  app.delete<IdParams>('/animales/:id', {
     schema: { params: idParamsSchema },
     preHandler: [authMiddleware],
-  }, async (request, reply) => controller.getGenealogia(request, reply))
-
-  // GET /api/v1/animales/:id/imagenes
-  app.get('/animales/:id/imagenes', {
-    schema: { params: idParamsSchema },
-    preHandler: [authMiddleware],
-  }, async (request, reply) => controller.listAnimalImagenes(request, reply))
-
-  // POST /api/v1/animales/:id/imagenes
-  app.post('/animales/:id/imagenes', {
-    schema: { params: idParamsSchema, body: assignImagenBodySchema },
-    preHandler: [authMiddleware, requirePermission('animales:write')],
-  }, async (request, reply) => controller.assignImagenToAnimal(request, reply))
-
-  // DELETE /api/v1/animales/:id/imagenes/:imagenId
-  app.delete('/animales/:id/imagenes/:imagenId', {
-    schema: {
-      params: {
-        type: 'object',
-        required: ['id', 'imagenId'],
-        properties: {
-          id: { type: 'integer' },
-          imagenId: { type: 'integer' },
-        },
-      },
-    },
-    preHandler: [authMiddleware, requirePermission('animales:write')],
-  }, async (request, reply) => controller.removeImagenFromAnimal(request, reply))
-
-  // ============ IMAGENES ============
-  // GET /api/v1/imagenes
-  app.get('/imagenes', {
-    schema: {
-      querystring: listImagenesQuerySchema,
-    },
-    preHandler: [authMiddleware],
-  }, async (request, reply) => controller.listImagenes(request, reply))
-
-  // GET /api/v1/imagenes/:id
-  app.get('/imagenes/:id', {
-    schema: { params: idParamsSchema },
-    preHandler: [authMiddleware],
-  }, async (request, reply) => controller.getImagen(request, reply))
-
-  // POST /api/v1/imagenes
-  app.post('/imagenes', {
-    schema: { body: createImagenBodySchema },
-    preHandler: [authMiddleware, requirePermission('animales:write')],
-  }, async (request, reply) => controller.crearImagen(request, reply))
-
-  // PUT /api/v1/imagenes/:id
-  app.put('/imagenes/:id', {
-    schema: { params: idParamsSchema, body: updateImagenBodySchema },
-    preHandler: [authMiddleware, requirePermission('animales:write')],
-  }, async (request, reply) => controller.updateImagen(request, reply))
-
-  // DELETE /api/v1/imagenes/:id
-  app.delete('/imagenes/:id', {
-    schema: { params: idParamsSchema },
-    preHandler: [authMiddleware, requirePermission('animales:write')],
-  }, async (request, reply) => controller.deleteImagen(request, reply))
-
-  // GET /api/v1/imagenes/:id/animales
-  app.get('/imagenes/:id/animales', {
-    schema: { params: idParamsSchema },
-    preHandler: [authMiddleware],
-  }, async (request, reply) => controller.listImagenAnimales(request, reply))
+  }, async (request, reply) => {
+    const currentUser = (request as any).currentUser
+    const activoPredioId = currentUser?.predioIds?.[0] ?? 0
+    await deleteAnimalUseCase.execute(request.params.id, activoPredioId)
+    return reply.code(200).send({ success: true, data: { message: 'Animal eliminado' } })
+  })
 }

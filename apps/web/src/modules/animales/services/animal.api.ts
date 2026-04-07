@@ -23,13 +23,12 @@ import type { AnimalService } from './animal.service';
 export class RealAnimalService implements AnimalService {
   async getAll(filters: AnimalFilters): Promise<PaginatedAnimales> {
     const params = new URLSearchParams();
-    params.set('predioId', String(filters.predioId));
     params.set('page', String(filters.page));
     params.set('limit', String(filters.limit));
     if (filters.search) params.set('search', filters.search);
-    if (filters.sexoKey !== undefined) params.set('sexo_key', String(filters.sexoKey));
-    if (filters.estadoAnimalKey !== undefined) params.set('estado_animal_key', String(filters.estadoAnimalKey));
-    if (filters.potreroId !== undefined) params.set('potrero_id', String(filters.potreroId));
+    if (filters.sexoKey !== undefined) params.set('sexoKey', String(filters.sexoKey));
+    if (filters.estadoAnimalKey !== undefined) params.set('estado', String(filters.estadoAnimalKey));
+    if (filters.potreroId !== undefined) params.set('potreroId', String(filters.potreroId));
 
     const response = await apiClient.get(`animales?${params.toString()}`);
     return response.json();
