@@ -54,10 +54,13 @@ export function useLogin(): UseLoginReturn {
     setIsLoading(true);
 
     try {
+      console.log('[use-login] Calling authService.login...');
       const response = await authService.login(data);
+      console.log('[use-login] Login response:', response);
 
       // Check if 2FA is required
       if (isTwoFactorResponse(response)) {
+        console.log('[use-login] 2FA required, redirecting...');
         setIsLoading(false);
         // Redirect to 2FA page with tempToken
         const redirectUrl = searchParams.get('redirect');
@@ -69,6 +72,7 @@ export function useLogin(): UseLoginReturn {
       }
 
       // Direct login success — AuthResponse
+      console.log('[use-login] Login successful, setting auth...');
       const authData = response as AuthResponse;
       setAuth({
         accessToken: authData.accessToken,
@@ -92,15 +96,18 @@ export function useLogin(): UseLoginReturn {
       }
 
       setIsLoading(false);
+      console.log('[use-login] Redirecting to dashboard...');
 
       // Redirect to dashboard or original requested page
       const redirectUrl = searchParams.get('redirect');
+      console.log('[use-login] redirectUrl:', redirectUrl);
       if (redirectUrl && isValidRedirect(redirectUrl) && redirectUrl !== '/') {
         router.push(redirectUrl);
       } else {
         router.push('/dashboard');
       }
     } catch (err) {
+      console.error('[use-login] Error during login:', err);
       setIsLoading(false);
 
       if (err instanceof ApiError) {

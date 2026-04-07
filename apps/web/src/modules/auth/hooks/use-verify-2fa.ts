@@ -137,8 +137,8 @@ export function useVerify2FA(tempToken: string): UseVerify2FAReturn {
       // Redirect to dashboard or original requested page
       const redirectUrl = searchParams.get('redirect');
       console.log('[use-verify-2fa] redirectUrl:', redirectUrl);
-      // Allow '/' or any valid path (but exclude root from isValidRedirect, so we handle it)
-      if (redirectUrl && (redirectUrl === '/' || isValidRedirect(redirectUrl))) {
+      // If redirect is root '/' or invalid, go to dashboard
+      if (redirectUrl && redirectUrl !== '/' && isValidRedirect(redirectUrl)) {
         router.push(redirectUrl);
       } else {
         router.push('/dashboard');
