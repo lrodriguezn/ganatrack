@@ -1,7 +1,7 @@
 // Predio schemas
 export const createPredioBodySchema = {
   type: 'object',
-  required: ['codigo', 'nombre'],
+  required: ['nombre'],
   properties: {
     codigo: { type: 'string', minLength: 1, maxLength: 20 },
     nombre: { type: 'string', minLength: 1, maxLength: 100 },
@@ -11,6 +11,8 @@ export const createPredioBodySchema = {
     areaHectareas: { type: 'number', minimum: 0 },
     capacidadMaxima: { type: 'integer', minimum: 0 },
     tipoExplotacionId: { type: 'integer' },
+    tipo: { type: 'string', enum: ['lechería', 'cría', 'doble propósito', 'engorde'] },
+    estado: { type: 'string', enum: ['activo', 'inactivo'] },
   },
   additionalProperties: false,
 } as const
@@ -26,6 +28,8 @@ export const updatePredioBodySchema = {
     areaHectareas: { type: 'number', minimum: 0 },
     capacidadMaxima: { type: 'integer', minimum: 0 },
     tipoExplotacionId: { type: 'integer' },
+    tipo: { type: 'string', enum: ['lechería', 'cría', 'doble propósito', 'engorde'] },
+    estado: { type: 'string', enum: ['activo', 'inactivo'] },
   },
   additionalProperties: false,
 } as const
