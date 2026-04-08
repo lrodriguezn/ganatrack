@@ -2,7 +2,7 @@ import { sqliteTable, integer, text, unique } from 'drizzle-orm/sqlite-core'
 
 // Import predios for reference resolution
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { predios } from './predios.js'
+import { predios } from './predios'
 
 // usuarios - Main user table
 export const usuarios = sqliteTable('usuarios', {

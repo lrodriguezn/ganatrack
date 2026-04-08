@@ -2,9 +2,9 @@ import { sqliteTable, integer, text, index, unique } from 'drizzle-orm/sqlite-co
 
 // Forward references for foreign keys (resolved in barrel export)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { predios } from './predios.js'
+import { predios } from './predios'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { usuarios } from './usuarios.js'
+import { usuarios } from './usuarios'
 
 // reportes_exportaciones - Report export jobs tracking
 export const reportesExportaciones = sqliteTable('reportes_exportaciones', {

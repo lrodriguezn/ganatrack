@@ -2,9 +2,9 @@ import { sqliteTable, integer, text, real, unique, index } from 'drizzle-orm/sql
 
 // Import required tables for references
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { predios } from './predios.js'
+import { predios } from './predios'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { potreros } from './predios.js'
+import { potreros } from './predios'
 
 // imagenes - Image storage table
 export const imagenes = sqliteTable('imagenes', {

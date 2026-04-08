@@ -2,9 +2,9 @@ import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core'
 
 // Import required tables for references
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { predios } from './predios.js'
+import { predios } from './predios'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { imagenes } from './animales.js'
+import { imagenes } from './animales'
 
 // veterinarios - Veterinarians
 export const veterinarios = sqliteTable('veterinarios', {

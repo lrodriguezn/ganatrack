@@ -18,7 +18,7 @@ import {
   rolesPermisos,
   usuariosPredios,
   usuariosRolesAsignacion,
-} from './usuarios.js'
+} from './usuarios'
 
 import {
   // predios schema
@@ -28,14 +28,14 @@ import {
   lotes,
   grupos,
   configParametrosPredio,
-} from './predios.js'
+} from './predios'
 
 import {
   // animales schema
   imagenes,
   animales,
   animalesImagenes,
-} from './animales.js'
+} from './animales'
 
 import {
   // maestros schema
@@ -47,7 +47,7 @@ import {
   causasMuerte,
   lugaresCompras,
   lugaresVentas,
-} from './maestros.js'
+} from './maestros'
 
 import {
   // servicios schema
@@ -60,7 +60,7 @@ import {
   serviciosVeterinariosGrupal,
   serviciosVeterinariosAnimales,
   serviciosVeterinariosProductos,
-} from './servicios.js'
+} from './servicios'
 
 import {
   // configuracion schema
@@ -71,25 +71,25 @@ import {
   configColores,
   configRangosEdades,
   configKeyValues,
-} from './configuracion.js'
+} from './configuracion'
 
 import {
   // productos schema
   productos,
   productosImagenes,
-} from './productos.js'
+} from './productos'
 
 import {
   // reportes schema
   reportesExportaciones,
-} from './reportes.js'
+} from './reportes'
 
 import {
   // notificaciones schema
   notificaciones,
   notificacionesPreferencias,
   notificacionesPushTokens,
-} from './notificaciones.js'
+} from './notificaciones'
 
 // =============================================================================
 // Re-export all tables
@@ -158,109 +158,109 @@ export {
 // =============================================================================
 // Type exports
 // =============================================================================
-export type { Usuario } from './usuarios.js'
-export type { NuevoUsuario } from './usuarios.js'
-export type { UsuarioContrasena } from './usuarios.js'
-export type { NuevoUsuarioContrasena } from './usuarios.js'
-export type { UsuarioHistorialContrasena } from './usuarios.js'
-export type { NuevoUsuarioHistorialContrasena } from './usuarios.js'
-export type { UsuarioLogin } from './usuarios.js'
-export type { NuevoUsuarioLogin } from './usuarios.js'
-export type { UsuarioAutenticacionDosFactores } from './usuarios.js'
-export type { NuevoUsuarioAutenticacionDosFactores } from './usuarios.js'
-export type { UsuarioRol } from './usuarios.js'
-export type { NuevoUsuarioRol } from './usuarios.js'
-export type { UsuarioPermiso } from './usuarios.js'
-export type { NuevoUsuarioPermiso } from './usuarios.js'
-export type { RolPermiso } from './usuarios.js'
-export type { NuevoRolPermiso } from './usuarios.js'
-export type { UsuarioPredio } from './usuarios.js'
-export type { NuevoUsuarioPredio } from './usuarios.js'
-export type { UsuarioRolesAsignacion } from './usuarios.js'
-export type { NuevoUsuarioRolesAsignacion } from './usuarios.js'
+export type { Usuario } from './usuarios'
+export type { NuevoUsuario } from './usuarios'
+export type { UsuarioContrasena } from './usuarios'
+export type { NuevoUsuarioContrasena } from './usuarios'
+export type { UsuarioHistorialContrasena } from './usuarios'
+export type { NuevoUsuarioHistorialContrasena } from './usuarios'
+export type { UsuarioLogin } from './usuarios'
+export type { NuevoUsuarioLogin } from './usuarios'
+export type { UsuarioAutenticacionDosFactores } from './usuarios'
+export type { NuevoUsuarioAutenticacionDosFactores } from './usuarios'
+export type { UsuarioRol } from './usuarios'
+export type { NuevoUsuarioRol } from './usuarios'
+export type { UsuarioPermiso } from './usuarios'
+export type { NuevoUsuarioPermiso } from './usuarios'
+export type { RolPermiso } from './usuarios'
+export type { NuevoRolPermiso } from './usuarios'
+export type { UsuarioPredio } from './usuarios'
+export type { NuevoUsuarioPredio } from './usuarios'
+export type { UsuarioRolesAsignacion } from './usuarios'
+export type { NuevoUsuarioRolesAsignacion } from './usuarios'
 
-export type { Predio } from './predios.js'
-export type { NuevoPredio } from './predios.js'
-export type { Potrero } from './predios.js'
-export type { NuevoPotrero } from './predios.js'
-export type { Sector } from './predios.js'
-export type { NuevoSector } from './predios.js'
-export type { Lote } from './predios.js'
-export type { NuevoLote } from './predios.js'
-export type { Grupo } from './predios.js'
-export type { NuevoGrupo } from './predios.js'
-export type { ConfigParametroPredio } from './predios.js'
-export type { NuevoConfigParametroPredio } from './predios.js'
+export type { Predio } from './predios'
+export type { NuevoPredio } from './predios'
+export type { Potrero } from './predios'
+export type { NuevoPotrero } from './predios'
+export type { Sector } from './predios'
+export type { NuevoSector } from './predios'
+export type { Lote } from './predios'
+export type { NuevoLote } from './predios'
+export type { Grupo } from './predios'
+export type { NuevoGrupo } from './predios'
+export type { ConfigParametroPredio } from './predios'
+export type { NuevoConfigParametroPredio } from './predios'
 
-export type { Imagen } from './animales.js'
-export type { NuevaImagen } from './animales.js'
-export type { Animal } from './animales.js'
-export type { NuevoAnimal } from './animales.js'
-export type { AnimalImagen } from './animales.js'
-export type { NuevaAnimalImagen } from './animales.js'
+export type { Imagen } from './animales'
+export type { NuevaImagen } from './animales'
+export type { Animal } from './animales'
+export type { NuevoAnimal } from './animales'
+export type { AnimalImagen } from './animales'
+export type { NuevaAnimalImagen } from './animales'
 
-export type { Veterinario } from './maestros.js'
-export type { NuevoVeterinario } from './maestros.js'
-export type { Propietario } from './maestros.js'
-export type { NuevoPropietario } from './maestros.js'
-export type { Hierro } from './maestros.js'
-export type { NuevoHierro } from './maestros.js'
-export type { DiagnosticoVeterinario } from './maestros.js'
-export type { NuevoDiagnosticoVeterinario } from './maestros.js'
-export type { MotivoVenta } from './maestros.js'
-export type { NuevoMotivoVenta } from './maestros.js'
-export type { CausaMuerte } from './maestros.js'
-export type { NuevaCausaMuerte } from './maestros.js'
-export type { LugarCompra } from './maestros.js'
-export type { NuevoLugarCompra } from './maestros.js'
-export type { LugarVenta } from './maestros.js'
-export type { NuevoLugarVenta } from './maestros.js'
+export type { Veterinario } from './maestros'
+export type { NuevoVeterinario } from './maestros'
+export type { Propietario } from './maestros'
+export type { NuevoPropietario } from './maestros'
+export type { Hierro } from './maestros'
+export type { NuevoHierro } from './maestros'
+export type { DiagnosticoVeterinario } from './maestros'
+export type { NuevoDiagnosticoVeterinario } from './maestros'
+export type { MotivoVenta } from './maestros'
+export type { NuevoMotivoVenta } from './maestros'
+export type { CausaMuerte } from './maestros'
+export type { NuevaCausaMuerte } from './maestros'
+export type { LugarCompra } from './maestros'
+export type { NuevoLugarCompra } from './maestros'
+export type { LugarVenta } from './maestros'
+export type { NuevoLugarVenta } from './maestros'
 
-export type { ServicioPalpacionGrupal } from './servicios.js'
-export type { NuevoServicioPalpacionGrupal } from './servicios.js'
-export type { ServicioPalpacionAnimal } from './servicios.js'
-export type { NuevoServicioPalpacionAnimal } from './servicios.js'
-export type { ServicioInseminacionGrupal } from './servicios.js'
-export type { NuevoServicioInseminacionGrupal } from './servicios.js'
-export type { ServicioInseminacionAnimal } from './servicios.js'
-export type { NuevoServicioInseminacionAnimal } from './servicios.js'
-export type { ServicioPartoAnimal } from './servicios.js'
-export type { NuevoServicioPartoAnimal } from './servicios.js'
-export type { ServicioPartoCria } from './servicios.js'
-export type { NuevoServicioPartoCria } from './servicios.js'
-export type { ServicioVeterinarioGrupal } from './servicios.js'
-export type { NuevoServicioVeterinarioGrupal } from './servicios.js'
-export type { ServicioVeterinarioAnimal } from './servicios.js'
-export type { NuevoServicioVeterinarioAnimal } from './servicios.js'
-export type { ServicioVeterinarioProducto } from './servicios.js'
-export type { NuevoServicioVeterinarioProducto } from './servicios.js'
+export type { ServicioPalpacionGrupal } from './servicios'
+export type { NuevoServicioPalpacionGrupal } from './servicios'
+export type { ServicioPalpacionAnimal } from './servicios'
+export type { NuevoServicioPalpacionAnimal } from './servicios'
+export type { ServicioInseminacionGrupal } from './servicios'
+export type { NuevoServicioInseminacionGrupal } from './servicios'
+export type { ServicioInseminacionAnimal } from './servicios'
+export type { NuevoServicioInseminacionAnimal } from './servicios'
+export type { ServicioPartoAnimal } from './servicios'
+export type { NuevoServicioPartoAnimal } from './servicios'
+export type { ServicioPartoCria } from './servicios'
+export type { NuevoServicioPartoCria } from './servicios'
+export type { ServicioVeterinarioGrupal } from './servicios'
+export type { NuevoServicioVeterinarioGrupal } from './servicios'
+export type { ServicioVeterinarioAnimal } from './servicios'
+export type { NuevoServicioVeterinarioAnimal } from './servicios'
+export type { ServicioVeterinarioProducto } from './servicios'
+export type { NuevoServicioVeterinarioProducto } from './servicios'
 
-export type { ConfigRaza } from './configuracion.js'
-export type { NuevoConfigRaza } from './configuracion.js'
-export type { ConfigCondicionCorporal } from './configuracion.js'
-export type { NuevoConfigCondicionCorporal } from './configuracion.js'
-export type { ConfigTipoExplotacion } from './configuracion.js'
-export type { NuevoConfigTipoExplotacion } from './configuracion.js'
-export type { ConfigCalidadAnimal } from './configuracion.js'
-export type { NuevoConfigCalidadAnimal } from './configuracion.js'
-export type { ConfigColor } from './configuracion.js'
-export type { NuevoConfigColor } from './configuracion.js'
-export type { ConfigRangoEdad } from './configuracion.js'
-export type { NuevoConfigRangoEdad } from './configuracion.js'
-export type { ConfigKeyValue } from './configuracion.js'
-export type { NuevoConfigKeyValue } from './configuracion.js'
+export type { ConfigRaza } from './configuracion'
+export type { NuevoConfigRaza } from './configuracion'
+export type { ConfigCondicionCorporal } from './configuracion'
+export type { NuevoConfigCondicionCorporal } from './configuracion'
+export type { ConfigTipoExplotacion } from './configuracion'
+export type { NuevoConfigTipoExplotacion } from './configuracion'
+export type { ConfigCalidadAnimal } from './configuracion'
+export type { NuevoConfigCalidadAnimal } from './configuracion'
+export type { ConfigColor } from './configuracion'
+export type { NuevoConfigColor } from './configuracion'
+export type { ConfigRangoEdad } from './configuracion'
+export type { NuevoConfigRangoEdad } from './configuracion'
+export type { ConfigKeyValue } from './configuracion'
+export type { NuevoConfigKeyValue } from './configuracion'
 
-export type { Producto } from './productos.js'
-export type { NuevoProducto } from './productos.js'
-export type { ProductoImagen } from './productos.js'
-export type { NuevoProductoImagen } from './productos.js'
+export type { Producto } from './productos'
+export type { NuevoProducto } from './productos'
+export type { ProductoImagen } from './productos'
+export type { NuevoProductoImagen } from './productos'
 
-export type { ReporteExportacion } from './reportes.js'
-export type { NuevoReporteExportacion } from './reportes.js'
+export type { ReporteExportacion } from './reportes'
+export type { NuevoReporteExportacion } from './reportes'
 
-export type { Notificacion } from './notificaciones.js'
-export type { NuevaNotificacion } from './notificaciones.js'
-export type { NotificacionPreferencia } from './notificaciones.js'
-export type { NuevaNotificacionPreferencia } from './notificaciones.js'
-export type { NotificacionPushToken } from './notificaciones.js'
-export type { NuevaNotificacionPushToken } from './notificaciones.js'
+export type { Notificacion } from './notificaciones'
+export type { NuevaNotificacion } from './notificaciones'
+export type { NotificacionPreferencia } from './notificaciones'
+export type { NuevaNotificacionPreferencia } from './notificaciones'
+export type { NotificacionPushToken } from './notificaciones'
+export type { NuevaNotificacionPushToken } from './notificaciones'

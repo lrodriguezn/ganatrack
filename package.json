@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "turbo dev",
+    "dev:api": "turbo dev --filter=@ganatrack/api",
+    "dev:web": "turbo dev --filter=@ganatrack/web",
     "build": "turbo build",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",

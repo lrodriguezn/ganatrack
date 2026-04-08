@@ -1,5 +1,5 @@
 import { sqliteTable, integer, text, unique } from 'drizzle-orm/sqlite-core'
-import { usuarios } from './usuarios.js'
+import { usuarios } from './usuarios'
 
 // ============================================================================
 // NOTIFICACIONES
