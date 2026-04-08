@@ -114,11 +114,11 @@ export function PredioTable({
       ),
     },
     {
-      accessorKey: 'hectares',
+      accessorKey: 'areaHectareas',
       header: 'Hectáreas',
       cell: ({ row }) => (
         <span className="text-gray-700 dark:text-gray-300">
-          {row.original.hectares.toLocaleString('es-CO')}
+          {row.original.areaHectareas.toLocaleString('es-CO')}
         </span>
       ),
     },

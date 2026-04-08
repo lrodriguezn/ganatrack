@@ -47,7 +47,7 @@ const MOCK_PREDIOS: MockPredio[] = [
     departamento: 'Antioquia',
     municipio: 'Medellín',
     vereda: 'El Carmen',
-    hectares: 150.5,
+    areaHectareas: 150.5,
     tipo: 'doble propósito',
     estado: 'activo',
   },
@@ -57,7 +57,7 @@ const MOCK_PREDIOS: MockPredio[] = [
     departamento: 'Cundinamarca',
     municipio: 'Bogotá',
     vereda: 'La Calera',
-    hectares: 320.0,
+    areaHectareas: 320.0,
     tipo: 'lechería',
     estado: 'activo',
   },
@@ -67,7 +67,7 @@ const MOCK_PREDIOS: MockPredio[] = [
     departamento: 'Caldas',
     municipio: 'Manizales',
     vereda: 'La Reina',
-    hectares: 85.3,
+    areaHectareas: 85.3,
     tipo: 'cría',
     estado: 'activo',
   },
@@ -77,7 +77,7 @@ const MOCK_PREDIOS: MockPredio[] = [
     departamento: 'Tolima',
     municipio: 'Ibagué',
     vereda: 'Coello',
-    hectares: 450.0,
+    areaHectareas: 450.0,
     tipo: 'engorde',
     estado: 'activo',
   },
@@ -87,7 +87,7 @@ const MOCK_PREDIOS: MockPredio[] = [
     departamento: 'Santander',
     municipio: 'Bucaramanga',
     vereda: 'Rio Negro',
-    hectares: 200.75,
+    areaHectareas: 200.75,
     tipo: 'doble propósito',
     estado: 'inactivo',
   },
@@ -100,37 +100,37 @@ interface MockPotrero extends Omit<Potrero, 'id' | 'predioId'> {
 
 const MOCK_POTREROS: MockPotrero[] = [
   // Predio 1 - Finca La Esperanza (150.5 has)
-  { id: 1, predioId: 1, codigo: 'PE-01', nombre: 'Potrero Norte', hectares: 25.0, tipoPasto: 'Brachiaria Decumbens', capacidadMaxima: 50, estado: 'activo' },
-  { id: 2, predioId: 1, codigo: 'PE-02', nombre: 'Potrero Sur', hectares: 20.5, tipoPasto: 'Guinea Panic', capacidadMaxima: 40, estado: 'activo' },
-  { id: 3, predioId: 1, codigo: 'PE-03', nombre: 'Potrero Este', hectares: 18.0, tipoPasto: 'Brachiaria Decumbens', capacidadMaxima: 35, estado: 'en_descanso' },
-  { id: 4, predioId: 1, codigo: 'PE-04', nombre: 'Potrero Oeste', hectares: 22.0, tipoPasto: 'Angleton', capacidadMaxima: 45, estado: 'activo' },
-  { id: 5, predioId: 1, codigo: 'PE-05', nombre: 'Potrero Central', hectares: 30.0, tipoPasto: 'Brachiaria Hybrid', capacidadMaxima: 60, estado: 'activo' },
-  { id: 6, predioId: 1, codigo: 'PE-06', nombre: 'Potrero Loma', hectares: 35.0, tipoPasto: 'Jaragua', capacidadMaxima: 70, estado: 'activo' },
+  { id: 1, predioId: 1, codigo: 'PE-01', nombre: 'Potrero Norte', areaHectareas: 25.0, tipoPasto: 'Brachiaria Decumbens', capacidadMaxima: 50, estado: 'activo' },
+  { id: 2, predioId: 1, codigo: 'PE-02', nombre: 'Potrero Sur', areaHectareas: 20.5, tipoPasto: 'Guinea Panic', capacidadMaxima: 40, estado: 'activo' },
+  { id: 3, predioId: 1, codigo: 'PE-03', nombre: 'Potrero Este', areaHectareas: 18.0, tipoPasto: 'Brachiaria Decumbens', capacidadMaxima: 35, estado: 'en_descanso' },
+  { id: 4, predioId: 1, codigo: 'PE-04', nombre: 'Potrero Oeste', areaHectareas: 22.0, tipoPasto: 'Angleton', capacidadMaxima: 45, estado: 'activo' },
+  { id: 5, predioId: 1, codigo: 'PE-05', nombre: 'Potrero Central', areaHectareas: 30.0, tipoPasto: 'Brachiaria Hybrid', capacidadMaxima: 60, estado: 'activo' },
+  { id: 6, predioId: 1, codigo: 'PE-06', nombre: 'Potrero Loma', areaHectareas: 35.0, tipoPasto: 'Jaragua', capacidadMaxima: 70, estado: 'activo' },
 
   // Predio 2 - Hacienda El Roble (320 has)
-  { id: 7, predioId: 2, codigo: 'HER-01', nombre: 'Sector A - Alta', hectares: 40.0, tipoPasto: 'Kikuyu', capacidadMaxima: 80, estado: 'activo' },
-  { id: 8, predioId: 2, codigo: 'HER-02', nombre: 'Sector A - Baja', hectares: 45.0, tipoPasto: 'Kikuyu', capacidadMaxima: 90, estado: 'activo' },
-  { id: 9, predioId: 2, codigo: 'HER-03', nombre: 'Sector B', hectares: 50.0, tipoPasto: 'Ryegrass', capacidadMaxima: 100, estado: 'en_descanso' },
-  { id: 10,predioId: 2, codigo: 'HER-04', nombre: 'Sector C', hectares: 55.0, tipoPasto: 'Festuca', capacidadMaxima: 110, estado: 'activo' },
-  { id: 11,predioId: 2, codigo: 'HER-05', nombre: 'Sector D', hectares: 60.0, tipoPasto: 'Bluegrass', capacidadMaxima: 120, estado: 'activo' },
-  { id: 12,predioId: 2, codigo: 'HER-06', nombre: 'Potrero Loma', hectares: 70.0, tipoPasto: 'Kikuyu', capacidadMaxima: 140, estado: 'activo' },
+  { id: 7, predioId: 2, codigo: 'HER-01', nombre: 'Sector A - Alta', areaHectareas: 40.0, tipoPasto: 'Kikuyu', capacidadMaxima: 80, estado: 'activo' },
+  { id: 8, predioId: 2, codigo: 'HER-02', nombre: 'Sector A - Baja', areaHectareas: 45.0, tipoPasto: 'Kikuyu', capacidadMaxima: 90, estado: 'activo' },
+  { id: 9, predioId: 2, codigo: 'HER-03', nombre: 'Sector B', areaHectareas: 50.0, tipoPasto: 'Ryegrass', capacidadMaxima: 100, estado: 'en_descanso' },
+  { id: 10,predioId: 2, codigo: 'HER-04', nombre: 'Sector C', areaHectareas: 55.0, tipoPasto: 'Festuca', capacidadMaxima: 110, estado: 'activo' },
+  { id: 11,predioId: 2, codigo: 'HER-05', nombre: 'Sector D', areaHectareas: 60.0, tipoPasto: 'Bluegrass', capacidadMaxima: 120, estado: 'activo' },
+  { id: 12,predioId: 2, codigo: 'HER-06', nombre: 'Potrero Loma', areaHectareas: 70.0, tipoPasto: 'Kikuyu', capacidadMaxima: 140, estado: 'activo' },
 
   // Predio 3 - Finca San José (85.3 has)
-  { id: 13,predioId: 3, codigo: 'FSJ-01', nombre: 'Alto', hectares: 20.0, tipoPasto: 'Brachiaria', capacidadMaxima: 40, estado: 'activo' },
-  { id: 14,predioId: 3, codigo: 'FSJ-02', nombre: 'Medio', hectares: 25.0, tipoPasto: 'Guinea', capacidadMaxima: 50, estado: 'activo' },
-  { id: 15,predioId: 3, codigo: 'FSJ-03', nombre: 'Bajo', hectares: 40.3, tipoPasto: 'Brachiaria', capacidadMaxima: 80, estado: 'en_descanso' },
+  { id: 13,predioId: 3, codigo: 'FSJ-01', nombre: 'Alto', areaHectareas: 20.0, tipoPasto: 'Brachiaria', capacidadMaxima: 40, estado: 'activo' },
+  { id: 14,predioId: 3, codigo: 'FSJ-02', nombre: 'Medio', areaHectareas: 25.0, tipoPasto: 'Guinea', capacidadMaxima: 50, estado: 'activo' },
+  { id: 15,predioId: 3, codigo: 'FSJ-03', nombre: 'Bajo', areaHectareas: 40.3, tipoPasto: 'Brachiaria', capacidadMaxima: 80, estado: 'en_descanso' },
 
   // Predio 4 - Hacienda Santa María (450 has)
-  { id: 16,predioId: 4, codigo: 'HSM-01', nombre: 'Norte Grande', hectares: 75.0, tipoPasto: 'Angleton', capacidadMaxima: 150, estado: 'activo' },
-  { id: 17,predioId: 4, codigo: 'HSM-02', nombre: 'Sur Grande', hectares: 80.0, tipoPasto: 'Brachiaria', capacidadMaxima: 160, estado: 'activo' },
-  { id: 18,predioId: 4, codigo: 'HSM-03', nombre: 'Este', hectares: 70.0, tipoPasto: 'Guinea', capacidadMaxima: 140, estado: 'activo' },
-  { id: 19,predioId: 4, codigo: 'HSM-04', nombre: 'Oeste', hectares: 65.0, tipoPasto: 'Brachiaria', capacidadMaxima: 130, estado: 'en_descanso' },
-  { id: 20,predioId: 4, codigo: 'HSM-05', nombre: 'Central', hectares: 80.0, tipoPasto: 'Angleton', capacidadMaxima: 160, estado: 'activo' },
-  { id: 21,predioId: 4, codigo: 'HSM-06', nombre: 'Loma', hectares: 80.0, tipoPasto: 'Jaragua', capacidadMaxima: 160, estado: 'activo' },
+  { id: 16,predioId: 4, codigo: 'HSM-01', nombre: 'Norte Grande', areaHectareas: 75.0, tipoPasto: 'Angleton', capacidadMaxima: 150, estado: 'activo' },
+  { id: 17,predioId: 4, codigo: 'HSM-02', nombre: 'Sur Grande', areaHectareas: 80.0, tipoPasto: 'Brachiaria', capacidadMaxima: 160, estado: 'activo' },
+  { id: 18,predioId: 4, codigo: 'HSM-03', nombre: 'Este', areaHectareas: 70.0, tipoPasto: 'Guinea', capacidadMaxima: 140, estado: 'activo' },
+  { id: 19,predioId: 4, codigo: 'HSM-04', nombre: 'Oeste', areaHectareas: 65.0, tipoPasto: 'Brachiaria', capacidadMaxima: 130, estado: 'en_descanso' },
+  { id: 20,predioId: 4, codigo: 'HSM-05', nombre: 'Central', areaHectareas: 80.0, tipoPasto: 'Angleton', capacidadMaxima: 160, estado: 'activo' },
+  { id: 21,predioId: 4, codigo: 'HSM-06', nombre: 'Loma', areaHectareas: 80.0, tipoPasto: 'Jaragua', capacidadMaxima: 160, estado: 'activo' },
 
   // Predio 5 - Finca El Porvenir (200.75 has) - Inactivo
-  { id: 22,predioId: 5, codigo: 'FEP-01', nombre: 'Principal', hectares: 100.0, tipoPasto: 'Brachiaria', capacidadMaxima: 200, estado: 'activo' },
-  { id: 23,predioId: 5, codigo: 'FEP-02', nombre: 'Secundario', hectares: 100.75, tipoPasto: 'Guinea', capacidadMaxima: 200, estado: 'activo' },
+  { id: 22,predioId: 5, codigo: 'FEP-01', nombre: 'Principal', areaHectareas: 100.0, tipoPasto: 'Brachiaria', capacidadMaxima: 200, estado: 'activo' },
+  { id: 23,predioId: 5, codigo: 'FEP-02', nombre: 'Secundario', areaHectareas: 100.75, tipoPasto: 'Guinea', capacidadMaxima: 200, estado: 'activo' },
 ];
 
 interface MockLote extends Omit<Lote, 'id' | 'predioId'> {
@@ -199,27 +199,27 @@ interface MockSector extends Omit<Sector, 'id' | 'predioId'> {
 
 const MOCK_SECTORES: MockSector[] = [
   // Predio 1 - Finca La Esperanza
-  { id: 1,  predioId: 1, codigo: 'SEC-PE-01', nombre: 'Zona Norte', hectares: 50.0, tipoPasto: 'Brachiaria Decumbens', capacidadMaxima: 100, estado: 'activo' },
-  { id: 2,  predioId: 1, codigo: 'SEC-PE-02', nombre: 'Zona Sur', hectares: 45.5, tipoPasto: 'Guinea Panic', capacidadMaxima: 90, estado: 'activo' },
-  { id: 3,  predioId: 1, codigo: 'SEC-PE-03', nombre: 'Zona Centro', hectares: 55.0, tipoPasto: 'Brachiaria Hybrid', capacidadMaxima: 110, estado: 'en_descanso' },
+  { id: 1,  predioId: 1, codigo: 'SEC-PE-01', nombre: 'Zona Norte', areaHectareas: 50.0, tipoPasto: 'Brachiaria Decumbens', capacidadMaxima: 100, estado: 'activo' },
+  { id: 2,  predioId: 1, codigo: 'SEC-PE-02', nombre: 'Zona Sur', areaHectareas: 45.5, tipoPasto: 'Guinea Panic', capacidadMaxima: 90, estado: 'activo' },
+  { id: 3,  predioId: 1, codigo: 'SEC-PE-03', nombre: 'Zona Centro', areaHectareas: 55.0, tipoPasto: 'Brachiaria Hybrid', capacidadMaxima: 110, estado: 'en_descanso' },
 
   // Predio 2 - Hacienda El Roble
-  { id: 4,  predioId: 2, codigo: 'SEC-HER-01', nombre: 'Sector Alta Montana', hectares: 120.0, tipoPasto: 'Kikuyu', capacidadMaxima: 240, estado: 'activo' },
-  { id: 5,  predioId: 2, codigo: 'SEC-HER-02', nombre: 'Sector Baja Montana', hectares: 100.0, tipoPasto: 'Ryegrass', capacidadMaxima: 200, estado: 'activo' },
-  { id: 6,  predioId: 2, codigo: 'SEC-HER-03', nombre: 'Sector Valle', hectares: 100.0, tipoPasto: 'Bluegrass', capacidadMaxima: 200, estado: 'activo' },
+  { id: 4,  predioId: 2, codigo: 'SEC-HER-01', nombre: 'Sector Alta Montana', areaHectareas: 120.0, tipoPasto: 'Kikuyu', capacidadMaxima: 240, estado: 'activo' },
+  { id: 5,  predioId: 2, codigo: 'SEC-HER-02', nombre: 'Sector Baja Montana', areaHectareas: 100.0, tipoPasto: 'Ryegrass', capacidadMaxima: 200, estado: 'activo' },
+  { id: 6,  predioId: 2, codigo: 'SEC-HER-03', nombre: 'Sector Valle', areaHectareas: 100.0, tipoPasto: 'Bluegrass', capacidadMaxima: 200, estado: 'activo' },
 
   // Predio 3 - Finca San José
-  { id: 7,  predioId: 3, codigo: 'SEC-FSJ-01', nombre: 'Altiplano', hectares: 40.0, tipoPasto: 'Brachiaria', capacidadMaxima: 80, estado: 'activo' },
-  { id: 8,  predioId: 3, codigo: 'SEC-FSJ-02', nombre: ' Bajio', hectares: 45.3, tipoPasto: 'Guinea', capacidadMaxima: 90, estado: 'en_descanso' },
+  { id: 7,  predioId: 3, codigo: 'SEC-FSJ-01', nombre: 'Altiplano', areaHectareas: 40.0, tipoPasto: 'Brachiaria', capacidadMaxima: 80, estado: 'activo' },
+  { id: 8,  predioId: 3, codigo: 'SEC-FSJ-02', nombre: ' Bajio', areaHectareas: 45.3, tipoPasto: 'Guinea', capacidadMaxima: 90, estado: 'en_descanso' },
 
   // Predio 4 - Hacienda Santa María
-  { id: 9,  predioId: 4, codigo: 'SEC-HSM-01', nombre: 'Norte Extensive', hectares: 150.0, tipoPasto: 'Angleton', capacidadMaxima: 300, estado: 'activo' },
-  { id: 10, predioId: 4, codigo: 'SEC-HSM-02', nombre: 'Sur Extensive', hectares: 150.0, tipoPasto: 'Brachiaria', capacidadMaxima: 300, estado: 'activo' },
-  { id: 11,predioId: 4, codigo: 'SEC-HSM-03', nombre: 'Centro Intensivo', hectares: 150.0, tipoPasto: 'Guinea', capacidadMaxima: 300, estado: 'activo' },
+  { id: 9,  predioId: 4, codigo: 'SEC-HSM-01', nombre: 'Norte Extensive', areaHectareas: 150.0, tipoPasto: 'Angleton', capacidadMaxima: 300, estado: 'activo' },
+  { id: 10, predioId: 4, codigo: 'SEC-HSM-02', nombre: 'Sur Extensive', areaHectareas: 150.0, tipoPasto: 'Brachiaria', capacidadMaxima: 300, estado: 'activo' },
+  { id: 11,predioId: 4, codigo: 'SEC-HSM-03', nombre: 'Centro Intensivo', areaHectareas: 150.0, tipoPasto: 'Guinea', capacidadMaxima: 300, estado: 'activo' },
 
   // Predio 5 - Finca El Porvenir (Inactivo)
-  { id: 12,predioId: 5, codigo: 'SEC-FEP-01', nombre: 'Principal Norte', hectares: 100.0, tipoPasto: 'Brachiaria', capacidadMaxima: 200, estado: 'activo' },
-  { id: 13,predioId: 5, codigo: 'SEC-FEP-02', nombre: 'Principal Sur', hectares: 100.75, tipoPasto: 'Guinea', capacidadMaxima: 200, estado: 'activo' },
+  { id: 12,predioId: 5, codigo: 'SEC-FEP-01', nombre: 'Principal Norte', areaHectareas: 100.0, tipoPasto: 'Brachiaria', capacidadMaxima: 200, estado: 'activo' },
+  { id: 13,predioId: 5, codigo: 'SEC-FEP-02', nombre: 'Principal Sur', areaHectareas: 100.75, tipoPasto: 'Guinea', capacidadMaxima: 200, estado: 'activo' },
 ];
 
 // ============================================================================

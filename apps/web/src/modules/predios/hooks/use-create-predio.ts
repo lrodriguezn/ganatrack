@@ -55,7 +55,7 @@ export function useCreatePredio(
         departamento: data.departamento,
         municipio: data.municipio,
         vereda: data.vereda,
-        hectares: data.hectares,
+        areaHectareas: data.areaHectareas,
         tipo: data.tipo,
         estado: 'activo',
       };

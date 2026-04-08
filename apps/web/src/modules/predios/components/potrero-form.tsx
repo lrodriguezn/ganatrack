@@ -2,7 +2,7 @@
 /**
  * PotreroForm — RHF + Zod form for creating/editing potreros.
  *
- * Fields: nombre, hectares, tipoPasto, capacidadMaxima, estado
+ * Fields: nombre, areaHectareas, tipoPasto, capacidadMaxima, estado
  *
  * Usage:
  *   <PotreroForm onSubmit={handleSubmit} isLoading={isLoading} />
@@ -52,7 +52,7 @@ export function PotreroForm({
     resolver: zodResolver(isEdit ? UpdatePotreroSchema : CreatePotreroSchema),
     defaultValues: initialData ?? {
       nombre: '',
-      hectares: undefined,
+      areaHectareas: undefined,
       tipoPasto: '',
       capacidadMaxima: undefined,
       estado: 'activo',
@@ -66,7 +66,7 @@ export function PotreroForm({
     } else {
       reset({
         nombre: '',
-        hectares: undefined,
+        areaHectareas: undefined,
         tipoPasto: '',
         capacidadMaxima: undefined,
         estado: 'activo',
@@ -108,8 +108,8 @@ export function PotreroForm({
         placeholder="25.0"
         step="0.1"
         min="0"
-        error={errors.hectares?.message}
-        {...register('hectares', { valueAsNumber: true })}
+        error={errors.areaHectareas?.message}
+        {...register('areaHectareas', { valueAsNumber: true })}
       />
 
       {/* Tipo Pasto */}

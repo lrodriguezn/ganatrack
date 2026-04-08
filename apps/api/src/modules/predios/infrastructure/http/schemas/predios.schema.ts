@@ -169,7 +169,7 @@ export const idParamsSchema = {
   },
 } as const
 
-export const predioIdParamsSchema = {
+export const PredioIdParamsSchema = {
   type: 'object',
   required: ['predioId'],
   properties: {

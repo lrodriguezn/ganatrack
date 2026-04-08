@@ -38,11 +38,11 @@ export function PotrerosTable({
       ),
     },
     {
-      accessorKey: 'hectares',
+      accessorKey: 'areaHectareas',
       header: 'Hectáreas',
       cell: ({ row }) => (
         <span className="text-gray-700 dark:text-gray-300">
-          {row.original.hectares.toFixed(1)} ha
+          {row.original.areaHectareas.toFixed(1)} ha
         </span>
       ),
     },

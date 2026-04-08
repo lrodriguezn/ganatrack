@@ -253,7 +253,7 @@ function PredioInfoTab({ predio }: { predio: NonNullable<ReturnType<typeof usePr
           <div>
             <dt className="text-sm text-gray-500 dark:text-gray-400">Hectáreas</dt>
             <dd className="text-gray-900 dark:text-gray-100 text-2xl font-semibold">
-              {predio.hectares.toLocaleString('es-CO')}
+              {predio.areaHectareas.toLocaleString('es-CO')}
             </dd>
           </div>
         </dl>
@@ -307,7 +307,7 @@ function PotrerosTab({
               </span>
             </div>
             <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-              <span>{potrero.hectares} ha</span>
+              <span>{potrero.areaHectareas} ha</span>
               <span>•</span>
               <span>{potrero.tipoPasto}</span>
               <span>•</span>
@@ -368,7 +368,7 @@ function SectoresTab({
               </span>
             </div>
             <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-              <span>{sector.hectares} ha</span>
+              <span>{sector.areaHectareas} ha</span>
               <span>•</span>
               <span>{sector.tipoPasto}</span>
               <span>•</span>

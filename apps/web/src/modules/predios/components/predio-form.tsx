@@ -131,7 +131,7 @@ export function PredioForm({
 
       {/* Hectáreas */}
       <FormField
-        name="hectares"
+        name="areaHectareas"
         label="Hectáreas"
         control={form.control}
         render={(fieldProps) => (
@@ -141,7 +141,7 @@ export function PredioForm({
             placeholder="50"
             min={0}
             step={0.01}
-            error={errors.hectares?.message}
+            error={errors.areaHectareas?.message}
             disabled={isLoading}
             onChange={(e) => {
               const value = e.target.value;
@@ -203,7 +203,7 @@ export function predioToFormDefaults(predio: Predio): Partial<CreatePredioDto> {
     departamento: predio.departamento,
     municipio: predio.municipio,
     vereda: predio.vereda,
-    hectares: predio.hectares,
+    areaHectareas: predio.areaHectareas,
     tipo: predio.tipo,
   };
 }

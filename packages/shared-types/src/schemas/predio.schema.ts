@@ -36,7 +36,7 @@ export const PredioSchema = z.object({
   departamento: z.string().min(1),
   municipio: z.string().min(1),
   vereda: z.string().optional(),
-  hectares: z.number().positive(),
+  areaHectareas: z.number().positive(),
   tipo: PredioTipoSchema,
   estado: z.enum(['activo', 'inactivo']).default('activo'),
 });
@@ -51,7 +51,7 @@ export const CreatePredioSchema = z.object({
   departamento: z.string().min(1, 'Departamento requerido'),
   municipio: z.string().min(1, 'Municipio requerido'),
   vereda: z.string().optional(),
-  hectares: z.number().positive('Hectáreas debe ser un número positivo'),
+  areaHectareas: z.number().positive('Hectáreas debe ser un número positivo'),
   tipo: PredioTipoSchema,
 });
 
@@ -85,7 +85,7 @@ export const PotreroSchema = z.object({
   predioId: z.number().int(),
   codigo: z.string().min(1).max(20),
   nombre: z.string().min(1).max(100),
-  hectares: z.number().positive(),
+  areaHectareas: z.number().positive(),
   tipoPasto: z.string().min(1),
   capacidadMaxima: z.number().int().nonnegative(),
   estado: PotreroEstadoSchema.default('activo'),
@@ -99,7 +99,7 @@ export type Potrero = z.infer<typeof PotreroSchema>;
 export const CreatePotreroSchema = z.object({
   codigo: z.string().min(1, 'Código requerido').max(20, 'Máximo 20 caracteres'),
   nombre: z.string().min(1, 'Nombre requerido').max(100, 'Máximo 100 caracteres'),
-  hectares: z.number().positive('Hectáreas debe ser un número positivo'),
+  areaHectareas: z.number().positive('Hectáreas debe ser un número positivo'),
   tipoPasto: z.string().min(1, 'Tipo de pasto requerido'),
   capacidadMaxima: z.number().int().nonnegative('Capacidad debe ser un número entero positivo'),
   estado: PotreroEstadoSchema.default('activo'),
@@ -210,7 +210,7 @@ export const SectorSchema = z.object({
   predioId: z.number().int(),
   codigo: z.string().min(1).max(20),
   nombre: z.string().min(1).max(100),
-  hectares: z.number().positive(),
+  areaHectareas: z.number().positive(),
   tipoPasto: z.string().min(1),
   capacidadMaxima: z.number().int().nonnegative(),
   estado: SectorEstadoSchema.default('activo'),
@@ -224,7 +224,7 @@ export type Sector = z.infer<typeof SectorSchema>;
 export const CreateSectorSchema = z.object({
   codigo: z.string().min(1, 'Código requerido').max(20, 'Máximo 20 caracteres'),
   nombre: z.string().min(1, 'Nombre requerido').max(100, 'Máximo 100 caracteres'),
-  hectares: z.number().positive('Hectáreas debe ser un número positivo'),
+  areaHectareas: z.number().positive('Hectáreas debe ser un número positivo'),
   tipoPasto: z.string().min(1, 'Tipo de pasto requerido'),
   capacidadMaxima: z.number().int().nonnegative('Capacidad debe ser un número entero positivo'),
   estado: SectorEstadoSchema.default('activo'),

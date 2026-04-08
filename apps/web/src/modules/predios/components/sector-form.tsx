@@ -2,7 +2,7 @@
 /**
  * SectorForm — RHF + Zod form for creating/editing sectores.
  *
- * Fields: nombre, hectares, tipoPasto, capacidadMaxima, estado
+ * Fields: nombre, areaHectareas, tipoPasto, capacidadMaxima, estado
  *
  * Usage:
  *   <SectorForm onSubmit={handleSubmit} isLoading={isLoading} />
@@ -52,7 +52,7 @@ export function SectorForm({
     resolver: zodResolver(isEdit ? UpdateSectorSchema : CreateSectorSchema),
     defaultValues: initialData ?? {
       nombre: '',
-      hectares: undefined,
+      areaHectareas: undefined,
       tipoPasto: '',
       capacidadMaxima: undefined,
       estado: 'activo',
@@ -66,7 +66,7 @@ export function SectorForm({
     } else {
       reset({
         nombre: '',
-        hectares: undefined,
+        areaHectareas: undefined,
         tipoPasto: '',
         capacidadMaxima: undefined,
         estado: 'activo',
@@ -108,8 +108,8 @@ export function SectorForm({
         placeholder="50.0"
         step="0.1"
         min="0"
-        error={errors.hectares?.message}
-        {...register('hectares', { valueAsNumber: true })}
+        error={errors.areaHectareas?.message}
+        {...register('areaHectareas', { valueAsNumber: true })}
       />
 
       {/* Tipo Pasto */}

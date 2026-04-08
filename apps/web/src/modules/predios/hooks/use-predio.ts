@@ -18,7 +18,7 @@ export interface UsePredioOptions {
 }
 
 export interface UsePredioReturn {
-  predio: Predio | undefined;
+  existingPredio: Predio | undefined;
   isLoading: boolean;
   error: Error | null;
 }
@@ -34,7 +34,7 @@ export function usePredio(options: UsePredioOptions): UsePredioReturn {
   });
 
   return {
-    predio: data,
+    existingPredio: data,
     isLoading,
     error: error as Error | null,
   };

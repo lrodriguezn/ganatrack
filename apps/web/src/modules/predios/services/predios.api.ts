@@ -43,8 +43,8 @@ export class RealPrediosService implements PrediosService {
 
   async getPredios(): Promise<Predio[]> {
     try {
-      const response = await apiClient.get('predios').json();
-      return response as Predio[];
+      const wrapped = await apiClient.get('predios').json() as { success: boolean; data: Predio[] };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -55,8 +55,8 @@ export class RealPrediosService implements PrediosService {
 
   async getPredio(id: number): Promise<Predio> {
     try {
-      const response = await apiClient.get(`predios/${id}`).json();
-      return response as Predio;
+      const wrapped = await apiClient.get(`predios/${id}`).json() as { success: boolean; data: Predio };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -67,8 +67,8 @@ export class RealPrediosService implements PrediosService {
 
   async createPredio(data: CreatePredioDto): Promise<Predio> {
     try {
-      const response = await apiClient.post('predios', { json: data }).json();
-      return response as Predio;
+      const wrapped = await apiClient.post('predios', { json: data }).json() as { success: boolean; data: Predio };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -79,8 +79,8 @@ export class RealPrediosService implements PrediosService {
 
   async updatePredio(id: number, data: UpdatePredioDto): Promise<Predio> {
     try {
-      const response = await apiClient.put(`predios/${id}`, { json: data }).json();
-      return response as Predio;
+      const wrapped = await apiClient.put(`predios/${id}`, { json: data }).json() as { success: boolean; data: Predio };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -106,8 +106,8 @@ export class RealPrediosService implements PrediosService {
 
   async getPotreros(predioId: number): Promise<Potrero[]> {
     try {
-      const response = await apiClient.get(`predios/${predioId}/potreros`).json();
-      return response as Potrero[];
+      const wrapped = await apiClient.get(`predios/${predioId}/potreros`).json() as { success: boolean; data: Potrero[] };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -118,8 +118,8 @@ export class RealPrediosService implements PrediosService {
 
   async getPotrero(predioId: number, id: number): Promise<Potrero> {
     try {
-      const response = await apiClient.get(`predios/${predioId}/potreros/${id}`).json();
-      return response as Potrero;
+      const wrapped = await apiClient.get(`predios/${predioId}/potreros/${id}`).json() as { success: boolean; data: Potrero };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -130,10 +130,10 @@ export class RealPrediosService implements PrediosService {
 
   async createPotrero(predioId: number, data: CreatePotreroDto): Promise<Potrero> {
     try {
-      const response = await apiClient
+      const wrapped = await apiClient
         .post(`predios/${predioId}/potreros`, { json: data })
-        .json();
-      return response as Potrero;
+        .json() as { success: boolean; data: Potrero };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -144,10 +144,10 @@ export class RealPrediosService implements PrediosService {
 
   async updatePotrero(predioId: number, id: number, data: UpdatePotreroDto): Promise<Potrero> {
     try {
-      const response = await apiClient
+      const wrapped = await apiClient
         .put(`predios/${predioId}/potreros/${id}`, { json: data })
-        .json();
-      return response as Potrero;
+        .json() as { success: boolean; data: Potrero };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -173,8 +173,8 @@ export class RealPrediosService implements PrediosService {
 
   async getLotes(predioId: number): Promise<Lote[]> {
     try {
-      const response = await apiClient.get(`predios/${predioId}/lotes`).json();
-      return response as Lote[];
+      const wrapped = await apiClient.get(`predios/${predioId}/lotes`).json() as { success: boolean; data: Lote[] };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -185,8 +185,8 @@ export class RealPrediosService implements PrediosService {
 
   async getLote(predioId: number, id: number): Promise<Lote> {
     try {
-      const response = await apiClient.get(`predios/${predioId}/lotes/${id}`).json();
-      return response as Lote;
+      const wrapped = await apiClient.get(`predios/${predioId}/lotes/${id}`).json() as { success: boolean; data: Lote };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -197,10 +197,10 @@ export class RealPrediosService implements PrediosService {
 
   async createLote(predioId: number, data: CreateLoteDto): Promise<Lote> {
     try {
-      const response = await apiClient
+      const wrapped = await apiClient
         .post(`predios/${predioId}/lotes`, { json: data })
-        .json();
-      return response as Lote;
+        .json() as { success: boolean; data: Lote };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -211,10 +211,10 @@ export class RealPrediosService implements PrediosService {
 
   async updateLote(predioId: number, id: number, data: UpdateLoteDto): Promise<Lote> {
     try {
-      const response = await apiClient
+      const wrapped = await apiClient
         .put(`predios/${predioId}/lotes/${id}`, { json: data })
-        .json();
-      return response as Lote;
+        .json() as { success: boolean; data: Lote };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -240,8 +240,8 @@ export class RealPrediosService implements PrediosService {
 
   async getGrupos(predioId: number): Promise<Grupo[]> {
     try {
-      const response = await apiClient.get(`predios/${predioId}/grupos`).json();
-      return response as Grupo[];
+      const wrapped = await apiClient.get(`predios/${predioId}/grupos`).json() as { success: boolean; data: Grupo[] };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -252,8 +252,8 @@ export class RealPrediosService implements PrediosService {
 
   async getGrupo(predioId: number, id: number): Promise<Grupo> {
     try {
-      const response = await apiClient.get(`predios/${predioId}/grupos/${id}`).json();
-      return response as Grupo;
+      const wrapped = await apiClient.get(`predios/${predioId}/grupos/${id}`).json() as { success: boolean; data: Grupo };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -264,10 +264,10 @@ export class RealPrediosService implements PrediosService {
 
   async createGrupo(predioId: number, data: CreateGrupoDto): Promise<Grupo> {
     try {
-      const response = await apiClient
+      const wrapped = await apiClient
         .post(`predios/${predioId}/grupos`, { json: data })
-        .json();
-      return response as Grupo;
+        .json() as { success: boolean; data: Grupo };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -278,10 +278,10 @@ export class RealPrediosService implements PrediosService {
 
   async updateGrupo(predioId: number, id: number, data: UpdateGrupoDto): Promise<Grupo> {
     try {
-      const response = await apiClient
+      const wrapped = await apiClient
         .put(`predios/${predioId}/grupos/${id}`, { json: data })
-        .json();
-      return response as Grupo;
+        .json() as { success: boolean; data: Grupo };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -307,8 +307,8 @@ export class RealPrediosService implements PrediosService {
 
   async getSectores(predioId: number): Promise<Sector[]> {
     try {
-      const response = await apiClient.get(`predios/${predioId}/sectores`).json();
-      return response as Sector[];
+      const wrapped = await apiClient.get(`predios/${predioId}/sectores`).json() as { success: boolean; data: Sector[] };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -319,8 +319,8 @@ export class RealPrediosService implements PrediosService {
 
   async getSector(predioId: number, id: number): Promise<Sector> {
     try {
-      const response = await apiClient.get(`predios/${predioId}/sectores/${id}`).json();
-      return response as Sector;
+      const wrapped = await apiClient.get(`predios/${predioId}/sectores/${id}`).json() as { success: boolean; data: Sector };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -331,10 +331,10 @@ export class RealPrediosService implements PrediosService {
 
   async createSector(predioId: number, data: CreateSectorDto): Promise<Sector> {
     try {
-      const response = await apiClient
+      const wrapped = await apiClient
         .post(`predios/${predioId}/sectores`, { json: data })
-        .json();
-      return response as Sector;
+        .json() as { success: boolean; data: Sector };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -345,10 +345,10 @@ export class RealPrediosService implements PrediosService {
 
   async updateSector(predioId: number, id: number, data: UpdateSectorDto): Promise<Sector> {
     try {
-      const response = await apiClient
+      const wrapped = await apiClient
         .put(`predios/${predioId}/sectores/${id}`, { json: data })
-        .json();
-      return response as Sector;
+        .json() as { success: boolean; data: Sector };
+      return wrapped.data;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;

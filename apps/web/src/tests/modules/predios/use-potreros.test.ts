@@ -69,8 +69,8 @@ describe('usePotreros', () => {
   describe('basic usage', () => {
     it('should return potreros and loading states', async () => {
       const mockData = [
-        { id: 1, nombre: 'Potrero 1', hectares: 10 },
-        { id: 2, nombre: 'Potrero 2', hectares: 15 },
+        { id: 1, nombre: 'Potrero 1', areaHectareas: 10 },
+        { id: 2, nombre: 'Potrero 2', areaHectareas: 15 },
       ];
 
       mockPrediosService.getPotreros.mockResolvedValueOnce(mockData);

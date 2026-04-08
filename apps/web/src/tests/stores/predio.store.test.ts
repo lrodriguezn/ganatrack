@@ -24,7 +24,7 @@ const mockPredio1: Predio = {
   nombre: 'Finca La Esperanza',
   departamento: 'Cundinamarca',
   municipio: 'Guatavita',
-  hectares: 120,
+  areaHectareas: 120,
   tipo: 'cría',
   estado: 'activo',
 };
@@ -34,7 +34,7 @@ const mockPredio2: Predio = {
   nombre: 'Hacienda San Pedro',
   departamento: 'Boyacá',
   municipio: 'Duitama',
-  hectares: 85,
+  areaHectareas: 85,
   tipo: 'lechería',
   estado: 'activo',
 };
@@ -44,7 +44,7 @@ const mockPredio3: Predio = {
   nombre: 'El Retiro',
   departamento: 'Antioquia',
   municipio: 'Rionegro',
-  hectares: 200,
+  areaHectareas: 200,
   tipo: 'engorde',
   estado: 'activo',
 };
