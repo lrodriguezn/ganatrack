@@ -31,7 +31,7 @@ export default function NuevoPredioPage(): JSX.Element {
       departamento: '',
       municipio: '',
       vereda: '',
-      hectares: undefined,
+      areaHectareas: undefined,
       tipo: undefined,
     },
   });
