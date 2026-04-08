@@ -51,6 +51,7 @@ export function useCreatePredio(
       // Optimistic Predio with temporary ID
       const optimisticPredio: Predio = {
         id: Date.now(), // temporary negative ID
+        codigo: data.codigo,
         nombre: data.nombre,
         departamento: data.departamento,
         municipio: data.municipio,
