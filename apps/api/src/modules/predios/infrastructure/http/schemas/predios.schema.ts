@@ -1,7 +1,7 @@
 // Predio schemas
 export const createPredioBodySchema = {
   type: 'object',
-  required: ['nombre'],
+  required: ['codigo', 'nombre'],
   properties: {
     codigo: { type: 'string', minLength: 1, maxLength: 20 },
     nombre: { type: 'string', minLength: 1, maxLength: 100 },

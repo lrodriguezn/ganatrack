@@ -87,6 +87,15 @@ export function PredioTable({
 
   const columns: ColumnDef<Predio>[] = [
     {
+      accessorKey: 'codigo',
+      header: 'Código',
+      cell: ({ row }) => (
+        <span className="font-mono text-sm text-gray-600 dark:text-gray-400">
+          {row.original.codigo}
+        </span>
+      ),
+    },
+    {
       accessorKey: 'nombre',
       header: 'Nombre',
       cell: ({ row }) => (

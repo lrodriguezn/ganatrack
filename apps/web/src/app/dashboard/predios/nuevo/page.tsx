@@ -26,6 +26,7 @@ export default function NuevoPredioPage(): JSX.Element {
   const form = useForm<CreatePredioDto>({
     resolver: zodResolver(CreatePredioSchema),
     defaultValues: {
+      codigo: '',
       nombre: '',
       departamento: '',
       municipio: '',

@@ -33,6 +33,7 @@ function EditPredioContent(): JSX.Element {
   const form = useForm<CreatePredioDto>({
     resolver: zodResolver(UpdatePredioSchema),
     defaultValues: {
+      codigo: '',
       nombre: '',
       departamento: '',
       municipio: '',

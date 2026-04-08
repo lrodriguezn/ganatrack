@@ -3,6 +3,7 @@
  * PredioForm — RHF + Zod form for creating and editing Predios.
  *
  * Fields:
+ * - codigo (required, max 20 chars)
  * - nombre (required, max 100 chars)
  * - departamento (required)
  * - municipio (required)
@@ -64,6 +65,23 @@ export function PredioForm({
       onSubmit={handleSubmit(onSubmit)}
       className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm p-6 space-y-4"
     >
+      {/* Código */}
+      <FormField
+        name="codigo"
+        label="Código del Predio"
+        control={form.control}
+        render={(fieldProps) => (
+          <Input
+            {...fieldProps}
+            type="text"
+            placeholder="FE001"
+            error={errors.codigo?.message}
+            disabled={isLoading}
+            maxLength={20}
+          />
+        )}
+      />
+
       {/* Nombre */}
       <FormField
         name="nombre"
@@ -199,6 +217,7 @@ export function PredioForm({
  */
 export function predioToFormDefaults(predio: Predio): Partial<CreatePredioDto> {
   return {
+    codigo: predio.codigo,
     nombre: predio.nombre,
     departamento: predio.departamento,
     municipio: predio.municipio,

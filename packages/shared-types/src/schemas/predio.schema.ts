@@ -32,6 +32,7 @@ export type PredioTipo = z.infer<typeof PredioTipoSchema>;
  */
 export const PredioSchema = z.object({
   id: z.number().int(),
+  codigo: z.string().min(1).max(20),
   nombre: z.string().min(1).max(100),
   departamento: z.string().min(1),
   municipio: z.string().min(1),
@@ -47,6 +48,7 @@ export type Predio = z.infer<typeof PredioSchema>;
  * Create Predio DTO — all fields required except vereda.
  */
 export const CreatePredioSchema = z.object({
+  codigo: z.string().min(1, 'Código requerido').max(20, 'Máximo 20 caracteres'),
   nombre: z.string().min(1, 'Nombre requerido').max(100, 'Máximo 100 caracteres'),
   departamento: z.string().min(1, 'Departamento requerido'),
   municipio: z.string().min(1, 'Municipio requerido'),
