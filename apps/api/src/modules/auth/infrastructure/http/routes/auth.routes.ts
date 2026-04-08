@@ -81,7 +81,7 @@ export async function registerAuthRoutes(
     const loginResult = result as LoginResponseDto
     const isProduction = process.env.NODE_ENV === 'production'
     const secureFlag = isProduction ? '; Secure' : ''
-    const cookieValue = `refreshToken=${loginResult.refreshToken}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}${secureFlag}`
+    const cookieValue = `refreshToken=${loginResult.refreshToken}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 60 * 60}${secureFlag}`
     reply.header('Set-Cookie', cookieValue)
 
     return reply.send({

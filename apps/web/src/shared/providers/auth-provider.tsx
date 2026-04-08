@@ -22,8 +22,7 @@
 
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import { authService } from '@/modules/auth/services/auth.service';
 import { useAuthStore } from '@/store/auth.store';
 import { usePredioStore } from '@/store/predio.store';
@@ -41,12 +40,6 @@ interface AuthProviderProps {
  */
 export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   const [isHydrating, setIsHydrating] = useState(true);
-  const router = useRouter();
-  const clearAuth = useAuthStore((s) => s.clearAuth);
-
-  // Use ref to avoid re-triggering effect on router changes
-  const routerRef = useRef(router);
-  routerRef.current = router;
 
   useEffect(() => {
     const rehydrateAuth = async (): Promise<void> => {
@@ -64,6 +57,16 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         return;
       }
 
+      // In production mode (no mocks), skip rehydration entirely
+      // The auth state is managed by the login/logout hooks and Zustand persistence
+      // The middleware protects routes, and the first API call will handle token refresh
+      const useMocks = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
+      if (!useMocks) {
+        setIsHydrating(false);
+        return;
+      }
+
+      // Mock mode only: rehydrate with auto-login
       try {
         // Step 1: Call getMe() - this will trigger the refresh interceptor if needed
         const userData = await authService.getMe();
@@ -107,16 +110,36 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           // Predios failed - continue without them
         }
       } catch (error) {
-        // Session invalid - just log, don't clear auth or redirect
-        // The user might have just logged in and the rehydration is not needed
-        console.log('[AuthProvider] Rehydration skipped or failed:', error);
+        // 401 in mock mode — auto-login as admin
+        if (error instanceof ApiError && error.status === 401) {
+          const loginResult = await authService.login({
+            email: 'admin@ganatrack.com',
+            password: 'Admin123!',
+          });
+
+          if (!('requires2FA' in loginResult)) {
+            useAuthStore.getState().setAuth({
+              accessToken: loginResult.accessToken,
+              user: loginResult.user,
+              permissions: loginResult.permissions,
+            });
+            sessionStorage.setItem('ganatrack-auth-permissions', JSON.stringify(loginResult.permissions));
+
+            try {
+              const predios = await authService.getPredios();
+              usePredioStore.getState().setPredios(predios);
+            } catch {
+              // Mock predios failed — ignore
+            }
+          }
+        }
       } finally {
         setIsHydrating(false);
       }
     };
 
     rehydrateAuth();
-  }, [clearAuth, router]);
+  }, []);
 
   // While rehydrating, show a loading spinner
   // This prevents flash of unauthenticated content
