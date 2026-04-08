@@ -37,8 +37,8 @@ export const PredioSchema = z.object({
   departamento: z.string().min(1),
   municipio: z.string().min(1),
   vereda: z.string().optional(),
-  areaHectareas: z.number().positive(),
-  tipo: PredioTipoSchema,
+  areaHectareas: z.number().positive().nullable(),
+  tipo: PredioTipoSchema.optional(),
   estado: z.enum(['activo', 'inactivo']).default('activo'),
 });
 
