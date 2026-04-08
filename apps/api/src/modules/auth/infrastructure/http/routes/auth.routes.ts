@@ -6,7 +6,7 @@ import {
   resend2faBodySchema,
   verify2faBodySchema,
 } from '../schemas/auth.schema.js'
-import type { ChangePasswordDto, LoginDto, Verify2faDto } from '../../../application/dtos/login.dto.js'
+import type { ChangePasswordDto, LoginDto, LoginResponseDto, Verify2faDto } from '../../../application/dtos/login.dto.js'
 import { AuthMapper } from '../../mappers/auth.mapper.js'
 
 interface AuthUseCases {
@@ -68,26 +68,26 @@ export async function registerAuthRoutes(
     const result = await loginUseCase.execute(request.body)
 
     if ('requires2FA' in result) {
-      const responseData = {
-        requires2FA: true,
-        tempToken: (result as any).tempToken
-      }
-      return reply
-        .code(200)
-        .header('Content-Type', 'application/json')
-        .send(JSON.stringify({
-          success: true,
-          data: responseData,
-        }))
+      return reply.send({
+        success: true,
+        data: {
+          requires2FA: true,
+          tempToken: (result as any).tempToken
+        }
+      })
     }
 
-    return reply
-      .code(200)
-      .header('Content-Type', 'application/json')
-      .send(JSON.stringify({
-        success: true,
-        data: result,
-      }))
+    // Set refresh token cookie on successful login using header directly
+    const loginResult = result as LoginResponseDto
+    const isProduction = process.env.NODE_ENV === 'production'
+    const secureFlag = isProduction ? '; Secure' : ''
+    const cookieValue = `refreshToken=${loginResult.refreshToken}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}${secureFlag}`
+    reply.header('Set-Cookie', cookieValue)
+
+    return reply.send({
+      success: true,
+      data: result,
+    })
   })
 
   // POST /api/v1/auth/refresh

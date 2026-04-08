@@ -4,7 +4,7 @@
  *
  * Logic:
  * 1. Public routes: /login, /verificar-2fa (and sub-paths) — always allow
- * 2. Protected routes: require refreshToken cookie
+ * 2. Protected routes: require gt-auth cookie
  * 3. No cookie on protected route → redirect to /login?redirect={originalPath}
  * 4. Has cookie on /login → redirect to /dashboard
  * 5. Open-redirect prevention: validate redirect is internal (starts with /, no ://)
@@ -12,15 +12,22 @@
  * NOTE: middleware.ts runs at the edge BEFORE the page renders.
  * It only checks cookie EXISTENCE, not the token value itself.
  * Token validation is done by the API client.
+ *
+ * Auth flow:
+ * - Backend (localhost:3001) sets httpOnly 'refreshToken' cookie for API auth
+ * - Client (localhost:3000) sets 'gt-auth' cookie for middleware route protection
+ * - These are different cookies because middleware can't read httpOnly cross-origin cookies
  */
 
 import { NextResponse, type NextRequest } from 'next/server';
 
 // ============================================================================
-// Cookie name — matches backend httpOnly cookie name
+// Cookie name — client-side cookie set by login for middleware detection
+// The backend sets httpOnly 'refreshToken' cookie for API auth
+// This 'gt-auth' cookie is set by the client for middleware route protection
 // ============================================================================
 
-const REFRESH_TOKEN_COOKIE = 'ganatrack-refresh';
+const AUTH_COOKIE = 'gt-auth';
 
 // ============================================================================
 // Public routes (no auth required)
@@ -61,15 +68,15 @@ function sanitizeRedirect(redirect: string | null): string {
 export function middleware(request: NextRequest): NextResponse {
   const { pathname } = request.nextUrl;
 
-  // Check for refreshToken cookie
-  const hasRefreshToken = request.cookies.has(REFRESH_TOKEN_COOKIE);
+  // Check for auth cookie
+  const isAuthenticated = request.cookies.has(AUTH_COOKIE);
 
   // -------------------------------------------------------------------
   // Case 1: Public route
   // -------------------------------------------------------------------
   if (isPublicRoute(pathname)) {
     // If authenticated (has cookie) and trying to access public route
-    if (hasRefreshToken) {
+    if (isAuthenticated) {
       const redirectTo = request.nextUrl.searchParams.get('redirect');
       const safeRedirect = sanitizeRedirect(redirectTo);
       return NextResponse.redirect(new URL(safeRedirect, request.url));
@@ -82,7 +89,7 @@ export function middleware(request: NextRequest): NextResponse {
   // -------------------------------------------------------------------
   // Case 2: Protected route — no cookie
   // -------------------------------------------------------------------
-  if (!hasRefreshToken) {
+  if (!isAuthenticated) {
     const redirectUrl = new URL('/login', request.url);
     redirectUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(redirectUrl);

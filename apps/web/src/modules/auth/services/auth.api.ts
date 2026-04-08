@@ -41,7 +41,7 @@ export class RealAuthService implements AuthService {
 
       // Unwrap the {success, data} envelope from backend
       const wrapped = response as { success: boolean; data: unknown };
-      const data = wrapped.data as { 
+      const data = wrapped.data as {
         accessToken?: string; 
         refreshToken?: string;
         usuario?: { id: number; nombre: string; roles: string[] };

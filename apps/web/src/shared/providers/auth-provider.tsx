@@ -56,110 +56,60 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         return;
       }
 
-      // When not using mocks, skip rehydration entirely
-      // The auth is already valid after login, and getMe() may fail due to token issues
-      // This prevents the dashboard loop
-      const useMocks = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
-      if (!useMocks) {
+      // Skip rehydration if user is already authenticated (e.g., just logged in)
+      // This prevents the AuthProvider from clearing auth state after a client-side navigation
+      const currentState = useAuthStore.getState();
+      if (currentState.accessToken && currentState.user) {
         setIsHydrating(false);
         return;
       }
 
       try {
-        // Attempt to get current user using existing session (cookie)
+        // Step 1: Call getMe() - this will trigger the refresh interceptor if needed
         const userData = await authService.getMe();
 
-        // Success: store has a valid session
-        // Set auth with user data but NO accessToken (it will be refreshed on first API call)
-        // We use a placeholder that indicates rehydration happened
+        // Step 2: Now read the fresh accessToken from the store (set by interceptor)
+        const { accessToken, permissions } = useAuthStore.getState();
 
-        // Restore permissions from sessionStorage (stored during login/2FA success)
-        let permissions: string[] = [];
-        try {
-          const storedPermissions = sessionStorage.getItem('ganatrack-auth-permissions');
-          permissions = storedPermissions ? JSON.parse(storedPermissions) : [];
-        } catch {
-          // Corrupted data — clear and continue with empty permissions
-          sessionStorage.removeItem('ganatrack-auth-permissions');
+        // Step 3: Restore additional data from sessionStorage
+        let storedPermissions = permissions;
+        if (!storedPermissions || storedPermissions.length === 0) {
+          try {
+            const stored = sessionStorage.getItem('ganatrack-auth-permissions');
+            storedPermissions = stored ? JSON.parse(stored) : [];
+          } catch {
+            sessionStorage.removeItem('ganatrack-auth-permissions');
+          }
         }
 
-        // Restore active predio ID from sessionStorage
         let savedPredioId: number | null = null;
         try {
           const storedPredioId = sessionStorage.getItem('ganatrack-predio-activo-id');
           savedPredioId = storedPredioId ? Number(storedPredioId) : null;
         } catch { /* ignore */ }
 
+        // Step 4: Update auth store with user data (accessToken already set by interceptor)
         useAuthStore.getState().setAuth({
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          accessToken: '', // Empty string — will trigger 401 on API calls, which triggers refresh
+          accessToken,
           user: userData,
-          permissions,
+          permissions: storedPermissions,
         });
 
-        // Load predios and restore active selection
+        // Step 5: Load predios
         try {
           const predios = await authService.getPredios();
           usePredioStore.getState().setPredios(predios);
 
-          // Restore saved predio if it exists in the list
           if (savedPredioId && predios.some((p) => p.id === savedPredioId)) {
             usePredioStore.getState().switchPredio(savedPredioId);
           }
         } catch {
-          // Predios failed to load — continue without them
+          // Predios failed - continue without them
         }
       } catch (error) {
-        // 401 means session expired or invalid
-        if (error instanceof ApiError && error.status === 401) {
-          // DEV MODE: Auto-login as admin when mocks are enabled and no session exists
-          const useMocks = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
-          if (useMocks) {
-            // Call mock login to set internal mockLoggedInUser state
-            // (required for getMe() and getPredios() to work in mock mode)
-            const loginResult = await authService.login({
-              email: 'admin@ganatrack.com',
-              password: 'Admin123!',
-            });
-
-            if (!('requires2FA' in loginResult)) {
-              useAuthStore.getState().setAuth({
-                accessToken: loginResult.accessToken,
-                user: loginResult.user,
-                permissions: loginResult.permissions,
-              });
-              sessionStorage.setItem('ganatrack-auth-permissions', JSON.stringify(loginResult.permissions));
-
-              // Load predios from mock service
-              try {
-                const predios = await authService.getPredios();
-                usePredioStore.getState().setPredios(predios);
-
-                // Restore saved predio if it exists
-                let savedPredioId: number | null = null;
-                try {
-                  const storedPredioId = sessionStorage.getItem('ganatrack-predio-activo-id');
-                  savedPredioId = storedPredioId ? Number(storedPredioId) : null;
-                } catch { /* ignore */ }
-
-                if (savedPredioId && predios.some((p) => p.id === savedPredioId)) {
-                  usePredioStore.getState().switchPredio(savedPredioId);
-                }
-              } catch {
-                // Mock predios failed — ignore
-              }
-            }
-          } else {
-            clearAuth();
-            // Clear the mock cookie so middleware doesn't redirect back to dashboard
-            document.cookie = 'ganatrack-refresh=; path=/; max-age=0';
-            // Redirect to login if not already there
-            if (!window.location.pathname.startsWith('/login')) {
-              routerRef.current.push('/login');
-            }
-          }
-        }
-        // Other errors — ignore, user stays unauthenticated
+        // Session invalid - just log, don't clear auth or redirect
+        // The user might have just logged in and the rehydration is not needed
+        console.log('[AuthProvider] Rehydration skipped or failed:', error);
       } finally {
         setIsHydrating(false);
       }

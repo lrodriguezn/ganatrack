@@ -69,9 +69,7 @@ async function executeRefresh(): Promise<string> {
       {
         method: 'POST',
         credentials: 'include', // Send httpOnly cookie
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        // No Content-Type header since there's no body
       },
     );
 
@@ -81,16 +79,21 @@ async function executeRefresh(): Promise<string> {
       throw new ApiError(response.status, 'REFRESH_FAILED', 'Sesión expirada');
     }
 
-    const data = (await response.json()) as { accessToken: string };
+    // Backend returns: { success: true, data: { accessToken, expiresIn } }
+    const wrapped = (await response.json()) as {
+      success: boolean;
+      data: { accessToken: string; expiresIn: number };
+    };
+    const { accessToken } = wrapped.data;
 
     // Update auth store with new token
     authStore.setAuth({
-      accessToken: data.accessToken,
+      accessToken,
       user: authStore.user!,
       permissions: authStore.permissions,
     });
 
-    return data.accessToken;
+    return accessToken;
   } catch (error) {
     // If refresh fails, clear auth and throw
     authStore.clearAuth();

@@ -52,7 +52,11 @@ export function PredioForm({
     formState: { errors },
   } = form;
 
-  const { items: tiposExplotacion } = useCatalogo('tipos-explotacion');
+  // Hook para cargar el catálogo de tipos de explotación
+  const { items: tiposExplotacion = [], isLoading: isLoadingCatalogo } = useCatalogo('tipos-explotacion');
+
+  // Solo deshabilitar por carga del catálogo, NO por isLoading del mutation
+  const isDropdownDisabled = isLoadingCatalogo;
 
   return (
     <form
@@ -194,22 +198,22 @@ export function PredioForm({
         </label>
         <select
           id="tipoExplotacionId"
-          value={form.getValues('tipoExplotacionId') ?? ''}
+          value={form.getValues('tipoExplotacionId')?.toString() ?? ''}
           onChange={(e) => {
             const value = e.target.value;
-            form.setValue('tipoExplotacionId', value === '' ? undefined : parseInt(value, 10));
+            form.setValue('tipoExplotacionId', value === '' ? undefined : parseInt(value, 10), { shouldValidate: true });
           }}
-          disabled={isLoading}
-          className="
+          disabled={isDropdownDisabled}
+          className={`
             w-full px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600
             bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
             focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
-            disabled:opacity-50 disabled:cursor-not-allowed
-          "
+            ${isDropdownDisabled ? 'disabled:opacity-50 disabled:cursor-not-allowed' : ''}
+          `}
         >
           <option value="">Seleccionar tipo...</option>
-          {tiposExplotacion.map((tipo) => (
-            <option key={tipo.id} value={tipo.id}>
+          {Array.isArray(tiposExplotacion) && tiposExplotacion.map((tipo) => (
+            <option key={tipo.id} value={tipo.id.toString()}>
               {tipo.nombre}
             </option>
           ))}

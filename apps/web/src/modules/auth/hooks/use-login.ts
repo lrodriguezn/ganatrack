@@ -80,11 +80,9 @@ export function useLogin(): UseLoginReturn {
         permissions: authData.permissions,
       });
 
-      // DEV ONLY: Set cookie so middleware can detect authenticated state
-      // In production, the backend sets httpOnly refreshToken cookie
-      if (process.env.NODE_ENV === 'development') {
-        document.cookie = 'ganatrack-refresh=mock-token; path=/; max-age=604800';
-      }
+      // Set cookie for middleware - this is a client-side cookie that the middleware can read
+      // The backend also sets an httpOnly cookie (refreshToken) for API auth
+      document.cookie = `gt-auth=1; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Strict`;
 
       // Fetch predios after successful auth
       const predios = await authService.getPredios();
@@ -98,14 +96,9 @@ export function useLogin(): UseLoginReturn {
       setIsLoading(false);
       console.log('[use-login] Redirecting to dashboard...');
 
-      // Redirect to dashboard or original requested page
-      const redirectUrl = searchParams.get('redirect');
-      console.log('[use-login] redirectUrl:', redirectUrl);
-      if (redirectUrl && isValidRedirect(redirectUrl) && redirectUrl !== '/') {
-        router.push(redirectUrl);
-      } else {
-        router.push('/dashboard');
-      }
+      // Use router.push for client-side navigation - preserves Zustand store state
+      // window.location.href would reload the page and lose the auth state
+      router.push('/dashboard');
     } catch (err) {
       console.error('[use-login] Error during login:', err);
       setIsLoading(false);

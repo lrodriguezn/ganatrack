@@ -36,11 +36,8 @@ export function useLogout(): UseLogoutReturn {
     clearAuth();
     clearPredios();
 
-    // DEV ONLY: Clear the mock cookie
-    // In production, the backend clears the httpOnly cookie
-    if (process.env.NODE_ENV === 'development') {
-      document.cookie = 'ganatrack-refresh=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    }
+    // Clear the client-side auth cookie for middleware
+    document.cookie = 'gt-auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
 
     // Redirect to login
     router.push('/login');
