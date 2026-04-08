@@ -57,6 +57,8 @@ export function useCreatePredio(
         municipio: data.municipio ?? null,
         vereda: data.vereda ?? null,
         areaHectareas: data.areaHectareas ?? null,
+        capacidadMaxima: data.capacidadMaxima ?? null,
+        tipoExplotacionId: data.tipoExplotacionId ?? null,
       };
 
       // Optimistic update to list

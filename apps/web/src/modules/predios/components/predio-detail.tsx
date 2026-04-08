@@ -207,6 +207,18 @@ function PredioInfoTab({ predio }: { predio: NonNullable<ReturnType<typeof usePr
             <dt className="text-sm text-gray-500 dark:text-gray-400">Código</dt>
             <dd className="text-gray-900 dark:text-gray-100 font-mono">{predio.codigo}</dd>
           </div>
+          <div>
+            <dt className="text-sm text-gray-500 dark:text-gray-400">Hectáreas</dt>
+            <dd className="text-gray-900 dark:text-gray-100">{predio.areaHectareas ?? '—'} ha</dd>
+          </div>
+          <div>
+            <dt className="text-sm text-gray-500 dark:text-gray-400">Capacidad Máxima</dt>
+            <dd className="text-gray-900 dark:text-gray-100">{predio.capacidadMaxima ?? '—'}</dd>
+          </div>
+          <div>
+            <dt className="text-sm text-gray-500 dark:text-gray-400">Tipo Explotación</dt>
+            <dd className="text-gray-900 dark:text-gray-100">{predio.tipoExplotacionId ?? '—'}</dd>
+          </div>
         </dl>
       </InfoCard>
 

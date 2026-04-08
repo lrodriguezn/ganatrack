@@ -32,6 +32,8 @@ export default function NuevoPredioPage(): JSX.Element {
       municipio: '',
       vereda: '',
       areaHectareas: undefined,
+      capacidadMaxima: undefined,
+      tipoExplotacionId: undefined,
     },
   });
 

@@ -160,6 +160,48 @@ export function PredioForm({
         )}
       />
 
+      {/* Capacidad Máxima */}
+      <FormField
+        name="capacidadMaxima"
+        label="Capacidad Máxima (cabezas)"
+        control={form.control}
+        render={(fieldProps) => (
+          <Input
+            {...fieldProps}
+            type="number"
+            placeholder="100"
+            min={0}
+            error={errors.capacidadMaxima?.message}
+            disabled={isLoading}
+            onChange={(e) => {
+              const value = e.target.value;
+              fieldProps.onChange(value === '' ? undefined : parseInt(value, 10));
+            }}
+          />
+        )}
+      />
+
+      {/* Tipo de Explotación */}
+      <FormField
+        name="tipoExplotacionId"
+        label="Tipo de Explotación (ID)"
+        control={form.control}
+        render={(fieldProps) => (
+          <Input
+            {...fieldProps}
+            type="number"
+            placeholder="1"
+            min={1}
+            error={errors.tipoExplotacionId?.message}
+            disabled={isLoading}
+            onChange={(e) => {
+              const value = e.target.value;
+              fieldProps.onChange(value === '' ? undefined : parseInt(value, 10));
+            }}
+          />
+        )}
+      />
+
       {/* Submit button */}
       <div className="flex items-center justify-end gap-2 pt-4">
         <Button type="submit" isLoading={isLoading}>
@@ -181,5 +223,7 @@ export function predioToFormDefaults(predio: Predio): Partial<CreatePredioDto> {
     municipio: predio.municipio ?? undefined,
     vereda: predio.vereda ?? undefined,
     areaHectareas: predio.areaHectareas ?? undefined,
+    capacidadMaxima: predio.capacidadMaxima ?? undefined,
+    tipoExplotacionId: predio.tipoExplotacionId ?? undefined,
   };
 }
