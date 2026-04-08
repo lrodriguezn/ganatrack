@@ -98,9 +98,12 @@ export function AnimalForm({
       try {
         setIsLoadingRazas(true);
         const data = await catalogoService.getAll('razas');
-        setRazas(data);
+        // Ensure we always have an array, even if API returns something unexpected
+        setRazas(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error('Error loading razas:', error);
+        // On error, keep empty array to avoid crash
+        setRazas([]);
       } finally {
         setIsLoadingRazas(false);
       }

@@ -91,7 +91,7 @@ const MOCK_USERS: MockUser[] = [
 // Valid 2FA code
 const VALID_2FA_CODE = '123456';
 
-// Mock Predios — synchronized with predios.mock.ts schema (id: number, hectares, tipo)
+// Mock Predios — synchronized with predios.mock.ts schema (id: number, areaHectareas, tipo)
 const MOCK_PREDIOS: Predio[] = [
   {
     id: 1,
@@ -99,7 +99,7 @@ const MOCK_PREDIOS: Predio[] = [
     departamento: 'Antioquia',
     municipio: 'Rionegro',
     vereda: 'La Palma',
-    hectares: 150.5,
+    areaHectareas: 150.5,
     tipo: 'doble propósito',
     estado: 'activo',
   },
@@ -108,7 +108,7 @@ const MOCK_PREDIOS: Predio[] = [
     nombre: 'Hacienda El Roble',
     departamento: 'Cundinamarca',
     municipio: 'Zipaquirá',
-    hectares: 320.0,
+    areaHectareas: 320.0,
     tipo: 'lechería',
     estado: 'activo',
   },
@@ -117,7 +117,7 @@ const MOCK_PREDIOS: Predio[] = [
     nombre: 'Finca San José',
     departamento: 'Caldas',
     municipio: 'Manizales',
-    hectares: 85.3,
+    areaHectareas: 85.3,
     tipo: 'cría',
     estado: 'activo',
   },
@@ -126,7 +126,7 @@ const MOCK_PREDIOS: Predio[] = [
     nombre: 'Hacienda Santa María',
     departamento: 'Tolima',
     municipio: 'Ibagué',
-    hectares: 450.0,
+    areaHectareas: 450.0,
     tipo: 'engorde',
     estado: 'activo',
   },
@@ -136,7 +136,7 @@ const MOCK_PREDIOS: Predio[] = [
     departamento: 'Santander',
     municipio: 'Bucaramanga',
     vereda: 'Cerro Largo',
-    hectares: 200.75,
+    areaHectareas: 200.75,
     tipo: 'doble propósito',
     estado: 'activo',
   },

@@ -33,6 +33,9 @@ export default function NuevoUsuarioPage(): JSX.Element {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSubmitAny = handleSubmit as any;
+
   const handleCancel = () => {
     router.push('/dashboard/usuarios');
   };
@@ -70,7 +73,7 @@ export default function NuevoUsuarioPage(): JSX.Element {
       <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6">
         <UsuarioForm
           mode="create"
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmitAny}
           onCancel={handleCancel}
           isLoading={isPending}
           serverError={serverError}

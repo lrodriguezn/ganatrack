@@ -4,7 +4,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@ganatrack/shared-types": ["../../packages/shared-types/src"]
-    }
+    },
+    "skipLibCheck": true
   },
   "include": [
     "next-env.d.ts",

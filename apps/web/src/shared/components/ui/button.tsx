@@ -15,7 +15,7 @@
 import { forwardRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'destructive';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonBaseProps {
@@ -37,6 +37,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   ghost:
     'text-gray-700 hover:bg-gray-100 active:bg-gray-200 dark:text-gray-300 dark:hover:bg-white/5 dark:active:bg-white/10',
   danger: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800',
+  destructive: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

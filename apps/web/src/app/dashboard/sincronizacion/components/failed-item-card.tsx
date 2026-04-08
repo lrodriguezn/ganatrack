@@ -42,7 +42,7 @@ function extractEntityName(url: string): string {
   const entityIndex = parts.findIndex(
     (p) => p === 'animales' || p === 'servicios' || p === 'productos' || p === 'usuarios',
   );
-  return entityIndex !== -1 ? parts[entityIndex] : 'recurso';
+  return entityIndex !== -1 ? (parts[entityIndex] ?? 'recurso') : 'recurso';
 }
 
 /**

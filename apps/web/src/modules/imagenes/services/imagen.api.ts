@@ -47,9 +47,13 @@ export class RealImagenService implements ImagenService {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
     const url = `${baseUrl}/api/v1/imagenes/upload`;
 
-    // Get auth token from the store for XHR
+    // Get auth token from the store for XHR (must be outside Promise callback)
     const { useAuthStore } = await import('@/store/auth.store');
     const token = useAuthStore.getState().accessToken;
+
+    // Get activo from store (must be outside Promise callback)
+    const { usePredioStore } = await import('@/store/predio.store');
+    const activo = usePredioStore.getState().predioActivo;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -96,11 +100,9 @@ export class RealImagenService implements ImagenService {
         xhr.setRequestHeader('Authorization', `Bearer ${token}`);
       }
 
-      // Get predio_id from store
-      const { usePredioStore } = await import('@/store/predio.store');
-      const predioActivo = usePredioStore.getState().predioActivo;
-      if (predioActivo?.id) {
-        xhr.setRequestHeader('X-Predio-Id', predioActivo.id);
+      // Use captured activo value
+      if (activo?.id) {
+        xhr.setRequestHeader('X-Predio-Id', activo.id);
       }
 
       xhr.setRequestHeader('Accept-Language', 'es');

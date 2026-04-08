@@ -84,7 +84,21 @@ export function DatePicker({
   // Update value when prop changes
   useEffect(() => {
     if (pickerRef.current && value) {
-      pickerRef.current.setDate(value as Parameters<typeof pickerRef.current.setDate>[0]);
+      // Handle Date objects, ISO strings, or invalid values gracefully
+      let validDate: Date | string | undefined;
+      
+      if (value instanceof Date && !isNaN(value.getTime())) {
+        validDate = value;
+      } else if (typeof value === 'string' && value) {
+        const parsed = new Date(value);
+        if (!isNaN(parsed.getTime())) {
+          validDate = value;
+        }
+      }
+      
+      if (validDate) {
+        pickerRef.current.setDate(validDate);
+      }
     }
   }, [value]);
 

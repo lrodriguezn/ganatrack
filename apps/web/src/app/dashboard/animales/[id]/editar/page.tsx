@@ -108,7 +108,7 @@ export default function EditarAnimalPage({ params }: EditarAnimalPageProps): JSX
       {error && (
         <div className="rounded-md bg-red-50 dark:bg-red-500/10 p-4">
           <p className="text-sm text-red-600 dark:text-red-400">
-            Error al guardar: {error.message}
+            Error al guardar: {(error as Error).message}
           </p>
         </div>
       )}

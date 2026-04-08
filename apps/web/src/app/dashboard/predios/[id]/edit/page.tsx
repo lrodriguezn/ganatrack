@@ -22,7 +22,7 @@ function EditPredioContent(): JSX.Element {
   const router = useRouter();
   const id = parseInt(params.id as string, 10);
 
-  const { data: existingPredio, isLoading, error } = usePredio({ id });
+  const { existingPredio: existingPredio, isLoading, error } = usePredio({ id });
 
   const { mutate, isLoading: isUpdating, error: updateError } = useUpdatePredio({
     onSuccess: (updatedPredio) => {
@@ -43,7 +43,7 @@ function EditPredioContent(): JSX.Element {
   });
 
   // Populate form when existingPredio loads
-  if (existingPredio && form.formState.defaultValues.nombre === '') {
+  if (existingPredio && form.formState.defaultValues?.nombre === '') {
     const defaults = predioToFormDefaults(existingPredio);
     form.reset(defaults);
   }

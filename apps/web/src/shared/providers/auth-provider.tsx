@@ -22,7 +22,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { authService } from '@/modules/auth/services/auth.service';
 import { useAuthStore } from '@/store/auth.store';
@@ -44,8 +44,27 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   const router = useRouter();
   const clearAuth = useAuthStore((s) => s.clearAuth);
 
+  // Use ref to avoid re-triggering effect on router changes
+  const routerRef = useRef(router);
+  routerRef.current = router;
+
   useEffect(() => {
     const rehydrateAuth = async (): Promise<void> => {
+      // Skip rehydration if already on login page (no session to restore)
+      if (typeof window !== 'undefined' && window.location.pathname.startsWith('/login')) {
+        setIsHydrating(false);
+        return;
+      }
+
+      // When not using mocks, skip rehydration entirely
+      // The auth is already valid after login, and getMe() may fail due to token issues
+      // This prevents the dashboard loop
+      const useMocks = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
+      if (!useMocks) {
+        setIsHydrating(false);
+        return;
+      }
+
       try {
         // Attempt to get current user using existing session (cookie)
         const userData = await authService.getMe();
@@ -132,9 +151,11 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
             }
           } else {
             clearAuth();
+            // Clear the mock cookie so middleware doesn't redirect back to dashboard
+            document.cookie = 'ganatrack-refresh=; path=/; max-age=0';
             // Redirect to login if not already there
             if (!window.location.pathname.startsWith('/login')) {
-              router.push('/login');
+              routerRef.current.push('/login');
             }
           }
         }

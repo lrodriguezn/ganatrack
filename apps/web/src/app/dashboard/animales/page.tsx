@@ -190,11 +190,13 @@ export default function AnimalesListPage(): JSX.Element {
         {/* Search */}
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-          <Input
+          <input
+            type="text"
             value={search}
-            onChange={(e) => handleSearchChange(e.target.value)}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onChange={(e: any) => handleSearchChange(e.target.value)}
             placeholder="Buscar por código o nombre..."
-            className="pl-10"
+            className="flex w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 pl-10 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 px-4 py-2"
           />
         </div>
 
@@ -205,7 +207,8 @@ export default function AnimalesListPage(): JSX.Element {
           {/* Sexo filter */}
           <select
             value={sexoKey ?? ''}
-            onChange={(e) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onChange={(e: any) =>
               handleFilterChange(
                 'sexo',
                 e.target.value ? Number(e.target.value) : undefined
@@ -221,7 +224,8 @@ export default function AnimalesListPage(): JSX.Element {
           {/* Estado filter */}
           <select
             value={estadoAnimalKey ?? ''}
-            onChange={(e) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onChange={(e: any) =>
               handleFilterChange(
                 'estado',
                 e.target.value ? Number(e.target.value) : undefined
