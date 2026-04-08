@@ -20,41 +20,35 @@ import { z } from 'zod';
 // ============================================================================
 
 /**
- * Predio tipo enum — classification of farm type.
- * Per PRD §4.2: lechería, cría, doble propósito, engorde
- */
-export const PredioTipoSchema = z.enum(['lechería', 'cría', 'doble propósito', 'engorde']);
-
-export type PredioTipo = z.infer<typeof PredioTipoSchema>;
-
-/**
  * Predio base schema — shared between list and detail views.
  */
 export const PredioSchema = z.object({
   id: z.number().int(),
-  codigo: z.string().min(1).max(20),
-  nombre: z.string().min(1).max(100),
-  departamento: z.string().min(1),
-  municipio: z.string().min(1),
-  vereda: z.string().optional(),
-  areaHectareas: z.number().positive().nullable(),
-  tipo: PredioTipoSchema.optional(),
-  estado: z.enum(['activo', 'inactivo']).default('activo'),
+  codigo: z.string(),
+  nombre: z.string(),
+  departamento: z.string().nullable(),
+  municipio: z.string().nullable(),
+  vereda: z.string().nullable().optional(),
+  areaHectareas: z.number().nullable(),
+  capacidadMaxima: z.number().nullable().optional(),
+  tipoExplotacionId: z.number().nullable().optional(),
+  activo: z.number().optional(),
 });
 
 export type Predio = z.infer<typeof PredioSchema>;
 
 /**
- * Create Predio DTO — all fields required except vereda.
+ * Create Predio DTO — all fields except codigo and nombre are optional.
  */
 export const CreatePredioSchema = z.object({
   codigo: z.string().min(1, 'Código requerido').max(20, 'Máximo 20 caracteres'),
   nombre: z.string().min(1, 'Nombre requerido').max(100, 'Máximo 100 caracteres'),
-  departamento: z.string().min(1, 'Departamento requerido'),
-  municipio: z.string().min(1, 'Municipio requerido'),
+  departamento: z.string().optional(),
+  municipio: z.string().optional(),
   vereda: z.string().optional(),
-  areaHectareas: z.number().positive('Hectáreas debe ser un número positivo'),
-  tipo: PredioTipoSchema,
+  areaHectareas: z.number().optional(),
+  capacidadMaxima: z.number().optional(),
+  tipoExplotacionId: z.number().optional(),
 });
 
 export type CreatePredioDto = z.infer<typeof CreatePredioSchema>;

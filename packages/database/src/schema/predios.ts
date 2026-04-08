@@ -3,7 +3,7 @@ import { sqliteTable, integer, text, real, unique } from 'drizzle-orm/sqlite-cor
 // predios - Farm/estate table
 export const predios = sqliteTable('predios', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  codigo: text('codigo', { length: 20 }),
+  codigo: text('codigo', { length: 20 }).notNull(),
   nombre: text('nombre', { length: 100 }).notNull(),
   departamento: text('departamento', { length: 100 }),
   municipio: text('municipio', { length: 100 }),
@@ -11,8 +11,6 @@ export const predios = sqliteTable('predios', {
   areaHectareas: real('area_hectareas').default(0),
   capacidadMaxima: integer('capacidad_maxima').default(0),
   tipoExplotacionId: integer('tipo_explotacion_id'),
-  tipo: text('tipo', { length: 50 }),
-  estado: text('estado', { length: 20 }).default('activo'),
   activo: integer('activo').default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),

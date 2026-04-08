@@ -32,7 +32,6 @@ export default function NuevoPredioPage(): JSX.Element {
       municipio: '',
       vereda: '',
       areaHectareas: undefined,
-      tipo: undefined,
     },
   });
 

@@ -31,8 +31,6 @@ export interface PredioResponseDto {
   areaHectareas: number | null
   capacidadMaxima: number | null
   tipoExplotacionId: number | null
-  tipo: string | null
-  estado: string | null
   activo: number
   createdAt: string | null
   updatedAt: string | null

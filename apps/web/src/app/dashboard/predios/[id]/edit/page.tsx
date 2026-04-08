@@ -39,7 +39,6 @@ function EditPredioContent(): JSX.Element {
       municipio: '',
       vereda: '',
       areaHectareas: undefined,
-      tipo: undefined,
     },
   });
 

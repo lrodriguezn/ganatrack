@@ -52,13 +52,6 @@ const TABS: Tab[] = [
   { id: 'grupos', label: 'Grupos' },
 ];
 
-const TIPO_LABELS: Record<string, string> = {
-  'lechería': 'Lechería',
-  'cría': 'Cría',
-  'doble propósito': 'Doble Propósito',
-  'engorde': 'Engorde',
-};
-
 const ESTADO_LABELS: Record<string, { label: string; className: string }> = {
   activo: {
     label: 'Activo',
@@ -211,20 +204,8 @@ function PredioInfoTab({ predio }: { predio: NonNullable<ReturnType<typeof usePr
             <dd className="text-gray-900 dark:text-gray-100 font-medium">{predio.nombre}</dd>
           </div>
           <div>
-            <dt className="text-sm text-gray-500 dark:text-gray-400">Tipo</dt>
-            <dd>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
-                {TIPO_LABELS[predio.tipo] ??predio.tipo}
-              </span>
-            </dd>
-          </div>
-          <div>
-            <dt className="text-sm text-gray-500 dark:text-gray-400">Estado</dt>
-            <dd>
-              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${ESTADO_LABELS[predio.estado]?.className ?? ''}`}>
-                {ESTADO_LABELS[predio.estado]?.label ??predio.estado}
-              </span>
-            </dd>
+            <dt className="text-sm text-gray-500 dark:text-gray-400">Código</dt>
+            <dd className="text-gray-900 dark:text-gray-100 font-mono">{predio.codigo}</dd>
           </div>
         </dl>
       </InfoCard>

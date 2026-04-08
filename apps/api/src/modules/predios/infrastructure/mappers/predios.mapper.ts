@@ -25,8 +25,6 @@ export class PredioMapper {
       areaHectareas: entity.areaHectareas,
       capacidadMaxima: entity.capacidadMaxima,
       tipoExplotacionId: entity.tipoExplotacionId,
-      tipo: entity.tipo,
-      estado: entity.estado,
       activo: entity.activo,
       createdAt: entity.createdAt?.toISOString() ?? null,
       updatedAt: entity.updatedAt?.toISOString() ?? null,

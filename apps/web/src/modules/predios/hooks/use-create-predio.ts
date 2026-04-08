@@ -50,15 +50,13 @@ export function useCreatePredio(
 
       // Optimistic Predio with temporary ID
       const optimisticPredio: Predio = {
-        id: Date.now(), // temporary negative ID
+        id: Date.now(),
         codigo: data.codigo,
         nombre: data.nombre,
-        departamento: data.departamento,
-        municipio: data.municipio,
-        vereda: data.vereda,
-        areaHectareas: data.areaHectareas,
-        tipo: data.tipo,
-        estado: 'activo',
+        departamento: data.departamento ?? null,
+        municipio: data.municipio ?? null,
+        vereda: data.vereda ?? null,
+        areaHectareas: data.areaHectareas ?? null,
       };
 
       // Optimistic update to list
