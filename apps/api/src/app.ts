@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+import 'dotenv/config'
 import Fastify from 'fastify'
 import type { FastifyInstance } from 'fastify'
 import { corsPlugin } from './plugins/cors.plugin.js'
@@ -8,86 +9,76 @@ import { rateLimitPlugin } from './plugins/rate-limit.plugin.js'
 import { authMiddleware, errorHandler, tenantContextMiddleware } from './shared/middleware/index.js'
 import { registerAuthModule, registerAuthModuleRoutes } from './modules/auth/index.js'
 import { registerUsuariosModule, registerUsuariosModuleRoutes } from './modules/usuarios/index.js'
-import { registerConfiguracionModule, registerConfiguracionModuleRoutes } from './modules/configuracion/index.js'
 import { registerPrediosModule, registerPrediosModuleRoutes } from './modules/predios/index.js'
-import { registerMaestrosModule, registerMaestrosModuleRoutes } from './modules/maestros/index.js'
 import { registerAnimalesModule, registerAnimalesModuleRoutes } from './modules/animales/index.js'
+import { registerConfiguracionModule, registerConfiguracionModuleRoutes } from './modules/configuracion/index.js'
+import { registerMaestrosModule, registerMaestrosModuleRoutes } from './modules/maestros/index.js'
 import { registerServiciosModule, registerServiciosModuleRoutes } from './modules/servicios/index.js'
 import { registerProductosModule, registerProductosModuleRoutes } from './modules/productos/index.js'
 import { registerImagenesModule, registerImagenesModuleRoutes } from './modules/imagenes/index.js'
 import { registerNotificacionesModule, registerNotificacionesModuleRoutes } from './modules/notificaciones/index.js'
 import { registerReportesModule, registerReportesModuleRoutes } from './modules/reportes/index.js'
-import schedulerPlugin from './plugins/scheduler.plugin.js'
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
-    logger: {
-      level: process.env.LOG_LEVEL ?? 'info',
-    },
+    logger: { level: process.env.LOG_LEVEL ?? 'info' }
   })
 
-  // Error handler
-  app.setErrorHandler(errorHandler)
+  // Add CORS headers to ALL responses (including success)
+  app.addHook('onSend', async (request, reply) => {
+    const origin = request.headers.origin
+    if (origin) {
+      reply.header('Access-Control-Allow-Origin', origin)
+      reply.header('Access-Control-Allow-Credentials', 'true')
+    } else {
+      // Allow all origins if no origin header
+      reply.header('Access-Control-Allow-Origin', '*')
+    }
+  })
 
-  // Plugins
+  app.setErrorHandler(errorHandler)
   await app.register(corsPlugin)
   await app.register(cookiePlugin)
   await app.register(jwtPlugin)
   await app.register(rateLimitPlugin)
-  await app.register(schedulerPlugin)
 
-  // Decorate app with middleware for use in routes
   app.decorate('authenticate', authMiddleware)
   app.decorate('requireTenant', tenantContextMiddleware)
 
-  // Register auth module and routes
   registerAuthModule()
-  await app.register(async (instance) => registerAuthModuleRoutes(instance), { prefix: '/api/v1/auth' })
+  await app.register(async (i) => registerAuthModuleRoutes(i), { prefix: '/api/v1/auth' })
 
-  // Register usuarios module and routes
   registerUsuariosModule()
-  await app.register(async (instance) => registerUsuariosModuleRoutes(instance), { prefix: '/api/v1' })
+  await app.register(async (i) => registerUsuariosModuleRoutes(i), { prefix: '/api/v1' })
 
-  // Register configuracion module and routes
-  registerConfiguracionModule()
-  await app.register(async (instance) => registerConfiguracionModuleRoutes(instance), { prefix: '/api/v1/config' })
-
-  // Register predios module and routes
   registerPrediosModule()
-  await app.register(async (instance) => registerPrediosModuleRoutes(instance), { prefix: '/api/v1/predios' })
+  await app.register(async (i) => registerPrediosModuleRoutes(i), { prefix: '/api/v1/predios' })
 
-  // Register maestros module and routes
-  registerMaestrosModule()
-  await app.register(async (instance) => registerMaestrosModuleRoutes(instance), { prefix: '/api/v1/maestros' })
-
-  // Register animales module and routes
   registerAnimalesModule()
-  await app.register(async (instance) => registerAnimalesModuleRoutes(instance), { prefix: '/api/v1' })
+  await app.register(async (i) => registerAnimalesModuleRoutes(i), { prefix: '/api/v1' })
 
-  // Register servicios module and routes
+  registerConfiguracionModule()
+  await app.register(async (i) => registerConfiguracionModuleRoutes(i), { prefix: '/api/v1/config' })
+
+  registerMaestrosModule()
+  await app.register(async (i) => registerMaestrosModuleRoutes(i), { prefix: '/api/v1/maestros' })
+
   registerServiciosModule()
-  await app.register(async (instance) => registerServiciosModuleRoutes(instance), { prefix: '/api/v1' })
+  await app.register(async (i) => registerServiciosModuleRoutes(i), { prefix: '/api/v1' })
 
-  // Register productos module and routes
   registerProductosModule()
-  await app.register(async (instance) => registerProductosModuleRoutes(instance), { prefix: '/api/v1' })
+  await app.register(async (i) => registerProductosModuleRoutes(i), { prefix: '/api/v1' })
 
-  // Register imagenes module and routes
   registerImagenesModule()
-  await app.register(async (instance) => registerImagenesModuleRoutes(instance), { prefix: '/api/v1' })
+  await app.register(async (i) => registerImagenesModuleRoutes(i), { prefix: '/api/v1' })
 
-  // Register notificaciones module and routes
   registerNotificacionesModule()
-  await app.register(async (instance) => registerNotificacionesModuleRoutes(instance), { prefix: '/api/v1' })
+  await app.register(async (i) => registerNotificacionesModuleRoutes(i), { prefix: '/api/v1' })
 
-  // Register reportes module and routes
   registerReportesModule()
-  await app.register(async (instance) => registerReportesModuleRoutes(instance), { prefix: '/api/v1' })
+  await app.register(async (i) => registerReportesModuleRoutes(i), { prefix: '/api/v1' })
 
-  // Health check
-  app.get('/health', async () => {
-    return { status: 'ok', service: 'ganatrack-api' }
-  })
+  app.get('/health', async () => ({ status: 'ok', service: 'ganatrack-api' }))
 
   return app
 }

@@ -1,37 +1,43 @@
 import type { FastifyInstance } from 'fastify'
-import { container } from 'tsyringe'
-import { ImagenesController } from '../controllers/imagenes.controller.js'
-import { authMiddleware, requirePermission } from '../../../../../shared/middleware/index.js'
-import {
-  idParamsSchema,
-  listImagenesQuerySchema,
-  uploadImagenBodySchema,
-} from '../schemas/imagenes.schema.js'
+import { authMiddleware } from '../../../../../shared/middleware/index.js'
+import { listImagenesQuerySchema, idParamsSchema } from '../schemas/imagenes.schema.js'
+import { ListImagenesUseCase } from '../../../application/use-cases/list-imagenes.use-case.js'
+import { GetImagenUseCase } from '../../../application/use-cases/get-imagen.use-case.js'
+import { DeleteImagenUseCase } from '../../../application/use-cases/delete-imagen.use-case.js'
+import type { IImagenRepository } from '../../../domain/repositories/imagen.repository.js'
 
-export async function registerImagenesRoutes(app: FastifyInstance): Promise<void> {
-  const controller = container.resolve(ImagenesController)
+type ImagenesRepos = { imagenRepo: IImagenRepository }
+type ListQuery = { Querystring: { page?: number; limit?: number; search?: string } }
+type IdParams = { Params: { id: number } }
 
-  // GET /api/v1/imagenes
-  app.get('/imagenes', {
+export async function registerImagenesRoutes(app: FastifyInstance, repos: ImagenesRepos): Promise<void> {
+  const { imagenRepo } = repos
+  const listImagenesUseCase = new ListImagenesUseCase(imagenRepo)
+  const getImagenUseCase = new GetImagenUseCase(imagenRepo)
+  const deleteImagenUseCase = new DeleteImagenUseCase(imagenRepo)
+
+  app.get<ListQuery>('/imagenes', {
     schema: { querystring: listImagenesQuerySchema },
     preHandler: [authMiddleware],
-  }, async (request, reply) => controller.listImagenes(request, reply))
+  }, async (request, reply) => {
+    const { page = 1, limit = 20, search } = request.query
+    const result = await listImagenesUseCase.execute(0, { page, limit, search })
+    return reply.code(200).send({ success: true, ...result })
+  })
 
-  // GET /api/v1/imagenes/:id
-  app.get('/imagenes/:id', {
+  app.get<IdParams>('/imagenes/:id', {
     schema: { params: idParamsSchema },
     preHandler: [authMiddleware],
-  }, async (request, reply) => controller.getImagen(request, reply))
+  }, async (request, reply) => {
+    const result = await getImagenUseCase.execute(request.params.id)
+    return reply.code(200).send({ success: true, data: result })
+  })
 
-  // POST /api/v1/imagenes/upload
-  app.post('/imagenes/upload', {
-    schema: { body: uploadImagenBodySchema },
-    preHandler: [authMiddleware, requirePermission('imagenes:write')],
-  }, async (request, reply) => controller.uploadImagen(request, reply))
-
-  // DELETE /api/v1/imagenes/:id
-  app.delete('/imagenes/:id', {
+  app.delete<IdParams>('/imagenes/:id', {
     schema: { params: idParamsSchema },
-    preHandler: [authMiddleware, requirePermission('imagenes:write')],
-  }, async (request, reply) => controller.deleteImagen(request, reply))
+    preHandler: [authMiddleware],
+  }, async (request, reply) => {
+    await deleteImagenUseCase.execute(request.params.id)
+    return reply.code(200).send({ success: true, data: { message: 'Imagen eliminada' } })
+  })
 }

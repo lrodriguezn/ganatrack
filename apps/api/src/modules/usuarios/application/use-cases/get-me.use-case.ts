@@ -8,7 +8,7 @@ import { NotFoundError } from '../../../../shared/errors/index.js'
 import type { DbClient } from '@ganatrack/database'
 import { usuariosRoles, usuariosRolesAsignacion } from '@ganatrack/database/schema'
 import { and, eq } from 'drizzle-orm'
-import { USUARIO_DB_CLIENT } from '../../index.js'
+import { USUARIO_DB_CLIENT } from '../../tokens.js'
 
 @injectable()
 export class GetMeUseCase {

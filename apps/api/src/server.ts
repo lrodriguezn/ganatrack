@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+import 'dotenv/config'
 import { buildApp } from './app.js'
 
 const start = async () => {

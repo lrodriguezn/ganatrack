@@ -8,7 +8,7 @@ import type { RolResponseDto } from '../dtos/usuario.dto.js'
 import { ConflictError, NotFoundError } from '../../../../shared/errors/index.js'
 import type { DbClient } from '@ganatrack/database'
 import { usuariosRolesAsignacion } from '@ganatrack/database/schema'
-import { USUARIO_DB_CLIENT } from '../../index.js'
+import { USUARIO_DB_CLIENT } from '../../tokens.js'
 
 @injectable()
 export class AssignRolesUseCase {

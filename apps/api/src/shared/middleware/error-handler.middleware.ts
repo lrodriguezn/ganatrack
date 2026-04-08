@@ -3,9 +3,16 @@ import { DomainError } from '../errors/index.js'
 
 export function errorHandler(
   error: FastifyError | DomainError,
-  _request: FastifyRequest,
+  request: FastifyRequest,
   reply: FastifyReply,
 ) {
+  // Get origin from request headers for CORS
+  const origin = request.headers.origin
+
+  // Add CORS headers to all error responses
+  reply.header('Access-Control-Allow-Origin', origin ?? '*')
+  reply.header('Access-Control-Allow-Credentials', 'true')
+
   if (error instanceof DomainError) {
     return reply.status(error.statusCode).send({
       success: false,

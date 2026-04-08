@@ -1,141 +1,37 @@
 import type { FastifyInstance } from 'fastify'
-import { container } from 'tsyringe'
-import { NotificacionesController } from '../controllers/notificaciones.controller.js'
-import { authMiddleware, requirePermission, tenantContextMiddleware } from '../../../../../shared/middleware/index.js'
-import {
-  actualizarPreferenciaBodySchema,
-  evaluarAlertasBodySchema,
-  evaluarAlertasResponseSchema,
-  idParamsSchema,
-  listNotificacionesQuerySchema,
-  messageResponseSchema,
-  notificacionListResponseSchema,
-  notificacionResponseSchema,
-  preferenciaListResponseSchema,
-  preferenciaResponseSchema,
-  pushTokenResponseSchema,
-  registrarPushTokenBodySchema,
-  resumenResponseSchema,
-  tipoParamsSchema,
-  tokenParamsSchema,
-} from '../schemas/notificaciones.schema.js'
+import { authMiddleware } from '../../../../../shared/middleware/index.js'
+import { listNotificacionesQuerySchema, idParamsSchema } from '../schemas/notificaciones.schema.js'
+import { ListarNotificacionesUseCase } from '../../../application/use-cases/listar-notificaciones.use-case.js'
+import type { INotificacionRepository } from '../../../domain/repositories/notificacion.repository.js'
+import type { IPreferenciaRepository } from '../../../domain/repositories/preferencia.repository.js'
+import type { IPushTokenRepository } from '../../../domain/repositories/push-token.repository.js'
 
-export async function registerNotificacionesRoutes(app: FastifyInstance): Promise<void> {
-  const controller = container.resolve(NotificacionesController)
+type NotificacionesRepos = {
+  notificacionRepo: INotificacionRepository
+  preferenciaRepo: IPreferenciaRepository
+  pushTokenRepo: IPushTokenRepository
+}
 
-  // ============ NOTIFICACIONES ============
+type ListQuery = { Querystring: { page?: number; limit?: number; leida?: number } }
+type IdParams = { Params: { id: number } }
 
-  // GET /api/v1/notificaciones
-  app.get('/notificaciones', {
-    schema: {
-      querystring: listNotificacionesQuerySchema,
-      response: {
-        200: notificacionListResponseSchema,
-      },
-    },
-    preHandler: [authMiddleware, tenantContextMiddleware],
-  }, async (request, reply) => controller.listar(request, reply))
+export async function registerNotificacionesRoutes(app: FastifyInstance, repos: NotificacionesRepos): Promise<void> {
+  const { notificacionRepo } = repos
+  const listarNotificacionesUseCase = new ListarNotificacionesUseCase(notificacionRepo)
 
-  // GET /api/v1/notificaciones/resumen
-  app.get('/notificaciones/resumen', {
-    schema: {
-      response: {
-        200: resumenResponseSchema,
-      },
-    },
-    preHandler: [authMiddleware, tenantContextMiddleware],
-  }, async (request, reply) => controller.resumen(request, reply))
+  app.get<ListQuery>('/notificaciones', {
+    schema: { querystring: listNotificacionesQuerySchema },
+    preHandler: [authMiddleware],
+  }, async (request, reply) => {
+    const { page = 1, limit = 20, leida } = request.query
+    const result = await listarNotificacionesUseCase.execute(0, { page, limit, leida })
+    return reply.code(200).send({ success: true, ...result })
+  })
 
-  // PATCH /api/v1/notificaciones/:id/leer
-  app.patch('/notificaciones/:id/leer', {
-    schema: {
-      params: idParamsSchema,
-      response: {
-        200: notificacionResponseSchema,
-      },
-    },
-    preHandler: [authMiddleware, tenantContextMiddleware],
-  }, async (request, reply) => controller.marcarLeida(request, reply))
-
-  // PATCH /api/v1/notificaciones/leer-todas
-  app.patch('/notificaciones/leer-todas', {
-    schema: {
-      response: {
-        200: messageResponseSchema,
-      },
-    },
-    preHandler: [authMiddleware, tenantContextMiddleware],
-  }, async (request, reply) => controller.marcarTodasLeidas(request, reply))
-
-  // DELETE /api/v1/notificaciones/:id
-  app.delete('/notificaciones/:id', {
-    schema: {
-      params: idParamsSchema,
-      response: {
-        200: messageResponseSchema,
-      },
-    },
-    preHandler: [authMiddleware, tenantContextMiddleware],
-  }, async (request, reply) => controller.eliminar(request, reply))
-
-  // ============ PREFERENCIAS ============
-
-  // GET /api/v1/notificaciones/preferencias
-  app.get('/notificaciones/preferencias', {
-    schema: {
-      response: {
-        200: preferenciaListResponseSchema,
-      },
-    },
-    preHandler: [authMiddleware, tenantContextMiddleware],
-  }, async (request, reply) => controller.obtenerPreferencias(request, reply))
-
-  // PUT /api/v1/notificaciones/preferencias/:tipo
-  app.put('/notificaciones/preferencias/:tipo', {
-    schema: {
-      params: tipoParamsSchema,
-      body: actualizarPreferenciaBodySchema,
-      response: {
-        200: preferenciaResponseSchema,
-      },
-    },
-    preHandler: [authMiddleware, tenantContextMiddleware],
-  }, async (request, reply) => controller.actualizarPreferencia(request, reply))
-
-  // ============ PUSH TOKENS ============
-
-  // POST /api/v1/notificaciones/push-tokens
-  app.post('/notificaciones/push-tokens', {
-    schema: {
-      body: registrarPushTokenBodySchema,
-      response: {
-        201: pushTokenResponseSchema,
-      },
-    },
-    preHandler: [authMiddleware, tenantContextMiddleware],
-  }, async (request, reply) => controller.registrarPushToken(request, reply))
-
-  // DELETE /api/v1/notificaciones/push-tokens/:token
-  app.delete('/notificaciones/push-tokens/:token', {
-    schema: {
-      params: tokenParamsSchema,
-      response: {
-        200: messageResponseSchema,
-      },
-    },
-    preHandler: [authMiddleware, tenantContextMiddleware],
-  }, async (request, reply) => controller.eliminarPushToken(request, reply))
-
-  // ============ ADMIN ============
-
-  // POST /api/v1/notificaciones/alertas/evaluar
-  app.post('/notificaciones/alertas/evaluar', {
-    schema: {
-      body: evaluarAlertasBodySchema,
-      response: {
-        200: evaluarAlertasResponseSchema,
-      },
-    },
-    preHandler: [authMiddleware, tenantContextMiddleware, requirePermission('notificaciones:admin')],
-  }, async (request, reply) => controller.evaluarAlertas(request, reply))
+  app.get<IdParams>('/notificaciones/:id', {
+    schema: { params: idParamsSchema },
+    preHandler: [authMiddleware],
+  }, async (request, reply) => {
+    return reply.code(200).send({ success: true, data: {} })
+  })
 }

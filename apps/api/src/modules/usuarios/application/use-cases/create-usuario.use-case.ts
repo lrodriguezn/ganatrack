@@ -8,8 +8,7 @@ import type { CreateUsuarioDto, UsuarioResponseDto } from '../dtos/usuario.dto.j
 import { hashPassword } from '../../../../shared/utils/password.utils.js'
 import { ConflictError } from '../../../../shared/errors/index.js'
 import type { DbClient } from '@ganatrack/database'
-import { usuariosContrasena, usuariosRolesAsignacion } from '@ganatrack/database/schema'
-import { USUARIO_DB_CLIENT } from '../../index.js'
+import { USUARIO_DB_CLIENT } from '../../tokens.js'
 
 @injectable()
 export class CreateUsuarioUseCase {

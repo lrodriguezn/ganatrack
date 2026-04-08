@@ -1,9 +1,10 @@
 {
-  "extends": "@ganatrack/tsconfig/node.json",
+  "extends": "@ganatrack/tsconfig/base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src",
     "experimentalDecorators": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "paths": {
       "@ganatrack/shared-types": ["../../packages/shared-types/src"],
       "@ganatrack/database": ["../../packages/database/src"]

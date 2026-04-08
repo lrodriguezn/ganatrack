@@ -5,7 +5,7 @@ import type { UsuarioResponseDto } from '../dtos/usuario.dto.js'
 import type { DbClient } from '@ganatrack/database'
 import { usuariosRoles, usuariosRolesAsignacion } from '@ganatrack/database/schema'
 import { and, eq } from 'drizzle-orm'
-import { USUARIO_DB_CLIENT } from '../../index.js'
+import { USUARIO_DB_CLIENT } from '../../tokens.js'
 
 export interface ListUsuariosResponse {
   data: UsuarioResponseDto[]

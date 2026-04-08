@@ -1,4 +1,4 @@
-import { container } from 'tsyringe'
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { createClient } from '@ganatrack/database'
 import { AUTH_REPOSITORY } from './domain/repositories/auth.repository.js'
 import type { IAuthRepository } from './domain/repositories/auth.repository.js'
@@ -16,32 +16,29 @@ import type { FastifyInstance } from 'fastify'
 export { AUTH_REPOSITORY }
 export { registerAuthRoutes }
 
-// DI tokens for the auth module
-export const AUTH_TOKENS = {
-  AuthRepository: AUTH_REPOSITORY,
-  DbClient: Symbol('AuthDbClient'),
-}
-
 export function registerAuthModule(): void {
-  // Register DB client
-  const db = createClient()
-  container.registerInstance(AUTH_TOKENS.DbClient, db)
-
-  // Register repository
-  container.registerSingleton<IAuthRepository>(AUTH_TOKENS.AuthRepository, DrizzleAuthRepository)
-
-  // Register domain services
-  container.registerSingleton(AuthDomainService)
-
-  // Register use cases
-  container.registerSingleton(LoginUseCase)
-  container.registerSingleton(LogoutUseCase)
-  container.registerSingleton(RefreshTokenUseCase)
-  container.registerSingleton(Verify2faUseCase)
-  container.registerSingleton(Resend2faUseCase)
-  container.registerSingleton(ChangePasswordUseCase)
+  // No DI - instances created on-demand in routes
 }
 
 export async function registerAuthModuleRoutes(app: FastifyInstance): Promise<void> {
-  await registerAuthRoutes(app)
+  // Create instances on-demand for this route registration
+  const db = createClient()
+  const authRepo: IAuthRepository = new DrizzleAuthRepository(db)
+  const domainService = new AuthDomainService()
+
+  const loginUseCase = new LoginUseCase(authRepo, domainService)
+  const logoutUseCase = new LogoutUseCase(authRepo)
+  const refreshTokenUseCase = new RefreshTokenUseCase(authRepo)
+  const verify2faUseCase = new Verify2faUseCase(authRepo, domainService)
+  const resend2faUseCase = new Resend2faUseCase(authRepo)
+  const changePasswordUseCase = new ChangePasswordUseCase(authRepo)
+
+  await registerAuthRoutes(app, {
+    loginUseCase,
+    logoutUseCase,
+    refreshTokenUseCase,
+    verify2faUseCase,
+    resend2faUseCase,
+    changePasswordUseCase,
+  })
 }

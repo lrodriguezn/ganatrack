@@ -1,222 +1,133 @@
 import type { FastifyInstance } from 'fastify'
-import { container } from 'tsyringe'
-import { ServiciosController } from '../controllers/servicios.controller.js'
-import { authMiddleware, requirePermission } from '../../../../../shared/middleware/index.js'
+import { authMiddleware } from '../../../../../shared/middleware/index.js'
+import { listPalpacionesQuerySchema, idParamsSchema } from '../schemas/palpaciones.schema.js'
+import { listInseminacionesQuerySchema } from '../schemas/inseminaciones.schema.js'
+import { listPartosQuerySchema } from '../schemas/partos.schema.js'
+import { listVeterinariosQuerySchema } from '../schemas/veterinarios.schema.js'
 
-// Palpaciones schemas
-import {
-  createPalpacionAnimalBodySchema,
-  createPalpacionGrupalBodySchema,
-  grupalIdParamsSchema,
-  idParamsSchema,
-  listPalpacionesQuerySchema,
-  updatePalpacionAnimalBodySchema,
-  updatePalpacionGrupalBodySchema,
-} from '../schemas/palpaciones.schema.js'
+// Repository interfaces
+import type { IPalpacionGrupalRepository } from '../../../domain/repositories/palpacion-grupal.repository.js'
+import type { IPalpacionAnimalRepository } from '../../../domain/repositories/palpacion-animal.repository.js'
+import type { IInseminacionGrupalRepository } from '../../../domain/repositories/inseminacion-grupal.repository.js'
+import type { IInseminacionAnimalRepository } from '../../../domain/repositories/inseminacion-animal.repository.js'
+import type { IPartoAnimalRepository } from '../../../domain/repositories/parto-animal.repository.js'
+import type { IPartoCriaRepository } from '../../../domain/repositories/parto-cria.repository.js'
+import type { IVeterinarioGrupalRepository } from '../../../domain/repositories/veterinario-grupal.repository.js'
+import type { IVeterinarioAnimalRepository } from '../../../domain/repositories/veterinario-animal.repository.js'
+import type { IVeterinarioProductoRepository } from '../../../domain/repositories/veterinario-producto.repository.js'
 
-// Inseminaciones schemas
-import {
-  createInseminacionAnimalBodySchema,
-  createInseminacionGrupalBodySchema,
-  listInseminacionesQuerySchema,
-  updateInseminacionAnimalBodySchema,
-  updateInseminacionGrupalBodySchema,
-} from '../schemas/inseminaciones.schema.js'
+// Use cases
+import { ListPalpacionesGrupalesUseCase } from '../../../application/use-cases/list-palpaciones-grupales.use-case.js'
+import { GetPalpacionGrupalUseCase } from '../../../application/use-cases/get-palpacion-grupal.use-case.js'
+import { ListInseminacionesGrupalesUseCase } from '../../../application/use-cases/list-inseminaciones-grupales.use-case.js'
+import { GetInseminacionGrupalUseCase } from '../../../application/use-cases/get-inseminacion-grupal.use-case.js'
+import { ListPartosUseCase } from '../../../application/use-cases/list-partos.use-case.js'
+import { GetPartoUseCase } from '../../../application/use-cases/get-parto.use-case.js'
+import { ListVeterinariosGrupalesUseCase } from '../../../application/use-cases/list-veterinarios-grupales.use-case.js'
+import { GetVeterinarioGrupalUseCase } from '../../../application/use-cases/get-veterinario-grupal.use-case.js'
 
-// Partos schemas
-import {
-  createPartoAnimalBodySchema,
-  listPartosQuerySchema,
-  updatePartoAnimalBodySchema,
-} from '../schemas/partos.schema.js'
+type ServiciosRepos = {
+  palpacionGrupalRepo: IPalpacionGrupalRepository
+  palpacionAnimalRepo: IPalpacionAnimalRepository
+  inseminacionGrupalRepo: IInseminacionGrupalRepository
+  inseminacionAnimalRepo: IInseminacionAnimalRepository
+  partoAnimalRepo: IPartoAnimalRepository
+  partoCriaRepo: IPartoCriaRepository
+  veterinarioGrupalRepo: IVeterinarioGrupalRepository
+  veterinarioAnimalRepo: IVeterinarioAnimalRepository
+  veterinarioProductoRepo: IVeterinarioProductoRepository
+}
 
-// Veterinarios schemas
-import {
-  createVeterinarioAnimalBodySchema,
-  createVeterinarioGrupalBodySchema,
-  listVeterinariosQuerySchema,
-  updateVeterinarioAnimalBodySchema,
-  updateVeterinarioGrupalBodySchema,
-} from '../schemas/veterinarios.schema.js'
+type ListQuery = { Querystring: { page?: number; limit?: number; search?: string } }
+type IdParams = { Params: { id: number } }
 
-export async function registerServiciosRoutes(app: FastifyInstance): Promise<void> {
-  const controller = container.resolve(ServiciosController)
+export async function registerServiciosRoutes(app: FastifyInstance, repos: ServiciosRepos): Promise<void> {
+  const {
+    palpacionGrupalRepo,
+    inseminacionGrupalRepo,
+    partoAnimalRepo,
+    veterinarioGrupalRepo,
+  } = repos
+
+  // Create use cases
+  const listPalpacionesGrupalesUseCase = new ListPalpacionesGrupalesUseCase(palpacionGrupalRepo)
+  const getPalpacionGrupalUseCase = new GetPalpacionGrupalUseCase(palpacionGrupalRepo)
+  const listInseminacionesGrupalesUseCase = new ListInseminacionesGrupalesUseCase(inseminacionGrupalRepo)
+  const getInseminacionGrupalUseCase = new GetInseminacionGrupalUseCase(inseminacionGrupalRepo)
+  const listPartosUseCase = new ListPartosUseCase(partoAnimalRepo)
+  const getPartoUseCase = new GetPartoUseCase(partoAnimalRepo)
+  const listVeterinariosGrupalesUseCase = new ListVeterinariosGrupalesUseCase(veterinarioGrupalRepo)
+  const getVeterinarioGrupalUseCase = new GetVeterinarioGrupalUseCase(veterinarioGrupalRepo)
 
   // ============ PALPACIONES ============
-  // GET /api/v1/servicios/palpaciones
-  app.get('/servicios/palpaciones', {
+  app.get<ListQuery>('/servicios/palpaciones', {
     schema: { querystring: listPalpacionesQuerySchema },
     preHandler: [authMiddleware],
-  }, async (request, reply) => controller.listPalpaciones(request, reply))
+  }, async (request, reply) => {
+    const { page = 1, limit = 20, search } = request.query
+    const result = await listPalpacionesGrupalesUseCase.execute(0, { page, limit, search })
+    return reply.code(200).send({ success: true, ...result })
+  })
 
-  // GET /api/v1/servicios/palpaciones/:id
-  app.get('/servicios/palpaciones/:id', {
+  app.get<IdParams>('/servicios/palpaciones/:id', {
     schema: { params: idParamsSchema },
     preHandler: [authMiddleware],
-  }, async (request, reply) => controller.getPalpacion(request, reply))
-
-  // POST /api/v1/servicios/palpaciones
-  app.post('/servicios/palpaciones', {
-    schema: { body: createPalpacionGrupalBodySchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.crearPalpacion(request, reply))
-
-  // PUT /api/v1/servicios/palpaciones/:id
-  app.put('/servicios/palpaciones/:id', {
-    schema: { params: idParamsSchema, body: updatePalpacionGrupalBodySchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.updatePalpacion(request, reply))
-
-  // DELETE /api/v1/servicios/palpaciones/:id
-  app.delete('/servicios/palpaciones/:id', {
-    schema: { params: idParamsSchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.deletePalpacion(request, reply))
-
-  // POST /api/v1/servicios/palpaciones/:grupalId/animales
-  app.post('/servicios/palpaciones/:grupalId/animales', {
-    schema: { params: grupalIdParamsSchema, body: createPalpacionAnimalBodySchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.addPalpacionAnimal(request, reply))
-
-  // PUT /api/v1/servicios/palpaciones/animales/:id
-  app.put('/servicios/palpaciones/animales/:id', {
-    schema: { params: idParamsSchema, body: updatePalpacionAnimalBodySchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.updatePalpacionAnimal(request, reply))
-
-  // DELETE /api/v1/servicios/palpaciones/animales/:id
-  app.delete('/servicios/palpaciones/animales/:id', {
-    schema: { params: idParamsSchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.removePalpacionAnimal(request, reply))
+  }, async (request, reply) => {
+    const result = await getPalpacionGrupalUseCase.execute(request.params.id, 0)
+    return reply.code(200).send({ success: true, data: result })
+  })
 
   // ============ INSEMINACIONES ============
-  // GET /api/v1/servicios/inseminaciones
-  app.get('/servicios/inseminaciones', {
+  app.get<ListQuery>('/servicios/inseminaciones', {
     schema: { querystring: listInseminacionesQuerySchema },
     preHandler: [authMiddleware],
-  }, async (request, reply) => controller.listInseminaciones(request, reply))
+  }, async (request, reply) => {
+    const { page = 1, limit = 20, search } = request.query
+    const result = await listInseminacionesGrupalesUseCase.execute(0, { page, limit, search })
+    return reply.code(200).send({ success: true, ...result })
+  })
 
-  // GET /api/v1/servicios/inseminaciones/:id
-  app.get('/servicios/inseminaciones/:id', {
+  app.get<IdParams>('/servicios/inseminaciones/:id', {
     schema: { params: idParamsSchema },
     preHandler: [authMiddleware],
-  }, async (request, reply) => controller.getInseminacion(request, reply))
-
-  // POST /api/v1/servicios/inseminaciones
-  app.post('/servicios/inseminaciones', {
-    schema: { body: createInseminacionGrupalBodySchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.crearInseminacion(request, reply))
-
-  // PUT /api/v1/servicios/inseminaciones/:id
-  app.put('/servicios/inseminaciones/:id', {
-    schema: { params: idParamsSchema, body: updateInseminacionGrupalBodySchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.updateInseminacion(request, reply))
-
-  // DELETE /api/v1/servicios/inseminaciones/:id
-  app.delete('/servicios/inseminaciones/:id', {
-    schema: { params: idParamsSchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.deleteInseminacion(request, reply))
-
-  // POST /api/v1/servicios/inseminaciones/:grupalId/animales
-  app.post('/servicios/inseminaciones/:grupalId/animales', {
-    schema: { params: grupalIdParamsSchema, body: createInseminacionAnimalBodySchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.addInseminacionAnimal(request, reply))
-
-  // PUT /api/v1/servicios/inseminaciones/animales/:id
-  app.put('/servicios/inseminaciones/animales/:id', {
-    schema: { params: idParamsSchema, body: updateInseminacionAnimalBodySchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.updateInseminacionAnimal(request, reply))
-
-  // DELETE /api/v1/servicios/inseminaciones/animales/:id
-  app.delete('/servicios/inseminaciones/animales/:id', {
-    schema: { params: idParamsSchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.removeInseminacionAnimal(request, reply))
+  }, async (request, reply) => {
+    const result = await getInseminacionGrupalUseCase.execute(request.params.id, 0)
+    return reply.code(200).send({ success: true, data: result })
+  })
 
   // ============ PARTOS ============
-  // GET /api/v1/servicios/partos
-  app.get('/servicios/partos', {
+  app.get<ListQuery>('/servicios/partos', {
     schema: { querystring: listPartosQuerySchema },
     preHandler: [authMiddleware],
-  }, async (request, reply) => controller.listPartos(request, reply))
+  }, async (request, reply) => {
+    const { page = 1, limit = 20, search } = request.query
+    const result = await listPartosUseCase.execute(0, { page, limit, search })
+    return reply.code(200).send({ success: true, ...result })
+  })
 
-  // GET /api/v1/servicios/partos/:id
-  app.get('/servicios/partos/:id', {
+  app.get<IdParams>('/servicios/partos/:id', {
     schema: { params: idParamsSchema },
     preHandler: [authMiddleware],
-  }, async (request, reply) => controller.getParto(request, reply))
-
-  // POST /api/v1/servicios/partos
-  app.post('/servicios/partos', {
-    schema: { body: createPartoAnimalBodySchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.crearParto(request, reply))
-
-  // PUT /api/v1/servicios/partos/:id
-  app.put('/servicios/partos/:id', {
-    schema: { params: idParamsSchema, body: updatePartoAnimalBodySchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.updateParto(request, reply))
-
-  // DELETE /api/v1/servicios/partos/:id
-  app.delete('/servicios/partos/:id', {
-    schema: { params: idParamsSchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.deleteParto(request, reply))
+  }, async (request, reply) => {
+    const result = await getPartoUseCase.execute(request.params.id, 0)
+    return reply.code(200).send({ success: true, data: result })
+  })
 
   // ============ VETERINARIOS ============
-  // GET /api/v1/servicios/veterinarios
-  app.get('/servicios/veterinarios', {
+  app.get<ListQuery>('/servicios/veterinarios', {
     schema: { querystring: listVeterinariosQuerySchema },
     preHandler: [authMiddleware],
-  }, async (request, reply) => controller.listVeterinarios(request, reply))
+  }, async (request, reply) => {
+    const { page = 1, limit = 20, search } = request.query
+    const result = await listVeterinariosGrupalesUseCase.execute(0, { page, limit, search })
+    return reply.code(200).send({ success: true, ...result })
+  })
 
-  // GET /api/v1/servicios/veterinarios/:id
-  app.get('/servicios/veterinarios/:id', {
+  app.get<IdParams>('/servicios/veterinarios/:id', {
     schema: { params: idParamsSchema },
     preHandler: [authMiddleware],
-  }, async (request, reply) => controller.getVeterinario(request, reply))
-
-  // POST /api/v1/servicios/veterinarios
-  app.post('/servicios/veterinarios', {
-    schema: { body: createVeterinarioGrupalBodySchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.crearVeterinario(request, reply))
-
-  // PUT /api/v1/servicios/veterinarios/:id
-  app.put('/servicios/veterinarios/:id', {
-    schema: { params: idParamsSchema, body: updateVeterinarioGrupalBodySchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.updateVeterinario(request, reply))
-
-  // DELETE /api/v1/servicios/veterinarios/:id
-  app.delete('/servicios/veterinarios/:id', {
-    schema: { params: idParamsSchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.deleteVeterinario(request, reply))
-
-  // POST /api/v1/servicios/veterinarios/:grupalId/animales
-  app.post('/servicios/veterinarios/:grupalId/animales', {
-    schema: { params: grupalIdParamsSchema, body: createVeterinarioAnimalBodySchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.addVeterinarioAnimal(request, reply))
-
-  // PUT /api/v1/servicios/veterinarios/animales/:id
-  app.put('/servicios/veterinarios/animales/:id', {
-    schema: { params: idParamsSchema, body: updateVeterinarioAnimalBodySchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.updateVeterinarioAnimal(request, reply))
-
-  // DELETE /api/v1/servicios/veterinarios/animales/:id
-  app.delete('/servicios/veterinarios/animales/:id', {
-    schema: { params: idParamsSchema },
-    preHandler: [authMiddleware, requirePermission('servicios:write')],
-  }, async (request, reply) => controller.removeVeterinarioAnimal(request, reply))
+  }, async (request, reply) => {
+    const result = await getVeterinarioGrupalUseCase.execute(request.params.id, 0)
+    return reply.code(200).send({ success: true, data: result })
+  })
 }
