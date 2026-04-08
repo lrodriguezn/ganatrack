@@ -27,6 +27,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePredio, usePotreros, useSectores, useLotes, useGrupos } from '../hooks';
+import { useCatalogo } from '@/modules/configuracion/hooks';
 import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 import { Pencil } from 'lucide-react';
@@ -195,6 +196,9 @@ export function PredioDetail({ predioId, onEdit }: PredioDetailProps): JSX.Eleme
  * Info tab — displays basic Predio information.
  */
 function PredioInfoTab({ predio }: { predio: NonNullable<ReturnType<typeof usePredio>['predio']> }): JSX.Element {
+  const { items: tiposExplotacion } = useCatalogo('tipos-explotacion');
+  const tipoExplotacionNombre = tiposExplotacion.find(t => t.id === predio.tipoExplotacionId)?.nombre;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <InfoCard title="Información General">
@@ -217,7 +221,7 @@ function PredioInfoTab({ predio }: { predio: NonNullable<ReturnType<typeof usePr
           </div>
           <div>
             <dt className="text-sm text-gray-500 dark:text-gray-400">Tipo Explotación</dt>
-            <dd className="text-gray-900 dark:text-gray-100">{predio.tipoExplotacionId ?? '—'}</dd>
+            <dd className="text-gray-900 dark:text-gray-100">{tipoExplotacionNombre ?? predio.tipoExplotacionId ?? '—'}</dd>
           </div>
         </dl>
       </InfoCard>

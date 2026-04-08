@@ -32,6 +32,7 @@ import type { CreatePredioDto, Predio } from '@ganatrack/shared-types';
 import { FormField } from '@/shared/components/ui/form-field';
 import { Input } from '@/shared/components/ui/input';
 import { Button } from '@/shared/components/ui/button';
+import { useCatalogo } from '@/modules/configuracion/hooks';
 
 interface PredioFormProps {
   form: UseFormReturn<CreatePredioDto>;
@@ -50,6 +51,8 @@ export function PredioForm({
     handleSubmit,
     formState: { errors },
   } = form;
+
+  const { items: tiposExplotacion } = useCatalogo('tipos-explotacion');
 
   return (
     <form
@@ -182,25 +185,41 @@ export function PredioForm({
       />
 
       {/* Tipo de Explotación */}
-      <FormField
-        name="tipoExplotacionId"
-        label="Tipo de Explotación (ID)"
-        control={form.control}
-        render={(fieldProps) => (
-          <Input
-            {...fieldProps}
-            type="number"
-            placeholder="1"
-            min={1}
-            error={errors.tipoExplotacionId?.message}
-            disabled={isLoading}
-            onChange={(e) => {
-              const value = e.target.value;
-              fieldProps.onChange(value === '' ? undefined : parseInt(value, 10));
-            }}
-          />
+      <div className="flex flex-col gap-1.5">
+        <label
+          htmlFor="tipoExplotacionId"
+          className="text-sm font-medium text-gray-700 dark:text-gray-200"
+        >
+          Tipo de Explotación
+        </label>
+        <select
+          id="tipoExplotacionId"
+          value={form.getValues('tipoExplotacionId') ?? ''}
+          onChange={(e) => {
+            const value = e.target.value;
+            form.setValue('tipoExplotacionId', value === '' ? undefined : parseInt(value, 10));
+          }}
+          disabled={isLoading}
+          className="
+            w-full px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600
+            bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
+            focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
+            disabled:opacity-50 disabled:cursor-not-allowed
+          "
+        >
+          <option value="">Seleccionar tipo...</option>
+          {tiposExplotacion.map((tipo) => (
+            <option key={tipo.id} value={tipo.id}>
+              {tipo.nombre}
+            </option>
+          ))}
+        </select>
+        {errors.tipoExplotacionId && (
+          <span className="text-sm text-red-500 dark:text-red-400" role="alert">
+            {errors.tipoExplotacionId.message}
+          </span>
         )}
-      />
+      </div>
 
       {/* Submit button */}
       <div className="flex items-center justify-end gap-2 pt-4">
