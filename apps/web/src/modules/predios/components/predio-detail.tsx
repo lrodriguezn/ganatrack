@@ -77,7 +77,7 @@ export function PredioDetail({ predioId, onEdit }: PredioDetailProps): JSX.Eleme
 
   console.log('[PredioDetail] predioId:', predioId, 'effectivePredioId:', effectivePredioId);
 
-  const { predio, isLoading: isLoadingPredio, error: errorPredio } = usePredio({
+  const { existingPredio: predio, isLoading: isLoadingPredio, error: errorPredio } = usePredio({
     id: effectivePredioId,
   });
 
