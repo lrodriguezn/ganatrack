@@ -75,9 +75,13 @@ export function PredioDetail({ predioId, onEdit }: PredioDetailProps): JSX.Eleme
   // Note: This requires the parent to handle the case where there's no active Predio
   const effectivePredioId = predioId ?? 0;
 
+  console.log('[PredioDetail] predioId:', predioId, 'effectivePredioId:', effectivePredioId);
+
   const { predio, isLoading: isLoadingPredio, error: errorPredio } = usePredio({
     id: effectivePredioId,
   });
+
+  console.log('[PredioDetail] predio:', predio, 'isLoadingPredio:', isLoadingPredio, 'errorPredio:', errorPredio);
 
   const { potreros, isLoading: isLoadingPotreros } = usePotreros({
     predioId: effectivePredioId,

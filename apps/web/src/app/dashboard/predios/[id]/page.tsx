@@ -19,6 +19,9 @@ function PredioDetailContent(): JSX.Element {
   const idStr = Array.isArray(idParam) ? idParam[0] : idParam;
   const id = idStr ? Number(idStr) : NaN;
 
+  console.log('[PredioDetailContent] params:', params);
+  console.log('[PredioDetailContent] idParam:', idParam, 'idStr:', idStr, 'id:', id);
+
   const handleEdit = (predioId: number) => {
     router.push(`/dashboard/predios/${predioId}/edit`);
   };
