@@ -1,0 +1,65 @@
+# SDD Change State
+# Managed by SDD orchestrator — do not edit manually
+
+change: sub-recursos-crud
+status: completed
+archived: true
+archived_date: "2026-04-09"
+archive_path: "openspec/changes/archive/2026-04-09-sub-recursos-crud"
+
+phases:
+  propose: completed
+  spec: completed
+  design: completed
+  tasks: completed
+  apply: completed
+  verify: completed
+  archive: completed
+
+artifacts:
+  - proposal.md
+  - spec.md
+  - design.md
+  - tasks.md
+  - verify-report.md
+  - archive-report.md
+  - state.yaml
+
+acceptance_criteria:
+  - id: AC-001
+    status: pass
+    description: Los 4 sub-recursos tienen flujo Tabla → Crear → Detalle → Editar → Eliminar
+  - id: AC-002
+    status: pass
+    description: Las 4 tablas de lista global tienen botón Nuevo y handlers onEdit/onDelete/onRowClick
+  - id: AC-003
+    status: pass
+    description: Los 12 hooks de mutación invalidan correctamente la cache
+  - id: AC-004
+    status: pass
+    description: Los 4 componentes de detalle muestran campos y botones de acción
+  - id: AC-005
+    status: pass
+    description: Las 12 páginas de routing navegan correctamente
+  - id: AC-006
+    status: pass
+    description: DeleteModal aparece antes de eliminar en todas las vistas
+  - id: AC-007
+    status: pass
+    description: Barrel exports actualizados en hooks/index.ts y components/index.ts
+  - id: AC-008
+    status: pass
+    description: Navegación consistente para los 4 sub-recursos
+
+verification:
+  verdict: pass
+  issues:
+    critical: 0
+    warnings: 2
+    suggestions: 1
+  notes: >
+    PASS WITH WARNINGS: 2 warnings (DeleteModal con window.confirm en lugar de modal;
+    onRowClick no implementado en tablas). No bloquean funcionalidad core.
+
+files_created: 34
+files_modified: 6

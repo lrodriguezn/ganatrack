@@ -8,17 +8,37 @@
 
 'use client';
 
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useState } from 'react';
+import { Plus } from 'lucide-react';
 import { usePredioStore } from '@/store/predio.store';
-import { useLotes } from '@/modules/predios/hooks';
+import { useLotes, useDeleteLote } from '@/modules/predios/hooks';
 import { LotesTable } from '@/modules/predios/components/lotes-table';
+import { SubRecursoDeleteModal } from '@/modules/predios/components';
+import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 
+interface DeleteTarget {
+  id: number;
+  nombre: string;
+}
+
 export default function LotesPage(): JSX.Element {
+  const router = useRouter();
   const { predioActivo } = usePredioStore();
 
   const { lotes, isLoading, error } = useLotes({
     predioId: predioActivo?.id ?? 0,
   });
+
+  const { mutate: deleteLote, isLoading: isDeleting } = useDeleteLote({
+    onSuccess: () => {
+      // Query invalidation happens automatically via the hook
+    },
+  });
+
+  const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
 
   if (!predioActivo) {
     return (
@@ -40,16 +60,38 @@ export default function LotesPage(): JSX.Element {
     );
   }
 
+  const handleEdit = (lote: { id: number }) => {
+    router.push(`/dashboard/predios/${predioActivo.id}/lotes/${lote.id}/edit`);
+  };
+
+  const handleDelete = (lote: { id: number; nombre: string }) => {
+    setDeleteTarget({ id: lote.id, nombre: lote.nombre });
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteTarget) {
+      deleteLote(predioActivo.id, deleteTarget.id);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Page header */}
-      <div>
-        <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-          Lotes
-        </h1>
-        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-          Lotes del predio: {predioActivo.nombre}
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+            Lotes
+          </h1>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            Lotes del predio: {predioActivo.nombre}
+          </p>
+        </div>
+        <Link href={`/dashboard/predios/${predioActivo.id}/lotes/nuevo`}>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Nuevo Lote
+          </Button>
+        </Link>
       </div>
 
       {/* Error state */}
@@ -67,8 +109,22 @@ export default function LotesPage(): JSX.Element {
           <Skeleton className="h-64 w-full" />
         </div>
       ) : (
-        <LotesTable lotes={lotes} isLoading={isLoading} />
+        <LotesTable
+          lotes={lotes}
+          isLoading={isLoading}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       )}
+
+      <SubRecursoDeleteModal
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleConfirmDelete}
+        nombre={deleteTarget?.nombre ?? ''}
+        tipoRecurso="Lote"
+        isLoading={isDeleting}
+      />
     </div>
   );
 }

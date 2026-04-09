@@ -28,3 +28,12 @@ export { PotreroForm } from './potrero-form';
 export { LoteForm } from './lote-form';
 export { GrupoForm } from './grupo-form';
 export { SectorForm } from './sector-form';
+
+// Phase 6 — Sub-recursos Detail Components
+export { PotreroDetail } from './potrero-detail';
+export { LoteDetail } from './lote-detail';
+export { GrupoDetail } from './grupo-detail';
+export { SectorDetail } from './sector-detail';
+
+// Generic Delete Modal for sub-recursos
+export { SubRecursoDeleteModal } from './subrecurso-delete-modal';
