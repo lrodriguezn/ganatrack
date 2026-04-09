@@ -58,6 +58,10 @@ function EditPredioContent(): JSX.Element {
     mutate(id, data);
   };
 
+  const handleCancel = () => {
+    router.push(`/dashboard/predios/${id}`);
+  };
+
   if (isLoading) {
     return (
       <div className="space-y-6">
@@ -107,6 +111,7 @@ function EditPredioContent(): JSX.Element {
       <PredioForm
         form={form}
         onSubmit={onSubmit}
+        onCancel={handleCancel}
         isLoading={isUpdating}
         submitLabel="Guardar Cambios"
       />

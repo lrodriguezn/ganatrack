@@ -41,6 +41,10 @@ export default function NuevoPredioPage(): JSX.Element {
     mutate(data);
   };
 
+  const handleCancel = () => {
+    router.push('/dashboard/predios');
+  };
+
   return (
     <div className="space-y-6">
       {/* Page header */}
@@ -66,6 +70,7 @@ export default function NuevoPredioPage(): JSX.Element {
       <PredioForm
         form={form}
         onSubmit={onSubmit}
+        onCancel={handleCancel}
         isLoading={isLoading}
         submitLabel="Crear Predio"
       />
