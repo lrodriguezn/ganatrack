@@ -1,0 +1,207 @@
+export declare const reportesExportaciones: import("drizzle-orm/sqlite-core").SQLiteTableWithColumns<{
+    name: "reportes_exportaciones";
+    schema: undefined;
+    columns: {
+        id: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "id";
+            tableName: "reportes_exportaciones";
+            dataType: "number";
+            columnType: "SQLiteInteger";
+            data: number;
+            driverParam: number;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        tipo: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "tipo";
+            tableName: "reportes_exportaciones";
+            dataType: "string";
+            columnType: "SQLiteText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            length: 50;
+        }>;
+        formato: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "formato";
+            tableName: "reportes_exportaciones";
+            dataType: "string";
+            columnType: "SQLiteText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            length: 10;
+        }>;
+        estado: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "estado";
+            tableName: "reportes_exportaciones";
+            dataType: "string";
+            columnType: "SQLiteText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            length: 20;
+        }>;
+        rutaArchivo: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "ruta_archivo";
+            tableName: "reportes_exportaciones";
+            dataType: "string";
+            columnType: "SQLiteText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            length: number | undefined;
+        }>;
+        parametros: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "parametros";
+            tableName: "reportes_exportaciones";
+            dataType: "string";
+            columnType: "SQLiteText";
+            data: string;
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            length: number | undefined;
+        }>;
+        predioId: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "predio_id";
+            tableName: "reportes_exportaciones";
+            dataType: "number";
+            columnType: "SQLiteInteger";
+            data: number;
+            driverParam: number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        usuarioId: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "usuario_id";
+            tableName: "reportes_exportaciones";
+            dataType: "number";
+            columnType: "SQLiteInteger";
+            data: number;
+            driverParam: number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        activo: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "activo";
+            tableName: "reportes_exportaciones";
+            dataType: "number";
+            columnType: "SQLiteInteger";
+            data: number;
+            driverParam: number;
+            notNull: false;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        createdAt: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "created_at";
+            tableName: "reportes_exportaciones";
+            dataType: "date";
+            columnType: "SQLiteTimestamp";
+            data: Date;
+            driverParam: number;
+            notNull: false;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        updatedAt: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "updated_at";
+            tableName: "reportes_exportaciones";
+            dataType: "date";
+            columnType: "SQLiteTimestamp";
+            data: Date;
+            driverParam: number;
+            notNull: false;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: true;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "sqlite";
+}>;
+export type ReporteExportacion = typeof reportesExportaciones.$inferSelect;
+export type NuevoReporteExportacion = typeof reportesExportaciones.$inferInsert;
+//# sourceMappingURL=reportes.d.ts.map
