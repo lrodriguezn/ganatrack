@@ -55,12 +55,9 @@ export class RealPrediosService implements PrediosService {
 
   async getPredio(id: number): Promise<Predio> {
     try {
-      console.log('[RealPrediosService] getPredio id:', id);
       const wrapped = await apiClient.get(`predios/${id}`).json() as { success: boolean; data: Predio };
-      console.log('[RealPrediosService] getPredio result:', wrapped);
       return wrapped.data;
     } catch (error) {
-      console.error('[RealPrediosService] getPredio error:', error);
       if (error instanceof ApiError) {
         throw error;
       }
