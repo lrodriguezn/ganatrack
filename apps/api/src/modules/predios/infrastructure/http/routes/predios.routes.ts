@@ -179,7 +179,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await getPotreroUseCase.execute(request.params.id)
+    const result = await getPotreroUseCase.execute(request.params.id, request.params.predioId)
     return reply.code(200).send({ success: true, data: result })
   })
 
@@ -197,7 +197,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema, body: updatePotreroBodySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await updatePotreroUseCase.execute(request.params.id, request.body)
+    const result = await updatePotreroUseCase.execute(request.params.id, request.body, request.params.predioId)
     return reply.code(200).send({ success: true, data: result })
   })
 
@@ -206,7 +206,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    await deletePotreroUseCase.execute(request.params.id)
+    await deletePotreroUseCase.execute(request.params.id, request.params.predioId)
     return reply.code(200).send({ success: true, data: { message: 'Potrero eliminado' } })
   })
 
@@ -225,7 +225,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await getSectorUseCase.execute(request.params.id)
+    const result = await getSectorUseCase.execute(request.params.id, request.params.predioId)
     return reply.code(200).send({ success: true, data: result })
   })
 
@@ -243,7 +243,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema, body: updateSectorBodySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await updateSectorUseCase.execute(request.params.id, request.body)
+    const result = await updateSectorUseCase.execute(request.params.id, request.body, request.params.predioId)
     return reply.code(200).send({ success: true, data: result })
   })
 
@@ -252,7 +252,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    await deleteSectorUseCase.execute(request.params.id)
+    await deleteSectorUseCase.execute(request.params.id, request.params.predioId)
     return reply.code(200).send({ success: true, data: { message: 'Sector eliminado' } })
   })
 
@@ -271,7 +271,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await getLoteUseCase.execute(request.params.id)
+    const result = await getLoteUseCase.execute(request.params.id, request.params.predioId)
     return reply.code(200).send({ success: true, data: result })
   })
 
@@ -289,7 +289,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema, body: updateLoteBodySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await updateLoteUseCase.execute(request.params.id, request.body)
+    const result = await updateLoteUseCase.execute(request.params.id, request.body, request.params.predioId)
     return reply.code(200).send({ success: true, data: result })
   })
 
@@ -298,7 +298,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    await deleteLoteUseCase.execute(request.params.id)
+    await deleteLoteUseCase.execute(request.params.id, request.params.predioId)
     return reply.code(200).send({ success: true, data: { message: 'Lote eliminado' } })
   })
 
@@ -317,7 +317,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await getGrupoUseCase.execute(request.params.id)
+    const result = await getGrupoUseCase.execute(request.params.id, request.params.predioId)
     return reply.code(200).send({ success: true, data: result })
   })
 
@@ -335,7 +335,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema, body: updateGrupoBodySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await updateGrupoUseCase.execute(request.params.id, request.body)
+    const result = await updateGrupoUseCase.execute(request.params.id, request.body, request.params.predioId)
     return reply.code(200).send({ success: true, data: result })
   })
 
@@ -344,7 +344,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    await deleteGrupoUseCase.execute(request.params.id)
+    await deleteGrupoUseCase.execute(request.params.id, request.params.predioId)
     return reply.code(200).send({ success: true, data: { message: 'Grupo eliminado' } })
   })
 }
