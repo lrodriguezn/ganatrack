@@ -15,10 +15,11 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Plus } from 'lucide-react';
-import { usePredios } from '@/modules/predios/hooks';
+import { usePredios, useDeletePredio } from '@/modules/predios/hooks';
 import { PredioTable } from '@/modules/predios/components/predio-table';
 import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
+import type { Predio } from '@ganatrack/shared-types';
 
 export default function PrediosListPage(): JSX.Element {
   const router = useRouter();
@@ -27,6 +28,8 @@ export default function PrediosListPage(): JSX.Element {
   const [pageSize, setPageSize] = useState(10);
 
   const { predios, isLoading, error } = usePredios({ search });
+
+  const { mutate: deletePredio } = useDeletePredio();
 
   const handlePaginationChange = (newPageIndex: number, newPageSize: number) => {
     setPageIndex(newPageIndex);
@@ -38,8 +41,14 @@ export default function PrediosListPage(): JSX.Element {
     setPageIndex(0); // Reset to first page on search
   };
 
-  const handleEdit = (predio: typeof predios[number]) => {
+  const handleEdit = (predio: Predio) => {
     router.push(`/dashboard/predios/${predio.id}/edit`);
+  };
+
+  const handleDelete = (predio: Predio) => {
+    if (window.confirm(`¿Estás seguro de eliminar el predio "${predio.nombre}"?`)) {
+      deletePredio(predio.id);
+    }
   };
 
   if (error) {
@@ -90,6 +99,7 @@ export default function PrediosListPage(): JSX.Element {
           totalRows={predios.length}
           onPaginationChange={handlePaginationChange}
           onEdit={handleEdit}
+          onDelete={handleDelete}
           searchValue={search}
           onSearchChange={handleSearchChange}
         />
