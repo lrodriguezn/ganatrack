@@ -162,7 +162,7 @@ export default function UsuariosListPage(): JSX.Element {
           {/* Rol filter */}
           <select
             value={rolId ?? ''}
-            onChange={(e) => {
+            onChange={(e: any) => {
               setRolId(e.target.value ? Number(e.target.value) : undefined);
               setPageIndex(0);
             }}
@@ -180,7 +180,7 @@ export default function UsuariosListPage(): JSX.Element {
           {/* Estado filter */}
           <select
             value={activo === undefined ? '' : activo ? 'true' : 'false'}
-            onChange={(e) => {
+            onChange={(e: any) => {
               setActivo(e.target.value === '' ? undefined : e.target.value === 'true');
               setPageIndex(0);
             }}

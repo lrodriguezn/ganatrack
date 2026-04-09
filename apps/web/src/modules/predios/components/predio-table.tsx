@@ -35,6 +35,7 @@ import { DataTable } from '@/shared/components/ui/data-table';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import type { Predio } from '@ganatrack/shared-types';
+import { useCatalogo } from '@/modules/configuracion/hooks';
 
 interface PredioTableProps {
   predios: Predio[];
@@ -64,6 +65,15 @@ export function PredioTable({
   onSearchChange,
 }: PredioTableProps): JSX.Element {
   const [localSearch, setLocalSearch] = useState(searchValue);
+
+  // Load catalog for tipo explotacion
+  const { items: tiposExplotacion } = useCatalogo('tipos-explotacion');
+
+  const getTipoExplotacionNombre = (id: number | null | undefined): string => {
+    if (!id) return '—';
+    const tipo = tiposExplotacion.find(t => t.id === id);
+    return tipo?.nombre ?? '—';
+  };
 
   const handleSearchChange = (value: string) => {
     setLocalSearch(value);
@@ -132,21 +142,22 @@ export function PredioTable({
       ),
     },
     {
-      accessorKey: 'tipo',
-      header: 'Tipo',
-      cell: ({ row }) => {
-        const tipoLabels: Record<string, string> = {
-          'lechería': 'Lechería',
-          'cría': 'Cría',
-          'doble propósito': 'Doble Propósito',
-          'engorde': 'Engorde',
-        };
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
-            {tipoLabels[row.original.tipo] ?? row.original.tipo}
-          </span>
-        );
-      },
+      accessorKey: 'tipoExplotacionId',
+      header: 'Tipo Explotación',
+      cell: ({ row }) => (
+        <span className="text-gray-700 dark:text-gray-300">
+          {getTipoExplotacionNombre(row.original.tipoExplotacionId)}
+        </span>
+      ),
+    },
+    {
+      accessorKey: 'capacidadMaxima',
+      header: 'Capacidad Máx.',
+      cell: ({ row }) => (
+        <span className="text-gray-700 dark:text-gray-300">
+          {row.original.capacidadMaxima ?? '—'}
+        </span>
+      ),
     },
     {
       id: 'acciones',
