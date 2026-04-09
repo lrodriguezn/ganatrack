@@ -24,7 +24,13 @@ export async function buildApp(): Promise<FastifyInstance> {
     logger: { level: process.env.LOG_LEVEL ?? 'info' }
   })
 
-  // Add CORS headers to ALL responses (including success)
+  // Register CORS plugin FIRST - before any other middleware
+  await app.register(corsPlugin)
+
+  // Add error handler immediately after CORS
+  app.setErrorHandler(errorHandler)
+
+  // Add CORS headers to ALL responses as fallback
   app.addHook('onSend', async (request, reply) => {
     const origin = request.headers.origin
     if (origin) {
@@ -35,9 +41,6 @@ export async function buildApp(): Promise<FastifyInstance> {
       reply.header('Access-Control-Allow-Origin', '*')
     }
   })
-
-  app.setErrorHandler(errorHandler)
-  await app.register(corsPlugin)
   await app.register(cookiePlugin)
   await app.register(jwtPlugin)
   await app.register(rateLimitPlugin)
