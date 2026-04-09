@@ -11,7 +11,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { UpdatePredioSchema, type UpdatePredioDto, type CreatePredioDto } from '@ganatrack/shared-types';
 import { usePredio, useUpdatePredio } from '@/modules/predios/hooks';
 import { PredioForm, predioToFormDefaults } from '@/modules/predios/components/predio-form';
@@ -44,11 +44,13 @@ function EditPredioContent(): JSX.Element {
     },
   });
 
-  // Populate form when existingPredio loads
-  if (existingPredio && form.formState.defaultValues?.nombre === '') {
-    const defaults = predioToFormDefaults(existingPredio);
-    form.reset(defaults);
-  }
+  // Populate form when existingPredio loads (using useEffect to avoid setState during render)
+  useEffect(() => {
+    if (existingPredio) {
+      const defaults = predioToFormDefaults(existingPredio);
+      form.reset(defaults);
+    }
+  }, [existingPredio, form]);
 
   const onSubmit = (data: UpdatePredioDto) => {
     mutate(id, data);
