@@ -11,7 +11,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { UpdatePredioSchema, type UpdatePredioDto, type CreatePredioDto } from '@ganatrack/shared-types';
 import { usePredio, useUpdatePredio } from '@/modules/predios/hooks';
 import { PredioForm, predioToFormDefaults } from '@/modules/predios/components/predio-form';
@@ -20,7 +20,9 @@ import { Skeleton } from '@/shared/components/ui/skeleton';
 function EditPredioContent(): JSX.Element {
   const params = useParams();
   const router = useRouter();
-  const id = parseInt(params.id as string, 10);
+  
+  // Parse ID - params can be string or string[] in Next.js 15
+  const id = Number(params.id) || 0;
 
   const { existingPredio: existingPredio, isLoading, error } = usePredio({ id });
 
@@ -69,7 +71,7 @@ function EditPredioContent(): JSX.Element {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <p className="text-gray-500 dark:text-gray-400">
-          No se pudo cargar el predio
+          No se pudo cargar el prédio
         </p>
         {error && (
           <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">
@@ -88,7 +90,7 @@ function EditPredioContent(): JSX.Element {
           Editar Predio
         </h1>
         <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-          Actualiza la información del predio
+          Actualiza la información del prédio
         </p>
       </div>
 
@@ -96,7 +98,7 @@ function EditPredioContent(): JSX.Element {
       {updateError && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-900 dark:bg-red-900/20">
           <p className="text-sm text-red-600 dark:text-red-400">
-            Error al actualizar el predio: {(updateError as Error).message}
+            Error al actualizar el prédio: {(updateError as Error).message}
           </p>
         </div>
       )}
