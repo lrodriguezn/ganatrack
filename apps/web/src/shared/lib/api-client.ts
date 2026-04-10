@@ -187,7 +187,11 @@ const handleResponseErrors: AfterResponseHook = async (
     } catch (error) {
       // Refresh failed or retry failed — clear auth and redirect to login
       if (error instanceof ApiError && error.code === 'REFRESH_FAILED') {
-        // Use window.location for redirect (we're in interceptor context)
+        // Clear the client-side gt-auth cookie so the middleware doesn't
+        // redirect back to /dashboard after the navigation to /login
+        if (typeof document !== 'undefined') {
+          document.cookie = 'gt-auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        }
         if (typeof window !== 'undefined') {
           window.location.href = '/login';
         }

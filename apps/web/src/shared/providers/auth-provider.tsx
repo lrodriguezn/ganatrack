@@ -55,6 +55,8 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       }
 
       const useMocks = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
+      // Flag: keep spinner if we're navigating away (refresh failed → redirect to /login)
+      let navigatingAway = false;
 
       try {
         // Step 1: Call getMe() — the api-client interceptor handles the 401→refresh cycle:
@@ -128,9 +130,15 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
             }
           }
         }
-        // Production: REFRESH_FAILED → api-client interceptor already redirected to /login
+        // Production: REFRESH_FAILED → api-client interceptor already redirected to /login.
+        // Keep the spinner up so the user doesn't see a flash of empty dashboard.
+        if (error instanceof ApiError && error.code === 'REFRESH_FAILED') {
+          navigatingAway = true;
+        }
       } finally {
-        setIsHydrating(false);
+        if (!navigatingAway) {
+          setIsHydrating(false);
+        }
       }
     };
 
