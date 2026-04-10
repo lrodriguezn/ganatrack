@@ -7,7 +7,7 @@ export async function corsPlugin(app: FastifyInstance): Promise<void> {
     origin: true,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'x-predio-id', 'x-tenant-id'],
     exposedHeaders: ['Content-Length', 'Content-Type'],
     maxAge: 86400,
   })
@@ -19,7 +19,7 @@ export async function corsPlugin(app: FastifyInstance): Promise<void> {
       reply.header('Access-Control-Allow-Origin', origin ?? '*')
       reply.header('Access-Control-Allow-Credentials', 'true')
       reply.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
-      reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Cookie')
+      reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Cookie, x-predio-id, x-tenant-id')
       reply.header('Access-Control-Max-Age', '86400')
       return reply.status(204).send()
     }
