@@ -229,6 +229,14 @@ export function PredioForm({
 
       {/* Submit button */}
       <div className="flex items-center justify-end gap-2 pt-4">
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => form.reset()}
+          disabled={isLoading}
+        >
+          Limpiar
+        </Button>
         {onCancel && (
           <Button
             type="button"
