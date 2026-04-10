@@ -31,7 +31,7 @@ export default function PredioLotesPage(): JSX.Element {
   const { lotes, isLoading, error } = useLotes({ predioId });
 
   const { mutate: deleteLote, isLoading: isDeleting } = useDeleteLote({
-    onSuccess: () => {},
+    onSuccess: () => { setDeleteTarget(null); },
   });
 
   const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
@@ -55,7 +55,7 @@ export default function PredioLotesPage(): JSX.Element {
   const handleConfirmDelete = () => {
     if (deleteTarget) {
       deleteLote(predioId, deleteTarget.id);
-      setDeleteTarget(null);
+      // Modal se cierra en onSuccess del hook
     }
   };
 

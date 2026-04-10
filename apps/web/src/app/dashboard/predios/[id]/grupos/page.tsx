@@ -31,7 +31,7 @@ export default function PredioGruposPage(): JSX.Element {
   const { grupos, isLoading, error } = useGrupos({ predioId });
 
   const { mutate: deleteGrupo, isLoading: isDeleting } = useDeleteGrupo({
-    onSuccess: () => {},
+    onSuccess: () => { setDeleteTarget(null); },
   });
 
   const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
@@ -55,7 +55,7 @@ export default function PredioGruposPage(): JSX.Element {
   const handleConfirmDelete = () => {
     if (deleteTarget) {
       deleteGrupo(predioId, deleteTarget.id);
-      setDeleteTarget(null);
+      // Modal se cierra en onSuccess del hook
     }
   };
 

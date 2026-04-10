@@ -36,7 +36,7 @@ export default function PredioPotrerosPage(): JSX.Element {
 
   const { mutate: deletePotrero, isLoading: isDeleting } = useDeletePotrero({
     onSuccess: () => {
-      // Query invalidation happens automatically via the hook
+      setDeleteTarget(null);
     },
   });
 
@@ -64,7 +64,7 @@ export default function PredioPotrerosPage(): JSX.Element {
   const handleConfirmDelete = () => {
     if (deleteTarget) {
       deletePotrero(predioId, deleteTarget.id);
-      setDeleteTarget(null);
+      // Modal se cierra en onSuccess del hook
     }
   };
 

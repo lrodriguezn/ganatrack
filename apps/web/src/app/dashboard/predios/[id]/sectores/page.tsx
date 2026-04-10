@@ -31,7 +31,9 @@ export default function PredioSectoresPage(): JSX.Element {
   const { sectores, isLoading, error } = useSectores({ predioId });
 
   const { mutate: deleteSector, isLoading: isDeleting } = useDeleteSector({
-    onSuccess: () => {},
+    onSuccess: () => {
+      setDeleteTarget(null);
+    },
   });
 
   const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
@@ -55,7 +57,7 @@ export default function PredioSectoresPage(): JSX.Element {
   const handleConfirmDelete = () => {
     if (deleteTarget) {
       deleteSector(predioId, deleteTarget.id);
-      setDeleteTarget(null);
+      // Modal se cierra en onSuccess del hook
     }
   };
 
@@ -73,7 +75,7 @@ export default function PredioSectoresPage(): JSX.Element {
         <Link href={`/dashboard/predios/${predioId}/sectores/nuevo`}>
           <Button>
             <Plus className="h-4 w-4 mr-2" />
-            Nuevo Sectore
+            Nuevo Sector
           </Button>
         </Link>
       </div>
