@@ -7,17 +7,14 @@
  * the refreshToken cookie exists server-side, but the client-side store is empty.
  *
  * Solution: On mount, call authService.getMe() to:
- * 1. Verify the session is still valid (cookie-based)
- * 2. Rehydrate the user data and permissions in the store
+ * 1. Trigger the api-client refresh interceptor (POST /auth/refresh via httpOnly cookie)
+ * 2. Get a fresh accessToken stored in the Zustand auth store
+ * 3. Fetch user data and restore permissions from sessionStorage
+ * 4. Reload the predio list and restore the previously active predio
  *
- * NOTE: We cannot rehydrate the accessToken this way because:
- * - getMe() doesn't return a new accessToken
- * - The new token would come from POST /auth/refresh which requires the httpOnly cookie
- * - This is handled automatically by the api-client interceptor on the first API call
- *
- * So after rehydration, the user has:
- * - user + permissions populated (so RBAC works immediately)
- * - accessToken = null (so first API call triggers refresh + retry)
+ * This flow runs in BOTH production and mock modes.
+ * In mock mode only: if getMe() returns 401, fall back to auto-login as admin.
+ * In production: if refresh fails, the api-client interceptor redirects to /login.
  */
 
 'use client';
@@ -57,24 +54,21 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         return;
       }
 
-      // In production mode (no mocks), skip rehydration entirely
-      // The auth state is managed by the login/logout hooks and Zustand persistence
-      // The middleware protects routes, and the first API call will handle token refresh
       const useMocks = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
-      if (!useMocks) {
-        setIsHydrating(false);
-        return;
-      }
 
-      // Mock mode only: rehydrate with auto-login
       try {
-        // Step 1: Call getMe() - this will trigger the refresh interceptor if needed
+        // Step 1: Call getMe() — the api-client interceptor handles the 401→refresh cycle:
+        //   a) GET /auth/me is sent with no Bearer token (store is empty after refresh)
+        //   b) API returns 401
+        //   c) Interceptor calls POST /auth/refresh using the httpOnly cookie
+        //   d) Gets a fresh accessToken, stores it in the Zustand auth store
+        //   e) Retries GET /auth/me with the new token → returns User
         const userData = await authService.getMe();
 
-        // Step 2: Now read the fresh accessToken from the store (set by interceptor)
+        // Step 2: Read the fresh accessToken set by the interceptor during Step 1
         const { accessToken, permissions } = useAuthStore.getState();
 
-        // Step 3: Restore additional data from sessionStorage
+        // Step 3: Restore permissions from sessionStorage (not returned by getMe)
         let storedPermissions = permissions;
         if (!storedPermissions || storedPermissions.length === 0) {
           try {
@@ -85,20 +79,21 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           }
         }
 
+        // Step 4: Restore the previously active predio from sessionStorage
         let savedPredioId: number | null = null;
         try {
           const storedPredioId = sessionStorage.getItem('ganatrack-predio-activo-id');
           savedPredioId = storedPredioId ? Number(storedPredioId) : null;
         } catch { /* ignore */ }
 
-        // Step 4: Update auth store with user data (accessToken already set by interceptor)
+        // Step 5: Commit the full auth state (accessToken + user + permissions)
         useAuthStore.getState().setAuth({
           accessToken,
           user: userData,
           permissions: storedPermissions,
         });
 
-        // Step 5: Load predios
+        // Step 6: Load predios and restore the active predio
         try {
           const predios = await authService.getPredios();
           usePredioStore.getState().setPredios(predios);
@@ -107,11 +102,11 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
             usePredioStore.getState().switchPredio(savedPredioId);
           }
         } catch {
-          // Predios failed - continue without them
+          // Predios failed — continue without them, user can select manually
         }
       } catch (error) {
-        // 401 in mock mode — auto-login as admin
-        if (error instanceof ApiError && error.status === 401) {
+        if (useMocks && error instanceof ApiError && error.status === 401) {
+          // Mock mode only: no valid session → auto-login as admin for development convenience
           const loginResult = await authService.login({
             email: 'admin@ganatrack.com',
             password: 'Admin123!',
@@ -133,6 +128,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
             }
           }
         }
+        // Production: REFRESH_FAILED → api-client interceptor already redirected to /login
       } finally {
         setIsHydrating(false);
       }
