@@ -8,11 +8,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ArrowLeft } from 'lucide-react';
 import { CreatePredioSchema, type CreatePredioDto } from '@ganatrack/shared-types';
 import { useCreatePredio } from '@/modules/predios/hooks';
 import { PredioForm } from '@/modules/predios/components/predio-form';
+import { Button } from '@/shared/components/ui/button';
 
 export default function NuevoPredioPage(): JSX.Element {
   const router = useRouter();
@@ -41,13 +44,21 @@ export default function NuevoPredioPage(): JSX.Element {
     mutate(data);
   };
 
-  const handleCancel = () => {
-    router.push('/dashboard/predios');
-  };
 
   return (
     <div className="space-y-6">
       {/* Page header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link href="/dashboard/predios">
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Cancelar
+            </Button>
+          </Link>
+        </div>
+      </div>
+
       <div>
         <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
           Nuevo Predio
@@ -70,7 +81,6 @@ export default function NuevoPredioPage(): JSX.Element {
       <PredioForm
         form={form}
         onSubmit={onSubmit}
-        onCancel={handleCancel}
         isLoading={isLoading}
         submitLabel="Crear Predio"
       />

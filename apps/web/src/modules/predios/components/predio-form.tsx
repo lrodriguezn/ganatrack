@@ -37,7 +37,6 @@ import { useCatalogo } from '@/modules/configuracion/hooks';
 interface PredioFormProps {
   form: UseFormReturn<CreatePredioDto>;
   onSubmit: (data: CreatePredioDto) => void;
-  onCancel?: () => void;
   isLoading?: boolean;
   submitLabel?: string;
 }
@@ -45,7 +44,6 @@ interface PredioFormProps {
 export function PredioForm({
   form,
   onSubmit,
-  onCancel,
   isLoading = false,
   submitLabel = 'Guardar',
 }: PredioFormProps): JSX.Element {
@@ -237,16 +235,6 @@ export function PredioForm({
         >
           Limpiar
         </Button>
-        {onCancel && (
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onCancel}
-            disabled={isLoading}
-          >
-            Cancelar
-          </Button>
-        )}
         <Button type="submit" isLoading={isLoading}>
           {submitLabel}
         </Button>
