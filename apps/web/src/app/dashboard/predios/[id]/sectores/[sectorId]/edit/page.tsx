@@ -95,6 +95,17 @@ function EditSectorContent(): JSX.Element {
   return (
     <div className="space-y-6">
       {/* Page header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link href={`/dashboard/predios/${id}/sectores/${sectorId}`}>
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Cancelar
+            </Button>
+          </Link>
+        </div>
+      </div>
+
       <div>
         <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
           Editar Sector
@@ -125,16 +136,6 @@ function EditSectorContent(): JSX.Element {
         onSubmit={onSubmit}
         isLoading={isUpdating}
       />
-
-      {/* Cancel button */}
-      <div className="flex justify-start">
-        <Link href={`/dashboard/predios/${id}/sectores/${sectorId}`}>
-          <Button variant="secondary">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Cancelar
-          </Button>
-        </Link>
-      </div>
     </div>
   );
 }
