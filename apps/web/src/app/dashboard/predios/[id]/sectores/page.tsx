@@ -9,7 +9,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Plus, ArrowLeft } from 'lucide-react';
-import { useSectores, useDeleteSectore } from '@/modules/predios/hooks';
+import { useSectores, useDeleteSector } from '@/modules/predios/hooks';
 import { SectoresTable } from '@/modules/predios/components/sectores-table';
 import { SubRecursoDeleteModal } from '@/modules/predios/components';
 import { Button } from '@/shared/components/ui/button';
@@ -30,7 +30,7 @@ export default function PredioSectoresPage(): JSX.Element {
 
   const { sectores, isLoading, error } = useSectores({ predioId });
 
-  const { mutate: deleteSectore, isLoading: isDeleting } = useDeleteSectore({
+  const { mutate: deleteSector, isLoading: isDeleting } = useDeleteSector({
     onSuccess: () => {},
   });
 
@@ -44,17 +44,17 @@ export default function PredioSectoresPage(): JSX.Element {
     );
   }
 
-  const handleEdit = (sectore: { id: number }) => {
-    router.push(`/dashboard/predios/${predioId}/sectores/${sectore.id}/edit`);
+  const handleEdit = (sector: { id: number }) => {
+    router.push(`/dashboard/predios/${predioId}/sectores/${sector.id}/edit`);
   };
 
-  const handleDelete = (sectore: { id: number; nombre: string }) => {
-    setDeleteTarget({ id: sectore.id, nombre: sectore.nombre });
+  const handleDelete = (sector: { id: number; nombre: string }) => {
+    setDeleteTarget({ id: sector.id, nombre: sector.nombre });
   };
 
   const handleConfirmDelete = () => {
     if (deleteTarget) {
-      deleteSectore(predioId, deleteTarget.id);
+      deleteSector(predioId, deleteTarget.id);
       setDeleteTarget(null);
     }
   };
