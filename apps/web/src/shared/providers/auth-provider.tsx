@@ -62,36 +62,51 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         // Step 1: Call getMe() — the api-client interceptor handles the 401→refresh cycle:
         //   a) GET /auth/me is sent with no Bearer token (store is empty after refresh)
         //   b) API returns 401
-        //   c) Interceptor calls POST /auth/refresh using the httpOnly cookie
-        //   d) Gets a fresh accessToken, stores it in the Zustand auth store
-        //   e) Retries GET /auth/me with the new token → returns User
-        const userData = await authService.getMe();
+        //   c) Interceptor calls POST /api/auth/refresh (Next.js proxy)
+        //   d) Proxy reads refreshToken cookie and forwards to backend
+        //   e) Gets a fresh accessToken, stores it in the Zustand auth store
+        //   f) Retries GET /auth/me with the new token → 200 confirms session is valid
+        await authService.getMe();
 
         // Step 2: Read the fresh accessToken set by the interceptor during Step 1
-        const { accessToken, permissions } = useAuthStore.getState();
+        const { accessToken } = useAuthStore.getState();
 
-        // Step 3: Restore permissions from sessionStorage (not returned by getMe)
-        let storedPermissions = permissions;
-        if (!storedPermissions || storedPermissions.length === 0) {
-          try {
-            const stored = sessionStorage.getItem('ganatrack-auth-permissions');
-            storedPermissions = stored ? JSON.parse(stored) : [];
-          } catch {
-            sessionStorage.removeItem('ganatrack-auth-permissions');
-          }
+        // Step 3: Restore user from sessionStorage (GET /me only validates session;
+        // full user data — nombre, email, rol — was saved to sessionStorage at login)
+        let storedUser = null;
+        try {
+          const stored = sessionStorage.getItem('ganatrack-auth-user');
+          storedUser = stored ? JSON.parse(stored) : null;
+        } catch {
+          sessionStorage.removeItem('ganatrack-auth-user');
         }
 
-        // Step 4: Restore the previously active predio from sessionStorage
+        if (!storedUser) {
+          // No cached user data — session is valid but we can't restore UI state
+          // Force a full re-login to rebuild the session properly
+          throw new Error('NO_CACHED_USER');
+        }
+
+        // Step 4: Restore permissions from sessionStorage
+        let storedPermissions: string[] = [];
+        try {
+          const stored = sessionStorage.getItem('ganatrack-auth-permissions');
+          storedPermissions = stored ? JSON.parse(stored) : [];
+        } catch {
+          sessionStorage.removeItem('ganatrack-auth-permissions');
+        }
+
+        // Step 5: Restore the previously active predio from sessionStorage
         let savedPredioId: number | null = null;
         try {
           const storedPredioId = sessionStorage.getItem('ganatrack-predio-activo-id');
           savedPredioId = storedPredioId ? Number(storedPredioId) : null;
         } catch { /* ignore */ }
 
-        // Step 5: Commit the full auth state (accessToken + user + permissions)
+        // Step 6: Commit the full auth state (accessToken + user + permissions)
         useAuthStore.getState().setAuth({
           accessToken,
-          user: userData,
+          user: storedUser,
           permissions: storedPermissions,
         });
 

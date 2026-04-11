@@ -278,21 +278,25 @@ export async function registerAuthRoutes(
   })
 
   // GET /api/v1/auth/me (requires auth)
+  // Used by the frontend to validate that the current session is still active.
+  // authMiddleware sets request.currentUser from the JWT payload.
   app.get('/me', {
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const user = request.user as { id: number; email: string; nombre: string; rol: string }
-    
+    const currentUser = (request as any).currentUser as { id: number; roles: string[] }
+
     return reply
       .code(200)
       .header('Content-Type', 'application/json')
       .send(JSON.stringify({
         success: true,
         data: {
-          id: user.id,
-          email: user.email,
-          nombre: user.nombre,
-          rol: user.rol,
+          id: currentUser.id,
+          // nombre, email, rol are not available in the JWT payload.
+          // The frontend restores these fields from sessionStorage (saved at login).
+          email: '',
+          nombre: '',
+          rol: (currentUser.roles?.[0] ?? 'operario').toLowerCase(),
         },
       }))
   })
