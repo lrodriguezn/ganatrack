@@ -89,7 +89,7 @@ export default function RootLayout({
           Saltar al contenido principal
         </a>
 
-        <SerwistProvider swUrl="/sw.js">
+        <SerwistProvider swUrl="/serwist/sw.js">
           <AppProviders>{children}</AppProviders>
         </SerwistProvider>
 
