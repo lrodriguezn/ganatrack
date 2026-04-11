@@ -64,14 +64,13 @@ async function executeRefresh(): Promise<string> {
   }
 
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/refresh`,
-      {
-        method: 'POST',
-        credentials: 'include', // Send httpOnly cookie
-        // No Content-Type header since there's no body
-      },
-    );
+    // Call the Next.js proxy route (same-origin) instead of the backend directly.
+    // The proxy reads the refreshToken from an httpOnly cookie stored for localhost:3000
+    // and forwards it server-to-server to the backend (no CORS restrictions).
+    const response = await fetch('/api/auth/refresh', {
+      method: 'POST',
+      credentials: 'include',
+    });
 
     if (!response.ok) {
       // Refresh failed — clear auth and redirect to login
@@ -79,7 +78,7 @@ async function executeRefresh(): Promise<string> {
       throw new ApiError(response.status, 'REFRESH_FAILED', 'Sesión expirada');
     }
 
-    // Backend returns: { success: true, data: { accessToken, expiresIn } }
+    // Proxy returns same shape as backend: { success: true, data: { accessToken, expiresIn } }
     const wrapped = (await response.json()) as {
       success: boolean;
       data: { accessToken: string; expiresIn: number };

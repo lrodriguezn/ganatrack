@@ -43,6 +43,9 @@ export class AuthController {
       success: true,
       data: {
         accessToken: result.accessToken,
+        // refreshToken included in body so the frontend proxy route can store it
+        // as a same-origin httpOnly cookie via POST /api/auth/session
+        refreshToken: (result as LoginResponseDto).refreshToken,
         expiresIn: (result as LoginResponseDto).expiresIn,
         usuario: (result as LoginResponseDto).usuario,
       },
