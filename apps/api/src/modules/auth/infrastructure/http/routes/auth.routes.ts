@@ -114,14 +114,13 @@ export async function registerAuthRoutes(
     const refreshToken = request.cookies?.refreshToken ?? (request.body as { refreshToken?: string })?.refreshToken ?? ''
     const result = await refreshTokenUseCase.execute(refreshToken)
 
-    // Set new refresh token cookie
-    reply.setCookie('refreshToken', result.refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      path: '/',
-      maxAge: 7 * 24 * 60 * 60,
-    })
+    // Set rotated refresh token cookie (same pattern as login — reply.setCookie unavailable here)
+    const isProduction = process.env.NODE_ENV === 'production'
+    const secureFlag = isProduction ? '; Secure' : ''
+    reply.header(
+      'Set-Cookie',
+      `refreshToken=${result.refreshToken}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 60 * 60}${secureFlag}`,
+    )
 
     return reply
       .code(200)
