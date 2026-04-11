@@ -25,8 +25,8 @@
  * - Offline fallback navigation
  */
 
-import { defaultCache } from "@serwist/turbopack/worker";
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
+import { get as idbGet, set as idbSet, del as idbDel } from "idb-keyval";
 import {
   Serwist,
   CacheFirst,
@@ -220,7 +220,7 @@ const serwist = new Serwist({
   runtimeCaching: [
     // 1. Static assets — StaleWhileRevalidate
     {
-      urlPattern: ({ url }) => url.pathname.startsWith("/_next/static/"),
+      matcher: ({ url }) => url.pathname.startsWith("/_next/static/"),
       handler: new StaleWhileRevalidate({
         cacheName: "static-resources",
       }),
@@ -228,7 +228,7 @@ const serwist = new Serwist({
 
     // 2. Images (icons, uploaded images) — CacheFirst
     {
-      urlPattern: ({ url }) =>
+      matcher: ({ url }) =>
         url.pathname.startsWith("/icons/") || url.pathname.startsWith("/images/"),
       handler: new CacheFirst({
         cacheName: "static-images",
@@ -240,13 +240,13 @@ const serwist = new Serwist({
 
     // 3. Auth — NEVER cache (NetworkOnly)
     {
-      urlPattern: ({ url }) => url.pathname.startsWith("/api/v1/auth/"),
+      matcher: ({ url }) => url.pathname.startsWith("/api/v1/auth/"),
       handler: new NetworkOnly(),
     },
 
     // 4. API images (animal photos, hierros) — CacheFirst
     {
-      urlPattern: ({ url }) => url.pathname.startsWith("/api/v1/imagenes/"),
+      matcher: ({ url }) => url.pathname.startsWith("/api/v1/imagenes/"),
       handler: new CacheFirst({
         cacheName: "api-images",
         plugins: [
@@ -257,7 +257,7 @@ const serwist = new Serwist({
 
     // 5. Catalogs — StaleWhileRevalidate (rarely change)
     {
-      urlPattern: ({ url }) =>
+      matcher: ({ url }) =>
         /\/api\/v1\/(configuracion|maestros)\//.test(url.pathname),
       handler: new StaleWhileRevalidate({ cacheName: "api-catalogs" }),
       method: "GET",
@@ -265,7 +265,7 @@ const serwist = new Serwist({
 
     // 6. Dynamic API — NetworkFirst with 3s timeout
     {
-      urlPattern: ({ url }) => url.pathname.startsWith("/api/v1/"),
+      matcher: ({ url }) => url.pathname.startsWith("/api/v1/"),
       handler: new NetworkFirst({
         cacheName: "api-dynamic",
         networkTimeoutSeconds: 3,
@@ -278,7 +278,7 @@ const serwist = new Serwist({
 
     // 7. Mutations POST — NetworkOnly + BackgroundSync (exclude auth)
     {
-      urlPattern: ({ url }) =>
+      matcher: ({ url }) =>
         url.pathname.startsWith("/api/v1/") &&
         !url.pathname.startsWith("/api/v1/auth/"),
       handler: createMutationHandler("mutation-queue-post"),
@@ -287,7 +287,7 @@ const serwist = new Serwist({
 
     // 7b. Mutations PUT — NetworkOnly + BackgroundSync (exclude auth)
     {
-      urlPattern: ({ url }) =>
+      matcher: ({ url }) =>
         url.pathname.startsWith("/api/v1/") &&
         !url.pathname.startsWith("/api/v1/auth/"),
       handler: createMutationHandler("mutation-queue-put"),
@@ -296,7 +296,7 @@ const serwist = new Serwist({
 
     // 7c. Mutations DELETE — NetworkOnly + BackgroundSync (exclude auth)
     {
-      urlPattern: ({ url }) =>
+      matcher: ({ url }) =>
         url.pathname.startsWith("/api/v1/") &&
         !url.pathname.startsWith("/api/v1/auth/"),
       handler: createMutationHandler("mutation-queue-delete"),
@@ -305,7 +305,7 @@ const serwist = new Serwist({
 
     // 8. Google Fonts — CacheFirst, 1 year
     {
-      urlPattern: ({ url }) =>
+      matcher: ({ url }) =>
         /^https:\/\/fonts\.(googleapis|gstatic)\.com/.test(url.href),
       handler: new CacheFirst({
         cacheName: "google-fonts",
@@ -380,9 +380,8 @@ export async function replayWithTokenRefresh(
  */
 export async function moveToFailedSyncQueue(item: SyncQueueItem): Promise<void> {
   try {
-    const { set, get } = await import('idb-keyval');
-    const items: SyncQueueItem[] = (await get('ganatrack-failed-sync')) ?? [];
-    
+    const items: SyncQueueItem[] = (await idbGet('ganatrack-failed-sync')) ?? [];
+
     // Replace if same URL, otherwise add
     const existingIndex = items.findIndex((i) => i.url === item.url);
     if (existingIndex >= 0) {
@@ -390,8 +389,8 @@ export async function moveToFailedSyncQueue(item: SyncQueueItem): Promise<void> 
     } else {
       items.push(item);
     }
-    
-    await set('ganatrack-failed-sync', items);
+
+    await idbSet('ganatrack-failed-sync', items);
     notifyClient({ type: 'SYNC_QUEUE_UPDATED' });
   } catch (error) {
     console.error('[SW] Failed to move item to failed-sync queue:', error);
@@ -405,17 +404,16 @@ export async function moveToFailedSyncQueue(item: SyncQueueItem): Promise<void> 
  */
 export async function moveToConflictQueue(item: SyncQueueItem): Promise<void> {
   try {
-    const { set, get } = await import('idb-keyval');
-    const items: SyncQueueItem[] = (await get('ganatrack-conflict-queue')) ?? [];
-    
+    const items: SyncQueueItem[] = (await idbGet('ganatrack-conflict-queue')) ?? [];
+
     const existingIndex = items.findIndex((i) => i.url === item.url);
     if (existingIndex >= 0) {
       items[existingIndex] = item;
     } else {
       items.push(item);
     }
-    
-    await set('ganatrack-conflict-queue', items);
+
+    await idbSet('ganatrack-conflict-queue', items);
     notifyClient({ type: 'CONFLICT_DETECTED', payload: { url: item.url } });
   } catch (error) {
     console.error('[SW] Failed to move item to conflict queue:', error);
@@ -559,10 +557,8 @@ self.addEventListener('message', (event) => {
       break;
 
     case 'CLEAR_SYNC_QUEUES':
-      void import('idb-keyval').then(({ del }) => {
-        void del('ganatrack-failed-sync');
-        void del('ganatrack-conflict-queue');
-      });
+      void idbDel('ganatrack-failed-sync');
+      void idbDel('ganatrack-conflict-queue');
       break;
 
     case 'GET_SYNC_STATUS':
@@ -576,10 +572,9 @@ self.addEventListener('message', (event) => {
         const { url } = event.data?.payload || {};
         if (url) {
           try {
-            const { set, get } = await import('idb-keyval');
-            const failedItems: SyncQueueItem[] = (await get('ganatrack-failed-sync')) ?? [];
+            const failedItems: SyncQueueItem[] = (await idbGet('ganatrack-failed-sync')) ?? [];
             const filtered = failedItems.filter((item) => item.url !== url);
-            await set('ganatrack-failed-sync', filtered);
+            await idbSet('ganatrack-failed-sync', filtered);
             notifyClient({ type: 'SYNC_QUEUE_UPDATED' });
           } catch (error) {
             console.error('[SW] Failed to discard sync item:', error);
@@ -594,10 +589,9 @@ self.addEventListener('message', (event) => {
         const { url } = event.data?.payload || {};
         if (url) {
           try {
-            const { set, get } = await import('idb-keyval');
-            const conflictItems: SyncQueueItem[] = (await get('ganatrack-conflict-queue')) ?? [];
+            const conflictItems: SyncQueueItem[] = (await idbGet('ganatrack-conflict-queue')) ?? [];
             const filtered = conflictItems.filter((item) => item.url !== url);
-            await set('ganatrack-conflict-queue', filtered);
+            await idbSet('ganatrack-conflict-queue', filtered);
             notifyClient({ type: 'SYNC_QUEUE_UPDATED' });
           } catch (error) {
             console.error('[SW] Failed to discard conflict item:', error);
@@ -635,10 +629,9 @@ async function getSyncStatus(): Promise<{
   conflictCount: number;
 }> {
   try {
-    const { get } = await import('idb-keyval');
-    const failedItems = (await get<SyncQueueItem[]>('ganatrack-failed-sync')) ?? [];
-    const conflictItems = (await get<SyncQueueItem[]>('ganatrack-conflict-queue')) ?? [];
-    
+    const failedItems = (await idbGet<SyncQueueItem[]>('ganatrack-failed-sync')) ?? [];
+    const conflictItems = (await idbGet<SyncQueueItem[]>('ganatrack-conflict-queue')) ?? [];
+
     return {
       failedCount: failedItems.length,
       conflictCount: conflictItems.length,

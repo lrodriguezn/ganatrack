@@ -14,3 +14,35 @@ export { usuariosHandlers } from './usuarios.handlers';
 export { maestrosHandlers } from './maestros.handlers';
 export { reportesHandlers } from './reportes.handlers';
 export { notificacionesHandlers } from './notificaciones.handlers';
+export { syncHandlers } from './sync.handlers';
+export { setMockLoggedInUser } from './auth.handlers';
+
+import { authHandlers } from './auth.handlers';
+import { prediosHandlers } from './predios.handlers';
+import { animalesHandlers } from './animales.handlers';
+import { serviciosHandlers } from './servicios.handlers';
+import { configHandlers } from './config.handlers';
+import { imagenesHandlers } from './imagenes.handlers';
+import { productosHandlers } from './productos.handlers';
+import { rolesHandlers } from './roles.handlers';
+import { usuariosHandlers } from './usuarios.handlers';
+import { maestrosHandlers } from './maestros.handlers';
+import { reportesHandlers } from './reportes.handlers';
+import { notificacionesHandlers } from './notificaciones.handlers';
+import { syncHandlers } from './sync.handlers';
+
+export const allHandlers = [
+  ...authHandlers,
+  ...prediosHandlers,
+  ...animalesHandlers,
+  ...serviciosHandlers,
+  ...configHandlers,
+  ...imagenesHandlers,
+  ...productosHandlers,
+  ...rolesHandlers,
+  ...usuariosHandlers,
+  ...maestrosHandlers,
+  ...reportesHandlers,
+  ...notificacionesHandlers,
+  ...syncHandlers,
+];
