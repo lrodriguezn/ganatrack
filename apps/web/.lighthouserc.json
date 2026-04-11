@@ -2,33 +2,52 @@
   "ci": {
     "collect": [
       {
-        "url": [
-          "http://localhost:3000/login",
-          "http://localhost:3000/dashboard",
-          "http://localhost:3000/dashboard/animales",
-          "http://localhost:3000/dashboard/predios",
-          "http://localhost:3000/dashboard/usuarios",
-          "http://localhost:3000/dashboard/sincronizacion"
-        ],
+        "url": ["http://localhost:3000/login"],
         "settings": {
           "preset": "desktop",
           "formFactor": "desktop",
           "channel": "chrome",
-          "skipAudits": [
-            "uses-http2",
-            "uses-long-cache-ttl"
-          ]
+          "skipAudits": ["uses-http2", "uses-long-cache-ttl"]
         }
       },
       {
         "url": [
-          "http://localhost:3000/login",
           "http://localhost:3000/dashboard",
           "http://localhost:3000/dashboard/animales",
           "http://localhost:3000/dashboard/predios",
           "http://localhost:3000/dashboard/usuarios",
           "http://localhost:3000/dashboard/sincronizacion"
         ],
+        "puppeteerScript": "./scripts/lighthouse-auth.js",
+        "settings": {
+          "preset": "desktop",
+          "formFactor": "desktop",
+          "channel": "chrome",
+          "skipAudits": ["uses-http2", "uses-long-cache-ttl"]
+        }
+      },
+      {
+        "url": ["http://localhost:3000/login"],
+        "settings": {
+          "preset": "mobile",
+          "formFactor": "mobile",
+          "throttling": {
+            "cpuSlowdownMultiplier": 4,
+            "downloadThroughputKbps": 1638.4,
+            "uploadThroughputKbps": 675,
+            "rttMs": 150
+          }
+        }
+      },
+      {
+        "url": [
+          "http://localhost:3000/dashboard",
+          "http://localhost:3000/dashboard/animales",
+          "http://localhost:3000/dashboard/predios",
+          "http://localhost:3000/dashboard/usuarios",
+          "http://localhost:3000/dashboard/sincronizacion"
+        ],
+        "puppeteerScript": "./scripts/lighthouse-auth.js",
         "settings": {
           "preset": "mobile",
           "formFactor": "mobile",

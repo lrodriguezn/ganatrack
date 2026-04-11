@@ -3,6 +3,7 @@ import { Outfit } from "next/font/google";
 import { AppProviders } from "@/shared/providers/app-providers";
 import { ToastProvider } from "@/shared/components/feedback";
 import { SerwistProvider } from "./serwist";
+import { MswProvider } from "./msw-provider";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -89,9 +90,11 @@ export default function RootLayout({
           Saltar al contenido principal
         </a>
 
-        <SerwistProvider swUrl="/serwist/sw.js">
-          <AppProviders>{children}</AppProviders>
-        </SerwistProvider>
+        <MswProvider>
+          <SerwistProvider swUrl="/serwist/sw.js">
+            <AppProviders>{children}</AppProviders>
+          </SerwistProvider>
+        </MswProvider>
 
         <ToastProvider />
       </body>

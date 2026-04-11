@@ -2,22 +2,28 @@
   "ci": {
     "collect": [
       {
+        "url": ["http://localhost:3000/login"],
+        "settings": {
+          "preset": "desktop",
+          "formFactor": "desktop",
+          "channel": "chrome",
+          "skipAudits": ["uses-http2", "uses-long-cache-ttl"]
+        }
+      },
+      {
         "url": [
-          "http://localhost:3000/login",
           "http://localhost:3000/dashboard",
           "http://localhost:3000/dashboard/animales",
           "http://localhost:3000/dashboard/predios",
           "http://localhost:3000/dashboard/usuarios",
           "http://localhost:3000/dashboard/sincronizacion"
         ],
+        "puppeteerScript": "./scripts/lighthouse-auth.js",
         "settings": {
           "preset": "desktop",
           "formFactor": "desktop",
           "channel": "chrome",
-          "skipAudits": [
-            "uses-http2",
-            "uses-long-cache-ttl"
-          ]
+          "skipAudits": ["uses-http2", "uses-long-cache-ttl"]
         }
       }
     ],

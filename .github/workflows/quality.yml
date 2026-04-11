@@ -150,6 +150,8 @@ jobs:
 
       - name: Build app
         run: pnpm --filter @ganatrack/web build
+        env:
+          NEXT_PUBLIC_MSW_ENABLED: 'true'
 
       - name: Start server and run Lighthouse Desktop
         run: |
@@ -159,6 +161,7 @@ jobs:
         working-directory: apps/web
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          NEXT_PUBLIC_MSW_ENABLED: 'true'
 
       - name: Upload Lighthouse Desktop report
         uses: actions/upload-artifact@v4
@@ -191,6 +194,8 @@ jobs:
 
       - name: Build app
         run: pnpm --filter @ganatrack/web build
+        env:
+          NEXT_PUBLIC_MSW_ENABLED: 'true'
 
       - name: Start server and run Lighthouse Mobile
         run: |
@@ -200,6 +205,7 @@ jobs:
         working-directory: apps/web
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          NEXT_PUBLIC_MSW_ENABLED: 'true'
 
       - name: Upload Lighthouse Mobile report
         uses: actions/upload-artifact@v4
