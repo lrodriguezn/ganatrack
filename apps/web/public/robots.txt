@@ -4,4 +4,3 @@ Disallow: /dashboard/
 Allow: /login
 Allow: /
 
-Sitemap: /sitemap.xml

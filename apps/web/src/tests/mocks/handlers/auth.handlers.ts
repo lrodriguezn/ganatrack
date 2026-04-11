@@ -106,18 +106,21 @@ export const authHandlers = [
    * Returns new access token.
    */
   http.post(`${BASE_URL}/api/v1/auth/refresh`, () => {
-    return HttpResponse.json({
-      accessToken: 'mock-access-token-refreshed-xyz',
-    });
+    // RefreshResponseSchema expects { accessToken: string } — no wrapper
+    return HttpResponse.json({ accessToken: 'ci-refresh-token' });
   }),
 
   /**
    * GET /api/v1/auth/me
    * Returns the currently logged-in user or 401 if not authenticated.
+   * auth.api.ts getMe() unwraps as wrapped.data → must return { success, data: User }
    */
   http.get(`${BASE_URL}/api/v1/auth/me`, () => {
     if (mockLoggedInUser) {
-      return HttpResponse.json(mockLoggedInUser, { status: 200 });
+      return HttpResponse.json(
+        { success: true, data: mockLoggedInUser },
+        { status: 200 },
+      );
     }
     return HttpResponse.json(
       { error: 'No autenticado' },

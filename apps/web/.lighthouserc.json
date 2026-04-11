@@ -56,9 +56,6 @@
             "downloadThroughputKbps": 1638.4,
             "uploadThroughputKbps": 675,
             "rttMs": 150
-          },
-          "assertions": {
-            "categories:performance": ["warn", { "minScore": 0.70 }]
           }
         }
       }

@@ -60,7 +60,10 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       // In production mode (no mocks), skip rehydration entirely
       // The auth state is managed by the login/logout hooks and Zustand persistence
       // The middleware protects routes, and the first API call will handle token refresh
-      const useMocks = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
+      // NEXT_PUBLIC_MSW_ENABLED covers LHCI CI runs — MSW intercepts getMe() for mock data
+      const useMocks =
+        process.env.NEXT_PUBLIC_USE_MOCKS === 'true' ||
+        process.env.NEXT_PUBLIC_MSW_ENABLED === 'true';
       if (!useMocks) {
         setIsHydrating(false);
         return;
