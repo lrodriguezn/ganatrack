@@ -110,7 +110,8 @@ export async function registerAuthRoutes(
       },
     },
   }, async (request, reply) => {
-    const refreshToken = request.cookies?.refreshToken ?? ''
+    // Accept refreshToken from cookie OR request body (for server-to-server proxy calls)
+    const refreshToken = request.cookies?.refreshToken ?? (request.body as { refreshToken?: string })?.refreshToken ?? ''
     const result = await refreshTokenUseCase.execute(refreshToken)
 
     // Set new refresh token cookie

@@ -37,12 +37,16 @@ export async function POST(): Promise<NextResponse> {
 
   let backendResponse: Response;
   try {
+    // Send the refreshToken in the request body (server-to-server).
+    // Using Cookie header for server-to-server calls can be unreliable due to
+    // how Fastify parses cookies. The backend refresh endpoint accepts the token
+    // from either cookies OR the request body (same pattern as logout).
     backendResponse = await fetch(backendUrl, {
       method: 'POST',
       headers: {
-        // Forward refreshToken as a cookie header (server-to-server — no CORS restrictions)
-        Cookie: `${COOKIE_NAME}=${refreshToken}`,
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ refreshToken }),
     });
   } catch {
     return NextResponse.json(
