@@ -156,7 +156,8 @@ export async function registerAuthRoutes(
     const refreshToken = request.cookies?.refreshToken ?? (request.body as { refreshToken?: string })?.refreshToken ?? ''
     await logoutUseCase.execute(refreshToken)
 
-    reply.clearCookie('refreshToken')
+    // reply.clearCookie unavailable in sub-scope — clear via expired Set-Cookie header
+    reply.header('Set-Cookie', 'refreshToken=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT')
     return reply
       .code(200)
       .header('Content-Type', 'application/json')

@@ -32,6 +32,9 @@ export function useLogout(): UseLogoutReturn {
       // Ignore logout errors — we clear local state regardless
     });
 
+    // Clear the refreshToken httpOnly cookie stored for localhost:3000
+    fetch('/api/auth/session', { method: 'DELETE' }).catch(() => {});
+
     // Clear all local state
     clearAuth();
     clearPredios();
