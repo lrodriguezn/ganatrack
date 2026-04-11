@@ -30,9 +30,22 @@ export class AuthController {
       })
     }
 
+    // Set refresh token as httpOnly cookie (same pattern as verify2fa)
+    reply.setCookie('refreshToken', (result as LoginResponseDto).refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
+    })
+
     return reply.code(200).send({
       success: true,
-      data: result,
+      data: {
+        accessToken: result.accessToken,
+        expiresIn: (result as LoginResponseDto).expiresIn,
+        usuario: (result as LoginResponseDto).usuario,
+      },
     })
   }
 
