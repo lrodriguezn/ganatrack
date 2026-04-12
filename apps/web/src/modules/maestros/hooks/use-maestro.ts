@@ -18,7 +18,6 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { maestrosService } from '../services';
 import { queryKeys } from '@/shared/lib/query-keys';
-import { StaleTimes } from '@/shared/lib/query-client';
 import type { CreateMaestroDto, MaestroTipo, MaestroBase } from '../types/maestro.types';
 
 export interface UseMaestroPagination {
@@ -35,47 +34,39 @@ export function useMaestro(
   pagination?: { page?: number; limit?: number; search?: string },
 ) {
   const queryClient = useQueryClient();
-  const [version, setVersion] = useState(0);
 
   const [page, setPage] = useState(pagination?.page ?? 1);
   const [limit, setLimit] = useState(pagination?.limit ?? 20);
   const [search, setSearch] = useState(pagination?.search ?? '');
 
-// ============================================================================
+  // ============================================================================
   // Query — list all items for this tipo
   // ============================================================================
 
-  const queryKey = queryKeys.maestros.byTipo(tipo, { page, limit, search, version });
-  console.log('[useMaestro] Query key for:', tipo, queryKey);
+  const queryKey = queryKeys.maestros.byTipo(tipo, { page, limit, search });
 
   const { data, isLoading, error } = useQuery({
     queryKey,
-    queryFn: async () => {
-      console.log('[useMaestro] useQuery fetching data for:', tipo);
-      const result = await maestrosService.getAll(tipo, { page, limit, search });
-      console.log('[useMaestro] fetch result:', result);
-      return result;
-    },
+    queryFn: () => maestrosService.getAll(tipo, { page, limit, search }),
     staleTime: 0,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
   });
 
   // ============================================================================
+  // Shared invalidation — invalidates all queries for this tipo
+  // ============================================================================
+
+  const invalidate = () =>
+    queryClient.invalidateQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
+
+  // ============================================================================
   // Mutation — create
   // ============================================================================
 
-const createMutation = useMutation({
-    mutationFn: (newData: CreateMaestroDto) => {
-      console.log('[useMaestro] create mutation called');
-      return maestrosService.create(tipo, newData);
-    },
-    onSuccess: () => {
-      console.log('[useMaestro] create onSuccess - removing cache');
-      queryClient.removeQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
-      setVersion(v => v + 1); // Force new query
-      console.log('[useMaestro] create onSuccess - DONE');
-    },
+  const createMutation = useMutation({
+    mutationFn: (newData: CreateMaestroDto) => maestrosService.create(tipo, newData),
+    onSuccess: invalidate,
   });
 
   // ============================================================================
@@ -89,16 +80,8 @@ const createMutation = useMutation({
     }: {
       id: number;
       data: Partial<CreateMaestroDto>;
-    }) => {
-      console.log('[useMaestro] update mutation called, id:', id);
-      return maestrosService.update(tipo, id, updateData);
-    },
-    onSuccess: () => {
-      console.log('[useMaestro] update onSuccess - removing cache');
-      queryClient.removeQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
-      setVersion(v => v + 1); // Force new query
-      console.log('[useMaestro] update onSuccess - DONE');
-    },
+    }) => maestrosService.update(tipo, id, updateData),
+    onSuccess: invalidate,
   });
 
   // ============================================================================
@@ -106,21 +89,12 @@ const createMutation = useMutation({
   // ============================================================================
 
   const removeMutation = useMutation({
-    mutationFn: (id: number) => {
-      console.log('[useMaestro] remove mutation called, id:', id);
-      return maestrosService.remove(tipo, id);
-    },
-    onSuccess: () => {
-      console.log('[useMaestro] remove onSuccess - removing cache');
-      queryClient.removeQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
-      setVersion(v => v + 1); // Force new query
-      console.log('[useMaestro] remove onSuccess - DONE');
-    },
+    mutationFn: (id: number) => maestrosService.remove(tipo, id),
+    onSuccess: invalidate,
   });
 
   return {
-    // Force new array reference to trigger re-render
-    items: [...(data?.data ?? [])],
+    items: data?.data ?? [],
     isLoading,
     error: error as Error | null,
     create: createMutation.mutateAsync,
@@ -129,10 +103,8 @@ const createMutation = useMutation({
     isCreating: createMutation.isPending,
     isUpdating: updateMutation.isPending,
     isRemoving: removeMutation.isPending,
-    // Pagination
     page,
     limit,
-    // Force new object reference
     total: data?.meta?.total ?? 0,
     search,
     setPage,

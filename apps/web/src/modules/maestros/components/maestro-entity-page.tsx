@@ -25,7 +25,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
 import { useMaestro } from '@/modules/maestros/hooks';
 import { MaestroTable, MaestroForm, MaestroDeleteModal } from '@/modules/maestros/components';
@@ -56,6 +56,7 @@ export function MaestroEntityPage<T extends z.ZodSchema>({
   schema,
 }: MaestroEntityPageProps<T>): JSX.Element {
   const [searchInput, setSearchInput] = useState('');
+
   const {
     items,
     isLoading,
@@ -72,6 +73,17 @@ export function MaestroEntityPage<T extends z.ZodSchema>({
     setLimit,
     setSearch,
   } = useMaestro(tipo);
+
+  // Debounced search — applies 300ms after the user stops typing
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearch(searchInput);
+      setPage(1);
+    }, 300);
+    return () => clearTimeout(timer);
+  // setSearch and setPage are stable useState setters — safe to omit from deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchInput]);
 
   const addToast = useUiStore((s) => s.addToast);
 
@@ -91,16 +103,6 @@ export function MaestroEntityPage<T extends z.ZodSchema>({
 
   const handleDelete = (item: MaestroBase) => {
     setDeleteItem(item);
-  };
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSearch(searchInput);
-    setPage(1);
-  };
-
-  const handleSearchChange = (e: any) => {
-    setSearchInput(e.target.value);
   };
 
   const handleLimitChange = (e: any) => {
@@ -168,21 +170,19 @@ export function MaestroEntityPage<T extends z.ZodSchema>({
 
       {/* Barra de búsqueda y controles */}
       <div className="flex items-center gap-4">
-        <form onSubmit={handleSearchSubmit} className="flex-1 max-w-md">
-          <input
-            type="text"
-            value={searchInput}
-            onChange={handleSearchChange}
-            placeholder="Buscar por nombre..."
-            className="
-              w-full rounded-md border border-gray-300 dark:border-gray-600
-              bg-white dark:bg-gray-800 px-3 py-2 text-sm
-              text-gray-900 dark:text-gray-100
-              placeholder-gray-500 dark:placeholder-gray-400
-              focus:outline-none focus:ring-2 focus:ring-blue-500
-            "
-          />
-        </form>
+        <input
+          type="text"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="Buscar por nombre..."
+          className="
+            flex-1 max-w-md rounded-md border border-gray-300 dark:border-gray-600
+            bg-white dark:bg-gray-800 px-3 py-2 text-sm
+            text-gray-900 dark:text-gray-100
+            placeholder-gray-500 dark:placeholder-gray-400
+            focus:outline-none focus:ring-2 focus:ring-blue-500
+          "
+        />
         <select
           value={limit}
           onChange={handleLimitChange}

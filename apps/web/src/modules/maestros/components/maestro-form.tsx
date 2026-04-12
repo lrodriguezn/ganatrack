@@ -73,7 +73,7 @@ export function MaestroForm<T extends z.ZodSchema>({
             // Extract only the properties needed for input/textarea
             const { value, onChange, onBlur, name, ref } = field;
             const inputProps = {
-              value,
+              value: value ?? '',
               onChange,
               onBlur,
               name,
