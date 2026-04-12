@@ -72,7 +72,7 @@ export const InseminacionEventoForm = forwardRef<InseminacionEventoFormRef, Inse
     async function loadVeterinarios() {
       try {
         setIsLoadingVets(true);
-        const data = await maestrosService.getAll('veterinarios');
+        const { data } = await maestrosService.getAll('veterinarios');
         setVeterinarios(data);
       } catch (error) {
         setErrorVets(error instanceof Error ? error.message : 'Error al cargar veterinarios');

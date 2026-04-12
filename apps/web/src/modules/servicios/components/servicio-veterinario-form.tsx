@@ -87,7 +87,7 @@ export const ServicioVeterinarioEventoForm = forwardRef<ServicioVeterinarioEvent
       async function loadVeterinarios() {
         try {
           setIsLoadingVets(true);
-          const data = await maestrosService.getAll('veterinarios');
+          const { data } = await maestrosService.getAll('veterinarios');
           setVeterinarios(data);
         } catch (error) {
           setErrorVets(error instanceof Error ? error.message : 'Error al cargar veterinarios');
@@ -231,7 +231,7 @@ export function ServicioVeterinarioResultadosStep({ animalIds, resultados, onCha
     async function loadCatalogs() {
       try {
         setIsLoading(true);
-        const diagData = await maestrosService.getAll('diagnosticos');
+        const { data: diagData } = await maestrosService.getAll('diagnosticos');
         setDiagnosticos(diagData);
       } catch {
         setDiagnosticos([]);

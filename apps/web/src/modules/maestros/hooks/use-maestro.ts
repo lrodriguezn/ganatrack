@@ -14,22 +14,39 @@
 
 'use client';
 
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { maestrosService } from '../services';
 import { queryKeys } from '@/shared/lib/query-keys';
 import { StaleTimes } from '@/shared/lib/query-client';
 import type { CreateMaestroDto, MaestroTipo, MaestroBase } from '../types/maestro.types';
 
-export function useMaestro(tipo: MaestroTipo) {
+export interface UseMaestroPagination {
+  page: number;
+  limit: number;
+  search: string;
+  setPage: (p: number) => void;
+  setLimit: (l: number) => void;
+  setSearch: (s: string) => void;
+}
+
+export function useMaestro(
+  tipo: MaestroTipo,
+  pagination?: { page?: number; limit?: number; search?: string },
+) {
   const queryClient = useQueryClient();
+
+  const [page, setPage] = useState(pagination?.page ?? 1);
+  const [limit, setLimit] = useState(pagination?.limit ?? 20);
+  const [search, setSearch] = useState(pagination?.search ?? '');
 
   // ============================================================================
   // Query — list all items for this tipo
   // ============================================================================
 
   const { data, isLoading, error } = useQuery({
-    queryKey: queryKeys.maestros.byTipo(tipo),
-    queryFn: () => maestrosService.getAll(tipo),
+    queryKey: queryKeys.maestros.byTipo(tipo, { page, limit, search }),
+    queryFn: () => maestrosService.getAll(tipo, { page, limit, search }),
     staleTime: StaleTimes.LIST,
   });
 
@@ -74,7 +91,7 @@ export function useMaestro(tipo: MaestroTipo) {
   });
 
   return {
-    items: data ?? [],
+    items: data?.data ?? [],
     isLoading,
     error: error as Error | null,
     create: createMutation.mutateAsync,
@@ -83,5 +100,13 @@ export function useMaestro(tipo: MaestroTipo) {
     isCreating: createMutation.isPending,
     isUpdating: updateMutation.isPending,
     isRemoving: removeMutation.isPending,
+    // Pagination
+    page,
+    limit,
+    total: data?.meta?.total ?? 0,
+    search,
+    setPage,
+    setLimit,
+    setSearch,
   };
 }

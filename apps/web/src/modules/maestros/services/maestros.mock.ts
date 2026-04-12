@@ -115,14 +115,14 @@ let store: DataStore = {
 };
 
 const idCounters: Record<MaestroTipo, number> = {
-  veterinarios: Math.max(...SEED_VETERINARIOS.map(v => v.id)) + 1,
-  propietarios: Math.max(...SEED_PROPIETARIOS.map(v => v.id)) + 1,
-  hierros: Math.max(...SEED_HIERROS.map(v => v.id)) + 1,
-  diagnosticos: Math.max(...SEED_DIAGNOSTICOS.map(v => v.id)) + 1,
-  'motivos-ventas': Math.max(...SEED_MOTIVOS_VENTAS.map(v => v.id)) + 1,
-  'causas-muerte': Math.max(...SEED_CAUSAS_MUERTE.map(v => v.id)) + 1,
-  'lugares-compras': Math.max(...SEED_LUGARES_COMPRAS.map(v => v.id)) + 1,
-  'lugares-ventas': Math.max(...SEED_LUGARES_VENTAS.map(v => v.id)) + 1,
+  veterinarios: Math.max(0, ...SEED_VETERINARIOS.map(v => v.id)) + 1,
+  propietarios: Math.max(0, ...SEED_PROPIETARIOS.map(v => v.id)) + 1,
+  hierros: Math.max(0, ...SEED_HIERROS.map(v => v.id)) + 1,
+  diagnosticos: Math.max(0, ...SEED_DIAGNOSTICOS.map(v => v.id)) + 1,
+  'motivos-ventas': Math.max(0, ...SEED_MOTIVOS_VENTAS.map(v => v.id)) + 1,
+  'causas-muerte': Math.max(0, ...SEED_CAUSAS_MUERTE.map(v => v.id)) + 1,
+  'lugares-compras': Math.max(0, ...SEED_LUGARES_COMPRAS.map(v => v.id)) + 1,
+  'lugares-ventas': Math.max(0, ...SEED_LUGARES_VENTAS.map(v => v.id)) + 1,
 };
 
 // ============================================================================
@@ -136,9 +136,30 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 // ============================================================================
 
 export class MockMaestrosService implements MaestrosService {
-  async getAll(tipo: MaestroTipo): Promise<MaestroBase[]> {
+  async getAll(
+    tipo: MaestroTipo,
+    params?: { page?: number; limit?: number; search?: string },
+  ): Promise<{ data: MaestroBase[]; meta: { page: number; limit: number; total: number } }> {
     await delay(300);
-    return [...(store[tipo] as MaestroBase[])];
+    let items = [...(store[tipo] as MaestroBase[])].filter((item) => item.activo);
+
+    // Apply search filter
+    if (params?.search) {
+      const search = params.search.toLowerCase();
+      items = items.filter((item) =>
+        item.nombre.toLowerCase().includes(search),
+      );
+    }
+
+    const total = items.length;
+    const page = params?.page ?? 1;
+    const limit = params?.limit ?? 20;
+
+    // Apply pagination
+    const offset = (page - 1) * limit;
+    const data = items.slice(offset, offset + limit);
+
+    return { data, meta: { page, limit, total } };
   }
 
   async getById(tipo: MaestroTipo, id: number): Promise<MaestroBase> {
@@ -173,14 +194,14 @@ export class MockMaestrosService implements MaestrosService {
     return { ...items[index] };
   }
 
-  async remove(tipo: MaestroTipo, id: number): Promise<void> {
+async remove(tipo: MaestroTipo, id: number): Promise<void> {
     await delay(300);
     const items = store[tipo] as MaestroBase[];
     const index = items.findIndex((item) => item.id === id);
     if (index === -1) {
       throw new ApiError(404, 'NOT_FOUND', `Registro con ID ${id} no encontrado`);
     }
-    items.splice(index, 1);
+    items[index] = { ...items[index], activo: false } as MaestroBase;
   }
 }
 
@@ -199,12 +220,12 @@ export function resetMaestrosMock(): void {
     'lugares-compras': [...SEED_LUGARES_COMPRAS],
     'lugares-ventas': [...SEED_LUGARES_VENTAS],
   };
-  idCounters.veterinarios = Math.max(...SEED_VETERINARIOS.map(v => v.id)) + 1;
-  idCounters.propietarios = Math.max(...SEED_PROPIETARIOS.map(v => v.id)) + 1;
-  idCounters.hierros = Math.max(...SEED_HIERROS.map(v => v.id)) + 1;
-  idCounters.diagnosticos = Math.max(...SEED_DIAGNOSTICOS.map(v => v.id)) + 1;
-  idCounters['motivos-ventas'] = Math.max(...SEED_MOTIVOS_VENTAS.map(v => v.id)) + 1;
-  idCounters['causas-muerte'] = Math.max(...SEED_CAUSAS_MUERTE.map(v => v.id)) + 1;
-  idCounters['lugares-compras'] = Math.max(...SEED_LUGARES_COMPRAS.map(v => v.id)) + 1;
-  idCounters['lugares-ventas'] = Math.max(...SEED_LUGARES_VENTAS.map(v => v.id)) + 1;
+  idCounters.veterinarios = Math.max(0, ...SEED_VETERINARIOS.map(v => v.id)) + 1;
+  idCounters.propietarios = Math.max(0, ...SEED_PROPIETARIOS.map(v => v.id)) + 1;
+  idCounters.hierros = Math.max(0, ...SEED_HIERROS.map(v => v.id)) + 1;
+  idCounters.diagnosticos = Math.max(0, ...SEED_DIAGNOSTICOS.map(v => v.id)) + 1;
+  idCounters['motivos-ventas'] = Math.max(0, ...SEED_MOTIVOS_VENTAS.map(v => v.id)) + 1;
+  idCounters['causas-muerte'] = Math.max(0, ...SEED_CAUSAS_MUERTE.map(v => v.id)) + 1;
+  idCounters['lugares-compras'] = Math.max(0, ...SEED_LUGARES_COMPRAS.map(v => v.id)) + 1;
+  idCounters['lugares-ventas'] = Math.max(0, ...SEED_LUGARES_VENTAS.map(v => v.id)) + 1;
 }

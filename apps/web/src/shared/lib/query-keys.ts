@@ -53,7 +53,8 @@ export const queryKeys = {
   },
   maestros: {
     ...createQueryKeys('maestros'),
-    byTipo: (tipo: string) => ['maestros', tipo] as const,
+    byTipo: (tipo: string, filters?: { page?: number; limit?: number; search?: string }) =>
+      filters ? (['maestros', tipo, filters] as const) : (['maestros', tipo] as const),
   },
   configuracion: {
     ...createQueryKeys('configuracion'),

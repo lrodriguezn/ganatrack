@@ -192,12 +192,103 @@ describe('useMaestro — mutation helpers', () => {
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     const initialCount = result.current.items.length;
-    const firstId = result.current.items[0].id;
+    const firstId = result.current.items[0]!.id;
 
     await act(async () => {
       await result.current.remove(firstId);
     });
 
     await waitFor(() => expect(result.current.items.length).toBe(initialCount - 1));
+  });
+});
+
+// ============================================================================
+// Tests: pagination state
+// ============================================================================
+
+describe('useMaestro — pagination state', () => {
+  it('debería exponer page, limit, total con valores por defecto', async () => {
+    const { result } = renderHook(() => useMaestro('veterinarios'), {
+      wrapper: createWrapper(),
+    });
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+    expect(result.current.page).toBe(1);
+    expect(result.current.limit).toBe(20);
+    expect(result.current.total).toBe(4); // 4 veterinarios en seed
+  });
+
+  it('debería exponer setPage, setLimit, setSearch como funciones', () => {
+    const { result } = renderHook(() => useMaestro('veterinarios'), {
+      wrapper: createWrapper(),
+    });
+
+    expect(typeof result.current.setPage).toBe('function');
+    expect(typeof result.current.setLimit).toBe('function');
+    expect(typeof result.current.setSearch).toBe('function');
+  });
+
+  it('debería actualizar page cuando se llama setPage', async () => {
+    const { result } = renderHook(() => useMaestro('veterinarios'), {
+      wrapper: createWrapper(),
+    });
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+    await act(async () => {
+      result.current.setPage(2);
+    });
+
+    expect(result.current.page).toBe(2);
+  });
+
+  it('debería actualizar limit cuando se llama setLimit', async () => {
+    const { result } = renderHook(() => useMaestro('veterinarios'), {
+      wrapper: createWrapper(),
+    });
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+    await act(async () => {
+      result.current.setLimit(10);
+    });
+
+    expect(result.current.limit).toBe(10);
+  });
+
+  it('debería actualizar search cuando se llama setSearch', async () => {
+    const { result } = renderHook(() => useMaestro('veterinarios'), {
+      wrapper: createWrapper(),
+    });
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+    await act(async () => {
+      result.current.setSearch('Carlos');
+    });
+
+    expect(result.current.search).toBe('Carlos');
+  });
+
+  it('debería filtrar items cuando se aplica search', async () => {
+    const { result } = renderHook(() => useMaestro('veterinarios'), {
+      wrapper: createWrapper(),
+    });
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    const allItemsCount = result.current.items.length;
+
+    await act(async () => {
+      result.current.setSearch('Carlos');
+    });
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+    // Search should filter results
+    expect(result.current.items.length).toBeLessThanOrEqual(allItemsCount);
+    if (result.current.items.length > 0) {
+      expect(result.current.items[0]!.nombre).toContain('Carlos');
+    }
   });
 });

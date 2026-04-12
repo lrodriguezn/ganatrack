@@ -6,7 +6,7 @@ import { animalesHandlers } from './animales.handlers';
 import { authHandlers } from './auth.handlers';
 import { configHandlers } from './config.handlers';
 import { imagenesHandlers } from './imagenes.handlers';
-import { MaestrosHandlers } from './maestros.handlers';
+import { maestrosHandlers } from './maestros.handlers';
 import { notificacionesHandlers } from './notificaciones.handlers';
 import { prediosHandlers } from './predios.handlers';
 import { productosHandlers } from './productos.handlers';

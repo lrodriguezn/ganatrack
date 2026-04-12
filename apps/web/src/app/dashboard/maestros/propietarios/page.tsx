@@ -16,14 +16,16 @@ import {
 
 const FIELDS: MaestroFieldDef[] = [
   { name: 'nombre', label: 'Nombre', type: 'text', required: true },
-  { name: 'documento', label: 'Documento', type: 'text' },
+  { name: 'tipoDocumento', label: 'Tipo de documento', type: 'text' },
+  { name: 'numeroDocumento', label: 'Número de documento', type: 'text' },
   { name: 'telefono', label: 'Teléfono', type: 'tel' },
   { name: 'email', label: 'Correo electrónico', type: 'email' },
 ];
 
 const COLUMNS: ColumnDef<Propietario>[] = [
   { accessorKey: 'nombre', header: 'Nombre' },
-  { accessorKey: 'documento', header: 'Documento', cell: ({ getValue }) => getValue() ?? '—' },
+  { accessorKey: 'tipoDocumento', header: 'Tipo Doc.', cell: ({ getValue }) => getValue() ?? '—' },
+  { accessorKey: 'numeroDocumento', header: 'Número Doc.', cell: ({ getValue }) => getValue() ?? '—' },
   { accessorKey: 'telefono', header: 'Teléfono', cell: ({ getValue }) => getValue() ?? '—' },
   { accessorKey: 'email', header: 'Correo electrónico', cell: ({ getValue }) => getValue() ?? '—' },
   {

@@ -13,7 +13,7 @@ import type { CreateMaestroDto, MaestroBase, MaestroTipo } from '../types/maestr
 // ============================================================================
 
 export interface MaestrosService {
-  getAll(tipo: MaestroTipo): Promise<MaestroBase[]>;
+  getAll(tipo: MaestroTipo, params?: { page?: number; limit?: number; search?: string }): Promise<{ data: MaestroBase[]; meta: { page: number; limit: number; total: number } }>;
   getById(tipo: MaestroTipo, id: number): Promise<MaestroBase>;
   create(tipo: MaestroTipo, data: CreateMaestroDto): Promise<MaestroBase>;
   update(tipo: MaestroTipo, id: number, data: Partial<CreateMaestroDto>): Promise<MaestroBase>;

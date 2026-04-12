@@ -219,3 +219,186 @@ export const UI_STRINGS = {
     buscarPlaceholder: /buscar por código/i,
   },
 } as const;
+
+// =============================================================================
+// Maestros mock data (must match maestros.mock.ts)
+// =============================================================================
+
+/** Entity configurations for MaestrosPage */
+export const MAESTROS_ENTITIES = {
+  veterinarios: {
+    tipo: 'veterinarios',
+    singularName: 'Veterinario',
+    url: '/dashboard/maestros/veterinarios',
+    existingName: 'Dr. Carlos Rodríguez Pérez',
+    newName: 'Dr. Test Veterinario E2E',
+    updatedName: 'Dr. Test Veterinario E2E Modificado',
+    fields: {
+      create: {
+        Nombre: 'Dr. Test Veterinario E2E',
+        Especialidad: 'Medicina General',
+        Teléfono: '3009998877',
+        'Correo electrónico': 'testvet@e2e.com',
+      },
+      update: {
+        Especialidad: 'Cirugía Veterinaria',
+      },
+    },
+    expectedColumns: ['Nombre', 'Especialidad', 'Teléfono', 'Correo electrónico', 'Estado'],
+  },
+  propietarios: {
+    tipo: 'propietarios',
+    singularName: 'Propietario',
+    url: '/dashboard/maestros/propietarios',
+    existingName: 'Hernando Martínez Suárez',
+    newName: 'Test Propietario E2E',
+    updatedName: 'Test Propietario E2E Modificado',
+    fields: {
+      create: {
+        Nombre: 'Test Propietario E2E',
+        'Tipo de documento': 'CC',
+        'Número de documento': '99887766',
+        Teléfono: '3001112233',
+        'Correo electrónico': 'testprop@e2e.com',
+      },
+      update: {
+        Teléfono: '3009998888',
+      },
+    },
+    expectedColumns: ['Nombre', 'Tipo Doc.', 'Número Doc.', 'Teléfono', 'Correo electrónico', 'Estado'],
+  },
+  hierros: {
+    tipo: 'hierros',
+    singularName: 'Hierro',
+    url: '/dashboard/maestros/hierros',
+    existingName: 'Hierro Principal Finca La Esperanza',
+    newName: 'Test Hierro E2E',
+    updatedName: 'Test Hierro E2E Modificado',
+    fields: {
+      create: {
+        Nombre: 'Test Hierro E2E',
+        Descripción: 'Descripción de prueba E2E',
+      },
+      update: {
+        Descripción: 'Descripción modificada E2E',
+      },
+    },
+    expectedColumns: ['Nombre', 'Descripción', 'Estado'],
+  },
+  diagnosticos: {
+    tipo: 'diagnosticos',
+    singularName: 'Diagnóstico',
+    url: '/dashboard/maestros/diagnosticos',
+    existingName: 'Brucelosis',
+    newName: 'Test Diagnóstico E2E',
+    updatedName: 'Test Diagnóstico E2E Modificado',
+    fields: {
+      create: {
+        Nombre: 'Test Diagnóstico E2E',
+        Descripción: 'Descripción de prueba E2E',
+        Categoría: 'Categoría E2E',
+      },
+      update: {
+        Categoría: 'Categoría Modificada',
+      },
+    },
+    expectedColumns: ['Nombre', 'Categoría', 'Descripción', 'Estado'],
+  },
+  'motivos-ventas': {
+    tipo: 'motivos-ventas',
+    singularName: 'Motivo',
+    url: '/dashboard/maestros/motivos-ventas',
+    existingName: 'Descarte por Edad',
+    newName: 'Test Motivo Venta E2E',
+    updatedName: 'Test Motivo Venta E2E Modificado',
+    fields: {
+      create: {
+        Nombre: 'Test Motivo Venta E2E',
+        Descripción: 'Motivo de venta de prueba E2E',
+      },
+      update: {
+        Descripción: 'Descripción modificada E2E',
+      },
+    },
+    expectedColumns: ['Nombre', 'Descripción', 'Estado'],
+  },
+  'causas-muerte': {
+    tipo: 'causas-muerte',
+    singularName: 'Causa',
+    url: '/dashboard/maestros/causas-muerte',
+    existingName: 'Septicemia',
+    newName: 'Test Causa Muerte E2E',
+    updatedName: 'Test Causa Muerte E2E Modificado',
+    fields: {
+      create: {
+        Nombre: 'Test Causa Muerte E2E',
+        Descripción: 'Causa de muerte de prueba E2E',
+      },
+      update: {
+        Descripción: 'Descripción modificada E2E',
+      },
+    },
+    expectedColumns: ['Nombre', 'Descripción', 'Estado'],
+  },
+  'lugares-compras': {
+    tipo: 'lugares-compras',
+    singularName: 'Lugar',
+    url: '/dashboard/maestros/lugares-compras',
+    existingName: 'Subasta Ganadera de Medellín',
+    newName: 'Test Lugar Compra E2E',
+    updatedName: 'Test Lugar Compra E2E Modificado',
+    fields: {
+      create: {
+        Nombre: 'Test Lugar Compra E2E',
+        Tipo: 'Subasta',
+        Ubicación: 'Bogotá, Cundinamarca',
+        Contacto: 'Juan Test',
+        Teléfono: '6011234567',
+      },
+      update: {
+        Ubicación: 'Medellín, Antioquia',
+      },
+    },
+    expectedColumns: ['Nombre', 'Tipo', 'Ubicación', 'Contacto', 'Teléfono', 'Estado'],
+  },
+  'lugares-ventas': {
+    tipo: 'lugares-ventas',
+    singularName: 'Lugar',
+    url: '/dashboard/maestros/lugares-ventas',
+    existingName: 'Frigorífico Guadalupe',
+    newName: 'Test Lugar Venta E2E',
+    updatedName: 'Test Lugar Venta E2E Modificado',
+    fields: {
+      create: {
+        Nombre: 'Test Lugar Venta E2E',
+        Tipo: 'Frigorífico',
+        Ubicación: 'Cali, Valle',
+        Contacto: 'María Test',
+        Teléfono: '6029876543',
+      },
+      update: {
+        Contacto: 'María Test Modificada',
+      },
+    },
+    expectedColumns: ['Nombre', 'Tipo', 'Ubicación', 'Contacto', 'Teléfono', 'Estado'],
+  },
+} as const;
+
+/** List of all maestro entity keys */
+export const ALL_MAESTROS_ENTITIES = Object.keys(MAESTROS_ENTITIES) as (keyof typeof MAESTROS_ENTITIES)[];
+
+/** Entities with field alignment fixes (need specific field testing) */
+export const FIX_ENTITIES: (keyof typeof MAESTROS_ENTITIES)[] = [
+  'propietarios',
+  'hierros',
+  'diagnosticos',
+  'lugares-compras',
+  'lugares-ventas',
+];
+
+/** Regression entities (already working, just verify) */
+export const REGRESSION_ENTITIES: (keyof typeof MAESTROS_ENTITIES)[] = [
+  'veterinarios',
+  'motivos-ventas',
+  'causas-muerte',
+];
