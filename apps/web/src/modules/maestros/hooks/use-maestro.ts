@@ -102,28 +102,6 @@ const createMutation = useMutation({
   });
 
   // ============================================================================
-  // Mutation — update
-  // ============================================================================
-
-  const updateMutation = useMutation({
-    mutationFn: ({
-      id,
-      data: updateData,
-    }: {
-      id: number;
-      data: Partial<CreateMaestroDto>;
-    }) => {
-      console.log('[useMaestro] update mutation called, id:', id);
-      return maestrosService.update(tipo, id, updateData);
-    },
-    onSuccess: () => {
-      console.log('[useMaestro] update onSuccess - removing cache');
-      queryClient.removeQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
-      console.log('[useMaestro] update onSuccess - DONE');
-    },
-  });
-
-  // ============================================================================
   // Mutation — remove
   // ============================================================================
 
