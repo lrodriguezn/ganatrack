@@ -111,24 +111,17 @@ export function MaestroEntityPage<T extends z.ZodSchema>({
   const totalPages = Math.max(1, Math.ceil(total / limit));
 
   const handleFormSubmit = async (data: z.infer<T>) => {
-    console.log('[MaestroEntityPage] handleFormSubmit called with data:', data);
-    console.log('[MaestroEntityPage] editItem:', editItem);
-    console.log('[MaestroEntityPage] editItem is truthy:', !!editItem);
-    console.log('[MaestroEntityPage] update function:', update);
     try {
       if (editItem) {
-        console.log('[MaestroEntityPage] Calling update with id:', editItem.id);
         await update({ id: editItem.id, data });
         addToast({ message: `${singularName} actualizado correctamente`, type: 'success' });
       } else {
-        console.log('[MaestroEntityPage] Calling create with:', data);
         await create(data);
         addToast({ message: `${singularName} creado correctamente`, type: 'success' });
       }
       setIsFormOpen(false);
       setEditItem(null);
     } catch (err) {
-      console.log('[MaestroEntityPage] Error caught:', err);
       if (ApiError.isApiError(err)) {
         addToast({ message: err.message, type: 'error' });
       } else if (err instanceof Error) {

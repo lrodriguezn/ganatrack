@@ -63,7 +63,6 @@ async getAll(
     params?: { page?: number; limit?: number; search?: string },
   ): Promise<{ data: MaestroBase[]; meta: { page: number; limit: number; total: number }}> {
     const endpoint = ENDPOINT_MAP[tipo];
-    console.log('[RealMaestrosService] getAll - tipo:', tipo, 'endpoint:', endpoint, 'params:', params);
     const response = await apiClient
       .get<PaginatedResponse<MaestroBase>>(endpoint, {
         searchParams: {
@@ -73,8 +72,6 @@ async getAll(
         },
       })
       .json();
-
-    console.log('[RealMaestrosService] getAll response:', response);
 
     if (!response.success) {
       throw new Error('La solicitud falló');

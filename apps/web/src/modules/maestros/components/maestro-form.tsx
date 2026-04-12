@@ -52,24 +52,11 @@ export function MaestroForm<T extends z.ZodSchema>({
     defaultValues: defaultValues ?? ({} as FormData),
   });
 
-  useEffect(() => {
-    console.log('[MaestroForm] MOUNTED - onSubmit:', onSubmit);
-    console.log('[MaestroForm] MOUNTED - onCancel:', onCancel);
-  }, [onSubmit, onCancel]);
-
   const onFormSubmit = async (data: FormData) => {
-    console.log('[MaestroForm] onFormSubmit called with data:', data);
-    console.log('[MaestroForm] onSubmit prop:', onSubmit);
     if (onSubmit) {
-      console.log('[MaestroForm] calling onSubmit...');
       await onSubmit(data);
-      console.log('[MaestroForm] onSubmit completed');
-    } else {
-      console.log('[MaestroForm] onSubmit is undefined!');
     }
   };
-
-  console.log('[MaestroForm] Render - onSubmit prop:', onSubmit);
 
   return (
     <form
@@ -118,17 +105,9 @@ export function MaestroForm<T extends z.ZodSchema>({
           type="button"
           isLoading={isLoading}
           onClick={async () => {
-            console.log('[MaestroForm] Button clicked - START');
-            console.log('[MaestroForm] getValues:', typeof getValues);
             const data = getValues();
-            console.log('[MaestroForm] getValues() result:', data);
-            console.log('[MaestroForm] onSubmit:', typeof onSubmit);
             if (onSubmit) {
-              console.log('[MaestroForm] calling onSubmit with data:', data);
               await onSubmit(data);
-              console.log('[MaestroForm] onSubmit finished');
-            } else {
-              console.log('[MaestroForm] onSubmit is NULL!');
             }
           }}
         >
