@@ -21,6 +21,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Path } from 'react-hook-form';
+import { useEffect } from 'react';
 import { FormField } from '@/shared/components/ui/form-field';
 import { Input, Textarea } from '@/shared/components/ui/input';
 import { Button } from '@/shared/components/ui/button';
@@ -50,6 +51,11 @@ export function MaestroForm<T extends z.ZodSchema>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues ?? ({} as FormData),
   });
+
+  useEffect(() => {
+    console.log('[MaestroForm] MOUNTED - onSubmit:', onSubmit);
+    console.log('[MaestroForm] MOUNTED - onCancel:', onCancel);
+  }, [onSubmit, onCancel]);
 
   const onFormSubmit = async (data: FormData) => {
     console.log('[MaestroForm] onFormSubmit called with data:', data);
@@ -110,8 +116,16 @@ export function MaestroForm<T extends z.ZodSchema>({
           Cancelar
         </Button>
         <Button
-          type="submit"
+          type="button"
           isLoading={isLoading}
+          onClick={() => {
+            console.log('[MaestroForm] Button clicked, calling handleSubmit');
+            handleSubmit(onFormSubmit)().then(() => {
+              console.log('[MaestroForm] handleSubmit resolved');
+            }).catch((err) => {
+              console.log('[MaestroForm] handleSubmit rejected:', err);
+            });
+          }}
         >
           Guardar
         </Button>
