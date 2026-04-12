@@ -51,9 +51,15 @@ export function MaestroForm<T extends z.ZodSchema>({
     defaultValues: defaultValues ?? ({} as FormData),
   });
 
+  const onFormSubmit = async (data: FormData) => {
+    if (onSubmit) {
+      await onSubmit(data);
+    }
+  };
+
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onFormSubmit)}
       className="flex flex-col gap-4"
       noValidate
     >
@@ -95,7 +101,10 @@ export function MaestroForm<T extends z.ZodSchema>({
         >
           Cancelar
         </Button>
-        <Button type="submit" isLoading={isLoading}>
+        <Button
+          type="submit"
+          isLoading={isLoading}
+        >
           Guardar
         </Button>
       </div>
