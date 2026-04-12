@@ -2,14 +2,17 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
 import { ForbiddenError } from '../errors/forbidden.error.js'
 
 export async function tenantContextMiddleware(request: FastifyRequest, _reply: FastifyReply): Promise<void> {
+  console.log('[tenantContextMiddleware] All headers:', request.headers);
   const prediosHeader = request.headers['x-predio-id']
+  console.log('[tenantContextMiddleware] x-predio-id header:', prediosHeader);
 
   if (!prediosHeader) {
-    request.predioId = 0
+    request.prediosId = 0
     return
   }
 
   const predios = Number(prediosHeader)
+  console.log('[tenantContextMiddleware] parsed predios:', predios);
 
   if (isNaN(predios) || predios <= 0) {
     throw new ForbiddenError('X-Predio-Id inválido')
