@@ -52,10 +52,18 @@ export function MaestroForm<T extends z.ZodSchema>({
   });
 
   const onFormSubmit = async (data: FormData) => {
+    console.log('[MaestroForm] onFormSubmit called with data:', data);
+    console.log('[MaestroForm] onSubmit prop:', onSubmit);
     if (onSubmit) {
+      console.log('[MaestroForm] calling onSubmit...');
       await onSubmit(data);
+      console.log('[MaestroForm] onSubmit completed');
+    } else {
+      console.log('[MaestroForm] onSubmit is undefined!');
     }
   };
+
+  console.log('[MaestroForm] Render - onSubmit prop:', onSubmit);
 
   return (
     <form

@@ -55,9 +55,12 @@ export function useMaestro(
   // ============================================================================
 
   const createMutation = useMutation({
-    mutationFn: (newData: CreateMaestroDto) =>
-      maestrosService.create(tipo, newData),
+    mutationFn: (newData: CreateMaestroDto) => {
+      console.log('[useMaestro] create mutation called with:', newData);
+      return maestrosService.create(tipo, newData);
+    },
     onSuccess: () => {
+      console.log('[useMaestro] create onSuccess');
       queryClient.invalidateQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
     },
   });

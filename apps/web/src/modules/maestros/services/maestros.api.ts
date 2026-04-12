@@ -102,7 +102,9 @@ export class RealMaestrosService implements MaestrosService {
    * POST — create a new entity
    */
   async create(tipo: MaestroTipo, data: CreateMaestroDto): Promise<MaestroBase> {
+    console.log('[RealMaestrosService] create called - tipo:', tipo, 'data:', data);
     const endpoint = ENDPOINT_MAP[tipo];
+    console.log('[RealMaestrosService] endpoint:', endpoint);
     const response = await apiClient
       .post<ApiResponse<MaestroBase>>(endpoint, {
         json: data,
