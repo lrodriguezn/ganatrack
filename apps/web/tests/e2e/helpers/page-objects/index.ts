@@ -13,3 +13,6 @@ export type {
   PartoStep1Data,
   PartoStep2Data,
 } from './servicios-wizard.page';
+
+export { MaestrosPage } from './maestros.page';
+export type { MaestroEntityConfig } from './maestros.page';

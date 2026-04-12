@@ -17,12 +17,12 @@ import {
 const FIELDS: MaestroFieldDef[] = [
   { name: 'nombre', label: 'Nombre', type: 'text', required: true },
   { name: 'descripcion', label: 'Descripción', type: 'textarea' },
-  { name: 'tipo', label: 'Tipo', type: 'text' },
+  { name: 'categoria', label: 'Categoría', type: 'text' },
 ];
 
 const COLUMNS: ColumnDef<Diagnostico>[] = [
   { accessorKey: 'nombre', header: 'Nombre' },
-  { accessorKey: 'tipo', header: 'Tipo', cell: ({ getValue }) => getValue() ?? '—' },
+  { accessorKey: 'categoria', header: 'Categoría', cell: ({ getValue }) => getValue() ?? '—' },
   { accessorKey: 'descripcion', header: 'Descripción', cell: ({ getValue }) => getValue() ?? '—' },
   {
     accessorKey: 'activo',

@@ -16,14 +16,11 @@ import {
 
 const FIELDS: MaestroFieldDef[] = [
   { name: 'nombre', label: 'Nombre', type: 'text', required: true },
-  { name: 'codigo', label: 'Código', type: 'text', required: true },
   { name: 'descripcion', label: 'Descripción', type: 'textarea' },
-  { name: 'imagen_url', label: 'URL de imagen', type: 'text' },
 ];
 
 const COLUMNS: ColumnDef<Hierro>[] = [
   { accessorKey: 'nombre', header: 'Nombre' },
-  { accessorKey: 'codigo', header: 'Código' },
   { accessorKey: 'descripcion', header: 'Descripción', cell: ({ getValue }) => getValue() ?? '—' },
   {
     accessorKey: 'activo',

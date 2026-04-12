@@ -16,14 +16,18 @@ import {
 
 const FIELDS: MaestroFieldDef[] = [
   { name: 'nombre', label: 'Nombre', type: 'text', required: true },
-  { name: 'municipio', label: 'Municipio', type: 'text' },
-  { name: 'departamento', label: 'Departamento', type: 'text' },
+  { name: 'tipo', label: 'Tipo', type: 'text' },
+  { name: 'ubicacion', label: 'Ubicación', type: 'text' },
+  { name: 'contacto', label: 'Contacto', type: 'text' },
+  { name: 'telefono', label: 'Teléfono', type: 'tel' },
 ];
 
 const COLUMNS: ColumnDef<LugarCompra>[] = [
   { accessorKey: 'nombre', header: 'Nombre' },
-  { accessorKey: 'municipio', header: 'Municipio', cell: ({ getValue }) => getValue() ?? '—' },
-  { accessorKey: 'departamento', header: 'Departamento', cell: ({ getValue }) => getValue() ?? '—' },
+  { accessorKey: 'tipo', header: 'Tipo', cell: ({ getValue }) => getValue() ?? '—' },
+  { accessorKey: 'ubicacion', header: 'Ubicación', cell: ({ getValue }) => getValue() ?? '—' },
+  { accessorKey: 'contacto', header: 'Contacto', cell: ({ getValue }) => getValue() ?? '—' },
+  { accessorKey: 'telefono', header: 'Teléfono', cell: ({ getValue }) => getValue() ?? '—' },
   {
     accessorKey: 'activo',
     header: 'Estado',

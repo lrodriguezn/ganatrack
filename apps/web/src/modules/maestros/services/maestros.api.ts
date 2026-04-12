@@ -11,6 +11,7 @@ import type {
   MaestroBase,
   MaestroTipo,
 } from '../types/maestro.types';
+import { parseActivo } from '../types/maestro.types';
 import type { MaestrosService } from './maestros.service';
 
 // ============================================================================
@@ -33,6 +34,7 @@ const ENDPOINT_MAP: Record<MaestroTipo, string> = {
 // ============================================================================
 
 interface PaginatedResponse<T> {
+  success: boolean;
   data: T[];
   meta: {
     page: number;
@@ -56,13 +58,32 @@ export class RealMaestrosService implements MaestrosService {
    * GET all entities of a given tipo
    * Supports pagination and search
    */
-  async getAll(tipo: MaestroTipo): Promise<MaestroBase[]> {
+  async getAll(
+    tipo: MaestroTipo,
+    params?: { page?: number; limit?: number; search?: string },
+  ): Promise<{ data: MaestroBase[]; meta: { page: number; limit: number; total: number } }> {
     const endpoint = ENDPOINT_MAP[tipo];
     const response = await apiClient
-      .get<PaginatedResponse<MaestroBase>>(endpoint)
+      .get<PaginatedResponse<MaestroBase>>(endpoint, {
+        searchParams: {
+          page: params?.page ?? 1,
+          limit: params?.limit ?? 20,
+          ...(params?.search ? { search: params.search } : {}),
+        },
+      })
       .json();
 
-    return response.data;
+    if (!response.success) {
+      throw new Error('La solicitud falló');
+    }
+
+    // Transform activo from number (backend) to boolean (frontend)
+    const transformedData = response.data.map((item) => ({
+      ...item,
+      activo: parseActivo(item.activo),
+    }));
+
+    return { data: transformedData, meta: response.meta };
   }
 
   /**
@@ -74,7 +95,7 @@ export class RealMaestrosService implements MaestrosService {
       .get<ApiResponse<MaestroBase>>(`${endpoint}/${id}`)
       .json();
 
-    return response.data;
+    return { ...response.data, activo: parseActivo(response.data.activo) };
   }
 
   /**
@@ -88,7 +109,7 @@ export class RealMaestrosService implements MaestrosService {
       })
       .json();
 
-    return response.data;
+    return { ...response.data, activo: parseActivo(response.data.activo) };
   }
 
   /**
@@ -106,7 +127,7 @@ export class RealMaestrosService implements MaestrosService {
       })
       .json();
 
-    return response.data;
+    return { ...response.data, activo: parseActivo(response.data.activo) };
   }
 
   /**

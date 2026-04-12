@@ -4,6 +4,7 @@
  *
  * Reduces boilerplate by providing a full CRUD UI:
  * - Header with title, description, and "New" button
+ * - Search bar and pagination controls
  * - Data table with edit/delete actions
  * - Form modal for create/edit
  * - Delete confirmation modal
@@ -54,8 +55,23 @@ export function MaestroEntityPage<T extends z.ZodSchema>({
   columns,
   schema,
 }: MaestroEntityPageProps<T>): JSX.Element {
-  const { items, isLoading, create, update, remove, isCreating, isUpdating, isRemoving } =
-    useMaestro(tipo);
+  const [searchInput, setSearchInput] = useState('');
+  const {
+    items,
+    isLoading,
+    create,
+    update,
+    remove,
+    isCreating,
+    isUpdating,
+    isRemoving,
+    page,
+    limit,
+    total,
+    setPage,
+    setLimit,
+    setSearch,
+  } = useMaestro(tipo);
 
   const addToast = useUiStore((s) => s.addToast);
 
@@ -76,6 +92,23 @@ export function MaestroEntityPage<T extends z.ZodSchema>({
   const handleDelete = (item: MaestroBase) => {
     setDeleteItem(item);
   };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearch(searchInput);
+    setPage(1);
+  };
+
+  const handleSearchChange = (e: any) => {
+    setSearchInput(e.target.value);
+  };
+
+  const handleLimitChange = (e: any) => {
+    setLimit(Number(e.target.value));
+    setPage(1);
+  };
+
+  const totalPages = Math.max(1, Math.ceil(total / limit));
 
   const handleFormSubmit = async (data: z.infer<T>) => {
     try {
@@ -133,6 +166,40 @@ export function MaestroEntityPage<T extends z.ZodSchema>({
         </Button>
       </div>
 
+      {/* Barra de búsqueda y controles */}
+      <div className="flex items-center gap-4">
+        <form onSubmit={handleSearchSubmit} className="flex-1 max-w-md">
+          <input
+            type="text"
+            value={searchInput}
+            onChange={handleSearchChange}
+            placeholder="Buscar por nombre..."
+            className="
+              w-full rounded-md border border-gray-300 dark:border-gray-600
+              bg-white dark:bg-gray-800 px-3 py-2 text-sm
+              text-gray-900 dark:text-gray-100
+              placeholder-gray-500 dark:placeholder-gray-400
+              focus:outline-none focus:ring-2 focus:ring-blue-500
+            "
+          />
+        </form>
+        <select
+          value={limit}
+          onChange={handleLimitChange}
+          className="
+            rounded-md border border-gray-300 dark:border-gray-600
+            bg-white dark:bg-gray-800 px-3 py-2 text-sm
+            text-gray-900 dark:text-gray-100
+            focus:outline-none focus:ring-2 focus:ring-blue-500
+          "
+        >
+          <option value={10}>10 por página</option>
+          <option value={20}>20 por página</option>
+          <option value={50}>50 por página</option>
+          <option value={100}>100 por página</option>
+        </select>
+      </div>
+
       {/* Tabla */}
       <MaestroTable<MaestroBase>
         columns={columns}
@@ -141,6 +208,44 @@ export function MaestroEntityPage<T extends z.ZodSchema>({
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
+
+      {/* Paginación */}
+      <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+        <span>
+          Mostrando {items.length} de {total} registros
+        </span>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            disabled={page <= 1}
+            onClick={() => setPage(page - 1)}
+            className="
+              rounded-md px-3 py-1.5 text-sm font-medium
+              disabled:opacity-40 disabled:cursor-not-allowed
+              hover:bg-gray-100 dark:hover:bg-gray-700
+              transition-colors
+            "
+          >
+            Anterior
+          </button>
+          <span className="px-2">
+            Página {page} de {totalPages}
+          </span>
+          <button
+            type="button"
+            disabled={page >= totalPages}
+            onClick={() => setPage(page + 1)}
+            className="
+              rounded-md px-3 py-1.5 text-sm font-medium
+              disabled:opacity-40 disabled:cursor-not-allowed
+              hover:bg-gray-100 dark:hover:bg-gray-700
+              transition-colors
+            "
+          >
+            Siguiente
+          </button>
+        </div>
+      </div>
 
       {/* Modal formulario */}
       <Modal

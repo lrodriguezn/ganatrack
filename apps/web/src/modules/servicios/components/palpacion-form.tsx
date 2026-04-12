@@ -91,7 +91,7 @@ export const PalpacionEventoForm = forwardRef<PalpacionEventoFormRef, PalpacionE
     async function loadVeterinarios() {
       try {
         setIsLoadingVets(true);
-        const data = await maestrosService.getAll('veterinarios');
+        const { data } = await maestrosService.getAll('veterinarios');
         setVeterinarios(data);
       } catch (error) {
         setErrorVets(error instanceof Error ? error.message : 'Error al cargar veterinarios');
@@ -234,7 +234,7 @@ export function PalpacionResultadosStep({ animalIds, resultados, onChange }: Pal
     async function loadCatalogs() {
       try {
         setIsLoading(true);
-        const [diagData, condData] = await Promise.all([
+        const [{ data: diagData }, condData] = await Promise.all([
           maestrosService.getAll('diagnosticos'),
           catalogoService.getAll('condiciones-corporales'),
         ]);
