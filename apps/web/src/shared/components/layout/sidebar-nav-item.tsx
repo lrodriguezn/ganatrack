@@ -31,6 +31,7 @@ import {
   TooltipContent,
   TooltipProvider,
 } from '@/shared/components/ui/tooltip';
+import { usePredioStore, selectPredioActivo } from '@/store/predio.store';
 
 /**
  * Check if a nav item href matches the current pathname.
@@ -80,6 +81,9 @@ function SidebarNavItemInner({ item, isCollapsed, depth = 0 }: SidebarNavItemPro
     }
   }, [childIsActive]);
 
+  const predioActivo = usePredioStore(selectPredioActivo);
+  const isDisabled = !!item.requiresPredio && !predioActivo;
+
   const Icon = itemIsActive && item.iconActive ? item.iconActive : item.icon;
   const ChevronIcon = isExpanded ? ChevronRightIconSolid : ChevronRightIcon;
 
@@ -92,6 +96,13 @@ function SidebarNavItemInner({ item, isCollapsed, depth = 0 }: SidebarNavItemPro
       : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5',
   );
 
+  // Item classes when disabled
+  const disabledItemClasses = twMerge(
+    'group relative flex items-center w-full gap-3 px-3 py-2 rounded-lg font-medium text-sm',
+    'opacity-50 cursor-not-allowed',
+    'text-gray-700 dark:text-gray-300',
+  );
+
   // Icon classes
   const iconClasses = twMerge(
     'h-5 w-5 flex-shrink-0',
@@ -100,8 +111,27 @@ function SidebarNavItemInner({ item, isCollapsed, depth = 0 }: SidebarNavItemPro
       : 'text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300',
   );
 
+  const disabledIconClasses = 'h-5 w-5 flex-shrink-0 text-gray-500 dark:text-gray-400';
+
   // Collapsed mode: show only icon with tooltip
   if (isCollapsed) {
+    if (isDisabled) {
+      return (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div>
+              <div className={disabledItemClasses} aria-disabled="true">
+                <Icon className={disabledIconClasses} />
+              </div>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="right" sideOffset={8}>
+            Selecciona un predio primero
+          </TooltipContent>
+        </Tooltip>
+      );
+    }
+
     return (
       <Tooltip>
         <TooltipTrigger asChild>
@@ -123,6 +153,28 @@ function SidebarNavItemInner({ item, isCollapsed, depth = 0 }: SidebarNavItemPro
         </TooltipTrigger>
         <TooltipContent side="right" sideOffset={8}>
           {item.label}
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
+
+  // Normal mode: disabled rendering
+  if (isDisabled) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div>
+            <div className={disabledItemClasses} aria-disabled="true">
+              <Icon className={disabledIconClasses} />
+              <span className="flex-1 truncate">{item.label}</span>
+              {hasChildren && (
+                <ChevronRightIcon className="h-4 w-4 text-gray-500" />
+              )}
+            </div>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent side="bottom" sideOffset={4}>
+          Selecciona un predio primero
         </TooltipContent>
       </Tooltip>
     );

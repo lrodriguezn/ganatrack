@@ -12,13 +12,13 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
-import { usePredioStore } from '@/store/predio.store';
+import { usePredioRequerido } from '@/shared/hooks';
 import { usePalpaciones } from '@/modules/servicios';
 import { PalpacionesTable } from '@/modules/servicios/components/palpaciones-table';
 import { Button } from '@/shared/components/ui/button';
 
-export default function PalpacionesListPage(): JSX.Element {
-  const { predioActivo } = usePredioStore();
+export default function PalpacionesListPage(): JSX.Element | null {
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
@@ -27,6 +27,8 @@ export default function PalpacionesListPage(): JSX.Element {
     page: pageIndex + 1,
     limit: pageSize,
   });
+
+  if (predioLoading || !predioActivo) return null;
 
   // Calculate KPIs from visible data
   const totalEventos = data?.total ?? 0;

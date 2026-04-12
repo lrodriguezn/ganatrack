@@ -1,9 +1,12 @@
 // Colores page
 'use client';
 
+import { usePredioRequerido } from '@/shared/hooks';
 import { CatalogoEntityPage } from '@/modules/configuracion/components';
 import { CATALOGO_CONFIGS } from '@/modules/configuracion/types/catalogo.types';
 
-export default function ColoresPage(): JSX.Element {
-  return <CatalogoEntityPage tipo="colores" config={CATALOGO_CONFIGS.colores} />;
+export default function ColoresPage(): JSX.Element | null {
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
+  if (predioLoading || !predioActivo) return null;
+  return (<CatalogoEntityPage tipo="colores" config={CATALOGO_CONFIGS.colores} />;
 }

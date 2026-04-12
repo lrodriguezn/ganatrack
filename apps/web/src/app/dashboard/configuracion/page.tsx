@@ -7,6 +7,7 @@
 
 'use client';
 
+import { usePredioRequerido } from '@/shared/hooks';
 import Link from 'next/link';
 import React from 'react';
 
@@ -80,7 +81,9 @@ const CatalogoCard = React.memo(function CatalogoCard({ card }: { card: Catalogo
   );
 });
 
-export default function ConfiguracionPage(): JSX.Element {
+export default function ConfiguracionPage(): JSX.Element | null {
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
+  if (predioLoading || !predioActivo) return null;
   return (
     <div className="space-y-6">
       {/* Encabezado */}

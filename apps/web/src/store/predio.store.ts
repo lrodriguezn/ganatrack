@@ -39,7 +39,7 @@ type PredioStore = PredioState & PredioActions;
 const initialState: PredioState = {
   predios: [],
   predioActivo: null,
-  isLoading: false,
+  isLoading: true,
   lastSwitchTimestamp: null,
 };
 

@@ -8,13 +8,14 @@
 'use client';
 
 import { Baby } from 'lucide-react';
+import { usePredioRequerido } from '@/shared/hooks';
 import { useReporteReproductivo } from '@/modules/reportes/hooks/use-reporte-reproductivo';
 import { useFiltrosReportes } from '@/modules/reportes/hooks/use-filtros-reportes';
 import { ReporteChart } from '@/modules/reportes/components/charts/reporte-chart';
 import { ReporteFiltros as ReporteFiltrosComponent } from '@/modules/reportes/components/filters/reporte-filters';
 import { ExportButton } from '@/modules/reportes/components/export/export-button';
 
-export default function ReporteReproductivoPage(): JSX.Element {
+export default function ReporteReproductivoPage(): JSX.Element | null {
   const { filtros } = useFiltrosReportes();
   const { data, isLoading, error } = useReporteReproductivo(filtros);
 
@@ -31,6 +32,8 @@ export default function ReporteReproductivoPage(): JSX.Element {
   const toTimeValues = (items: { date: string; values: Record<string, number> }[], key: string) =>
     items.map((i) => i.values[key] ?? 0);
 
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
+  if (predioLoading || !predioActivo) return null;
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">

@@ -19,7 +19,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Plus, Search, Filter } from 'lucide-react';
-import { usePredioStore } from '@/store/predio.store';
+import { usePredioRequerido } from '@/shared/hooks';
 import { animalService } from '@/modules/animales/services';
 import { AnimalTable } from '@/modules/animales/components/animal-table';
 import { Button } from '@/shared/components/ui/button';
@@ -29,9 +29,9 @@ import type { AnimalEstadisticas } from '@/modules/animales/types/animal.types';
 import type { Animal } from '@/modules/animales/types/animal.types';
 import { SexoEnum, EstadoAnimalEnum } from '@ganatrack/shared-types';
 
-export default function AnimalesListPage(): JSX.Element {
+export default function AnimalesListPage(): JSX.Element | null {
   const router = useRouter();
-  const { predioActivo } = usePredioStore();
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
 
   // Pagination state
   const [pageIndex, setPageIndex] = useState(0);
@@ -94,6 +94,8 @@ export default function AnimalesListPage(): JSX.Element {
     }
     loadEstadisticas();
   }, [predioActivo?.id]);
+
+  if (predioLoading || !predioActivo) return null;
 
   // Handlers
   const handlePaginationChange = (pagination: { pageIndex: number; pageSize: number }) => {

@@ -9,12 +9,13 @@
 
 import { Archive, BarChart3, PieChart as PieIcon } from 'lucide-react';
 import { useReporteInventario } from '@/modules/reportes/hooks/use-reporte-inventario';
+import { usePredioRequerido } from '@/shared/hooks';
 import { useFiltrosReportes } from '@/modules/reportes/hooks/use-filtros-reportes';
 import { ReporteChart } from '@/modules/reportes/components/charts/reporte-chart';
 import { ReporteFiltros as ReporteFiltrosComponent } from '@/modules/reportes/components/filters/reporte-filters';
 import { ExportButton } from '@/modules/reportes/components/export/export-button';
 
-export default function ReporteInventarioPage(): JSX.Element {
+export default function ReporteInventarioPage(): JSX.Element | null {
   const { filtros } = useFiltrosReportes();
   const { data, isLoading, error } = useReporteInventario(filtros);
 
@@ -26,6 +27,8 @@ export default function ReporteInventarioPage(): JSX.Element {
   const toLabels = (items: { label: string; value: number }[]) =>
     items.map((i) => i.label);
 
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
+  if (predioLoading || !predioActivo) return null;
   return (
     <div className="space-y-6">
       {/* Header */}

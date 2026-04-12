@@ -9,12 +9,13 @@
 
 import { ArrowLeftRight, TrendingUp, TrendingDown } from 'lucide-react';
 import { useReporteMovimiento } from '@/modules/reportes/hooks/use-reporte-movimiento';
+import { usePredioRequerido } from '@/shared/hooks';
 import { useFiltrosReportes } from '@/modules/reportes/hooks/use-filtros-reportes';
 import { ReporteChart } from '@/modules/reportes/components/charts/reporte-chart';
 import { ReporteFiltros as ReporteFiltrosComponent } from '@/modules/reportes/components/filters/reporte-filters';
 import { ExportButton } from '@/modules/reportes/components/export/export-button';
 
-export default function ReporteMovimientoPage(): JSX.Element {
+export default function ReporteMovimientoPage(): JSX.Element | null {
   const { filtros } = useFiltrosReportes();
   const { data, isLoading, error, saldoNeto } = useReporteMovimiento(filtros);
 
@@ -27,6 +28,8 @@ export default function ReporteMovimientoPage(): JSX.Element {
 
   const saldoPositive = saldoNeto >= 0;
 
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
+  if (predioLoading || !predioActivo) return null;
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">

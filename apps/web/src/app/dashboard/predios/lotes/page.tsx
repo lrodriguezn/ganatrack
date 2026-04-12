@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { usePredioStore } from '@/store/predio.store';
+import { usePredioRequerido } from '@/shared/hooks';
 import { useLotes, useDeleteLote } from '@/modules/predios/hooks';
 import { LotesTable } from '@/modules/predios/components/lotes-table';
 import { SubRecursoDeleteModal } from '@/modules/predios/components';
@@ -24,9 +24,9 @@ interface DeleteTarget {
   nombre: string;
 }
 
-export default function LotesPage(): JSX.Element {
+export default function LotesPage(): JSX.Element | null {
   const router = useRouter();
-  const { predioActivo } = usePredioStore();
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
 
   const { lotes, isLoading, error } = useLotes({
     predioId: predioActivo?.id ?? 0,
@@ -40,25 +40,7 @@ export default function LotesPage(): JSX.Element {
 
   const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
 
-  if (!predioActivo) {
-    return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-            Lotes
-          </h1>
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            Gestiona los lotes de tu operación
-          </p>
-        </div>
-        <div className="rounded-lg border border-gray-200 bg-white p-8 text-center dark:border-gray-700 dark:bg-gray-900">
-          <p className="text-gray-500 dark:text-gray-400">
-            Selecciona un predio activo para ver sus lotes
-          </p>
-        </div>
-      </div>
-    );
-  }
+  if (predioLoading || !predioActivo) return null;
 
   const handleEdit = (lote: { id: number }) => {
     router.push(`/dashboard/predios/${predioActivo.id}/lotes/${lote.id}/edit`);

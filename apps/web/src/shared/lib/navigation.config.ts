@@ -65,6 +65,7 @@ export interface NavItem {
   iconActive?: HeroIcon;
   permission: string | null;
   children?: NavItem[];
+  requiresPredio?: boolean;
 }
 
 /**
@@ -96,34 +97,22 @@ function group(
 // ============================================================================
 // Servicios children
 // ============================================================================
-const palpaciones = leaf(
-  'Palpaciones',
-  '/dashboard/servicios/palpaciones',
-  BeakerIcon,
-  BeakerIcon,
-  'servicios:read',
-);
-const inseminaciones = leaf(
-  'Inseminaciones',
-  '/dashboard/servicios/inseminaciones',
-  HeartIcon,
-  HeartIcon,
-  'servicios:read',
-);
-const partos = leaf(
-  'Partos',
-  '/dashboard/servicios/partos',
-  ClipboardDocumentCheckIcon,
-  ClipboardDocumentCheckIcon,
-  'servicios:read',
-);
-const serviciosVeterinarios = leaf(
-  'Servicios Veterinarios',
-  '/dashboard/servicios/veterinarios',
-  ShieldCheckIcon,
-  ShieldCheckIcon,
-  'servicios:read',
-);
+const palpaciones: NavItem = {
+  ...leaf('Palpaciones', '/dashboard/servicios/palpaciones', BeakerIcon, BeakerIcon, 'servicios:read'),
+  requiresPredio: true,
+};
+const inseminaciones: NavItem = {
+  ...leaf('Inseminaciones', '/dashboard/servicios/inseminaciones', HeartIcon, HeartIcon, 'servicios:read'),
+  requiresPredio: true,
+};
+const partos: NavItem = {
+  ...leaf('Partos', '/dashboard/servicios/partos', ClipboardDocumentCheckIcon, ClipboardDocumentCheckIcon, 'servicios:read'),
+  requiresPredio: true,
+};
+const serviciosVeterinarios: NavItem = {
+  ...leaf('Servicios Veterinarios', '/dashboard/servicios/veterinarios', ShieldCheckIcon, ShieldCheckIcon, 'servicios:read'),
+  requiresPredio: true,
+};
 
 // ============================================================================
 // Predios children
@@ -135,140 +124,86 @@ const predios = leaf(
   MapPinIconSolidOutline,
   'predios:read',
 );
-const potreros = leaf(
-  'Potreros',
-  '/dashboard/predios/potreros',
-  MapIcon,
-  MapIcon,
-  'predios:read',
-);
-const sectores = leaf(
-  'Sectores',
-  '/dashboard/predios/sectores',
-  RectangleStackIcon,
-  RectangleStackIcon,
-  'predios:read',
-);
-const lotes = leaf(
-  'Lotes',
-  '/dashboard/predios/lotes',
-  Square3Stack3DIcon,
-  Square3Stack3DIcon,
-  'predios:read',
-);
-const grupos = leaf(
-  'Grupos',
-  '/dashboard/predios/grupos',
-  UserGroupIcon,
-  UserGroupIcon,
-  'predios:read',
-);
+const potreros: NavItem = {
+  ...leaf('Potreros', '/dashboard/predios/potreros', MapIcon, MapIcon, 'predios:read'),
+  requiresPredio: true,
+};
+const sectores: NavItem = {
+  ...leaf('Sectores', '/dashboard/predios/sectores', RectangleStackIcon, RectangleStackIcon, 'predios:read'),
+  requiresPredio: true,
+};
+const lotes: NavItem = {
+  ...leaf('Lotes', '/dashboard/predios/lotes', Square3Stack3DIcon, Square3Stack3DIcon, 'predios:read'),
+  requiresPredio: true,
+};
+const grupos: NavItem = {
+  ...leaf('Grupos', '/dashboard/predios/grupos', UserGroupIcon, UserGroupIcon, 'predios:read'),
+  requiresPredio: true,
+};
 
 // ============================================================================
 // Maestros children — 8 entidades maestro + Productos
 // ============================================================================
-const veterinarios = leaf(
-  'Veterinarios',
-  '/dashboard/maestros/veterinarios',
-  ShieldCheckIcon,
-  ShieldCheckIcon,
-  'maestros:read',
-);
-const propietarios = leaf(
-  'Propietarios',
-  '/dashboard/maestros/propietarios',
-  UsersIcon,
-  UsersIconSolid,
-  'maestros:read',
-);
-const hierros = leaf(
-  'Hierros',
-  '/dashboard/maestros/hierros',
-  ArchiveBoxIcon,
-  ArchiveBoxIconSolid,
-  'maestros:read',
-);
-const diagnosticos = leaf(
-  'Diagnósticos',
-  '/dashboard/maestros/diagnosticos',
-  BeakerIcon,
-  BeakerIcon,
-  'maestros:read',
-);
-const motivosVentas = leaf(
-  'Motivos de Venta',
-  '/dashboard/maestros/motivos-ventas',
-  TruckIcon,
-  TruckIcon,
-  'maestros:read',
-);
-const causasMuerte = leaf(
-  'Causas de Muerte',
-  '/dashboard/maestros/causas-muerte',
-  ExclamationTriangleIcon,
-  ExclamationTriangleIcon,
-  'maestros:read',
-);
-const lugaresCompras = leaf(
-  'Lugares de Compra',
-  '/dashboard/maestros/lugares-compras',
-  MapPinIcon,
-  MapPinIconSolidOutline,
-  'maestros:read',
-);
-const lugaresVentas = leaf(
-  'Lugares de Venta',
-  '/dashboard/maestros/lugares-ventas',
-  MapPinIconSolid,
-  MapPinIconSolid,
-  'maestros:read',
-);
-const productos = leaf(
-  'Productos',
-  '/dashboard/maestros/productos',
-  ArchiveBoxIcon,
-  ArchiveBoxIconSolid,
-  'productos:read',
-);
+const veterinarios: NavItem = {
+  ...leaf('Veterinarios', '/dashboard/maestros/veterinarios', ShieldCheckIcon, ShieldCheckIcon, 'maestros:read'),
+  requiresPredio: true,
+};
+const propietarios: NavItem = {
+  ...leaf('Propietarios', '/dashboard/maestros/propietarios', UsersIcon, UsersIconSolid, 'maestros:read'),
+  requiresPredio: true,
+};
+const hierros: NavItem = {
+  ...leaf('Hierros', '/dashboard/maestros/hierros', ArchiveBoxIcon, ArchiveBoxIconSolid, 'maestros:read'),
+  requiresPredio: true,
+};
+const diagnosticos: NavItem = {
+  ...leaf('Diagnósticos', '/dashboard/maestros/diagnosticos', BeakerIcon, BeakerIcon, 'maestros:read'),
+  requiresPredio: true,
+};
+const motivosVentas: NavItem = {
+  ...leaf('Motivos de Venta', '/dashboard/maestros/motivos-ventas', TruckIcon, TruckIcon, 'maestros:read'),
+  requiresPredio: true,
+};
+const causasMuerte: NavItem = {
+  ...leaf('Causas de Muerte', '/dashboard/maestros/causas-muerte', ExclamationTriangleIcon, ExclamationTriangleIcon, 'maestros:read'),
+  requiresPredio: true,
+};
+const lugaresCompras: NavItem = {
+  ...leaf('Lugares de Compra', '/dashboard/maestros/lugares-compras', MapPinIcon, MapPinIconSolidOutline, 'maestros:read'),
+  requiresPredio: true,
+};
+const lugaresVentas: NavItem = {
+  ...leaf('Lugares de Venta', '/dashboard/maestros/lugares-ventas', MapPinIconSolid, MapPinIconSolid, 'maestros:read'),
+  requiresPredio: true,
+};
+const productos: NavItem = {
+  ...leaf('Productos', '/dashboard/maestros/productos', ArchiveBoxIcon, ArchiveBoxIconSolid, 'productos:read'),
+  requiresPredio: true,
+};
 
 // ============================================================================
 // Reportes children
 // ============================================================================
-const reporteProductividad = leaf(
-  'Productividad',
-  '/dashboard/reportes/productividad',
-  ChartBarIcon,
-  ChartBarIconSolid,
-  'reportes:read',
-);
-const reporteInventario = leaf(
-  'Inventario',
-  '/dashboard/reportes/inventario',
-  ArchiveBoxArrowDownIcon,
-  ArchiveBoxArrowDownIcon,
-  'reportes:read',
-);
-const reporteSalud = leaf(
-  'Salud',
-  '/dashboard/reportes/salud',
-  HeartIcon,
-  HeartIcon,
-  'reportes:read',
-);
-const reporteMovimientos = leaf(
-  'Movimientos',
-  '/dashboard/reportes/movimientos',
-  TruckIcon,
-  TruckIcon,
-  'reportes:read',
-);
-const reporteGeneral = leaf(
-  'General',
-  '/dashboard/reportes/general',
-  ClipboardDocumentListIcon,
-  ClipboardDocumentListIconSolid,
-  'reportes:read',
-);
+const reporteProductividad: NavItem = {
+  ...leaf('Productividad', '/dashboard/reportes/productividad', ChartBarIcon, ChartBarIconSolid, 'reportes:read'),
+  requiresPredio: true,
+};
+const reporteInventario: NavItem = {
+  ...leaf('Inventario', '/dashboard/reportes/inventario', ArchiveBoxArrowDownIcon, ArchiveBoxArrowDownIcon, 'reportes:read'),
+  requiresPredio: true,
+};
+const reporteSalud: NavItem = {
+  ...leaf('Salud', '/dashboard/reportes/salud', HeartIcon, HeartIcon, 'reportes:read'),
+  requiresPredio: true,
+};
+const reporteMovimientos: NavItem = {
+  ...leaf('Movimientos', '/dashboard/reportes/movimientos', TruckIcon, TruckIcon, 'reportes:read'),
+  requiresPredio: true,
+};
+const reporteGeneral: NavItem = {
+  ...leaf('General', '/dashboard/reportes/general', ClipboardDocumentListIcon, ClipboardDocumentListIconSolid, 'reportes:read'),
+  requiresPredio: true,
+};
 
 // ============================================================================
 // Root navigation items
@@ -278,46 +213,39 @@ export const NAVIGATION_ITEMS: NavItem[] = [
   leaf('Dashboard', '/dashboard', HomeIcon, HomeIconSolid, null),
 
   // 2. Animales
-  leaf('Animales', '/dashboard/animales', CpuChipIcon, CpuChipIconSolid, 'animales:read'),
+  { ...leaf('Animales', '/dashboard/animales', CpuChipIcon, CpuChipIconSolid, 'animales:read'), requiresPredio: true },
 
   // 3. Servicios (group)
-  group(
-    'Servicios',
-    ClipboardDocumentListIcon,
-    ClipboardDocumentListIconSolid,
-    'servicios:read',
-    [palpaciones, inseminaciones, partos, serviciosVeterinarios],
-  ),
+  {
+    ...group('Servicios', ClipboardDocumentListIcon, ClipboardDocumentListIconSolid, 'servicios:read', [
+      palpaciones, inseminaciones, partos, serviciosVeterinarios,
+    ]),
+    requiresPredio: true,
+  },
 
-  // 4. Predios (group)
-  group(
-    'Predios',
-    MapPinIcon,
-    MapPinIconSolidOutline,
-    'predios:read',
-    [predios, potreros, sectores, lotes, grupos],
-  ),
+  // 4. Predios (group) — group header is always accessible (redirect target lives here)
+  group('Predios', MapPinIcon, MapPinIconSolidOutline, 'predios:read', [
+    predios, potreros, sectores, lotes, grupos,
+  ]),
 
   // 5. Maestros (group)
-  group(
-    'Maestros',
-    FolderOpenIcon,
-    FolderOpenIconSolid,
-    'maestros:read',
-    [veterinarios, propietarios, hierros, diagnosticos, motivosVentas, causasMuerte, lugaresCompras, lugaresVentas, productos],
-  ),
+  {
+    ...group('Maestros', FolderOpenIcon, FolderOpenIconSolid, 'maestros:read', [
+      veterinarios, propietarios, hierros, diagnosticos, motivosVentas, causasMuerte, lugaresCompras, lugaresVentas, productos,
+    ]),
+    requiresPredio: true,
+  },
 
   // 6. Configuración
-  leaf('Configuración', '/dashboard/configuracion', Cog6ToothIcon, Cog6ToothIconSolid, 'configuracion:read'),
+  { ...leaf('Configuración', '/dashboard/configuracion', Cog6ToothIcon, Cog6ToothIconSolid, 'configuracion:read'), requiresPredio: true },
 
   // 7. Reportes (group)
-  group(
-    'Reportes',
-    ChartBarIcon,
-    ChartBarIconSolid,
-    'reportes:read',
-    [reporteProductividad, reporteInventario, reporteSalud, reporteMovimientos, reporteGeneral],
-  ),
+  {
+    ...group('Reportes', ChartBarIcon, ChartBarIconSolid, 'reportes:read', [
+      reporteProductividad, reporteInventario, reporteSalud, reporteMovimientos, reporteGeneral,
+    ]),
+    requiresPredio: true,
+  },
 
   // 9. Notificaciones
   leaf('Notificaciones', '/dashboard/notificaciones', BellIcon, BellIconSolid, 'notificaciones:read'),

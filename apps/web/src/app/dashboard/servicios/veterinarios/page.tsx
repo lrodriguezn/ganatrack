@@ -12,13 +12,13 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
-import { usePredioStore } from '@/store/predio.store';
+import { usePredioRequerido } from '@/shared/hooks';
 import { useServiciosVeterinarios } from '@/modules/servicios';
 import { ServiciosVeterinariosTable } from '@/modules/servicios/components/servicios-veterinarios-table';
 import { Button } from '@/shared/components/ui/button';
 
-export default function ServiciosVeterinariosListPage(): JSX.Element {
-  const { predioActivo } = usePredioStore();
+export default function ServiciosVeterinariosListPage(): JSX.Element | null {
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
@@ -29,6 +29,8 @@ export default function ServiciosVeterinariosListPage(): JSX.Element {
   }, {
     enabled: !!predioActivo?.id,
   });
+
+  if (predioLoading || !predioActivo) return null;
 
   // Calculate KPIs from visible data
   const totalEventos = data?.total ?? 0;

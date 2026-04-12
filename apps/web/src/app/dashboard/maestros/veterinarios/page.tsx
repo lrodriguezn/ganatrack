@@ -6,6 +6,7 @@
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
+import { usePredioRequerido } from '@/shared/hooks';
 import { MaestroEntityPage } from '@/modules/maestros/components';
 import {
   VeterinarioSchema,
@@ -40,7 +41,9 @@ const COLUMNS: ColumnDef<Veterinario>[] = [
   },
 ];
 
-export default function VeterinariosPage(): JSX.Element {
+export default function VeterinariosPage(): JSX.Element | null {
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
+  if (predioLoading || !predioActivo) return null;
   return (
     <MaestroEntityPage
       tipo="veterinarios"

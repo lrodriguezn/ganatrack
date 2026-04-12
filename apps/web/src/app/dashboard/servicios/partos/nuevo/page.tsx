@@ -7,20 +7,22 @@
 
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import { usePredioStore } from '@/store/predio.store';
+import { usePredioRequerido } from '@/shared/hooks';
 import { useCreateParto } from '@/modules/servicios';
 import { PartoForm } from '@/modules/servicios/components/parto-form';
 import { Button } from '@/shared/components/ui/button';
 import type { CreatePartoDto } from '@/modules/servicios/types/servicios.types';
 
-export default function NuevoPartoPage(): JSX.Element {
-  const { predioActivo } = usePredioStore();
+export default function NuevoPartoPage(): JSX.Element | null {
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
   const { mutateAsync, isPending } = useCreateParto();
+
+  if (predioLoading || !predioActivo) return null;
 
   const handleSubmit = async (data: CreatePartoDto) => {
     await mutateAsync({
       ...data,
-      predioId: predioActivo?.id ?? data.predioId,
+      predioId: predioActivo.id,
     });
   };
 
