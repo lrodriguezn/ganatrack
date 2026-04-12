@@ -44,9 +44,17 @@ export function useMaestro(
   // Query — list all items for this tipo
   // ============================================================================
 
+  const queryKey = queryKeys.maestros.byTipo(tipo, { page, limit, search });
+  console.log('[useMaestro] Query key for:', tipo, queryKey);
+
   const { data, isLoading, error } = useQuery({
-    queryKey: queryKeys.maestros.byTipo(tipo, { page, limit, search }),
-    queryFn: () => maestrosService.getAll(tipo, { page, limit, search }),
+    queryKey,
+    queryFn: async () => {
+      console.log('[useMaestro] useQuery fetching data for:', tipo);
+      const result = await maestrosService.getAll(tipo, { page, limit, search });
+      console.log('[useMaestro] fetch result:', result);
+      return result;
+    },
     staleTime: StaleTimes.LIST,
   });
 
@@ -56,12 +64,15 @@ export function useMaestro(
 
   const createMutation = useMutation({
     mutationFn: (newData: CreateMaestroDto) => {
+      console.log('[useMaestro] create mutation called');
       return maestrosService.create(tipo, newData);
     },
     onSuccess: () => {
-      console.log('[useMaestro] create onSuccess - invalidating cache for:', tipo);
+      console.log('[useMaestro] create onSuccess - BEFORE invalidate for:', tipo);
       queryClient.invalidateQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
+      console.log('[useMaestro] create onSuccess - AFTER invalidate, calling refetch');
       queryClient.refetchQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
+      console.log('[useMaestro] create onSuccess - DONE');
     },
   });
 
@@ -76,10 +87,16 @@ export function useMaestro(
     }: {
       id: number;
       data: Partial<CreateMaestroDto>;
-    }) => maestrosService.update(tipo, id, updateData),
+    }) => {
+      console.log('[useMaestro] update mutation called, id:', id);
+      return maestrosService.update(tipo, id, updateData);
+    },
     onSuccess: () => {
+      console.log('[useMaestro] update onSuccess - BEFORE invalidate');
       queryClient.invalidateQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
+      console.log('[useMaestro] update onSuccess - AFTER invalidate, calling refetch');
       queryClient.refetchQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
+      console.log('[useMaestro] update onSuccess - DONE');
     },
   });
 
