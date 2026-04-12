@@ -56,12 +56,12 @@ export function useMaestro(
 
   const createMutation = useMutation({
     mutationFn: (newData: CreateMaestroDto) => {
-      console.log('[useMaestro] create mutation called with:', newData);
       return maestrosService.create(tipo, newData);
     },
     onSuccess: () => {
-      console.log('[useMaestro] create onSuccess');
+      console.log('[useMaestro] create onSuccess - invalidating cache for:', tipo);
       queryClient.invalidateQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
+      queryClient.refetchQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
     },
   });
 
@@ -79,6 +79,7 @@ export function useMaestro(
     }) => maestrosService.update(tipo, id, updateData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
+      queryClient.refetchQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
     },
   });
 
@@ -90,6 +91,7 @@ export function useMaestro(
     mutationFn: (id: number) => maestrosService.remove(tipo, id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
+      queryClient.refetchQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
     },
   });
 
