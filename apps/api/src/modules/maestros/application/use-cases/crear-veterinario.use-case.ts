@@ -7,13 +7,10 @@ import { VeterinarioMapper } from '../../infrastructure/mappers/maestros.mapper.
 @injectable()
 export class CrearVeterinarioUseCase {
   constructor(@inject(VETERINARIO_REPOSITORY) private readonly repo: IVeterinarioRepository) {}
-  async execute(dto: CreateVeterinarioDto, predicates: number): Promise<VeterinarioResponseDto> {
-    console.log('[CrearVeterinarioUseCase] execute called with predicates:', predicates)
-    console.log('[CrearVeterinarioUseCase] dto:', dto)
-    // Drizzle convierte predioId -> predicates_id automaticamente
+  async execute(dto: CreateVeterinarioDto, predios: number): Promise<VeterinarioResponseDto> {
     const createData = {
       nombre: dto.nombre || '',
-      predioId: predicates,
+      predicatesId: predios,
       telefono: dto.telefono ?? null,
       email: dto.email ?? null,
       direccion: dto.direccion ?? null,
@@ -21,13 +18,7 @@ export class CrearVeterinarioUseCase {
       especialidad: dto.especialidad ?? null,
       activo: 1,
     }
-    console.log('[CrearVeterinarioUseCase] createData:', createData)
-    try {
-      const entity = await this.repo.create(createData as any)
-      return VeterinarioMapper.toResponse(entity)
-    } catch (err) {
-      console.error('[CrearVeterinarioUseCase] Error:', err)
-      throw err
-    }
+    const entity = await this.repo.create(createData as any)
+    return VeterinarioMapper.toResponse(entity)
   }
 }

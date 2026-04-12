@@ -205,13 +205,11 @@ export async function registerMaestrosRoutes(app: FastifyInstance, repos: Maestr
     return reply.code(200).send({ success: true, data: result })
   })
 
-  app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
+app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
     schema: { body: createVeterinarioBodySchema },
     preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
-    const predicatesId = (request as any).predioId
-    console.log('[maestros.routes] POST /veterinarios - request.predioId:', predicatesId)
-    const result = await crearVeterinarioUseCase.execute(request.body, predicatesId)
+    const result = await crearVeterinarioUseCase.execute(request.body, getPredioId(request))
     return reply.code(201).send({ success: true, data: result })
   })
 
