@@ -7,8 +7,37 @@ import { VeterinarioMapper } from '../../infrastructure/mappers/maestros.mapper.
 @injectable()
 export class CrearVeterinarioUseCase {
   constructor(@inject(VETERINARIO_REPOSITORY) private readonly repo: IVeterinarioRepository) {}
-  async execute(dto: CreateVeterinarioDto, predioId: number): Promise<VeterinarioResponseDto> {
-    const entity = await this.repo.create({ ...dto, predioId, telefono: dto.telefono ?? null, email: dto.email ?? null, direccion: dto.direccion ?? null, numeroRegistro: dto.numeroRegistro ?? null, especialidad: dto.especialidad ?? null, activo: 1 })
-    return VeterinarioMapper.toResponse(entity)
+  async execute(dto: CreateVeterinarioDto, predicates: number): Promise<VeterinarioResponseDto> {
+    console.log('[CrearVeterinarioUseCase] dto:', dto, 'predioId:', predicates)
+    const createData = {
+      ...dto,
+      telefono: dto.telefono ?? null,
+      email: dto.email ?? null,
+      direccion: dto.direccion ?? null,
+      numeroRegistro: dto.numeroRegistro ?? null,
+      especialidad: dto.especialidad ?? null,
+      activo: 1,
+      // Asegurar que siempre tenga un valor para required fields
+      nombre: dto.nombre || '',
+    }
+    console.log('[CrearVeterinarioUseCase] createData:', createData)
+    try {
+      const entity = await this.repo.create({ ...createData, predicates })
+      return VeterinarioMapper.toResponse(entity)
+    } catch (err) {
+      console.error('[CrearVeterinarioUseCase] Error:', err)
+      throw err
+    }
   }
+}
+    console.log('[CrearVeterinarioUseCase] createData:', createData)
+    try {
+      const entity = await this.repo.create({ ...createData, predicates })
+      return VeterinarioMapper.toResponse(entity)
+    } catch (err) {
+      console.error('[CrearVeterinarioUseCase] Error:', err)
+      throw err
+    }
+  }
+}
 }

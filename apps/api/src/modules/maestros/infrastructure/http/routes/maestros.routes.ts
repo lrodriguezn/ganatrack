@@ -1,5 +1,5 @@
 import type { FastifyInstance, FastifyRequest } from 'fastify'
-import { authMiddleware } from '../../../../../shared/middleware/index.js'
+import { authMiddleware, tenantContextMiddleware } from '../../../../../shared/middleware/index.js'
 
 // Schemas
 import {
@@ -207,8 +207,9 @@ export async function registerMaestrosRoutes(app: FastifyInstance, repos: Maestr
 
   app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
     schema: { body: createVeterinarioBodySchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
+    console.log('[maestros.routes] POST /veterinarios - request.predioId:', (request as any).predioId);
     const result = await crearVeterinarioUseCase.execute(request.body, getPredioId(request))
     return reply.code(201).send({ success: true, data: result })
   })
