@@ -19,14 +19,14 @@ import type { MaestrosService } from './maestros.service';
 // ============================================================================
 
 const ENDPOINT_MAP: Record<MaestroTipo, string> = {
-  veterinarios: '/veterinarios',
-  propietarios: '/propietarios',
-  hierros: '/hierros',
-  diagnosticos: '/diagnosticos',
-  'motivos-ventas': '/motivos-ventas',
-  'causas-muerte': '/causas-muerte',
-  'lugares-compras': '/lugares-compras',
-  'lugares-ventas': '/lugares-ventas',
+  veterinarios: 'veterinarios',
+  propietarios: 'propietarios',
+  hierros: 'hierros',
+  diagnosticos: 'diagnosticos',
+  'motivos-ventas': 'motivos-ventas',
+  'causas-muerte': 'causas-muerte',
+  'lugares-compras': 'lugares-compras',
+  'lugares-ventas': 'lugares-ventas',
 };
 
 // ============================================================================
