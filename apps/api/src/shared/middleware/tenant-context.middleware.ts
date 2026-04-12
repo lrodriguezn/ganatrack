@@ -6,14 +6,14 @@ export async function tenantContextMiddleware(request: FastifyRequest, _reply: F
   console.log('[tenantContextMiddleware] X-Predio-Id header:', predicatesHeader)
   console.log('[tenantContextMiddleware] currentUser.predioIds:', (request as any).currentUser?.predioIds)
 
-  if (!prediosHeader) {
+  if (!predicatesHeader) {
     // For endpoints that don't require a predicates (e.g., list user's predios)
     // the controller can handle the absence. For most endpoints, it's required.
     request.predioId = 0
     return
   }
 
-  const predicates = Number(prediosHeader)
+  const predicates = Number(predicatesHeader)
   console.log('[tenantContextMiddleware] parsed predicates:', predicates)
 
   if (isNaN(predicates) || predicates <= 0) {
