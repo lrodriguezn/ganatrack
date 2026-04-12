@@ -217,8 +217,9 @@ app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
 
   app.put<{ Params: IdParams['Params']; Body: UpdateVeterinarioDto }>('/veterinarios/:id', {
     schema: { params: idParamsSchema, body: updateVeterinarioBodySchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
+    console.log('[maestros.routes] PUT /veterinarios/:id - id:', request.params.id, 'predioId:', getPredioId(request));
     const result = await updateVeterinarioUseCase.execute(request.params.id, request.body, getPredioId(request))
     return reply.code(200).send({ success: true, data: result })
   })
