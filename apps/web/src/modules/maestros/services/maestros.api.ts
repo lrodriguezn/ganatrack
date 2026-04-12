@@ -61,7 +61,7 @@ export class RealMaestrosService implements MaestrosService {
 async getAll(
     tipo: MaestroTipo,
     params?: { page?: number; limit?: number; search?: string },
-  ): Promise<{ data: MaestroBase[]; meta: { page: number; limit: number; total: number }> {
+  ): Promise<{ data: MaestroBase[]; meta: { page: number; limit: number; total: number }}> {
     const endpoint = ENDPOINT_MAP[tipo];
     console.log('[RealMaestrosService] getAll - tipo:', tipo, 'endpoint:', endpoint, 'params:', params);
     const response = await apiClient
