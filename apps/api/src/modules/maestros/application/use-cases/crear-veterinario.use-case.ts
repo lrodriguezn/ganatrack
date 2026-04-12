@@ -8,10 +8,11 @@ import { VeterinarioMapper } from '../../infrastructure/mappers/maestros.mapper.
 export class CrearVeterinarioUseCase {
   constructor(@inject(VETERINARIO_REPOSITORY) private readonly repo: IVeterinarioRepository) {}
   async execute(dto: CreateVeterinarioDto, predicates: number): Promise<VeterinarioResponseDto> {
-    console.log('[CrearVeterinarioUseCase] dto:', dto, 'predioId:', predicates)
+    console.log('[CrearVeterinarioUseCase] execute called with predicates:', predicates)
+    console.log('[CrearVeterinarioUseCase] dto:', dto)
     // Drizzle convierte predicatesId -> predicates_id automaticamente
     const createData = {
-      ...dto,
+      nombre: dto.nombre || '',
       predicatesId: predicates,
       telefono: dto.telefono ?? null,
       email: dto.email ?? null,
@@ -19,8 +20,6 @@ export class CrearVeterinarioUseCase {
       numeroRegistro: dto.numeroRegistro ?? null,
       especialidad: dto.especialidad ?? null,
       activo: 1,
-      // Asegurar que siempre tenga un valor para required fields
-      nombre: dto.nombre || '',
     }
     console.log('[CrearVeterinarioUseCase] createData:', createData)
     try {
