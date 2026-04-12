@@ -119,13 +119,17 @@ export function MaestroForm<T extends z.ZodSchema>({
           type="button"
           isLoading={isLoading}
           onClick={async () => {
-            console.log('[MaestroForm] Button clicked - using getValues');
+            console.log('[MaestroForm] Button clicked - START');
+            console.log('[MaestroForm] getValues:', typeof getValues);
             const data = getValues();
             console.log('[MaestroForm] getValues() result:', data);
-            console.log('[MaestroForm] calling onSubmit with:', data);
+            console.log('[MaestroForm] onSubmit:', typeof onSubmit);
             if (onSubmit) {
+              console.log('[MaestroForm] calling onSubmit with data:', data);
               await onSubmit(data);
-              console.log('[MaestroForm] onSubmit completed');
+              console.log('[MaestroForm] onSubmit finished');
+            } else {
+              console.log('[MaestroForm] onSubmit is NULL!');
             }
           }}
         >
