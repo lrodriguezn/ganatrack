@@ -11,6 +11,7 @@ export class CrearVeterinarioUseCase {
     console.log('[CrearVeterinarioUseCase] dto:', dto, 'predioId:', predicates)
     const createData = {
       ...dto,
+      predicates,
       telefono: dto.telefono ?? null,
       email: dto.email ?? null,
       direccion: dto.direccion ?? null,
@@ -22,7 +23,7 @@ export class CrearVeterinarioUseCase {
     }
     console.log('[CrearVeterinarioUseCase] createData:', createData)
     try {
-      const entity = await this.repo.create({ ...createData, predicates })
+      const entity = await this.repo.create(createData)
       return VeterinarioMapper.toResponse(entity)
     } catch (err) {
       console.error('[CrearVeterinarioUseCase] Error:', err)
