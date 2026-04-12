@@ -10,7 +10,7 @@ export class CrearVeterinarioUseCase {
   async execute(dto: CreateVeterinarioDto, predios: number): Promise<VeterinarioResponseDto> {
     const createData = {
       nombre: dto.nombre || '',
-      predicatesId: predios,
+      predioId: predios,
       telefono: dto.telefono ?? null,
       email: dto.email ?? null,
       direccion: dto.direccion ?? null,
