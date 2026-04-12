@@ -30,14 +30,3 @@ export class CrearVeterinarioUseCase {
     }
   }
 }
-    console.log('[CrearVeterinarioUseCase] createData:', createData)
-    try {
-      const entity = await this.repo.create({ ...createData, predicates })
-      return VeterinarioMapper.toResponse(entity)
-    } catch (err) {
-      console.error('[CrearVeterinarioUseCase] Error:', err)
-      throw err
-    }
-  }
-}
-}
