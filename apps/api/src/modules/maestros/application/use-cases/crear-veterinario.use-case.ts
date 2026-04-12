@@ -10,10 +10,10 @@ export class CrearVeterinarioUseCase {
   async execute(dto: CreateVeterinarioDto, predicates: number): Promise<VeterinarioResponseDto> {
     console.log('[CrearVeterinarioUseCase] execute called with predicates:', predicates)
     console.log('[CrearVeterinarioUseCase] dto:', dto)
-    // Drizzle convierte predicatesId -> predicates_id automaticamente
+    // Drizzle convierte predioId -> predicates_id automaticamente
     const createData = {
       nombre: dto.nombre || '',
-      predicatesId: predicates,
+      predioId: predicates,
       telefono: dto.telefono ?? null,
       email: dto.email ?? null,
       direccion: dto.direccion ?? null,
