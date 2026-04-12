@@ -68,10 +68,8 @@ export function useMaestro(
       return maestrosService.create(tipo, newData);
     },
     onSuccess: () => {
-      console.log('[useMaestro] create onSuccess - BEFORE invalidate for:', tipo);
-      queryClient.invalidateQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
-      console.log('[useMaestro] create onSuccess - AFTER invalidate, calling refetch');
-      queryClient.refetchQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
+      console.log('[useMaestro] create onSuccess - removing cache for:', tipo);
+      queryClient.removeQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
       console.log('[useMaestro] create onSuccess - DONE');
     },
   });
@@ -92,10 +90,8 @@ export function useMaestro(
       return maestrosService.update(tipo, id, updateData);
     },
     onSuccess: () => {
-      console.log('[useMaestro] update onSuccess - BEFORE invalidate');
-      queryClient.invalidateQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
-      console.log('[useMaestro] update onSuccess - AFTER invalidate, calling refetch');
-      queryClient.refetchQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
+      console.log('[useMaestro] update onSuccess - removing cache');
+      queryClient.removeQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
       console.log('[useMaestro] update onSuccess - DONE');
     },
   });
@@ -105,10 +101,14 @@ export function useMaestro(
   // ============================================================================
 
   const removeMutation = useMutation({
-    mutationFn: (id: number) => maestrosService.remove(tipo, id),
+    mutationFn: (id: number) => {
+      console.log('[useMaestro] remove mutation called, id:', id);
+      return maestrosService.remove(tipo, id);
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
-      queryClient.refetchQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
+      console.log('[useMaestro] remove onSuccess - removing cache');
+      queryClient.removeQueries({ queryKey: queryKeys.maestros.byTipo(tipo) });
+      console.log('[useMaestro] remove onSuccess - DONE');
     },
   });
 
