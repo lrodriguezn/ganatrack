@@ -225,8 +225,9 @@ app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
 
   app.delete<IdParams>('/veterinarios/:id', {
     schema: { params: idParamsSchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
+    console.log('[maestros.routes] DELETE /veterinarios/:id - id:', request.params.id, 'predioId:', getPredioId(request));
     await deleteVeterinarioUseCase.execute(request.params.id, getPredioId(request))
     return reply.code(200).send({ success: true, data: { message: 'Veterinario eliminado' } })
   })
