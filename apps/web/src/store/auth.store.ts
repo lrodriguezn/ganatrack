@@ -44,9 +44,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
   ...initialState,
 
   setAuth: ({ accessToken, user, permissions }) => {
-    // Persist permissions to sessionStorage for rehydration on page refresh
+    // Persist permissions and user to sessionStorage for rehydration on page refresh
     if (permissions.length > 0) {
       sessionStorage.setItem('ganatrack-auth-permissions', JSON.stringify(permissions));
+    }
+    if (user) {
+      sessionStorage.setItem('ganatrack-auth-user', JSON.stringify(user));
     }
     set({
       accessToken,
@@ -58,6 +61,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   clearAuth: () => {
     sessionStorage.removeItem('ganatrack-auth-permissions');
+    sessionStorage.removeItem('ganatrack-auth-user');
     set(initialState);
   },
 

@@ -110,17 +110,17 @@ export async function registerAuthRoutes(
       },
     },
   }, async (request, reply) => {
-    const refreshToken = request.cookies?.refreshToken ?? ''
+    // Accept refreshToken from cookie OR request body (for server-to-server proxy calls)
+    const refreshToken = request.cookies?.refreshToken ?? (request.body as { refreshToken?: string })?.refreshToken ?? ''
     const result = await refreshTokenUseCase.execute(refreshToken)
 
-    // Set new refresh token cookie
-    reply.setCookie('refreshToken', result.refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      path: '/',
-      maxAge: 7 * 24 * 60 * 60,
-    })
+    // Set rotated refresh token cookie (same pattern as login — reply.setCookie unavailable here)
+    const isProduction = process.env.NODE_ENV === 'production'
+    const secureFlag = isProduction ? '; Secure' : ''
+    reply.header(
+      'Set-Cookie',
+      `refreshToken=${result.refreshToken}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 60 * 60}${secureFlag}`,
+    )
 
     return reply
       .code(200)
@@ -156,7 +156,8 @@ export async function registerAuthRoutes(
     const refreshToken = request.cookies?.refreshToken ?? (request.body as { refreshToken?: string })?.refreshToken ?? ''
     await logoutUseCase.execute(refreshToken)
 
-    reply.clearCookie('refreshToken')
+    // reply.clearCookie unavailable in sub-scope — clear via expired Set-Cookie header
+    reply.header('Set-Cookie', 'refreshToken=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT')
     return reply
       .code(200)
       .header('Content-Type', 'application/json')
@@ -278,21 +279,25 @@ export async function registerAuthRoutes(
   })
 
   // GET /api/v1/auth/me (requires auth)
+  // Used by the frontend to validate that the current session is still active.
+  // authMiddleware sets request.currentUser from the JWT payload.
   app.get('/me', {
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const user = request.user as { id: number; email: string; nombre: string; rol: string }
-    
+    const currentUser = (request as any).currentUser as { id: number; roles: string[] }
+
     return reply
       .code(200)
       .header('Content-Type', 'application/json')
       .send(JSON.stringify({
         success: true,
         data: {
-          id: user.id,
-          email: user.email,
-          nombre: user.nombre,
-          rol: user.rol,
+          id: currentUser.id,
+          // nombre, email, rol are not available in the JWT payload.
+          // The frontend restores these fields from sessionStorage (saved at login).
+          email: '',
+          nombre: '',
+          rol: (currentUser.roles?.[0] ?? 'operario').toLowerCase(),
         },
       }))
   })

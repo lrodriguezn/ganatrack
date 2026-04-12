@@ -80,6 +80,19 @@ export class RealAuthService implements AuthService {
         console.warn('[auth.api] Could not decode JWT to extract permissions');
       }
       
+      // Store the refreshToken as a same-origin httpOnly cookie via the Next.js proxy route.
+      // Browsers block Set-Cookie from cross-origin responses (backend at a different port/domain),
+      // so we use a server-side Next.js route to set the cookie for the frontend's own origin.
+      if (data.refreshToken) {
+        fetch('/api/auth/session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refreshToken: data.refreshToken }),
+        }).catch(() => {
+          console.warn('[auth.api] Failed to store refreshToken session cookie');
+        });
+      }
+
       const result = {
         accessToken: data.accessToken,
         user: {
