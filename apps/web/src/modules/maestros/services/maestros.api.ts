@@ -58,11 +58,12 @@ export class RealMaestrosService implements MaestrosService {
    * GET all entities of a given tipo
    * Supports pagination and search
    */
-  async getAll(
+async getAll(
     tipo: MaestroTipo,
     params?: { page?: number; limit?: number; search?: string },
-  ): Promise<{ data: MaestroBase[]; meta: { page: number; limit: number; total: number } }> {
+  ): Promise<{ data: MaestroBase[]; meta: { page: number; limit: number; total: number }> {
     const endpoint = ENDPOINT_MAP[tipo];
+    console.log('[RealMaestrosService] getAll - tipo:', tipo, 'endpoint:', endpoint, 'params:', params);
     const response = await apiClient
       .get<PaginatedResponse<MaestroBase>>(endpoint, {
         searchParams: {
@@ -72,6 +73,8 @@ export class RealMaestrosService implements MaestrosService {
         },
       })
       .json();
+
+    console.log('[RealMaestrosService] getAll response:', response);
 
     if (!response.success) {
       throw new Error('La solicitud falló');

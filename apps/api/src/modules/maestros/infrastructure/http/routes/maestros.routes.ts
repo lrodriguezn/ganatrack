@@ -190,10 +190,12 @@ export async function registerMaestrosRoutes(app: FastifyInstance, repos: Maestr
   // ============ VETERINARIOS (tenant-scoped) ============
   app.get<ListQuery>('/veterinarios', {
     schema: { querystring: listQuerySchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
+    console.log('[maestros.routes] GET /veterinarios - request.predioId:', (request as any).predioId);
     const { page = 1, limit = 20, search } = request.query
     const result = await listVeterinariosUseCase.execute(getPredioId(request), { page, limit, search })
+    console.log('[maestros.routes] GET /veterinarios result:', result);
     return reply.code(200).send({ success: true, data: result.data, meta: { page: result.page, limit: result.limit, total: result.total } })
   })
 
