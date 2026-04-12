@@ -47,7 +47,7 @@ export function MaestroForm<T extends z.ZodSchema>({
 }: MaestroFormProps<T>): JSX.Element {
   type FormData = z.infer<T>;
 
-  const { control, handleSubmit, getValues } = useForm<FormData>({
+  const { control, getValues } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues ?? ({} as FormData),
   });
@@ -73,7 +73,6 @@ export function MaestroForm<T extends z.ZodSchema>({
 
   return (
     <form
-      onSubmit={handleSubmit(onFormSubmit)}
       className="flex flex-col gap-4"
       noValidate
     >
