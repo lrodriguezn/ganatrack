@@ -47,7 +47,7 @@ export function MaestroForm<T extends z.ZodSchema>({
 }: MaestroFormProps<T>): JSX.Element {
   type FormData = z.infer<T>;
 
-  const { control, handleSubmit } = useForm<FormData>({
+  const { control, handleSubmit, getValues } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues ?? ({} as FormData),
   });
@@ -118,13 +118,15 @@ export function MaestroForm<T extends z.ZodSchema>({
         <Button
           type="button"
           isLoading={isLoading}
-          onClick={() => {
-            console.log('[MaestroForm] Button clicked, calling handleSubmit');
-            handleSubmit(onFormSubmit)().then(() => {
-              console.log('[MaestroForm] handleSubmit resolved');
-            }).catch((err) => {
-              console.log('[MaestroForm] handleSubmit rejected:', err);
-            });
+          onClick={async () => {
+            console.log('[MaestroForm] Button clicked - using getValues');
+            const data = getValues();
+            console.log('[MaestroForm] getValues() result:', data);
+            console.log('[MaestroForm] calling onSubmit with:', data);
+            if (onSubmit) {
+              await onSubmit(data);
+              console.log('[MaestroForm] onSubmit completed');
+            }
           }}
         >
           Guardar
