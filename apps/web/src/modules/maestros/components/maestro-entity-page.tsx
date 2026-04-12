@@ -113,8 +113,11 @@ export function MaestroEntityPage<T extends z.ZodSchema>({
   const handleFormSubmit = async (data: z.infer<T>) => {
     console.log('[MaestroEntityPage] handleFormSubmit called with data:', data);
     console.log('[MaestroEntityPage] editItem:', editItem);
+    console.log('[MaestroEntityPage] editItem is truthy:', !!editItem);
+    console.log('[MaestroEntityPage] update function:', update);
     try {
       if (editItem) {
+        console.log('[MaestroEntityPage] Calling update with id:', editItem.id);
         await update({ id: editItem.id, data });
         addToast({ message: `${singularName} actualizado correctamente`, type: 'success' });
       } else {
