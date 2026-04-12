@@ -19,14 +19,14 @@ import type { MaestrosService } from './maestros.service';
 // ============================================================================
 
 const ENDPOINT_MAP: Record<MaestroTipo, string> = {
-  veterinarios: '/veterinarios',
-  propietarios: '/propietarios',
-  hierros: '/hierros',
-  diagnosticos: '/diagnosticos',
-  'motivos-ventas': '/motivos-ventas',
-  'causas-muerte': '/causas-muerte',
-  'lugares-compras': '/lugares-compras',
-  'lugares-ventas': '/lugares-ventas',
+  veterinarios: 'maestros/veterinarios',
+  propietarios: 'maestros/propietarios',
+  hierros: 'maestros/hierros',
+  diagnosticos: 'maestros/diagnosticos',
+  'motivos-ventas': 'maestros/motivos-ventas',
+  'causas-muerte': 'maestros/causas-muerte',
+  'lugares-compras': 'maestros/lugares-compras',
+  'lugares-ventas': 'maestros/lugares-ventas',
 };
 
 // ============================================================================
@@ -58,10 +58,10 @@ export class RealMaestrosService implements MaestrosService {
    * GET all entities of a given tipo
    * Supports pagination and search
    */
-  async getAll(
+async getAll(
     tipo: MaestroTipo,
     params?: { page?: number; limit?: number; search?: string },
-  ): Promise<{ data: MaestroBase[]; meta: { page: number; limit: number; total: number } }> {
+  ): Promise<{ data: MaestroBase[]; meta: { page: number; limit: number; total: number }}> {
     const endpoint = ENDPOINT_MAP[tipo];
     const response = await apiClient
       .get<PaginatedResponse<MaestroBase>>(endpoint, {

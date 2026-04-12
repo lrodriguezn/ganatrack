@@ -21,6 +21,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Path } from 'react-hook-form';
+import { useEffect } from 'react';
 import { FormField } from '@/shared/components/ui/form-field';
 import { Input, Textarea } from '@/shared/components/ui/input';
 import { Button } from '@/shared/components/ui/button';
@@ -46,14 +47,19 @@ export function MaestroForm<T extends z.ZodSchema>({
 }: MaestroFormProps<T>): JSX.Element {
   type FormData = z.infer<T>;
 
-  const { control, handleSubmit } = useForm<FormData>({
+  const { control, getValues } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues ?? ({} as FormData),
   });
 
+  const onFormSubmit = async (data: FormData) => {
+    if (onSubmit) {
+      await onSubmit(data);
+    }
+  };
+
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-4"
       noValidate
     >
@@ -67,7 +73,7 @@ export function MaestroForm<T extends z.ZodSchema>({
             // Extract only the properties needed for input/textarea
             const { value, onChange, onBlur, name, ref } = field;
             const inputProps = {
-              value,
+              value: value ?? '',
               onChange,
               onBlur,
               name,
@@ -95,7 +101,16 @@ export function MaestroForm<T extends z.ZodSchema>({
         >
           Cancelar
         </Button>
-        <Button type="submit" isLoading={isLoading}>
+        <Button
+          type="button"
+          isLoading={isLoading}
+          onClick={async () => {
+            const data = getValues();
+            if (onSubmit) {
+              await onSubmit(data);
+            }
+          }}
+        >
           Guardar
         </Button>
       </div>

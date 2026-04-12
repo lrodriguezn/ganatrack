@@ -1,5 +1,5 @@
 import type { FastifyInstance, FastifyRequest } from 'fastify'
-import { authMiddleware } from '../../../../../shared/middleware/index.js'
+import { authMiddleware, tenantContextMiddleware } from '../../../../../shared/middleware/index.js'
 
 // Schemas
 import {
@@ -190,7 +190,7 @@ export async function registerMaestrosRoutes(app: FastifyInstance, repos: Maestr
   // ============ VETERINARIOS (tenant-scoped) ============
   app.get<ListQuery>('/veterinarios', {
     schema: { querystring: listQuerySchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     const { page = 1, limit = 20, search } = request.query
     const result = await listVeterinariosUseCase.execute(getPredioId(request), { page, limit, search })
@@ -205,9 +205,9 @@ export async function registerMaestrosRoutes(app: FastifyInstance, repos: Maestr
     return reply.code(200).send({ success: true, data: result })
   })
 
-  app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
+app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
     schema: { body: createVeterinarioBodySchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     const result = await crearVeterinarioUseCase.execute(request.body, getPredioId(request))
     return reply.code(201).send({ success: true, data: result })
@@ -215,7 +215,7 @@ export async function registerMaestrosRoutes(app: FastifyInstance, repos: Maestr
 
   app.put<{ Params: IdParams['Params']; Body: UpdateVeterinarioDto }>('/veterinarios/:id', {
     schema: { params: idParamsSchema, body: updateVeterinarioBodySchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     const result = await updateVeterinarioUseCase.execute(request.params.id, request.body, getPredioId(request))
     return reply.code(200).send({ success: true, data: result })
@@ -223,7 +223,7 @@ export async function registerMaestrosRoutes(app: FastifyInstance, repos: Maestr
 
   app.delete<IdParams>('/veterinarios/:id', {
     schema: { params: idParamsSchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     await deleteVeterinarioUseCase.execute(request.params.id, getPredioId(request))
     return reply.code(200).send({ success: true, data: { message: 'Veterinario eliminado' } })
