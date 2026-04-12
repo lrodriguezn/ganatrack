@@ -55,7 +55,9 @@ export function useMaestro(
       console.log('[useMaestro] fetch result:', result);
       return result;
     },
-    staleTime: StaleTimes.LIST,
+    staleTime: 0, // Always fetch fresh data
+    refetchOnMount: true, // Refetch on mount
+    refetchOnWindowFocus: true, // Refetch when window gains focus
   });
 
   // ============================================================================
