@@ -5,6 +5,7 @@
 
 'use client';
 
+import { usePredioRequerido } from '@/shared/hooks';
 import type { ColumnDef } from '@tanstack/react-table';
 import { MaestroEntityPage } from '@/modules/maestros/components';
 import {
@@ -39,7 +40,9 @@ const COLUMNS: ColumnDef<Diagnostico>[] = [
   },
 ];
 
-export default function DiagnosticosPage(): JSX.Element {
+export default function DiagnosticosPage(): JSX.Element | null {
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
+  if (predioLoading || !predioActivo) return null;
   return (
     <MaestroEntityPage
       tipo="diagnosticos"

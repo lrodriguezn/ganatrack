@@ -8,13 +8,13 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
-import { usePredioStore } from '@/store/predio.store';
+import { usePredioRequerido } from '@/shared/hooks';
 import { useInseminaciones } from '@/modules/servicios';
 import { InseminacionesTable } from '@/modules/servicios/components/inseminaciones-table';
 import { Button } from '@/shared/components/ui/button';
 
-export default function InseminacionesListPage(): JSX.Element {
-  const { predioActivo } = usePredioStore();
+export default function InseminacionesListPage(): JSX.Element | null {
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
@@ -23,6 +23,8 @@ export default function InseminacionesListPage(): JSX.Element {
     page: pageIndex + 1,
     limit: pageSize,
   });
+
+  if (predioLoading || !predioActivo) return null;
 
   return (
     <div className="space-y-6">

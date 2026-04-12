@@ -73,8 +73,8 @@ describe('predio.store — estado inicial', () => {
     expect(usePredioStore.getState().predioActivo).toBeNull();
   });
 
-  it('debería tener isLoading false en el estado inicial', () => {
-    expect(usePredioStore.getState().isLoading).toBe(false);
+  it('debería tener isLoading true en el estado inicial', () => {
+    expect(usePredioStore.getState().isLoading).toBe(true);
   });
 
   it('debería tener lastSwitchTimestamp null en el estado inicial', () => {
@@ -297,6 +297,7 @@ describe('predio.store — clearPredios', () => {
     const state = usePredioStore.getState();
     expect(state.predios).toEqual([]);
     expect(state.predioActivo).toBeNull();
+    expect(state.isLoading).toBe(true);
     expect(state.lastSwitchTimestamp).toBeNull();
   });
 });
@@ -327,7 +328,7 @@ describe('predio.store — selectores', () => {
 
   it('selectIsLoading debería retornar el estado de carga', () => {
     const state = usePredioStore.getState();
-    expect(selectIsLoading(state)).toBe(false);
+    expect(selectIsLoading(state)).toBe(true);
   });
 
   it('selectLastSwitchTimestamp debería retornar null inicialmente', () => {

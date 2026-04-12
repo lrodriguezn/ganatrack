@@ -7,6 +7,7 @@
 
 'use client';
 
+import { usePredioRequerido } from '@/shared/hooks';
 import Link from 'next/link';
 import { memo } from 'react';
 
@@ -101,7 +102,9 @@ const MaestroCard = memo(function MaestroCard({ card }: { card: MaestroCard }): 
   );
 });
 
-export default function MaestrosPage(): JSX.Element {
+export default function MaestrosPage(): JSX.Element | null {
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
+  if (predioLoading || !predioActivo) return null;
   return (
     <div className="space-y-6">
       {/* Encabezado */}

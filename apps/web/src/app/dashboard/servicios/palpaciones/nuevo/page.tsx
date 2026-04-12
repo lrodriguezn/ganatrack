@@ -6,7 +6,7 @@
 'use client';
 
 import { useRef, useState, useCallback } from 'react';
-import { usePredioStore } from '@/store/predio.store';
+import { usePredioRequerido } from '@/shared/hooks';
 import { useCreatePalpacion } from '@/modules/servicios';
 import {
   PalpacionEventoForm,
@@ -18,8 +18,8 @@ import { ServicioGrupalWizard } from '@/modules/servicios/components/servicio-gr
 import type { PalpacionEventoFormValues } from '@/modules/servicios/schemas/palpacion.schema';
 import type { CreatePalpacionAnimalDto, CreatePalpacionEventoDto } from '@/modules/servicios/types/servicios.types';
 
-export default function NuevaPalpacionPage(): JSX.Element {
-  const { predioActivo } = usePredioStore();
+export default function NuevaPalpacionPage(): JSX.Element | null {
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
   const { mutateAsync, isPending } = useCreatePalpacion();
   const formRef = useRef<PalpacionEventoFormRef>(null);
 
@@ -29,7 +29,9 @@ export default function NuevaPalpacionPage(): JSX.Element {
   const [selectedAnimals, setSelectedAnimals] = useState<number[]>([]);
   const [resultados, setResultados] = useState<Record<number, CreatePalpacionAnimalDto>>({});
 
-  const handleNextStep1 = useCallback(async () => {
+  if (predioLoading || !predioActivo) return null;
+
+  const handleNextStep1 = async () => {
     const isValid = await formRef.current?.trigger();
     if (isValid) {
       const values = formRef.current?.getValues();
@@ -38,13 +40,13 @@ export default function NuevaPalpacionPage(): JSX.Element {
         setStep(2);
       }
     }
-  }, []);
+  };
 
-  const handleResultadoChange = useCallback((animalId: number, data: CreatePalpacionAnimalDto) => {
+  const handleResultadoChange = (animalId: number, data: CreatePalpacionAnimalDto) => {
     setResultados((prev) => ({ ...prev, [animalId]: data }));
-  }, []);
+  };
 
-  const handleSubmit = useCallback(async () => {
+  const handleSubmit = async () => {
     if (!eventoData) return;
 
     const dto: CreatePalpacionEventoDto = {
@@ -61,7 +63,7 @@ export default function NuevaPalpacionPage(): JSX.Element {
     };
 
     await mutateAsync(dto);
-  }, [eventoData, selectedAnimals, resultados, mutateAsync]);
+  };
 
   return (
     <ServicioGrupalWizard
@@ -81,7 +83,7 @@ export default function NuevaPalpacionPage(): JSX.Element {
       step3Form={
         step === 2 ? (
           <PalpacionAnimalesStep
-            predioId={predioActivo?.id ?? 0}
+            predioId={predioActivo.id}
             selected={selectedAnimals}
             onChange={setSelectedAnimals}
           />

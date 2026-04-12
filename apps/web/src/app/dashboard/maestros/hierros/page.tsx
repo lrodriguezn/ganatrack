@@ -5,6 +5,7 @@
 
 'use client';
 
+import { usePredioRequerido } from '@/shared/hooks';
 import type { ColumnDef } from '@tanstack/react-table';
 import { MaestroEntityPage } from '@/modules/maestros/components';
 import {
@@ -37,7 +38,9 @@ const COLUMNS: ColumnDef<Hierro>[] = [
   },
 ];
 
-export default function HierrosPage(): JSX.Element {
+export default function HierrosPage(): JSX.Element | null {
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
+  if (predioLoading || !predioActivo) return null;
   return (
     <MaestroEntityPage
       tipo="hierros"

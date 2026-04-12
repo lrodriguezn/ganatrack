@@ -7,6 +7,7 @@
 
 'use client';
 
+import { usePredioRequerido } from '@/shared/hooks';
 import Link from 'next/link';
 import {
   Archive,
@@ -55,7 +56,9 @@ const reportes = [
   },
 ];
 
-export default function ReportesPage(): JSX.Element {
+export default function ReportesPage(): JSX.Element | null {
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
+  if (predioLoading || !predioActivo) return null;
   return (
     <div className="space-y-6">
       <div>

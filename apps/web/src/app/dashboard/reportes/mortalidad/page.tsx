@@ -10,12 +10,13 @@
 
 import { HeartPulse, AlertTriangle } from 'lucide-react';
 import { useReporteMortalidad } from '@/modules/reportes/hooks/use-reporte-mortalidad';
+import { usePredioRequerido } from '@/shared/hooks';
 import { useFiltrosReportes } from '@/modules/reportes/hooks/use-filtros-reportes';
 import { ReporteChart } from '@/modules/reportes/components/charts/reporte-chart';
 import { ReporteFiltros as ReporteFiltrosComponent } from '@/modules/reportes/components/filters/reporte-filters';
 import { ExportButton } from '@/modules/reportes/components/export/export-button';
 
-export default function ReporteMortalidadPage(): JSX.Element {
+export default function ReporteMortalidadPage(): JSX.Element | null {
   const { filtros } = useFiltrosReportes();
   const { data, isLoading, error, peakMonths } = useReporteMortalidad(filtros);
 
@@ -32,6 +33,8 @@ export default function ReporteMortalidadPage(): JSX.Element {
 
   const hasPeaks = peakMonths.size > 0;
 
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
+  if (predioLoading || !predioActivo) return null;
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">

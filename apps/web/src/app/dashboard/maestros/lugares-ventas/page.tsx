@@ -6,6 +6,7 @@
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
+import { usePredioRequerido } from '@/shared/hooks';
 import { MaestroEntityPage } from '@/modules/maestros/components';
 import {
   LugarVentaSchema,
@@ -43,7 +44,10 @@ const COLUMNS: ColumnDef<LugarVenta>[] = [
   },
 ];
 
-export default function LugaresVentasPage(): JSX.Element {
+export default function LugaresVentasPage(): JSX.Element | null {
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
+  if (predioLoading || !predioActivo) return null;
+
   return (
     <MaestroEntityPage
       tipo="lugares-ventas"

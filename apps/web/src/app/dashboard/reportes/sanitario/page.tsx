@@ -9,12 +9,13 @@
 
 import { Stethoscope, AlertCircle } from 'lucide-react';
 import { useReporteSanitario } from '@/modules/reportes/hooks/use-reporte-sanitario';
+import { usePredioRequerido } from '@/shared/hooks';
 import { useFiltrosReportes } from '@/modules/reportes/hooks/use-filtros-reportes';
 import { ReporteChart } from '@/modules/reportes/components/charts/reporte-chart';
 import { ReporteFiltros as ReporteFiltrosComponent } from '@/modules/reportes/components/filters/reporte-filters';
 import { ExportButton } from '@/modules/reportes/components/export/export-button';
 
-export default function ReporteSanitarioPage(): JSX.Element {
+export default function ReporteSanitarioPage(): JSX.Element | null {
   const { filtros } = useFiltrosReportes();
   const { data, isLoading, error } = useReporteSanitario(filtros);
 
@@ -29,6 +30,8 @@ export default function ReporteSanitarioPage(): JSX.Element {
   const toTimeValues = (items: { date: string; values: Record<string, number> }[], key: string) =>
     items.map((i) => i.values[key] ?? 0);
 
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
+  if (predioLoading || !predioActivo) return null;
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">

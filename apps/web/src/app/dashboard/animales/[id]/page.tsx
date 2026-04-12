@@ -11,6 +11,7 @@
 import { use } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { usePredioRequerido } from '@/shared/hooks';
 import { ArrowLeft, Edit } from 'lucide-react';
 import { useAnimal } from '@/modules/animales/hooks';
 import { AnimalDetailTabs } from '@/modules/animales/components/animal-detail-tabs';
@@ -21,10 +22,12 @@ interface AnimalDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default function AnimalDetailPage({ params }: AnimalDetailPageProps): JSX.Element {
+export default function AnimalDetailPage({ params }: AnimalDetailPageProps): JSX.Element | null {
   const resolvedParams = use(params);
   const router = useRouter();
+  const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
   const animalId = parseInt(resolvedParams.id, 10);
+  if (predioLoading || !predioActivo) return null;
 
   const { data: animal, isLoading, error } = useAnimal(animalId);
 
