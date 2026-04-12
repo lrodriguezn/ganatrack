@@ -232,7 +232,7 @@ app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
   // ============ PROPIETARIOS (tenant-scoped) ============
   app.get<ListQuery>('/propietarios', {
     schema: { querystring: listQuerySchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     const { page = 1, limit = 20, search } = request.query
     const result = await listPropietariosUseCase.execute(getPredioId(request), { page, limit, search })
@@ -241,7 +241,7 @@ app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
 
   app.get<IdParams>('/propietarios/:id', {
     schema: { params: idParamsSchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     const result = await getPropietarioUseCase.execute(request.params.id, getPredioId(request))
     return reply.code(200).send({ success: true, data: result })
@@ -249,7 +249,7 @@ app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
 
   app.post<{ Body: CreatePropietarioDto }>('/propietarios', {
     schema: { body: createPropietarioBodySchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     const result = await crearPropietarioUseCase.execute(request.body, getPredioId(request))
     return reply.code(201).send({ success: true, data: result })
@@ -257,7 +257,7 @@ app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
 
   app.put<{ Params: IdParams['Params']; Body: UpdatePropietarioDto }>('/propietarios/:id', {
     schema: { params: idParamsSchema, body: updatePropietarioBodySchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     const result = await updatePropietarioUseCase.execute(request.params.id, request.body, getPredioId(request))
     return reply.code(200).send({ success: true, data: result })
@@ -265,7 +265,7 @@ app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
 
   app.delete<IdParams>('/propietarios/:id', {
     schema: { params: idParamsSchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     await deletePropietarioUseCase.execute(request.params.id, getPredioId(request))
     return reply.code(200).send({ success: true, data: { message: 'Propietario eliminado' } })
@@ -274,7 +274,7 @@ app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
   // ============ HIERROS (tenant-scoped) ============
   app.get<ListQuery>('/hierros', {
     schema: { querystring: listQuerySchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     const { page = 1, limit = 20, search } = request.query
     const result = await listHierrosUseCase.execute(getPredioId(request), { page, limit, search })
@@ -283,7 +283,7 @@ app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
 
   app.get<IdParams>('/hierros/:id', {
     schema: { params: idParamsSchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     const result = await getHierroUseCase.execute(request.params.id, getPredioId(request))
     return reply.code(200).send({ success: true, data: result })
@@ -291,7 +291,7 @@ app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
 
   app.post<{ Body: CreateHierroDto }>('/hierros', {
     schema: { body: createHierroBodySchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     const result = await crearHierroUseCase.execute(request.body, getPredioId(request))
     return reply.code(201).send({ success: true, data: result })
@@ -299,7 +299,7 @@ app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
 
   app.put<{ Params: IdParams['Params']; Body: UpdateHierroDto }>('/hierros/:id', {
     schema: { params: idParamsSchema, body: updateHierroBodySchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     const result = await updateHierroUseCase.execute(request.params.id, request.body, getPredioId(request))
     return reply.code(200).send({ success: true, data: result })
@@ -307,7 +307,7 @@ app.post<{ Body: CreateVeterinarioDto }>('/veterinarios', {
 
   app.delete<IdParams>('/hierros/:id', {
     schema: { params: idParamsSchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     await deleteHierroUseCase.execute(request.params.id, getPredioId(request))
     return reply.code(200).send({ success: true, data: { message: 'Hierro eliminado' } })
