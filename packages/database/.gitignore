@@ -4,4 +4,3 @@ dist/
 *.d.ts
 *.js.map
 !*.ts
-dev.db
