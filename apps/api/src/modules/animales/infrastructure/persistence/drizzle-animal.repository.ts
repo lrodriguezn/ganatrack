@@ -1,7 +1,7 @@
 import { injectable } from 'tsyringe'
 import { and, count, desc, eq, like } from 'drizzle-orm'
 import type { DbClient } from '@ganatrack/database'
-import { animales } from '@ganatrack/database/schema'
+import { animales, configRazas } from '@ganatrack/database/schema'
 import type { IAnimalRepository } from '../../domain/repositories/animal.repository.js'
 import type { AnimalEntity } from '../../domain/entities/animal.entity.js'
 
@@ -9,6 +9,19 @@ import type { AnimalEntity } from '../../domain/entities/animal.entity.js'
 export class DrizzleAnimalRepository implements IAnimalRepository {
   private readonly db: any
   constructor(db: DbClient) { this.db = db }
+
+  // Helper: enrich animal with razaNombre via JOIN
+  private async enrichWithRazaNombre(animal: any): Promise<AnimalEntity> {
+    if (!animal.configRazasId) {
+      return { ...animal, razaNombre: null }
+    }
+    const [raza] = await this.db
+      .select({ nombre: configRazas.nombre })
+      .from(configRazas)
+      .where(eq(configRazas.id, animal.configRazasId))
+      .limit(1)
+    return { ...animal, razaNombre: raza?.nombre ?? null }
+  }
 
   async findAll(predioId: number, opts: { page: number; limit: number; search?: string; potreroId?: number; estado?: number }) {
     const { page, limit, search, potreroId, estado } = opts
@@ -18,17 +31,21 @@ export class DrizzleAnimalRepository implements IAnimalRepository {
     if (estado !== undefined) conditions.push(eq(animales.estadoAnimalKey, estado))
     const rows = await this.db.select().from(animales).where(and(...conditions)).orderBy(desc(animales.createdAt)).limit(limit).offset((page - 1) * limit)
     const [{ total }] = await this.db.select({ total: count() }).from(animales).where(and(...conditions))
-    return { data: rows, total }
+    // Enrich each animal with razaNombre
+    const enrichedData = await Promise.all(rows.map(row => this.enrichWithRazaNombre(row)))
+    return { data: enrichedData, total }
   }
 
   async findById(id: number, predioId: number): Promise<AnimalEntity | null> {
     const [row] = await this.db.select().from(animales).where(and(eq(animales.id, id), eq(animales.predioId, predioId), eq(animales.activo, 1))).limit(1)
-    return row ?? null
+    if (!row) return null
+    return this.enrichWithRazaNombre(row)
   }
 
   async findByCodigo(codigo: string, predioId: number): Promise<AnimalEntity | null> {
     const [row] = await this.db.select().from(animales).where(and(eq(animales.codigo, codigo), eq(animales.predioId, predioId), eq(animales.activo, 1))).limit(1)
-    return row ?? null
+    if (!row) return null
+    return this.enrichWithRazaNombre(row)
   }
 
   async create(data: Omit<AnimalEntity, 'id' | 'createdAt' | 'updatedAt'>): Promise<AnimalEntity> {

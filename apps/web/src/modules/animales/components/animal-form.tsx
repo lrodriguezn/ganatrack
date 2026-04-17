@@ -113,54 +113,63 @@ export function AnimalForm({
 
   // Reset form when initialData changes
   useEffect(() => {
-    if (initialData) {
-      reset({
-        codigo: initialData.codigo ?? '',
-        nombre: initialData.nombre ?? '',
-        fechaNacimiento: initialData.fechaNacimiento
-          ? new Date(initialData.fechaNacimiento)
-          : new Date(),
-        sexoKey: initialData.sexoKey ?? SexoEnum.MASCULINO,
-        tipoIngresoId: initialData.tipoIngresoId ?? OrigenAnimalEnum.NACIDO_PREDIO,
-        configRazasId: initialData.configRazasId ?? 0,
-        predioId: initialData.predioId ?? (predioActivo?.id ?? 0),
-        potreroId: initialData.potreroId,
-        madreId: initialData.madreId,
-        padreId: initialData.padreId,
-        codigoMadre: initialData.codigoMadre ?? '',
-        codigoPadre: initialData.codigoPadre ?? '',
-        tipoPadreKey: initialData.tipoPadreKey ?? 0,
-        precioCompra: initialData.precioCompra,
-        pesoCompra: initialData.pesoCompra,
-        codigoRfid: initialData.codigoRfid ?? '',
-        codigoArete: initialData.codigoArete ?? '',
-        estadoAnimalKey: initialData.estadoAnimalKey ?? 0,
-        saludAnimalKey: initialData.saludAnimalKey ?? 0,
-      });
-    } else {
-      reset({
-        codigo: '',
-        nombre: '',
-        fechaNacimiento: new Date(),
-        sexoKey: SexoEnum.MASCULINO,
-        tipoIngresoId: OrigenAnimalEnum.NACIDO_PREDIO,
-        configRazasId: 0,
-        predioId: predioActivo?.id ?? 0,
-        potreroId: undefined,
-        madreId: undefined,
-        padreId: undefined,
-        codigoMadre: '',
-        codigoPadre: '',
-        tipoPadreKey: 0,
-        precioCompra: undefined,
-        pesoCompra: undefined,
-        codigoRfid: '',
-        codigoArete: '',
-        estadoAnimalKey: 0,
-        saludAnimalKey: 0,
-      });
-    }
-  }, [initialData, reset, predioActivo?.id]);
+    if (!initialData) return;
+
+    // Wait for razas to load before resetting form to ensure select displays correctly
+    if (isLoadingRazas) return;
+
+    reset({
+      codigo: initialData.codigo ?? '',
+      nombre: initialData.nombre ?? '',
+      fechaNacimiento: initialData.fechaNacimiento
+        ? new Date(initialData.fechaNacimiento)
+        : new Date(),
+      sexoKey: initialData.sexoKey ?? SexoEnum.MASCULINO,
+      tipoIngresoId: initialData.tipoIngresoId ?? OrigenAnimalEnum.NACIDO_PREDIO,
+      configRazasId: initialData.configRazasId ?? 0,
+      predioId: initialData.predioId ?? (predioActivo?.id ?? 0),
+      potreroId: initialData.potreroId,
+      madreId: initialData.madreId,
+      padreId: initialData.padreId,
+      codigoMadre: initialData.codigoMadre ?? '',
+      codigoPadre: initialData.codigoPadre ?? '',
+      tipoPadreKey: initialData.tipoPadreKey ?? 0,
+      precioCompra: initialData.precioCompra,
+      pesoCompra: initialData.pesoCompra,
+      codigoRfid: initialData.codigoRfid ?? '',
+      codigoArete: initialData.codigoArete ?? '',
+      estadoAnimalKey: initialData.estadoAnimalKey ?? 0,
+      saludAnimalKey: initialData.saludAnimalKey ?? 0,
+    });
+  }, [initialData, reset, isLoadingRazas, predioActivo?.id]);
+
+  // Effect for when initialData is null/undefined (create mode) - reset to defaults
+  useEffect(() => {
+    if (initialData) return;
+    if (isLoadingRazas) return;
+
+    reset({
+      codigo: '',
+      nombre: '',
+      fechaNacimiento: new Date(),
+      sexoKey: SexoEnum.MASCULINO,
+      tipoIngresoId: OrigenAnimalEnum.NACIDO_PREDIO,
+      configRazasId: 0,
+      predioId: predioActivo?.id ?? 0,
+      potreroId: undefined,
+      madreId: undefined,
+      padreId: undefined,
+      codigoMadre: '',
+      codigoPadre: '',
+      tipoPadreKey: 0,
+      precioCompra: undefined,
+      pesoCompra: undefined,
+      codigoRfid: '',
+      codigoArete: '',
+      estadoAnimalKey: 0,
+      saludAnimalKey: 0,
+    });
+  }, [initialData, reset, isLoadingRazas, predioActivo?.id]);
 
   const onFormSubmit = (data: AnimalFormData) => {
     // Ensure predioId is set from active predio

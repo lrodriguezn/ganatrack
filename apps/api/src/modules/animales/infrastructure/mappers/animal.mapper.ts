@@ -11,7 +11,7 @@ export class AnimalMapper {
       codigoMadre: e.codigoMadre ?? null, indTransferenciaEmb: e.indTransferenciaEmb,
       codigoDonadora: e.codigoDonadora ?? null, tipoPadreKey: e.tipoPadreKey,
       padreId: e.padreId, codigoPadre: e.codigoPadre ?? null,
-      codigoPajuela: e.codigoPajuela ?? null, configRazasId: e.configRazasId,
+      codigoPajuela: e.codigoPajuela ?? null, configRazasId: e.configRazasId, razaNombre: e.razaNombre ?? null,
       potreroId: e.potreroId, precioCompra: e.precioCompra, pesoCompra: e.pesoCompra,
       codigoRfid: e.codigoRfid ?? null, codigoArete: e.codigoArete ?? null,
       codigoQr: e.codigoQr ?? null, saludAnimalKey: e.saludAnimalKey,

@@ -69,6 +69,7 @@ export interface AnimalResponseDto {
   codigoPadre: string | null
   codigoPajuela: string | null
   configRazasId: number | null
+  razaNombre: string | null  // Joined from config_razas
   potreroId: number | null
   precioCompra: number | null
   pesoCompra: number | null

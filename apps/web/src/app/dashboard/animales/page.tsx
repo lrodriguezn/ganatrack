@@ -53,6 +53,11 @@ export default function AnimalesListPage(): JSX.Element | null {
   // Row selection for bulk actions
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
 
+  // Delete confirmation state
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [animalToDelete, setAnimalToDelete] = useState<Animal | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   // Load animals
   useEffect(() => {
     async function loadAnimales() {
@@ -119,6 +124,43 @@ export default function AnimalesListPage(): JSX.Element | null {
       setEstadoAnimalKey(value);
     }
     setPageIndex(0);
+  };
+
+  const handleDelete = (animal: Animal) => {
+    setAnimalToDelete(animal);
+    setDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!animalToDelete) return;
+    try {
+      setIsDeleting(true);
+      await animalService.delete(animalToDelete.id);
+      setDeleteModalOpen(false);
+      setAnimalToDelete(null);
+      // Refresh the list
+      const result = await animalService.getAll({
+        predioId: predioActivo!.id,
+        page: pageIndex + 1,
+        limit: pageSize,
+        search: search || undefined,
+        sexoKey,
+        estadoAnimalKey,
+      });
+      setAnimals(result.data);
+      setTotal(result.total);
+      setTotalPages(result.totalPages);
+    } catch (err) {
+      console.error('Error deleting animal:', err);
+      alert('Error al eliminar el animal');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const cancelDelete = () => {
+    setDeleteModalOpen(false);
+    setAnimalToDelete(null);
   };
 
   if (error) {
@@ -249,19 +291,46 @@ export default function AnimalesListPage(): JSX.Element | null {
           <Skeleton className="h-64 w-full" />
         </div>
       ) : (
-        <AnimalTable
-          animals={animals}
-          isLoading={isLoading}
-          pageIndex={pageIndex}
-          pageSize={pageSize}
-          totalRows={total}
-          pageCount={totalPages}
-          onPaginationChange={handlePaginationChange}
-          onRowClick={handleRowClick}
-          rowSelection={rowSelection}
-          onRowSelectionChange={setRowSelection}
-        />
-      )}
-    </div>
+<AnimalTable
+      animals={animals}
+      isLoading={isLoading}
+      pageIndex={pageIndex}
+      pageSize={pageSize}
+      totalRows={total}
+      pageCount={totalPages}
+      onPaginationChange={handlePaginationChange}
+      onRowClick={handleRowClick}
+      onDelete={handleDelete}
+      rowSelection={rowSelection}
+      onRowSelectionChange={setRowSelection}
+    />)}
+
+    {/* Delete Confirmation Modal */}
+    {deleteModalOpen && animalToDelete && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div className="mx-4 w-full max-w-md rounded-lg bg-white p-6 dark:bg-gray-800">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+            Eliminar Animal
+          </h3>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            ¿Estás seguro de eliminar el animal <strong>{animalToDelete.codigo}</strong>
+            {animalToDelete.nombre && ` — ${animalToDelete.nombre}`}? Esta acción no se puede deshacer.
+          </p>
+          <div className="mt-4 flex justify-end gap-2">
+            <Button variant="secondary" onClick={cancelDelete} disabled={isDeleting}>
+              Cancelar
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmDelete}
+              isLoading={isDeleting}
+            >
+              Eliminar
+            </Button>
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
   );
 }
