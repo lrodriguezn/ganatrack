@@ -28,7 +28,7 @@ import { useRouter } from 'next/navigation';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { Animal } from '../types/animal.types';
 import { DataTable } from '@/shared/components/ui/data-table';
-import { SexoEnum, EstadoAnimalEnum } from '@ganatrack/shared-types';
+import { SexoEnum, EstadoAnimalEnum, OrigenAnimalEnum } from '@ganatrack/shared-types';
 
 // Sexo label helper
 const sexoLabel = (key: number): string => {
@@ -79,6 +79,18 @@ const estadoBadgeColor = (key: number): string => {
       return 'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300';
     default:
       return 'bg-gray-100 text-gray-700 dark:bg-gray-500/20 dark:text-gray-300';
+  }
+};
+
+// Origen label helper
+const origenLabel = (key: number): string => {
+  switch (key) {
+    case OrigenAnimalEnum.NACIDO_PREDIO:
+      return 'Nacido Predio';
+    case OrigenAnimalEnum.COMPRADO:
+      return 'Comprado';
+    default:
+      return 'Desconocido';
   }
 };
 
@@ -190,11 +202,51 @@ export function AnimalTable({
             {date.toLocaleDateString('es-CO')}
           </span>
         );
-      },
-    },
-    {
-      id: 'acciones',
-      header: 'Acciones',
+},
+},
+{
+  id: 'origen',
+  accessorKey: 'tipoIngresoId',
+  header: 'Origen',
+  cell: ({ row }) => (
+    <span className="text-gray-700 dark:text-gray-300">
+      {origenLabel(row.original.tipoIngresoId)}
+    </span>
+  ),
+},
+{
+  id: 'precioCompra',
+  accessorKey: 'precioCompra',
+  header: 'Precio Compra',
+  cell: ({ row }) => {
+    if (row.original.precioCompra == null) {
+      return <span className="text-gray-400 dark:text-gray-500">—</span>;
+    }
+    return (
+      <span className="text-gray-700 dark:text-gray-300">
+        {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(row.original.precioCompra)}
+      </span>
+    );
+  },
+},
+{
+  id: 'pesoCompra',
+  accessorKey: 'pesoCompra',
+  header: 'Peso Compra',
+  cell: ({ row }) => {
+    if (row.original.pesoCompra == null) {
+      return <span className="text-gray-400 dark:text-gray-500">—</span>;
+    }
+    return (
+      <span className="text-gray-700 dark:text-gray-300">
+        {row.original.pesoCompra} kg
+      </span>
+    );
+  },
+},
+{
+  id: 'acciones',
+  header: 'Acciones',
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
           <button
