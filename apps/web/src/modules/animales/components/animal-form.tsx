@@ -185,10 +185,7 @@ const onFormSubmit = (data: AnimalFormData) => {
     pesoCompra: data.pesoCompra == null ? undefined : data.pesoCompra,
   };
   console.log('✅ AnimalForm submit:', JSON.stringify(submitData, null, 2));
-  onSubmit(submitData);
-};
-console.log('✅ AnimalForm submit:', JSON.stringify(submitData, null, 2));
-  onSubmit(submitData);
+onSubmit(submitData);
 };
 
 const onInvalid = (data: unknown) => {
