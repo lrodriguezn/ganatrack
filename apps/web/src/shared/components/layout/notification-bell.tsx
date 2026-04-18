@@ -26,8 +26,8 @@ export function NotificationBell(): JSX.Element {
   const openPanel = useNotificacionesStore((s) => s.openPanel);
   const closePanel = useNotificacionesStore((s) => s.closePanel);
 
-  // Start polling for notifications - TEMPORARILY DISABLED FOR TESTING
-  // useNotificacionesResumen(predioActivo?.id);
+  // Start polling for notifications
+  useNotificacionesResumen(predioActivo?.id);
 
   function handleClick() {
     if (panelOpen) {

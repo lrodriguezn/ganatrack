@@ -184,13 +184,12 @@ const onFormSubmit = (data: AnimalFormData) => {
     precioCompra: data.precioCompra == null ? undefined : data.precioCompra,
     pesoCompra: data.pesoCompra == null ? undefined : data.pesoCompra,
   };
-  console.log('✅ AnimalForm submit:', JSON.stringify(submitData, null, 2));
 onSubmit(submitData);
 };
 
 const onInvalid = (data: unknown) => {
-    console.error('❌ AnimalForm validation errors:', data);
-  };
+  console.error('AnimalForm validation errors:', data);
+};
 
   return (
     <form

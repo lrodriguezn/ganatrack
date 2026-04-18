@@ -35,13 +35,8 @@ export default function EditarAnimalPage({ params }: EditarAnimalPageProps): JSX
     async function loadAnimal() {
       try {
         const data = await animalService.getById(animalId);
-        console.log('[DEBUG EditarAnimal] API response:', JSON.stringify(data, null, 2));
-        // API returns { data: { animal fields } } - extract inner object
-        const animalData = (data as any).data ?? data;
-        console.log('[DEBUG EditarAnimal] animalData:', JSON.stringify(animalData, null, 2));
-        setAnimal(animalData);
+        setAnimal(data);
       } catch (err) {
-        console.error('[DEBUG EditarAnimal] Error:', err);
         setError(err as Error);
       } finally {
         setIsLoading(false);
