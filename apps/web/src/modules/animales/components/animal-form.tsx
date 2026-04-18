@@ -178,12 +178,14 @@ const onFormSubmit = (data: AnimalFormData) => {
     ...data,
     fechaNacimiento: data.fechaNacimiento,
     predioId: data.predioId ?? (predioActivo?.id ?? 0),
-    potreroId: data.potreroId == null ? undefined : data.potreroId,
     madreId: data.madreId == null ? undefined : data.madreId,
     padreId: data.padreId == null ? undefined : data.padreId,
     precioCompra: data.precioCompra == null ? undefined : data.precioCompra,
     pesoCompra: data.pesoCompra == null ? undefined : data.pesoCompra,
   };
+  console.log('✅ AnimalForm submit:', JSON.stringify(submitData, null, 2));
+  onSubmit(submitData);
+};
   console.log('✅ AnimalForm submit:', JSON.stringify(submitData, null, 2));
   onSubmit(submitData);
 };
