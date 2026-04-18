@@ -171,16 +171,22 @@ export function AnimalForm({
     });
   }, [initialData, reset, isLoadingRazas, predioActivo?.id]);
 
-  const onFormSubmit = (data: AnimalFormData) => {
-    // Ensure predioId is set from active predio
-    const submitData: CreateAnimalDto = {
-      ...data,
-      fechaNacimiento: data.fechaNacimiento,
-      predioId: data.predioId ?? (predioActivo?.id ?? 0),
-    };
-    console.log('✅ AnimalForm submit:', JSON.stringify(submitData, null, 2));
-    onSubmit(submitData);
+const onFormSubmit = (data: AnimalFormData) => {
+  // Normalize null values to undefined for Zod schema compatibility
+  // The API returns null for optional fields but Zod expects number | undefined
+  const submitData: CreateAnimalDto = {
+    ...data,
+    fechaNacimiento: data.fechaNacimiento,
+    predioId: data.predioId ?? (predioActivo?.id ?? 0),
+    potreroId: data.potreroId == null ? undefined : data.potreroId,
+    madreId: data.madreId == null ? undefined : data.madreId,
+    padreId: data.padreId == null ? undefined : data.padreId,
+    precioCompra: data.precioCompra == null ? undefined : data.precioCompra,
+    pesoCompra: data.pesoCompra == null ? undefined : data.pesoCompra,
   };
+  console.log('✅ AnimalForm submit:', JSON.stringify(submitData, null, 2));
+  onSubmit(submitData);
+};
 
   const onInvalid = (data: unknown) => {
     console.error('❌ AnimalForm validation errors:', data);
