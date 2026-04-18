@@ -17,7 +17,7 @@ export const createAnimalSchema = z.object({
   sexoKey: z.number().int().default(0),
   tipoIngresoId: z.number().int().default(0),
   configRazasId: z.number().int({ message: 'Raza requerida' }),
-  potreroId: z.number().int().optional(),
+  potreroId: z.number().int().nullish(),  // Accepts number | null | undefined
   madreId: z.number().int().nullish(),
   padreId: z.number().int().nullish(),
   codigoMadre: z.string().max(50).optional(),

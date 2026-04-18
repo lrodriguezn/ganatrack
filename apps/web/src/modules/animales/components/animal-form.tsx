@@ -172,12 +172,13 @@ export function AnimalForm({
   }, [initialData, reset, isLoadingRazas, predioActivo?.id]);
 
 const onFormSubmit = (data: AnimalFormData) => {
-  // Normalize null values to undefined for Zod schema compatibility
-  // The API returns null for optional fields but Zod expects number | undefined
+  // Normalize null values for optional number fields
+  // potreroId is not captured in form but must be sent as null
   const submitData: CreateAnimalDto = {
     ...data,
     fechaNacimiento: data.fechaNacimiento,
-    predioId: data.predioId ?? (predioActivo?.id ?? 0),
+    predicatesId: data.predioId ?? (predioActivo?.id ?? 0),
+    potreroId: null, // Not captured in form, send as null
     madreId: data.madreId == null ? undefined : data.madreId,
     padreId: data.padreId == null ? undefined : data.padreId,
     precioCompra: data.precioCompra == null ? undefined : data.precioCompra,
@@ -186,11 +187,11 @@ const onFormSubmit = (data: AnimalFormData) => {
   console.log('✅ AnimalForm submit:', JSON.stringify(submitData, null, 2));
   onSubmit(submitData);
 };
-  console.log('✅ AnimalForm submit:', JSON.stringify(submitData, null, 2));
+console.log('✅ AnimalForm submit:', JSON.stringify(submitData, null, 2));
   onSubmit(submitData);
 };
 
-  const onInvalid = (data: unknown) => {
+const onInvalid = (data: unknown) => {
     console.error('❌ AnimalForm validation errors:', data);
   };
 
