@@ -36,7 +36,9 @@ export class RealAnimalService implements AnimalService {
 
   async getById(id: number): Promise<Animal> {
     const response = await apiClient.get(`animales/${id}`);
-    return response.json();
+    const json = await response.json();
+    // API returns { data: { animal } } - extract inner object
+    return (json as any).data ?? json;
   }
 
   async create(data: CreateAnimalDto): Promise<Animal> {
