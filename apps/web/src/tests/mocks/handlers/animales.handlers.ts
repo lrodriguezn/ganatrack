@@ -17,6 +17,12 @@ const mockAnimales = [
 
 let idCounter = mockAnimales.length + 1;
 
+// Reset function to restore mock state between tests
+export function resetAnimalMock() {
+  // Reset mock data to initial state if needed
+  idCounter = mockAnimales.length + 1;
+}
+
 export const animalesHandlers = [
   http.get(`${BASE_URL}/api/v1/animales`, ({ request }) => {
     const url = new URL(request.url);
