@@ -85,20 +85,19 @@ export default function AnimalesListPage(): JSX.Element | null {
     loadAnimales();
   }, [predioActivo?.id, pageIndex, pageSize, search, sexoKey, estadoAnimalKey]);
 
-  // Load estadisticas
-  useEffect(() => {
-    async function loadEstadisticas() {
-      if (!predioActivo?.id) return;
-
-      try {
-        const stats = await animalService.getEstadisticas(predioActivo.id);
-        setEstadisticas(stats);
-      } catch (err) {
-        console.error('Error loading estadisticas:', err);
-      }
-    }
-    loadEstadisticas();
-  }, [predioActivo?.id]);
+  // TODO: Re-add estadisticas once backend endpoint exists
+  // useEffect(() => {
+  //   async function loadEstadisticas() {
+  //     if (!predioActivo?.id) return;
+  //     try {
+  //       const stats = await animalService.getEstadisticas(predioActivo.id);
+  //       setEstadisticas(stats);
+  //     } catch (err) {
+  //       console.error('Error loading estadisticas:', err);
+  //     }
+  //   }
+  //   loadEstadisticas();
+  // }, [predioActivo?.id]);
 
   if (predioLoading || !predioActivo) return null;
 
