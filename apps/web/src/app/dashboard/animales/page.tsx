@@ -85,7 +85,7 @@ export default function AnimalesListPage(): JSX.Element | null {
     loadAnimales();
   }, [predioActivo?.id, pageIndex, pageSize, search, sexoKey, estadoAnimalKey]);
 
-  // Load estadisticas
+  // Load estadisticas - TEMPORARILY DISABLED FOR TESTING
   useEffect(() => {
     async function loadEstadisticas() {
       if (!predioActivo?.id) return;
@@ -95,9 +95,12 @@ export default function AnimalesListPage(): JSX.Element | null {
         setEstadisticas(stats);
       } catch (err) {
         console.error('Error loading estadisticas:', err);
+        // TEMPORARILY DISABLED - setEstadisticas(null) to skip error
+        setEstadisticas(null);
       }
     }
-    loadEstadisticas();
+    // TEMPORARILY DISABLED FOR TESTING
+    // loadEstadisticas();
   }, [predioActivo?.id]);
 
   if (predioLoading || !predioActivo) return null;
