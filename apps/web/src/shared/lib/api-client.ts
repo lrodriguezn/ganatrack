@@ -85,10 +85,12 @@ async function executeRefresh(): Promise<string> {
     };
     const { accessToken } = wrapped.data;
 
-    // Update auth store with new token
+    // Update auth store with new token.
+    // User and permissions are restored by AuthProvider after getMe() succeeds
+    // (which handles new-tab rehydration where in-memory state is empty).
     authStore.setAuth({
       accessToken,
-      user: authStore.user!,
+      user: authStore.user ?? null,
       permissions: authStore.permissions,
     });
 

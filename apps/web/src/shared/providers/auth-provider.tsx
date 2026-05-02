@@ -66,35 +66,25 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         //   d) Proxy reads refreshToken cookie and forwards to backend
         //   e) Gets a fresh accessToken, stores it in the Zustand auth store
         //   f) Retries GET /auth/me with the new token → 200 confirms session is valid
-        await authService.getMe();
+        //   g) Returns the user data from the successful /auth/me response
+        const me = await authService.getMe();
 
         // Step 2: Read the fresh accessToken set by the interceptor during Step 1
         const { accessToken } = useAuthStore.getState();
 
-        // Step 3: Restore user from sessionStorage (GET /me only validates session;
-        // full user data — nombre, email, rol — was saved to sessionStorage at login)
-        let storedUser = null;
-        try {
-          const stored = sessionStorage.getItem('ganatrack-auth-user');
-          storedUser = stored ? JSON.parse(stored) : null;
-        } catch {
-          sessionStorage.removeItem('ganatrack-auth-user');
-        }
+        // Step 3: Use the user data from getMe() response (works in new tabs,
+        // unlike sessionStorage which is per-tab and empty in new tabs)
+        const storedUser = me;
 
-        if (!storedUser) {
-          // No cached user data — session is valid but we can't restore UI state
-          // Force a full re-login to rebuild the session properly
-          throw new Error('NO_CACHED_USER');
-        }
-
-        // Step 4: Restore permissions from sessionStorage
+        // Step 4: Decode permissions from JWT payload (same pattern as login)
         let storedPermissions: string[] = [];
         try {
-          const stored = sessionStorage.getItem('ganatrack-auth-permissions');
-          storedPermissions = stored ? JSON.parse(stored) : [];
-        } catch {
-          sessionStorage.removeItem('ganatrack-auth-permissions');
-        }
+          const tokenParts = accessToken.split('.');
+          if (tokenParts.length === 3) {
+            const payload = JSON.parse(atob(tokenParts[1]));
+            storedPermissions = payload.permisos || [];
+          }
+        } catch { /* ignore */ }
 
         // Step 5: Restore the previously active predio from localStorage (shared across tabs)
         let savedPredioId: number | null = null;
@@ -103,14 +93,14 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           savedPredioId = storedPredioId ? Number(storedPredioId) : null;
         } catch { /* ignore */ }
 
-        // Step 6: Commit the full auth state (accessToken + user + permissions)
+        // Step 7: Commit the full auth state (accessToken + user + permissions)
         useAuthStore.getState().setAuth({
           accessToken,
           user: storedUser,
           permissions: storedPermissions,
         });
 
-        // Step 6: Load predios and restore the active predio
+        // Step 8: Load predios and restore the active predio
         try {
           const predios = await authService.getPredios();
           usePredioStore.getState().setPredios(predios);
