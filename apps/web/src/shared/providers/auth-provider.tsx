@@ -96,10 +96,10 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           sessionStorage.removeItem('ganatrack-auth-permissions');
         }
 
-        // Step 5: Restore the previously active predio from sessionStorage
+        // Step 5: Restore the previously active predio from localStorage (shared across tabs)
         let savedPredioId: number | null = null;
         try {
-          const storedPredioId = sessionStorage.getItem('ganatrack-predio-activo-id');
+          const storedPredioId = localStorage.getItem('ganatrack-predio-activo-id');
           savedPredioId = storedPredioId ? Number(storedPredioId) : null;
         } catch { /* ignore */ }
 

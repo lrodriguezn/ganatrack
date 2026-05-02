@@ -62,6 +62,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   clearAuth: () => {
     sessionStorage.removeItem('ganatrack-auth-permissions');
     sessionStorage.removeItem('ganatrack-auth-user');
+    localStorage.removeItem('ganatrack-predio-activo-id');
     set(initialState);
   },
 
