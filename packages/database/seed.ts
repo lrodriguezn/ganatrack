@@ -323,6 +323,16 @@ async function seed() {
     { id: 2, predioId: 1, nombre: 'Hierro Hacienda El Roble', descripcion: 'Hierro de identificación para hembras reproductoras', activo: 1, createdAt: new Date(), updatedAt: new Date() },
   ]).onConflictDoNothing()
 
+  // --- MAESTROS: Diagnosticos Veterinarios (global) ---
+  await db.insert(diagnosticosVeterinarios).values([
+    { id: 1, nombre: 'Positiva', descripcion: 'Preñez confirmada', categoria: 'Diagnóstico Reproductivo', activo: 1, createdAt: new Date(), updatedAt: new Date() },
+    { id: 2, nombre: 'Negativa', descripcion: 'Preñez no confirmada', categoria: 'Diagnóstico Reproductivo', activo: 1, createdAt: new Date(), updatedAt: new Date() },
+    { id: 3, nombre: 'Desparasitación', descripcion: 'Tratamiento antiparasitario', categoria: 'Sanidad Preventiva', activo: 1, createdAt: new Date(), updatedAt: new Date() },
+    { id: 4, nombre: 'Vacunación', descripcion: 'Aplicación de vacunas', categoria: 'Sanidad Preventiva', activo: 1, createdAt: new Date(), updatedAt: new Date() },
+    { id: 5, nombre: 'Vitaminas', descripcion: 'Suplementación vitamínica', categoria: 'Suplementación', activo: 1, createdAt: new Date(), updatedAt: new Date() },
+    { id: 6, nombre: 'Tratamiento', descripcion: 'Tratamiento médico curativo', categoria: 'Medicina Curativa', activo: 1, createdAt: new Date(), updatedAt: new Date() },
+  ]).onConflictDoNothing()
+
   console.log('Seed completed!')
 }
 
