@@ -26,6 +26,27 @@ import type { ServiciosService } from './servicios.service';
 import { ApiError } from '@/shared/lib/errors';
 
 // ============================================================================
+// Diagnosticos & Condiciones Corporales lookup maps
+// ============================================================================
+
+const DIAGNOSTICO_MAP: Record<number, string> = {
+  1: 'Positiva',
+  2: 'Negativa',
+  3: 'Desparasitación',
+  4: 'Vacunación',
+  5: 'Vitaminas',
+  6: 'Tratamiento',
+};
+
+const CONDICION_MAP: Record<number, string> = {
+  1: '1.0',
+  2: '2.0',
+  3: '3.0',
+  4: '4.0',
+  5: '5.0',
+};
+
+// ============================================================================
 // Seed Data — Palpaciones
 // ============================================================================
 
@@ -223,8 +244,8 @@ export class MockServiciosService implements ServiciosService {
         comentarios: a.comentarios,
         animalCodigo: `GAN-${String(a.animalesId).padStart(3, '0')}`,
         animalNombre: `Animal ${a.animalesId}`,
-        diagnosticoNombre: a.diagnosticosVeterinariosId === 1 ? 'Positiva' : 'Negativa',
-        condicionCorporalNombre: '3.0',
+        diagnosticoNombre: DIAGNOSTICO_MAP[a.diagnosticosVeterinariosId] ?? 'Sin diagnóstico',
+        condicionCorporalNombre: CONDICION_MAP[a.configCondicionesCorporalesId] ?? 'Sin condición',
       })),
     };
     storePalpaciones.unshift(newEvento);
