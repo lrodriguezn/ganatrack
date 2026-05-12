@@ -18,25 +18,31 @@
 
 'use client';
 
-import { Controller, type ControllerProps, type FieldValues, type ControllerRenderProps } from 'react-hook-form';
+import {
+  Controller,
+  type ControllerProps,
+  type FieldValues,
+  type FieldPath,
+  type ControllerRenderProps,
+} from 'react-hook-form';
 
-interface FormFieldProps<T extends FieldValues> {
-  name: ControllerProps<T>['name'];
+interface FormFieldProps<T extends FieldValues, K extends FieldPath<T>> {
+  name: K;
   label?: string;
   control: ControllerProps<T>['control'];
   rules?: ControllerProps<T>['rules'];
-  render: (field: ControllerRenderProps<T, ControllerProps<T>['name']> & { id: string }) => React.ReactNode;
+  render: (field: ControllerRenderProps<T, K> & { id: string }) => React.ReactNode;
   required?: boolean;
 }
 
-export function FormField<T extends FieldValues>({
+export function FormField<T extends FieldValues, K extends FieldPath<T>>({
   name,
   label,
   control,
   rules,
   render,
   required,
-}: FormFieldProps<T>): JSX.Element {
+}: FormFieldProps<T, K>): JSX.Element {
   const displayLabel = required && label ? `${label} (required)` : label;
   const fieldId = name.toString();
 

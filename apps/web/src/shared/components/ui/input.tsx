@@ -31,7 +31,7 @@ interface InputBaseProps {
 export interface InputProps
   extends InputBaseProps,
     Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
-  type?: 'text' | 'email' | 'password' | 'number';
+  type?: 'text' | 'email' | 'password' | 'number' | 'date';
   as?: 'input';
 }
 

@@ -23,10 +23,17 @@ import {
   type SectorEstado,
 } from '@ganatrack/shared-types';
 
-type SectorFormData = CreateSectorDto | UpdateSectorDto;
+export type SectorFormData = {
+  codigo?: string;
+  nombre?: string;
+  areaHectareas?: number;
+  tipoPasto?: string;
+  capacidadMaxima?: number;
+  estado?: 'activo' | 'en_descanso';
+};
 
 interface SectorFormProps {
-  initialData?: UpdateSectorDto | null;
+  initialData?: SectorFormData | null;
   onSubmit: (data: SectorFormData) => void;
   isLoading?: boolean;
 }

@@ -15,7 +15,7 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { CreateLoteSchema, type CreateLoteDto } from '@ganatrack/shared-types';
 import { useCreateLote } from '@/modules/predios/hooks';
-import { LoteForm } from '@/modules/predios/components/lote-form';
+import { LoteForm, type LoteFormData } from '@/modules/predios/components/lote-form';
 import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 
@@ -43,8 +43,8 @@ function NuevoLoteContent(): JSX.Element {
     },
   });
 
-  const onSubmit = (data: CreateLoteDto) => {
-    mutate(id, data);
+  const onSubmit = (data: LoteFormData) => {
+    mutate(id, data as CreateLoteDto);
   };
 
   const handleCancel = () => {

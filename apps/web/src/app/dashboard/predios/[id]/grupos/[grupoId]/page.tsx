@@ -26,8 +26,13 @@ function GrupoDetailContent(): JSX.Element {
   const grupoId = grupoIdStr ? Number(grupoIdStr) : NaN;
 
   const { grupo, isLoading, error } = useGrupo({ id: grupoId, predioId: id });
-  const { mutate: deleteGrupo, isLoading: isDeleting } = useDeleteGrupo();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { mutate: deleteGrupo, isLoading: isDeleting } = useDeleteGrupo({
+    onSuccess: () => {
+      setShowDeleteModal(false);
+      router.push(`/dashboard/predios/${id}/grupos`);
+    },
+  });
 
   // Invalid IDs
   if (isNaN(id) || id <= 0 || isNaN(grupoId) || grupoId <= 0) {
@@ -49,12 +54,7 @@ function GrupoDetailContent(): JSX.Element {
   };
 
   const handleConfirmDelete = () => {
-    deleteGrupo(id, grupoId, {
-      onSuccess: () => {
-        setShowDeleteModal(false);
-        router.push(`/dashboard/predios/${id}/grupos`);
-      },
-    });
+    deleteGrupo(id, grupoId);
   };
 
   if (isLoading) {

@@ -177,7 +177,7 @@ const onFormSubmit = (data: AnimalFormData) => {
   const submitData: CreateAnimalDto = {
     ...data,
     fechaNacimiento: data.fechaNacimiento,
-    predicatesId: data.predioId ?? (predioActivo?.id ?? 0),
+    predioId: data.predioId ?? (predioActivo?.id ?? 0),
     potreroId: null, // Not captured in form, send as null
     madreId: data.madreId == null ? undefined : data.madreId,
     padreId: data.padreId == null ? undefined : data.padreId,

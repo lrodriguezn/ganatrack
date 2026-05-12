@@ -23,10 +23,17 @@ import {
   type PotreroEstado,
 } from '@ganatrack/shared-types';
 
-type PotreroFormData = CreatePotreroDto | UpdatePotreroDto;
+export type PotreroFormData = {
+  codigo?: string;
+  nombre?: string;
+  areaHectareas?: number;
+  tipoPasto?: string;
+  capacidadMaxima?: number;
+  estado?: 'activo' | 'en_descanso';
+};
 
 interface PotreroFormProps {
-  initialData?: UpdatePotreroDto | null;
+  initialData?: PotreroFormData | null;
   onSubmit: (data: PotreroFormData) => void;
   isLoading?: boolean;
 }

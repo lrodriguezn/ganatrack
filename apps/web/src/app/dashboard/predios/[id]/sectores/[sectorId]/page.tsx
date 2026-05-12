@@ -26,8 +26,13 @@ function SectorDetailContent(): JSX.Element {
   const sectorId = sectorIdStr ? Number(sectorIdStr) : NaN;
 
   const { sector, isLoading, error } = useSector({ id: sectorId, predioId: id });
-  const { mutate: deleteSector, isLoading: isDeleting } = useDeleteSector();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { mutate: deleteSector, isLoading: isDeleting } = useDeleteSector({
+    onSuccess: () => {
+      setShowDeleteModal(false);
+      router.push(`/dashboard/predios/${id}/sectores`);
+    },
+  });
 
   // Invalid IDs
   if (isNaN(id) || id <= 0 || isNaN(sectorId) || sectorId <= 0) {
@@ -49,12 +54,7 @@ function SectorDetailContent(): JSX.Element {
   };
 
   const handleConfirmDelete = () => {
-    deleteSector(id, sectorId, {
-      onSuccess: () => {
-        setShowDeleteModal(false);
-        router.push(`/dashboard/predios/${id}/sectores`);
-      },
-    });
+    deleteSector(id, sectorId);
   };
 
   if (isLoading) {

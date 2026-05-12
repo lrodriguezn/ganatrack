@@ -15,7 +15,7 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { CreateSectorSchema, type CreateSectorDto } from '@ganatrack/shared-types';
 import { useCreateSector } from '@/modules/predios/hooks';
-import { SectorForm } from '@/modules/predios/components/sector-form';
+import { SectorForm, type SectorFormData } from '@/modules/predios/components/sector-form';
 import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 
@@ -45,8 +45,8 @@ function NuevoSectorContent(): JSX.Element {
     },
   });
 
-  const onSubmit = (data: CreateSectorDto) => {
-    mutate(id, data);
+  const onSubmit = (data: SectorFormData) => {
+    mutate(id, data as CreateSectorDto);
   };
 
   const handleCancel = () => {

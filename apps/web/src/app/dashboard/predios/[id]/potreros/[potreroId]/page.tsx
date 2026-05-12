@@ -26,8 +26,13 @@ function PotreroDetailContent(): JSX.Element {
   const potreroId = potreroIdStr ? Number(potreroIdStr) : NaN;
 
   const { potrero, isLoading, error } = usePotrero({ id: potreroId, predioId: id });
-  const { mutate: deletePotrero, isLoading: isDeleting } = useDeletePotrero();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { mutate: deletePotrero, isLoading: isDeleting } = useDeletePotrero({
+    onSuccess: () => {
+      setShowDeleteModal(false);
+      router.push(`/dashboard/predios/${id}/potreros`);
+    },
+  });
 
   // Invalid IDs
   if (isNaN(id) || id <= 0 || isNaN(potreroId) || potreroId <= 0) {
@@ -49,12 +54,7 @@ function PotreroDetailContent(): JSX.Element {
   };
 
   const handleConfirmDelete = () => {
-    deletePotrero(id, potreroId, {
-      onSuccess: () => {
-        setShowDeleteModal(false);
-        router.push(`/dashboard/predios/${id}/potreros`);
-      },
-    });
+    deletePotrero(id, potreroId);
   };
 
   if (isLoading) {
