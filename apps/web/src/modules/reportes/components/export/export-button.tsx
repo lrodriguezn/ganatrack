@@ -48,9 +48,12 @@ export function ExportButton({
     if (disabled || !canExport) return;
 
     try {
-      await startExport(reportType, {
-        formato: format,
-        filtros,
+      await startExport({
+        tipo: reportType,
+        request: {
+          formato: format,
+          filtros,
+        },
       });
       setOpen(false);
     } catch (error) {

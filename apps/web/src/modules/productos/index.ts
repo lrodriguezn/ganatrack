@@ -30,4 +30,4 @@ export {
 export { ProductoTable } from './components/producto-table';
 export { ProductoForm } from './components/producto-form';
 export { ProductoDetail } from './components/producto-detail';
-export { ProductoFilters } from './components/producto-filters';
+export { ProductoFilters as ProductoFiltersComponent } from './components/producto-filters';
