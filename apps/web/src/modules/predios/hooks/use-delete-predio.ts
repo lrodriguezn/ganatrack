@@ -81,8 +81,9 @@ export function useDeletePredio(
       // If deleted the activo predio, switch to next available
       const activo = store.predioActivo;
       if (activo?.id === deletedId) {
-        if (updatedPredios.length > 0) {
-          store.switchPredio(updatedPredios[0].id);
+        const first = updatedPredios[0];
+        if (first) {
+          store.switchPredio(first.id);
         }
       }
 

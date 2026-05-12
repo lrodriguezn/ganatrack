@@ -80,7 +80,7 @@ export function EstadoChangeModal({
       if (selectedEstado === EstadoAnimalEnum.VENDIDO) {
         // Get values from form
         const formData = new FormData(e.target as HTMLFormElement);
-        dto.motivoVentaId = Number(formData.get('motivoVentaId')) || undefined;
+        dto.motivoId = Number(formData.get('motivoVentaId')) || undefined;
         dto.lugarVentaId = Number(formData.get('lugarVentaId')) || undefined;
         dto.precioVenta = precioVenta ? Number(precioVenta) : undefined;
       } else if (selectedEstado === EstadoAnimalEnum.MUERTO) {
@@ -168,7 +168,7 @@ export function EstadoChangeModal({
           </label>
           <DatePicker
             value={fecha}
-            onChange={(date) => date && setFecha(date)}
+            onChange={(date) => { const d = Array.isArray(date) ? date[0] : date; if (d) setFecha(d); }}
             maxDate={new Date()}
             placeholder="Seleccionar fecha"
           />

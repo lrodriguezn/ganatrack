@@ -195,7 +195,7 @@ export function PredioDetail({ predioId, onEdit }: PredioDetailProps): JSX.Eleme
 /**
  * Info tab — displays basic Predio information.
  */
-function PredioInfoTab({ predio }: { predio: NonNullable<ReturnType<typeof usePredio>['predio']> }): JSX.Element {
+function PredioInfoTab({ predio }: { predio: NonNullable<ReturnType<typeof usePredio>['existingPredio']> }): JSX.Element {
   const { items: tiposExplotacion } = useCatalogo('tipos-explotacion');
   const tipoExplotacionNombre = tiposExplotacion.find(t => t.id === predio.tipoExplotacionId)?.nombre;
 
