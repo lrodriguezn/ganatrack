@@ -13,8 +13,8 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 
-// Mock the service
-const mockPrediosService = {
+// Mock the service — vi.hoisted is required because vi.mock is hoisted above variable declarations
+const mockPrediosService = vi.hoisted(() => ({
   getPredios: vi.fn(),
   getPredio: vi.fn(),
   createPredio: vi.fn(),
@@ -40,7 +40,7 @@ const mockPrediosService = {
   createSector: vi.fn(),
   updateSector: vi.fn(),
   deleteSector: vi.fn(),
-};
+}));
 
 vi.mock('@/modules/predios/services', () => ({
   prediosService: mockPrediosService,
@@ -50,20 +50,23 @@ vi.mock('@/modules/predios/services', () => ({
 const mockSetPredios = vi.fn();
 const mockPredios = [{ id: 1, nombre: 'Test Predio' }];
 const mockSwitchPredio = vi.fn();
+const mockStore = {
+  predios: mockPredios,
+  predioActivo: null,
+  setPredios: mockSetPredios,
+  switchPredio: mockSwitchPredio,
+};
 
 vi.mock('@/store/predio.store', () => ({
-  usePredioStore: vi.fn((selector) => {
-    const state = {
-      predios: mockPredios,
-      prediold: null,
-      setPredios: mockSetPredios,
-      switchPredio: mockSwitchPredio,
-    };
-    if (typeof selector === 'function') {
-      return selector(state);
-    }
-    return state;
-  }),
+  usePredioStore: Object.assign(
+    vi.fn((selector) => {
+      if (typeof selector === 'function') {
+        return selector(mockStore);
+      }
+      return mockStore;
+    }),
+    { getState: () => mockStore },
+  ),
 }));
 
 // Import AFTER mock

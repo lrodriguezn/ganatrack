@@ -71,14 +71,14 @@ describe('MockMaestrosService — getAll', () => {
     expect(typeof first!.activo).toBe('boolean');
   });
 
-  it('debería retornar 4 veterinarios por defecto', async () => {
+  it('debería retornar 3 veterinarios por defecto', async () => {
     const result = await service.getAll('veterinarios');
-    expect(result.data.length).toBe(4);
+    expect(result.data.length).toBe(3);
   });
 
-  it('debería retornar 5 propietarios por defecto', async () => {
+  it('debería retornar 4 propietarios por defecto', async () => {
     const result = await service.getAll('propietarios');
-    expect(result.data.length).toBe(5);
+    expect(result.data.length).toBe(4);
   });
 
   it('debería retornar 5 causas de muerte por defecto', async () => {

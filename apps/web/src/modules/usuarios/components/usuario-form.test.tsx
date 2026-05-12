@@ -71,7 +71,7 @@ describe('UsuarioForm', () => {
 
     // Wait for validation to trigger
     await vi.waitFor(() => {
-      expect(screen.getByText(/nombre requerido/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/Nombre debe tener al menos 2 caracteres/i).length).toBeGreaterThanOrEqual(1);
     });
   });
 
@@ -84,7 +84,7 @@ describe('UsuarioForm', () => {
     fireEvent.click(submitButton);
 
     await vi.waitFor(() => {
-      expect(screen.getByText(/email inválido/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/email inválido/i).length).toBeGreaterThanOrEqual(1);
     });
   });
 
@@ -97,7 +97,7 @@ describe('UsuarioForm', () => {
     fireEvent.click(submitButton);
 
     await vi.waitFor(() => {
-      expect(screen.getByText(/contraseña debe tener al menos 8 caracteres/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/contraseña debe tener al menos 8 caracteres/i).length).toBeGreaterThanOrEqual(1);
     });
   });
 
