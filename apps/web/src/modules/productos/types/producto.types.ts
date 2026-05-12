@@ -33,6 +33,7 @@ export interface ProductoFilters {
   search?: string;
   tipoKey?: number;
   estadoKey?: number;
+  [key: string]: unknown;
 }
 
 export interface PaginatedProductos {

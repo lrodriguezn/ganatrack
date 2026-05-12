@@ -25,7 +25,7 @@ interface AuthState {
 }
 
 interface AuthActions {
-  setAuth(data: { accessToken: string; user: User; permissions: Permissions }): void;
+  setAuth(data: { accessToken: string; user: User | null; permissions: Permissions }): void;
   clearAuth(): void;
   setLoading(loading: boolean): void;
 }

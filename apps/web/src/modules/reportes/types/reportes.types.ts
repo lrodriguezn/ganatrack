@@ -13,6 +13,7 @@ export interface ReporteFiltros {
   predioId: number;
   fechaInicio: string; // YYYY-MM-DD
   fechaFin: string;
+  [key: string]: string | number | boolean | undefined;
 }
 
 // ============================================================================

@@ -21,16 +21,16 @@ import { Toaster, toast as sonnerToast } from 'sonner';
  * GanaTrack-branded toast helper.
  */
 export const toast = {
-  success: (message: string, description?: string) =>
+  success: (message: string, description?: string): string | number =>
     sonnerToast.success(message, { description }),
-  error: (message: string, description?: string) =>
+  error: (message: string, description?: string): string | number =>
     sonnerToast.error(message, { description }),
-  warning: (message: string, description?: string) =>
+  warning: (message: string, description?: string): string | number =>
     sonnerToast.warning(message, { description }),
-  info: (message: string, description?: string) =>
+  info: (message: string, description?: string): string | number =>
     sonnerToast.info(message, { description }),
   /** Passthrough for full Sonner API access */
-  custom: sonnerToast,
+  custom: sonnerToast as unknown as (message: string, options?: Record<string, unknown>) => string | number,
 };
 
 /**

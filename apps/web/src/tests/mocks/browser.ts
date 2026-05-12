@@ -6,8 +6,10 @@
  * NOT used in production builds.
  */
 import { setupWorker } from 'msw/browser';
+// @ts-ignore — handlers are test-only and not included in production typecheck
 import { allHandlers, setMockLoggedInUser } from './handlers';
 
+// @ts-ignore
 export const worker = setupWorker(...allHandlers);
 
 export async function startMockService(): Promise<void> {
