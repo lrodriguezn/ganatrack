@@ -216,7 +216,7 @@ describe('useMaestro — pagination state', () => {
 
     expect(result.current.page).toBe(1);
     expect(result.current.limit).toBe(20);
-    expect(result.current.total).toBe(4); // 4 veterinarios en seed
+    expect(result.current.total).toBe(3); // 3 veterinarios activos en seed
   });
 
   it('debería exponer setPage, setLimit, setSearch como funciones', () => {

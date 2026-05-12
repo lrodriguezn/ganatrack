@@ -115,7 +115,7 @@ describe('usePredios', () => {
       );
 
       await waitFor(() => {
-        expect(result.current.predios).toBeDefined();
+        expect(result.current.isLoading).toBe(false);
       });
 
       expect(result.current.predios).toHaveLength(1);

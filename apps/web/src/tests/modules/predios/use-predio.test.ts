@@ -83,7 +83,7 @@ describe('usePredio', () => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      expect(result.current.predio).toEqual(mockData);
+      expect(result.current.existingPredio).toEqual(mockData);
       expect(result.current.error).toBeNull();
     });
 
