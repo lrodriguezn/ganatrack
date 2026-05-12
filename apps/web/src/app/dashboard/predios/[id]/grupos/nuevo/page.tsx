@@ -15,7 +15,7 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { CreateGrupoSchema, type CreateGrupoDto } from '@ganatrack/shared-types';
 import { useCreateGrupo } from '@/modules/predios/hooks';
-import { GrupoForm } from '@/modules/predios/components/grupo-form';
+import { GrupoForm, type GrupoFormData } from '@/modules/predios/components/grupo-form';
 import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 
@@ -42,8 +42,8 @@ function NuevoGrupoContent(): JSX.Element {
     },
   });
 
-  const onSubmit = (data: CreateGrupoDto) => {
-    mutate(id, data);
+  const onSubmit = (data: GrupoFormData) => {
+    mutate(id, data as CreateGrupoDto);
   };
 
   const handleCancel = () => {

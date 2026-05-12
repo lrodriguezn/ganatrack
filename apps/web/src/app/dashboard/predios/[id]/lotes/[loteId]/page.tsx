@@ -26,8 +26,13 @@ function LoteDetailContent(): JSX.Element {
   const loteId = loteIdStr ? Number(loteIdStr) : NaN;
 
   const { lote, isLoading, error } = useLote({ id: loteId, predioId: id });
-  const { mutate: deleteLote, isLoading: isDeleting } = useDeleteLote();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { mutate: deleteLote, isLoading: isDeleting } = useDeleteLote({
+    onSuccess: () => {
+      setShowDeleteModal(false);
+      router.push(`/dashboard/predios/${id}/lotes`);
+    },
+  });
 
   // Invalid IDs
   if (isNaN(id) || id <= 0 || isNaN(loteId) || loteId <= 0) {
@@ -49,12 +54,7 @@ function LoteDetailContent(): JSX.Element {
   };
 
   const handleConfirmDelete = () => {
-    deleteLote(id, loteId, {
-      onSuccess: () => {
-        setShowDeleteModal(false);
-        router.push(`/dashboard/predios/${id}/lotes`);
-      },
-    });
+    deleteLote(id, loteId);
   };
 
   if (isLoading) {

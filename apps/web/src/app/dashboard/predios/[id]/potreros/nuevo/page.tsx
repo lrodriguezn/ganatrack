@@ -13,7 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Suspense } from 'react';
 import { CreatePotreroSchema, type CreatePotreroDto } from '@ganatrack/shared-types';
 import { useCreatePotrero } from '@/modules/predios/hooks';
-import { PotreroForm } from '@/modules/predios/components/potrero-form';
+import { PotreroForm, type PotreroFormData } from '@/modules/predios/components/potrero-form';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 import { Button } from '@/shared/components/ui/button';
 import Link from 'next/link';
@@ -45,8 +45,8 @@ function NuevoPotreroContent(): JSX.Element {
     },
   });
 
-  const onSubmit = (data: CreatePotreroDto) => {
-    mutate(id, data);
+  const onSubmit = (data: PotreroFormData) => {
+    mutate(id, data as CreatePotreroDto);
   };
 
   const handleCancel = () => {
