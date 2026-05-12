@@ -28,7 +28,7 @@ import { Button } from '@/shared/components/ui/button';
 import type { MaestroFieldDef } from '../types/maestro.types';
 import type { z } from 'zod';
 
-interface MaestroFormProps<T extends z.ZodSchema> {
+interface MaestroFormProps<T extends z.ZodTypeAny> {
   fields: MaestroFieldDef[];
   schema: T;
   defaultValues?: z.infer<T>;
@@ -37,7 +37,7 @@ interface MaestroFormProps<T extends z.ZodSchema> {
   isLoading?: boolean;
 }
 
-export function MaestroForm<T extends z.ZodSchema>({
+export function MaestroForm<T extends z.ZodTypeAny>({
   fields,
   schema,
   defaultValues,

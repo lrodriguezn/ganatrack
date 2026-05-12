@@ -27,6 +27,7 @@ import { Modal } from '@/shared/components/ui/modal';
 import { Button } from '@/shared/components/ui/button';
 import { useUiStore } from '@/store/ui.store';
 import { ApiError } from '@/shared/lib/errors';
+import { z } from 'zod';
 import type { CatalogoTipo, CatalogoBase, CatalogoConfig } from '../types/catalogo.types';
 import { CatalogoSchemas } from '../types/catalogo.types';
 
@@ -91,7 +92,7 @@ export function CatalogoEntityPage({
     setDeleteItem(item);
   };
 
-  const handleFormSubmit = async (data: Record<string, unknown>) => {
+  const handleFormSubmit = async (data: z.infer<typeof schema>) => {
     try {
       if (editItem) {
         await update({ id: editItem.id, data });
