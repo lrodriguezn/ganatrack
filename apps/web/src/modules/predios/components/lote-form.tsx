@@ -23,10 +23,14 @@ import {
   type LoteTipo,
 } from '@ganatrack/shared-types';
 
-type LoteFormData = CreateLoteDto | UpdateLoteDto;
+export type LoteFormData = {
+  nombre?: string;
+  descripcion?: string;
+  tipo?: 'producción' | 'levante' | 'engorde' | 'cría';
+};
 
 interface LoteFormProps {
-  initialData?: UpdateLoteDto | null;
+  initialData?: LoteFormData | null;
   onSubmit: (data: LoteFormData) => void;
   isLoading?: boolean;
 }

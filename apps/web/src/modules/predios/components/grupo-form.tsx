@@ -22,10 +22,13 @@ import {
   type UpdateGrupoDto,
 } from '@ganatrack/shared-types';
 
-type GrupoFormData = CreateGrupoDto | UpdateGrupoDto;
+export type GrupoFormData = {
+  nombre?: string;
+  descripcion?: string;
+};
 
 interface GrupoFormProps {
-  initialData?: UpdateGrupoDto | null;
+  initialData?: GrupoFormData | null;
   onSubmit: (data: GrupoFormData) => void;
   isLoading?: boolean;
 }
