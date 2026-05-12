@@ -63,6 +63,7 @@ export interface AnimalFilters {
   sexoKey?: number;
   estadoAnimalKey?: number;
   potreroId?: number;
+  [key: string]: unknown;
 }
 
 // ============================================================================
