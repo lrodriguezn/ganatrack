@@ -21,6 +21,7 @@ interface RolesSelectorProps {
   roles: Rol[];
   disabled?: boolean;
   error?: string;
+  id?: string;
 }
 
 export function RolesSelector({
@@ -29,10 +30,12 @@ export function RolesSelector({
   roles,
   disabled = false,
   error,
+  id,
 }: RolesSelectorProps): JSX.Element {
   return (
     <div>
       <select
+        id={id}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         disabled={disabled}
