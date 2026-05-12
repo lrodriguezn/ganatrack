@@ -8,5 +8,5 @@ import { CATALOGO_CONFIGS } from '@/modules/configuracion/types/catalogo.types';
 export default function RazasPage(): JSX.Element | null {
   const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
   if (predioLoading || !predioActivo) return null;
-  return (<CatalogoEntityPage tipo="razas" config={CATALOGO_CONFIGS.razas} />;
+  return (<CatalogoEntityPage tipo="razas" config={CATALOGO_CONFIGS.razas} />);
 }
