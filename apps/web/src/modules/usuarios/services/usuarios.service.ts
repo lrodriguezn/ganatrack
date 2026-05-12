@@ -50,14 +50,16 @@ export interface UsuariosService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): UsuariosService {
+  const mockModule = './usuarios.mock';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockUsuariosService } = require('./usuarios.mock');
+  const { MockUsuariosService } = require(mockModule);
   return new MockUsuariosService();
 }
 
 function createRealService(): UsuariosService {
+  const apiModule = './usuarios.api';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealUsuariosService } = require('./usuarios.api');
+  const { RealUsuariosService } = require(apiModule);
   return new RealUsuariosService();
 }
 

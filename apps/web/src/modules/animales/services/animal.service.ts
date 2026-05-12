@@ -52,14 +52,16 @@ export interface AnimalService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): AnimalService {
+  const mockModule = './animal.mock';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockAnimalService } = require('./animal.mock');
+  const { MockAnimalService } = require(mockModule);
   return new MockAnimalService();
 }
 
 function createRealService(): AnimalService {
+  const apiModule = './animal.api';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealAnimalService } = require('./animal.api');
+  const { RealAnimalService } = require(apiModule);
   return new RealAnimalService();
 }
 

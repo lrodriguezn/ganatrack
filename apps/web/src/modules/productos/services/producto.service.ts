@@ -35,14 +35,16 @@ export interface ProductoService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): ProductoService {
+  const mockModule = './producto.mock';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockProductoService } = require('./producto.mock');
+  const { MockProductoService } = require(mockModule);
   return new MockProductoService();
 }
 
 function createRealService(): ProductoService {
+  const apiModule = './producto.api';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealProductoService } = require('./producto.api');
+  const { RealProductoService } = require(apiModule);
   return new RealProductoService();
 }
 

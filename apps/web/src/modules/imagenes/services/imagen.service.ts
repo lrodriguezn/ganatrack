@@ -38,14 +38,16 @@ export interface ImagenService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): ImagenService {
+  const mockModule = './imagen.mock';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockImagenService } = require('./imagen.mock');
+  const { MockImagenService } = require(mockModule);
   return new MockImagenService();
 }
 
 function createRealService(): ImagenService {
+  const apiModule = './imagen.api';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealImagenService } = require('./imagen.api');
+  const { RealImagenService } = require(apiModule);
   return new RealImagenService();
 }
 

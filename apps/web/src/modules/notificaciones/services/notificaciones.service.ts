@@ -51,14 +51,16 @@ export interface INotificacionesService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): INotificacionesService {
+  const mockModule = './notificaciones.mock';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockNotificacionesService } = require('./notificaciones.mock');
+  const { MockNotificacionesService } = require(mockModule);
   return new MockNotificacionesService();
 }
 
 function createRealService(): INotificacionesService {
+  const apiModule = './notificaciones.api';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealNotificacionesService } = require('./notificaciones.api');
+  const { RealNotificacionesService } = require(apiModule);
   return new RealNotificacionesService();
 }
 

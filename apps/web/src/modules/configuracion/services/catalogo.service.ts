@@ -28,14 +28,16 @@ export interface CatalogoService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): CatalogoService {
+  const mockModule = './catalogo.mock';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockCatalogoService } = require('./catalogo.mock');
+  const { MockCatalogoService } = require(mockModule);
   return new MockCatalogoService();
 }
 
 function createRealService(): CatalogoService {
+  const apiModule = './catalogo.api';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealCatalogoService } = require('./catalogo.api');
+  const { RealCatalogoService } = require(apiModule);
   return new RealCatalogoService();
 }
 
