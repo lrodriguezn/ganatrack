@@ -101,7 +101,8 @@ export async function clearConflictQueue(): Promise<void> {
  * Notifies all open clients via postMessage.
  */
 export async function notifyClient(data: SyncNotification): Promise<void> {
-  const clients = await self.clients.matchAll({ type: 'window' });
+  const swSelf = self as unknown as { clients: { matchAll: (options: { type: string }) => Promise<Array<{ postMessage: (data: unknown) => void }>> } };
+  const clients = await swSelf.clients.matchAll({ type: 'window' });
   for (const client of clients) {
     client.postMessage(data);
   }

@@ -102,7 +102,7 @@ export class RealImagenService implements ImagenService {
 
       // Use captured activo value
       if (activo?.id) {
-        xhr.setRequestHeader('X-Predio-Id', activo.id);
+        xhr.setRequestHeader('X-Predio-Id', String(activo.id));
       }
 
       xhr.setRequestHeader('Accept-Language', 'es');

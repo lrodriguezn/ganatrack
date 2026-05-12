@@ -122,7 +122,7 @@ const attachAuthHeaders: BeforeRequestHook = (request) => {
 
   // Attach X-Predio-Id if active predio is set
   if (predioStore.predioActivo?.id) {
-    request.headers.set('X-Predio-Id', predioStore.predioActivo.id);
+    request.headers.set('X-Predio-Id', String(predioStore.predioActivo.id));
   }
 
   // Hardcode locale
