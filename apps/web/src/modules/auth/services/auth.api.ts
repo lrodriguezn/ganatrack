@@ -72,7 +72,7 @@ export class RealAuthService implements AuthService {
       let permissions: string[] = [];
       try {
         const tokenParts = data.accessToken.split('.');
-        if (tokenParts.length === 3) {
+        if (tokenParts.length === 3 && tokenParts[1]) {
           const payload = JSON.parse(atob(tokenParts[1]));
           permissions = payload.permisos || [];
         }
@@ -120,7 +120,7 @@ export class RealAuthService implements AuthService {
     try {
       const response = await apiClient
         .post('auth/2fa/verify', {
-          json: { tempToken, codigo: code } satisfies Verify2FARequest,
+          json: { tempToken, code } satisfies Verify2FARequest,
         })
         .json() as unknown;
 
@@ -141,7 +141,7 @@ export class RealAuthService implements AuthService {
       let permissions: string[] = [];
       try {
         const tokenParts = data.accessToken.split('.');
-        if (tokenParts.length === 3) {
+        if (tokenParts.length === 3 && tokenParts[1]) {
           const payload = JSON.parse(atob(tokenParts[1]));
           permissions = payload.permisos || [];
         }
@@ -155,7 +155,7 @@ export class RealAuthService implements AuthService {
           id: String(data.usuario.id),
           email: '', // Not available in 2FA response
           nombre: data.usuario.nombre,
-          rol: (data.usuario.roles[0] || 'operario').toLowerCase(),
+          rol: (data.usuario.roles[0] || 'operario').toLowerCase() as User['rol'],
         },
         permissions,
       };
