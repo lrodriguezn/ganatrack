@@ -126,7 +126,7 @@ export function useUpdatePredio(
 
   return {
     mutate: (id, data) => mutate({ id, data }),
-    mutateAsync: (id, data) => mutate({ id, data }),
+    mutateAsync: (id, data) => mutateAsync({ id, data }),
     isLoading: isPending,
     error: error as Error | null,
   };
