@@ -78,13 +78,15 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
         // Step 4: Decode permissions from JWT payload (same pattern as login)
         let storedPermissions: string[] = [];
-        try {
-          const tokenParts = accessToken.split('.');
-          if (tokenParts.length === 3) {
-            const payload = JSON.parse(atob(tokenParts[1]));
-            storedPermissions = payload.permisos || [];
-          }
-        } catch { /* ignore */ }
+        if (accessToken) {
+          try {
+            const tokenParts = accessToken.split('.');
+            if (tokenParts.length === 3 && tokenParts[1]) {
+              const payload = JSON.parse(atob(tokenParts[1]));
+              storedPermissions = payload.permisos || [];
+            }
+          } catch { /* ignore */ }
+        }
 
         // Step 5: Restore the previously active predio from localStorage (shared across tabs)
         let savedPredioId: number | null = null;
@@ -94,11 +96,13 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         } catch { /* ignore */ }
 
         // Step 7: Commit the full auth state (accessToken + user + permissions)
-        useAuthStore.getState().setAuth({
-          accessToken,
-          user: storedUser,
-          permissions: storedPermissions,
-        });
+        if (accessToken) {
+          useAuthStore.getState().setAuth({
+            accessToken,
+            user: storedUser,
+            permissions: storedPermissions,
+          });
+        }
 
         // Step 8: Load predios and restore the active predio
         try {
