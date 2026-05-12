@@ -14,6 +14,20 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useCreateUsuario } from './use-create-usuario';
 import * as serviceModule from '../services';
 
+vi.mock('@/modules/usuarios/services', () => ({
+  usuariosService: {
+    getAll: vi.fn(),
+    getById: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+    deactivate: vi.fn(),
+    activate: vi.fn(),
+    getRoles: vi.fn(),
+    getRolPermisos: vi.fn(),
+    updateRolPermisos: vi.fn(),
+  },
+}));
+
 const createWrapper = () => {
   const queryClient = new QueryClient({
     defaultOptions: {

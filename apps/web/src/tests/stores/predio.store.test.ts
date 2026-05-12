@@ -116,7 +116,7 @@ describe('predio.store — setPredios', () => {
     expect(usePredioStore.getState().predioActivo).toEqual(mockPredio1);
   });
 
-  it('debería limpiar predioActivo si ya no está en la nueva lista', () => {
+  it('debería auto-seleccionar el primer predio si el activo ya no está en la nueva lista', () => {
     act(() => {
       usePredioStore.getState().setPredios([mockPredio1, mockPredio2]);
       usePredioStore.getState().switchPredio(2);
@@ -124,7 +124,7 @@ describe('predio.store — setPredios', () => {
       usePredioStore.getState().setPredios([mockPredio1, mockPredio3]);
     });
 
-    expect(usePredioStore.getState().predioActivo).toBeNull();
+    expect(usePredioStore.getState().predioActivo).toEqual(mockPredio1);
   });
 
   it('debería reemplazar toda la lista al llamar setPredios', () => {
@@ -278,7 +278,7 @@ describe('predio.store — switchPredio', () => {
       usePredioStore.getState().switchPredio(999);
     });
 
-    expect(usePredioStore.getState().predioActivo).toBeNull();
+    expect(usePredioStore.getState().predioActivo).toEqual(mockPredio1);
   });
 });
 

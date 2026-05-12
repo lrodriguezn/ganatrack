@@ -74,7 +74,7 @@ describe('ThemeToggle — renderizado', () => {
   });
 
   it('debería renderizar el botón con SunIcon en modo oscuro', async () => {
-    mockLocalStorage.setItem('darkMode', 'true');
+    window.localStorage.setItem('darkMode', 'true');
     await renderThemeToggle();
 
     const button = screen.getByRole('button');

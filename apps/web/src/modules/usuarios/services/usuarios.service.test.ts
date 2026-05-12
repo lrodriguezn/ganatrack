@@ -9,6 +9,20 @@
 
 import { describe, it, expect, vi } from 'vitest';
 
+vi.mock('@/modules/usuarios/services/usuarios.service', () => ({
+  usuariosService: {
+    getAll: vi.fn(),
+    getById: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+    deactivate: vi.fn(),
+    activate: vi.fn(),
+    getRoles: vi.fn(),
+    getRolPermisos: vi.fn(),
+    updateRolPermisos: vi.fn(),
+  },
+}));
+
 describe('UsuariosService Factory', () => {
   it('should export usuariosService singleton', async () => {
     const { usuariosService } = await import('./usuarios.service');
