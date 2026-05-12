@@ -51,11 +51,12 @@ const SEED_HIERROS: Hierro[] = [
 ];
 
 const SEED_DIAGNOSTICOS: Diagnostico[] = [
-  { id: 1, nombre: 'Brucelosis', descripcion: 'Infección bacteriana causada por Brucella abortus', categoria: 'Enfermedad Infecciosa', activo: true },
-  { id: 2, nombre: 'Fiebre Aftosa', descripcion: 'Enfermedad viral altamente contagiosa de pezuñas y boca', categoria: 'Enfermedad Viral', activo: true },
-  { id: 3, nombre: 'Mastitis Crónica', descripcion: 'Inflamación crónica de la glándula mamaria', categoria: 'Enfermedad de la Ubre', activo: true },
-  { id: 4, nombre: 'Carbón Sintomático', descripcion: 'Enfermedad bacteriana causada por Clostridium chauvoei', categoria: 'Enfermedad Clostridial', activo: true },
-  { id: 5, nombre: 'Estomatitis Vesicular', descripcion: 'Enfermedad viral que afecta mucosas y pezuñas', categoria: 'Enfermedad Viral', activo: false },
+  { id: 1, nombre: 'Positiva', descripcion: 'Preñez confirmada', categoria: 'Diagnóstico Reproductivo', activo: true },
+  { id: 2, nombre: 'Negativa', descripcion: 'Preñez no confirmada', categoria: 'Diagnóstico Reproductivo', activo: true },
+  { id: 3, nombre: 'Desparasitación', descripcion: 'Tratamiento antiparasitario', categoria: 'Sanidad Preventiva', activo: true },
+  { id: 4, nombre: 'Vacunación', descripcion: 'Aplicación de vacunas', categoria: 'Sanidad Preventiva', activo: true },
+  { id: 5, nombre: 'Vitaminas', descripcion: 'Suplementación vitamínica', categoria: 'Suplementación', activo: true },
+  { id: 6, nombre: 'Tratamiento', descripcion: 'Tratamiento médico curativo', categoria: 'Medicina Curativa', activo: true },
 ];
 
 const SEED_MOTIVOS_VENTAS: MotivoVenta[] = [
