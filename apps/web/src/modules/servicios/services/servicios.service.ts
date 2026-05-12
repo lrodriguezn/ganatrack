@@ -57,14 +57,16 @@ export interface ServiciosService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): ServiciosService {
+  const mockModule = './servicios.mock';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockServiciosService } = require('./servicios.mock');
+  const { MockServiciosService } = require(mockModule);
   return new MockServiciosService();
 }
 
 function createRealService(): ServiciosService {
+  const apiModule = './servicios.api';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealServiciosService } = require('./servicios.api');
+  const { RealServiciosService } = require(apiModule);
   return new RealServiciosService();
 }
 

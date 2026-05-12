@@ -5,4 +5,3 @@
 
 export { serviciosService } from './servicios.service';
 export type { ServiciosService } from './servicios.service';
-export { resetServiciosMock, resetServiciosVeterinariosMock } from './servicios.mock';

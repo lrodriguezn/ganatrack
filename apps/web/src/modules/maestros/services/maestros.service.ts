@@ -27,14 +27,16 @@ export interface MaestrosService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): MaestrosService {
+  const mockModule = './maestros.mock';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockMaestrosService } = require('./maestros.mock');
+  const { MockMaestrosService } = require(mockModule);
   return new MockMaestrosService();
 }
 
 function createRealService(): MaestrosService {
+  const apiModule = './maestros.api';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealMaestrosService } = require('./maestros.api');
+  const { RealMaestrosService } = require(apiModule);
   return new RealMaestrosService();
 }
 

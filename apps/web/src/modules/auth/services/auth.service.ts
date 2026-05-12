@@ -38,14 +38,16 @@ export interface AuthService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): AuthService {
+  const mockModule = './auth.mock';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockAuthService } = require('./auth.mock');
+  const { MockAuthService } = require(mockModule);
   return new MockAuthService();
 }
 
 function createRealService(): AuthService {
+  const apiModule = './auth.api';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealAuthService } = require('./auth.api');
+  const { RealAuthService } = require(apiModule);
   return new RealAuthService();
 }
 

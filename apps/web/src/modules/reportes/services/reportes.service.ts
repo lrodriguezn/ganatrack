@@ -45,14 +45,16 @@ export interface ReportesService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): ReportesService {
+  const mockModule = './reportes.mock';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockReportesService } = require('./reportes.mock');
+  const { MockReportesService } = require(mockModule);
   return new MockReportesService();
 }
 
 function createRealService(): ReportesService {
+  const apiModule = './reportes.api';
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealReportesService } = require('./reportes.api');
+  const { RealReportesService } = require(apiModule);
   return new RealReportesService();
 }
 
