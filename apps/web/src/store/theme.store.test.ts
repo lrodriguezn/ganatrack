@@ -10,7 +10,7 @@
  * - Store initialization from localStorage, matchMedia, and default
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 
 // ============================================================================
 // Mocks
@@ -36,6 +36,31 @@ Object.defineProperty(window, 'localStorage', {
   writable: true,
 });
 
+// Mock matchMedia and track listeners for cleanup
+const matchMediaListeners: Array<(e: MediaQueryListEvent) => void> = [];
+
+Object.defineProperty(window, 'matchMedia', {
+  value: (query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: (type: string, listener: (e: MediaQueryListEvent) => void) => {
+      if (type === 'change') matchMediaListeners.push(listener);
+    },
+    removeEventListener: (type: string, listener: (e: MediaQueryListEvent) => void) => {
+      if (type === 'change') {
+        const index = matchMediaListeners.indexOf(listener);
+        if (index >= 0) matchMediaListeners.splice(index, 1);
+      }
+    },
+    dispatchEvent: (event: MediaQueryListEvent) => {
+      matchMediaListeners.forEach((listener) => listener(event));
+      return true;
+    },
+  }),
+  writable: true,
+});
+
 // ============================================================================
 // Helper: reset store module between tests
 // ============================================================================
@@ -43,8 +68,6 @@ Object.defineProperty(window, 'localStorage', {
 async function resetThemeStore() {
   // Clear module cache to force re-initialization
   vi.resetModules();
-  // Clear mock data object (NOT mockLocalStorage.clear — that's the raw object without clear method)
-  Object.keys(mockLocalStorage).forEach((k) => delete mockLocalStorage[k]);
   localStorageMock.getItem.mockClear();
   localStorageMock.setItem.mockClear();
 
@@ -55,6 +78,11 @@ async function resetThemeStore() {
   const { useThemeStore } = await import('./theme.store');
   return useThemeStore;
 }
+
+beforeEach(() => {
+  Object.keys(mockLocalStorage).forEach((k) => delete mockLocalStorage[k]);
+  matchMediaListeners.length = 0;
+});
 
 // ============================================================================
 // Tests: toggle()

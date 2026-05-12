@@ -12,7 +12,18 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
-// Mock window.location.reload
+const mockRefresh = vi.fn();
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    back: vi.fn(),
+    refresh: mockRefresh,
+  }),
+  usePathname: () => '/',
+}));
+
+// Mock window.location.reload (kept for compatibility if needed elsewhere)
 const mockReload = vi.fn();
 Object.defineProperty(window, 'location', {
   value: { reload: mockReload },
@@ -53,8 +64,8 @@ describe('OfflinePage', () => {
     render(<OfflinePage />);
     
     await user.click(screen.getByRole('button', { name: /Reintentar/i }));
-    
-    expect(mockReload).toHaveBeenCalled();
+
+    expect(mockRefresh).toHaveBeenCalled();
   });
 
   it('debería mostrar enlace al Dashboard', async () => {

@@ -182,6 +182,7 @@ export function UsuarioForm({
           rules={{ required: 'Rol requerido' }}
           render={(field) => (
             <RolesSelector
+              id={field.id}
               value={field.value ?? 0}
               onChange={(value) => field.onChange(value)}
               roles={roles ?? []}

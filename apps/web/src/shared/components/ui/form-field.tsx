@@ -25,7 +25,7 @@ interface FormFieldProps<T extends FieldValues> {
   label?: string;
   control: ControllerProps<T>['control'];
   rules?: ControllerProps<T>['rules'];
-  render: (field: ControllerRenderProps<T, ControllerProps<T>['name']>) => React.ReactNode;
+  render: (field: ControllerRenderProps<T, ControllerProps<T>['name']> & { id: string }) => React.ReactNode;
   required?: boolean;
 }
 
@@ -38,6 +38,7 @@ export function FormField<T extends FieldValues>({
   required,
 }: FormFieldProps<T>): JSX.Element {
   const displayLabel = required && label ? `${label} (required)` : label;
+  const fieldId = name.toString();
 
   return (
     <Controller
@@ -50,11 +51,11 @@ export function FormField<T extends FieldValues>({
         return (
           <div className="flex flex-col gap-1.5">
             {label && (
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
+              <label htmlFor={fieldId} className="text-sm font-medium text-gray-700 dark:text-gray-200">
                 {displayLabel}
               </label>
             )}
-            {render(field)}
+            {render({ ...field, id: fieldId })}
             {error && (
               <span className="text-sm text-red-500 dark:text-red-400" role="alert">
                 {error}
