@@ -98,8 +98,9 @@ export const notificacionesHandlers = [
       );
     }
 
-    storeNotificaciones[index].leida = true;
-    return HttpResponse.json(storeNotificaciones[index]);
+    const notif = storeNotificaciones[index]!;
+    notif.leida = true;
+    return HttpResponse.json(notif);
   }),
 
   // POST /api/v1/notificaciones/read-all — mark all as read

@@ -12,7 +12,7 @@ import { http, HttpResponse } from 'msw';
 const BASE_URL = 'http://localhost:3000';
 
 // Seed data — 15 users
-const mockUsuarios = [
+const mockUsuarios: any[] = [
   { id: 1, nombre: 'Carlos Mendoza', email: 'carlos@finca.com', rolId: 1, rolNombre: 'Administrador', predioId: 1, predioNombre: 'Finca La Esperanza', activo: true },
   { id: 2, nombre: 'María Rodríguez', email: 'maria@finca.com', rolId: 2, rolNombre: 'Veterinario', predioId: 1, predioNombre: 'Finca La Esperanza', activo: true },
   { id: 3, nombre: 'José Herrera', email: 'jose@finca.com', rolId: 3, rolNombre: 'Operario', predioId: 1, predioNombre: 'Finca La Esperanza', activo: true },

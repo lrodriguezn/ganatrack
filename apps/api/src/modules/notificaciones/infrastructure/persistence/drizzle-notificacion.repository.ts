@@ -33,7 +33,7 @@ export class DrizzleNotificacionRepository implements INotificacionRepository {
       )
       .limit(1)
 
-    return row ?? null
+    return (row as Notificacion) ?? null
   }
 
   async findByPredio(
@@ -62,11 +62,12 @@ export class DrizzleNotificacionRepository implements INotificacionRepository {
       .limit(limit)
       .offset((page - 1) * limit)
 
-    const [{ total }] = await this.db
+    const [countResult] = await this.db
       .select({ total: count() })
       .from(notificaciones)
       .where(and(...conditions))
 
+    const total = countResult?.total ?? 0
     return { data: rows as Notificacion[], total }
   }
 
@@ -90,7 +91,7 @@ export class DrizzleNotificacionRepository implements INotificacionRepository {
   }
 
   async countNoLeidas(predioId: number): Promise<number> {
-    const [{ total }] = await this.db
+    const [countResult] = await this.db
       .select({ total: count() })
       .from(notificaciones)
       .where(
@@ -101,7 +102,7 @@ export class DrizzleNotificacionRepository implements INotificacionRepository {
         )
       )
 
-    return total
+    return countResult?.total ?? 0
   }
 
   async create(data: CrearNotificacionParams): Promise<Notificacion> {
@@ -156,7 +157,7 @@ export class DrizzleNotificacionRepository implements INotificacionRepository {
       .set({ leida: 1 })
       .where(and(...conditions))
 
-    return result.rowCount ?? 0
+    return (result as any).rowCount ?? 0
   }
 
   async softDelete(id: number, predioId: number): Promise<boolean> {

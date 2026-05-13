@@ -6,7 +6,7 @@ export interface ProductoEntity {
   id: number
   predioId: number
   codigo: string
-  nombre: string | null
+  nombre: string
   descripcion: string | null
   tipoProducto: string | null
   categoria: string | null

@@ -17,7 +17,7 @@ export const reportesExportaciones = sqliteTable('reportes_exportaciones', {
   // Tenant isolation - REQUIRED foreign keys
   predioId: integer('predio_id').notNull(),
   usuarioId: integer('usuario_id').notNull(),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$defaultFn(() => new Date())

@@ -59,11 +59,11 @@ export class CrearVeterinarioGrupalUseCase {
       // Create product records for each animal
       const productosData: any[] = []
       for (let i = 0; i < animales.length; i++) {
-        const animal = dto.animales[i]
+        const animal = dto.animales[i]!
         if (animal.productos && animal.productos.length > 0) {
           for (const p of animal.productos) {
             productosData.push({
-              servicioAnimalId: animales[i].id,
+              servicioAnimalId: animales[i]!.id,
               productoId: p.productoId,
               cantidad: p.cantidad ?? null,
               unidad: p.unidad ?? null,

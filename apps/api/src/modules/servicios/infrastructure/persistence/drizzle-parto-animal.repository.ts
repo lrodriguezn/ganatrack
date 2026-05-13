@@ -14,7 +14,8 @@ export class DrizzlePartoAnimalRepository implements IPartoAnimalRepository {
     const { page, limit } = opts
     const conditions = [eq(serviciosPartosAnimales.predioId, predioId), eq(serviciosPartosAnimales.activo, 1)]
     const rows = await this.db.select().from(serviciosPartosAnimales).where(and(...conditions)).orderBy(desc(serviciosPartosAnimales.fecha)).limit(limit).offset((page - 1) * limit)
-    const [{ total }] = await this.db.select({ total: count() }).from(serviciosPartosAnimales).where(and(...conditions))
+    const [countResult] = await this.db.select({ total: count() }).from(serviciosPartosAnimales).where(and(...conditions))
+    const total = countResult?.total ?? 0
     return { data: rows, total }
   }
 
@@ -25,7 +26,7 @@ export class DrizzlePartoAnimalRepository implements IPartoAnimalRepository {
 
   async create(data: Omit<PartoAnimalEntity, 'id' | 'createdAt' | 'updatedAt'>): Promise<PartoAnimalEntity> {
     const [row] = await this.db.insert(serviciosPartosAnimales).values({ ...data, activo: 1 }).returning()
-    return row
+    return row!
   }
 
   async update(id: number, data: Partial<Omit<PartoAnimalEntity, 'id' | 'createdAt' | 'updatedAt'>>, predioId: number): Promise<PartoAnimalEntity | null> {

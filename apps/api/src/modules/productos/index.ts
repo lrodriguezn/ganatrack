@@ -8,7 +8,7 @@ import { registerProductosRoutes } from './infrastructure/http/routes/productos.
 export function registerProductosModule(): void {}
 
 export async function registerProductosModuleRoutes(app: FastifyInstance): Promise<void> {
-  const db: DbClient = createClient()
+  const db = createClient() as unknown as DbClient
   const productoRepo = new DrizzleProductoRepository(db)
   const productoImagenRepo = new DrizzleProductoImagenRepository(db)
 

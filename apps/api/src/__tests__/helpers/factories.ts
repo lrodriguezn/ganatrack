@@ -48,6 +48,7 @@ const animalDefaults = (): AnimalEntity => ({
   codigoPadre: null,
   codigoPajuela: null,
   configRazasId: null,
+  razaNombre: null,
   potreroId: null,
   precioCompra: null,
   pesoCompra: null,
@@ -118,8 +119,6 @@ const permisoDefaults = (): PermisoEntity => ({
   modulo: 'usuarios',
   accion: 'read',
   nombre: 'Ver usuarios',
-  createdAt: new Date(),
-  activo: 1,
 })
 
 // ============================================
@@ -130,7 +129,6 @@ const rolDefaults = (): RolEntity => ({
   nombre: 'ADMIN',
   descripcion: 'Administrador',
   esSistema: 1,
-  createdAt: new Date(),
   activo: 1,
 })
 

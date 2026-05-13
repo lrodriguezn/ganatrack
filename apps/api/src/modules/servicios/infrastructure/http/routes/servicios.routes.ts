@@ -44,28 +44,33 @@ type IdParams = { Params: { id: number } }
 export async function registerServiciosRoutes(app: FastifyInstance, repos: ServiciosRepos): Promise<void> {
   const {
     palpacionGrupalRepo,
+    palpacionAnimalRepo,
     inseminacionGrupalRepo,
+    inseminacionAnimalRepo,
     partoAnimalRepo,
+    partoCriaRepo,
     veterinarioGrupalRepo,
+    veterinarioAnimalRepo,
+    veterinarioProductoRepo,
   } = repos
 
   // Create use cases
   const listPalpacionesGrupalesUseCase = new ListPalpacionesGrupalesUseCase(palpacionGrupalRepo)
-  const getPalpacionGrupalUseCase = new GetPalpacionGrupalUseCase(palpacionGrupalRepo)
+  const getPalpacionGrupalUseCase = new GetPalpacionGrupalUseCase(palpacionGrupalRepo, palpacionAnimalRepo)
   const listInseminacionesGrupalesUseCase = new ListInseminacionesGrupalesUseCase(inseminacionGrupalRepo)
-  const getInseminacionGrupalUseCase = new GetInseminacionGrupalUseCase(inseminacionGrupalRepo)
+  const getInseminacionGrupalUseCase = new GetInseminacionGrupalUseCase(inseminacionGrupalRepo, inseminacionAnimalRepo)
   const listPartosUseCase = new ListPartosUseCase(partoAnimalRepo)
-  const getPartoUseCase = new GetPartoUseCase(partoAnimalRepo)
+  const getPartoUseCase = new GetPartoUseCase(partoAnimalRepo, partoCriaRepo)
   const listVeterinariosGrupalesUseCase = new ListVeterinariosGrupalesUseCase(veterinarioGrupalRepo)
-  const getVeterinarioGrupalUseCase = new GetVeterinarioGrupalUseCase(veterinarioGrupalRepo)
+  const getVeterinarioGrupalUseCase = new GetVeterinarioGrupalUseCase(veterinarioGrupalRepo, veterinarioAnimalRepo, veterinarioProductoRepo)
 
   // ============ PALPACIONES ============
   app.get<ListQuery>('/servicios/palpaciones', {
     schema: { querystring: listPalpacionesQuerySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const { page = 1, limit = 20, search } = request.query
-    const result = await listPalpacionesGrupalesUseCase.execute(0, { page, limit, search })
+    const { page = 1, limit = 20 } = request.query
+    const result = await listPalpacionesGrupalesUseCase.execute(0, { page, limit })
     return reply.code(200).send({ success: true, ...result })
   })
 
@@ -82,8 +87,8 @@ export async function registerServiciosRoutes(app: FastifyInstance, repos: Servi
     schema: { querystring: listInseminacionesQuerySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const { page = 1, limit = 20, search } = request.query
-    const result = await listInseminacionesGrupalesUseCase.execute(0, { page, limit, search })
+    const { page = 1, limit = 20 } = request.query
+    const result = await listInseminacionesGrupalesUseCase.execute(0, { page, limit })
     return reply.code(200).send({ success: true, ...result })
   })
 
@@ -100,8 +105,8 @@ export async function registerServiciosRoutes(app: FastifyInstance, repos: Servi
     schema: { querystring: listPartosQuerySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const { page = 1, limit = 20, search } = request.query
-    const result = await listPartosUseCase.execute(0, { page, limit, search })
+    const { page = 1, limit = 20 } = request.query
+    const result = await listPartosUseCase.execute(0, { page, limit })
     return reply.code(200).send({ success: true, ...result })
   })
 
@@ -118,8 +123,8 @@ export async function registerServiciosRoutes(app: FastifyInstance, repos: Servi
     schema: { querystring: listVeterinariosQuerySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const { page = 1, limit = 20, search } = request.query
-    const result = await listVeterinariosGrupalesUseCase.execute(0, { page, limit, search })
+    const { page = 1, limit = 20 } = request.query
+    const result = await listVeterinariosGrupalesUseCase.execute(0, { page, limit })
     return reply.code(200).send({ success: true, ...result })
   })
 

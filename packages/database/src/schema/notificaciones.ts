@@ -18,7 +18,7 @@ export const notificaciones = sqliteTable('notificaciones', {
   leida: integer('leida').default(0),
   fechaEvento: integer('fecha_evento', { mode: 'timestamp' }),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
 })
 
 // notificaciones_preferencias - User notification preferences
@@ -31,7 +31,7 @@ export const notificacionesPreferencias = sqliteTable('notificaciones_preferenci
   canalEmail: integer('canal_email').default(1),
   canalPush: integer('canal_push').default(0),
   diasAnticipacion: integer('dias_anticipacion').default(7),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
 }, (table) => [
   unique('uq_notificaciones_preferencias').on(table.usuarioId, table.tipo),
 ])
@@ -44,7 +44,7 @@ export const notificacionesPushTokens = sqliteTable('notificaciones_push_tokens'
   token: text('token', { length: 500 }).notNull(),
   plataforma: text('plataforma', { length: 20 }).notNull(), // 'android'|'ios'|'web'
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
 }, (table) => [
   unique('uq_notificaciones_push_tokens').on(table.usuarioId, table.token),
 ])

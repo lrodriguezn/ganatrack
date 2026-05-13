@@ -9,7 +9,7 @@ import { registerNotificacionesRoutes } from './infrastructure/http/routes/notif
 export function registerNotificacionesModule(): void {}
 
 export async function registerNotificacionesModuleRoutes(app: FastifyInstance): Promise<void> {
-  const db: DbClient = createClient()
+  const db = createClient() as unknown as DbClient
   const notificacionRepo = new DrizzleNotificacionRepository(db)
   const preferenciaRepo = new DrizzlePreferenciaRepository(db)
   const pushTokenRepo = new DrizzlePushTokenRepository(db)

@@ -7,7 +7,7 @@ import { DeleteImagenUseCase } from '../../../application/use-cases/delete-image
 import type { IImagenRepository } from '../../../domain/repositories/imagen.repository.js'
 
 type ImagenesRepos = { imagenRepo: IImagenRepository }
-type ListQuery = { Querystring: { page?: number; limit?: number; search?: string } }
+type ListQuery = { Querystring: { page?: number; limit?: number } }
 type IdParams = { Params: { id: number } }
 
 export async function registerImagenesRoutes(app: FastifyInstance, repos: ImagenesRepos): Promise<void> {
@@ -20,8 +20,8 @@ export async function registerImagenesRoutes(app: FastifyInstance, repos: Imagen
     schema: { querystring: listImagenesQuerySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const { page = 1, limit = 20, search } = request.query
-    const result = await listImagenesUseCase.execute(0, { page, limit, search })
+    const { page = 1, limit = 20 } = request.query
+    const result = await listImagenesUseCase.execute(0, { page, limit })
     return reply.code(200).send({ success: true, ...result })
   })
 
@@ -29,7 +29,7 @@ export async function registerImagenesRoutes(app: FastifyInstance, repos: Imagen
     schema: { params: idParamsSchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await getImagenUseCase.execute(request.params.id)
+    const result = await getImagenUseCase.execute(request.params.id, 0)
     return reply.code(200).send({ success: true, data: result })
   })
 
@@ -37,7 +37,7 @@ export async function registerImagenesRoutes(app: FastifyInstance, repos: Imagen
     schema: { params: idParamsSchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    await deleteImagenUseCase.execute(request.params.id)
+    await deleteImagenUseCase.execute(request.params.id, 0)
     return reply.code(200).send({ success: true, data: { message: 'Imagen eliminada' } })
   })
 }

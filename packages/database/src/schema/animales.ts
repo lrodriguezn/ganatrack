@@ -15,7 +15,7 @@ export const imagenes = sqliteTable('imagenes', {
   mimeType: text('mime_type', { length: 50 }),
   tamanoBytes: integer('tamano_bytes'),
   descripcion: text('descripcion'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 })
 
@@ -48,7 +48,7 @@ export const animales = sqliteTable('animales', {
   saludAnimalKey: integer('salud_animal_key').default(0),
   estadoAnimalKey: integer('estado_animal_key').default(0),
   indDescartado: integer('ind_descartado').default(0),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 }, (table) => [
@@ -63,7 +63,7 @@ export const animalesImagenes = sqliteTable('animales_imagenes', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   animalId: integer('animal_id').notNull().references(() => animales.id),
   imagenId: integer('imagen_id').notNull().references(() => imagenes.id),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 }, (table) => [
   unique('uq_animales_imagenes').on(table.animalId, table.imagenId),

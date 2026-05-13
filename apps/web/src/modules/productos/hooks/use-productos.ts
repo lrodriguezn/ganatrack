@@ -21,7 +21,7 @@ import type { ProductoFilters } from '../types/producto.types';
 
 export function useProductos(filters: ProductoFilters) {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: queryKeys.productos.list(filters),
+    queryKey: queryKeys.productos.list(filters as Record<string, unknown>),
     queryFn: () => productoService.getAll(filters),
     staleTime: StaleTimes.LIST,
   });

@@ -1,10 +1,10 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import { inject, injectable } from 'tsyringe'
-import type { ListImagenesUseCase } from '../../application/use-cases/list-imagenes.use-case.js'
-import type { GetImagenUseCase } from '../../application/use-cases/get-imagen.use-case.js'
-import type { UploadImagenUseCase } from '../../application/use-cases/upload-imagen.use-case.js'
-import type { DeleteImagenUseCase } from '../../application/use-cases/delete-imagen.use-case.js'
-import type { UploadImagenDto } from '../../application/dtos/imagen.dto.js'
+import type { ListImagenesUseCase } from '../../../application/use-cases/list-imagenes.use-case.js'
+import type { GetImagenUseCase } from '../../../application/use-cases/get-imagen.use-case.js'
+import type { UploadImagenUseCase } from '../../../application/use-cases/upload-imagen.use-case.js'
+import type { DeleteImagenUseCase } from '../../../application/use-cases/delete-imagen.use-case.js'
+import type { UploadImagenDto } from '../../../application/dtos/imagen.dto.js'
 
 @injectable()
 export class ImagenesController {

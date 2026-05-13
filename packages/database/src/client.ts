@@ -1,10 +1,14 @@
 import { drizzle as drizzleSQLite } from 'drizzle-orm/better-sqlite3'
 import { drizzle as drizzlePG } from 'drizzle-orm/postgres-js'
+import type { BetterSQLite3Database } from 'drizzle-orm/better-sqlite3'
+import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 import Database from 'better-sqlite3'
 import postgres from 'postgres'
 import * as schema from './schema/index.js'
 
-export type DbClient = ReturnType<typeof createClient>
+// Intersection type so TS can call common Drizzle methods without union-call errors.
+// At runtime only one driver is active; this is a typing workaround.
+export type DbClient = BetterSQLite3Database<typeof schema> & PostgresJsDatabase<typeof schema>
 
 export function createClient() {
   const provider = process.env.DATABASE_PROVIDER ?? 'sqlite'

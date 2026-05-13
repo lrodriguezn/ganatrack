@@ -14,7 +14,8 @@ export class DrizzlePalpacionGrupalRepository implements IPalpacionGrupalReposit
     const { page, limit } = opts
     const conditions = [eq(serviciosPalpacionesGrupal.predioId, predioId), eq(serviciosPalpacionesGrupal.activo, 1)]
     const rows = await this.db.select().from(serviciosPalpacionesGrupal).where(and(...conditions)).orderBy(desc(serviciosPalpacionesGrupal.fecha)).limit(limit).offset((page - 1) * limit)
-    const [{ total }] = await this.db.select({ total: count() }).from(serviciosPalpacionesGrupal).where(and(...conditions))
+    const [countResult] = await this.db.select({ total: count() }).from(serviciosPalpacionesGrupal).where(and(...conditions))
+    const total = countResult?.total ?? 0
     return { data: rows, total }
   }
 
@@ -30,7 +31,7 @@ export class DrizzlePalpacionGrupalRepository implements IPalpacionGrupalReposit
 
   async create(data: Omit<PalpacionGrupalEntity, 'id' | 'createdAt' | 'updatedAt'>): Promise<PalpacionGrupalEntity> {
     const [row] = await this.db.insert(serviciosPalpacionesGrupal).values({ ...data, activo: 1 }).returning()
-    return row
+    return row!
   }
 
   async update(id: number, data: Partial<Omit<PalpacionGrupalEntity, 'id' | 'createdAt' | 'updatedAt'>>): Promise<PalpacionGrupalEntity | null> {

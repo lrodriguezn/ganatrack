@@ -44,7 +44,7 @@ export async function registerAnimalesRoutes(app: FastifyInstance, repos: Animal
     // Get activo user from auth middleware
     const currentUser = (request as any).currentUser
     const activoPredioId = currentUser?.predioIds?.[0] ?? 0
-    const result = await listAnimalesUseCase.execute(activoPredioId, { page, limit, search, potreroId, estado })
+    const result = await listAnimalesUseCase.execute(activoPredioId, { page, limit, search, potreroId, estado: estado ? Number(estado) : undefined })
     return reply.code(200).send({ success: true, data: result.data, meta: { page: result.page, limit: result.limit, total: result.total } })
   })
 

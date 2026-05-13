@@ -7,7 +7,7 @@ import { registerReportesRoutes } from './infrastructure/http/routes/reportes.ro
 export function registerReportesModule(): void {}
 
 export async function registerReportesModuleRoutes(app: FastifyInstance): Promise<void> {
-  const db: DbClient = createClient()
+  const db = createClient() as unknown as DbClient
   const exportJobRepo = new DrizzleExportJobRepository(db)
 
   await registerReportesRoutes(app, { exportJobRepo })

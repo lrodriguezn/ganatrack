@@ -11,7 +11,7 @@ export const configRazas = sqliteTable('config_razas', {
   descripcion: text('descripcion'),
   origen: text('origen', { length: 100 }),
   tipoProduccion: text('tipo_produccion', { length: 50 }),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -23,7 +23,7 @@ export const configCondicionesCorporales = sqliteTable('config_condiciones_corpo
   descripcion: text('descripcion'),
   valorMin: integer('valor_min').default(1),
   valorMax: integer('valor_max').default(5),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -33,7 +33,7 @@ export const configTiposExplotacion = sqliteTable('config_tipos_explotacion', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   nombre: text('nombre', { length: 100 }).notNull(),
   descripcion: text('descripcion'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -43,7 +43,7 @@ export const configCalidadAnimal = sqliteTable('config_calidad_animal', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   nombre: text('nombre', { length: 100 }).notNull(),
   descripcion: text('descripcion'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -53,7 +53,7 @@ export const configColores = sqliteTable('config_colores', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   nombre: text('nombre', { length: 50 }).notNull(),
   codigo: text('codigo', { length: 20 }),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -66,7 +66,7 @@ export const configRangosEdades = sqliteTable('config_rangos_edades', {
   rango2: integer('rango2').notNull(),
   sexo: integer('sexo').default(0),
   descripcion: text('descripcion'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -78,7 +78,7 @@ export const configKeyValues = sqliteTable('config_key_values', {
   key: text('key', { length: 100 }).notNull(),
   value: text('value'),
   descripcion: text('descripcion'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 }, (table) => [

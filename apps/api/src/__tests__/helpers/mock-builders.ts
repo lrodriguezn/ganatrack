@@ -37,7 +37,7 @@ import type { IPotreroRepository } from '../../modules/predios/domain/repositori
 import type { ISectorRepository } from '../../modules/predios/domain/repositories/sector.repository.js'
 import type { ILoteRepository } from '../../modules/predios/domain/repositories/lote.repository.js'
 import type { IGrupoRepository } from '../../modules/predios/domain/repositories/grupo.repository.js'
-import type { IPartoRepository } from '../../modules/servicios/domain/repositories/parto.repository.js'
+import type { IPartoAnimalRepository } from '../../modules/servicios/domain/repositories/parto-animal.repository.js'
 import type { IInseminacionAnimalRepository } from '../../modules/servicios/domain/repositories/inseminacion-animal.repository.js'
 import type { IInseminacionGrupalRepository } from '../../modules/servicios/domain/repositories/inseminacion-grupal.repository.js'
 import type { IPalpacionAnimalRepository } from '../../modules/servicios/domain/repositories/palpacion-animal.repository.js'
@@ -50,7 +50,7 @@ import type { IExportJobRepository } from '../../modules/reportes/domain/reposit
  * Create a mock repository with all methods as vi.fn()
  * Defaults to returning null/undefined/empty arrays for fetch methods
  */
-function createMockRepo<T extends Record<string, unknown>>(methods: T): T {
+function createMockRepo<T>(methods: Record<string, any>): T {
   const mock = {} as T
   for (const key of Object.keys(methods)) {
     mock[key as keyof T] = vi.fn() as T[keyof T]
@@ -442,13 +442,13 @@ function buildGrupoRepo(): IGrupoRepository {
 // ============================================
 // Parto Repository Mock
 // ============================================
-function buildPartoRepo(): IPartoRepository {
-  return createMockRepo<IPartoRepository>({
+function buildPartoRepo(): IPartoAnimalRepository {
+  return createMockRepo<IPartoAnimalRepository>({
     findById: vi.fn().mockResolvedValue(null),
-    findByAnimal: vi.fn().mockResolvedValue({ data: [], total: 0 }),
+    findAll: vi.fn().mockResolvedValue({ data: [], total: 0 }),
     create: vi.fn().mockResolvedValue({} as any),
     update: vi.fn().mockResolvedValue(null),
-    delete: vi.fn().mockResolvedValue(false),
+    softDelete: vi.fn().mockResolvedValue(false),
   })
 }
 

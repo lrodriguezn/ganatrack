@@ -48,8 +48,8 @@ export class DrizzleTransactionManager implements ITransactionManager {
   }
 
   private async executePostgres<T>(callback: TransactionCallback<T>): Promise<T> {
-    return this.db.transaction(async (tx) => {
+    return (this.db as any).transaction(async (tx: any) => {
       return callback(tx)
-    })()
+    })
   }
 }

@@ -7,16 +7,16 @@ import { http, HttpResponse } from 'msw';
 
 const BASE_URL = 'http://localhost:3000';
 
-const mockPalpaciones = [
+const mockPalpaciones: any[] = [
   { id: 1, animalId: 1, animalCodigo: 'GAN-001', fecha: '2026-03-15', resultado: 'positivo', mesesGestacion: 3, veterinarioId: 2, observaciones: 'Preñada confirmada' },
   { id: 2, animalId: 14, animalCodigo: 'GAN-014', fecha: '2026-03-20', resultado: 'negativo', mesesGestacion: null, veterinarioId: 2, observaciones: 'No preñada' },
 ];
 
-const mockInseminaciones = [
+const mockInseminaciones: any[] = [
   { id: 1, animalId: 14, animalCodigo: 'GAN-014', fecha: '2026-02-10', toroId: 1, toroCodigo: 'GAN-001', tecnica: 'IA convencional', resultado: 'pendiente' },
 ];
 
-const mockPartos = [
+const mockPartos: any[] = [
   { id: 1, animalId: 14, animalCodigo: 'GAN-014', fecha: '2026-01-05', tipoParto: 'normal', sexoCria: 0, pesoCria: 35, observaciones: 'Parto sin complicaciones' },
 ];
 
