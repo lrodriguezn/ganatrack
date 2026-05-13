@@ -15,7 +15,8 @@ export class DrizzleProductoRepository implements IProductoRepository {
     const conditions = [eq(productos.predioId, predioId), eq(productos.activo, 1)]
     if (tipoProducto) conditions.push(like(productos.tipoProducto, `%${tipoProducto}%`))
     const rows = await this.db.select().from(productos).where(and(...conditions)).orderBy(desc(productos.nombre)).limit(limit).offset((page - 1) * limit)
-    const [{ total }] = await this.db.select({ total: count() }).from(productos).where(and(...conditions))
+    const [countResult] = await this.db.select({ total: count() }).from(productos).where(and(...conditions))
+    const total = countResult?.total ?? 0
     return { data: rows, total }
   }
 
@@ -31,7 +32,7 @@ export class DrizzleProductoRepository implements IProductoRepository {
 
   async create(data: Omit<ProductoEntity, 'id' | 'createdAt' | 'updatedAt'>): Promise<ProductoEntity> {
     const [row] = await this.db.insert(productos).values({ ...data, activo: 1 }).returning()
-    return row
+    return row!
   }
 
   async update(id: number, data: Partial<Omit<ProductoEntity, 'id' | 'createdAt' | 'updatedAt'>>): Promise<ProductoEntity | null> {

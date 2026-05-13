@@ -42,7 +42,7 @@ export class DrizzlePushTokenRepository implements IPushTokenRepository {
       )
       .limit(1)
 
-    return row ?? null
+    return (row as NotificacionPushToken) ?? null
   }
 
   async create(data: CrearPushTokenParams): Promise<NotificacionPushToken> {

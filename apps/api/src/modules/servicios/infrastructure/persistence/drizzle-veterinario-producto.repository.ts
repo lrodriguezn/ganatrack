@@ -21,7 +21,7 @@ export class DrizzleVeterinarioProductoRepository implements IVeterinarioProduct
 
   async create(data: Omit<VeterinarioProductoEntity, 'id' | 'createdAt'>): Promise<VeterinarioProductoEntity> {
     const [row] = await this.db.insert(serviciosVeterinariosProductos).values({ ...data, activo: 1 }).returning()
-    return row
+    return row!
   }
 
   async createMany(data: Omit<VeterinarioProductoEntity, 'id' | 'createdAt'>[]): Promise<VeterinarioProductoEntity[]> {

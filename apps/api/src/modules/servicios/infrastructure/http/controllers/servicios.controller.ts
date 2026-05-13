@@ -2,41 +2,41 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
 import { inject, injectable } from 'tsyringe'
 
 // Palpaciones use cases
-import type { ListPalpacionesGrupalesUseCase } from '../../application/use-cases/list-palpaciones-grupales.use-case.js'
-import type { GetPalpacionGrupalUseCase } from '../../application/use-cases/get-palpacion-grupal.use-case.js'
-import type { CrearPalpacionGrupalUseCase } from '../../application/use-cases/crear-palpacion-grupal.use-case.js'
-import type { UpdatePalpacionGrupalUseCase } from '../../application/use-cases/update-palpacion-grupal.use-case.js'
-import type { DeletePalpacionGrupalUseCase } from '../../application/use-cases/delete-palpacion-grupal.use-case.js'
-import type { AddPalpacionAnimalUseCase } from '../../application/use-cases/add-palpacion-animal.use-case.js'
-import type { UpdatePalpacionAnimalUseCase } from '../../application/use-cases/update-palpacion-animal.use-case.js'
-import type { RemovePalpacionAnimalUseCase } from '../../application/use-cases/remove-palpacion-animal.use-case.js'
+import type { ListPalpacionesGrupalesUseCase } from '../../../application/use-cases/list-palpaciones-grupales.use-case.js'
+import type { GetPalpacionGrupalUseCase } from '../../../application/use-cases/get-palpacion-grupal.use-case.js'
+import type { CrearPalpacionGrupalUseCase } from '../../../application/use-cases/crear-palpacion-grupal.use-case.js'
+import type { UpdatePalpacionGrupalUseCase } from '../../../application/use-cases/update-palpacion-grupal.use-case.js'
+import type { DeletePalpacionGrupalUseCase } from '../../../application/use-cases/delete-palpacion-grupal.use-case.js'
+import type { AddPalpacionAnimalUseCase } from '../../../application/use-cases/add-palpacion-animal.use-case.js'
+import type { UpdatePalpacionAnimalUseCase } from '../../../application/use-cases/update-palpacion-animal.use-case.js'
+import type { RemovePalpacionAnimalUseCase } from '../../../application/use-cases/remove-palpacion-animal.use-case.js'
 
 // Inseminaciones use cases
-import type { ListInseminacionesGrupalesUseCase } from '../../application/use-cases/list-inseminaciones-grupales.use-case.js'
-import type { GetInseminacionGrupalUseCase } from '../../application/use-cases/get-inseminacion-grupal.use-case.js'
-import type { CrearInseminacionGrupalUseCase } from '../../application/use-cases/crear-inseminacion-grupal.use-case.js'
-import type { UpdateInseminacionGrupalUseCase } from '../../application/use-cases/update-inseminacion-grupal.use-case.js'
-import type { DeleteInseminacionGrupalUseCase } from '../../application/use-cases/delete-inseminacion-grupal.use-case.js'
-import type { AddInseminacionAnimalUseCase } from '../../application/use-cases/add-inseminacion-animal.use-case.js'
-import type { UpdateInseminacionAnimalUseCase } from '../../application/use-cases/update-inseminacion-animal.use-case.js'
-import type { RemoveInseminacionAnimalUseCase } from '../../application/use-cases/remove-inseminacion-animal.use-case.js'
+import type { ListInseminacionesGrupalesUseCase } from '../../../application/use-cases/list-inseminaciones-grupales.use-case.js'
+import type { GetInseminacionGrupalUseCase } from '../../../application/use-cases/get-inseminacion-grupal.use-case.js'
+import type { CrearInseminacionGrupalUseCase } from '../../../application/use-cases/crear-inseminacion-grupal.use-case.js'
+import type { UpdateInseminacionGrupalUseCase } from '../../../application/use-cases/update-inseminacion-grupal.use-case.js'
+import type { DeleteInseminacionGrupalUseCase } from '../../../application/use-cases/delete-inseminacion-grupal.use-case.js'
+import type { AddInseminacionAnimalUseCase } from '../../../application/use-cases/add-inseminacion-animal.use-case.js'
+import type { UpdateInseminacionAnimalUseCase } from '../../../application/use-cases/update-inseminacion-animal.use-case.js'
+import type { RemoveInseminacionAnimalUseCase } from '../../../application/use-cases/remove-inseminacion-animal.use-case.js'
 
 // Partos use cases
-import type { ListPartosUseCase } from '../../application/use-cases/list-partos.use-case.js'
-import type { GetPartoUseCase } from '../../application/use-cases/get-parto.use-case.js'
-import type { CrearPartoUseCase } from '../../application/use-cases/crear-parto.use-case.js'
-import type { UpdatePartoUseCase } from '../../application/use-cases/update-parto.use-case.js'
-import type { DeletePartoUseCase } from '../../application/use-cases/delete-parto.use-case.js'
+import type { ListPartosUseCase } from '../../../application/use-cases/list-partos.use-case.js'
+import type { GetPartoUseCase } from '../../../application/use-cases/get-parto.use-case.js'
+import type { CrearPartoUseCase } from '../../../application/use-cases/crear-parto.use-case.js'
+import type { UpdatePartoUseCase } from '../../../application/use-cases/update-parto.use-case.js'
+import type { DeletePartoUseCase } from '../../../application/use-cases/delete-parto.use-case.js'
 
 // Veterinarios use cases
-import type { ListVeterinariosGrupalesUseCase } from '../../application/use-cases/list-veterinarios-grupales.use-case.js'
-import type { GetVeterinarioGrupalUseCase } from '../../application/use-cases/get-veterinario-grupal.use-case.js'
-import type { CrearVeterinarioGrupalUseCase } from '../../application/use-cases/crear-veterinario-grupal.use-case.js'
-import type { UpdateVeterinarioGrupalUseCase } from '../../application/use-cases/update-veterinario-grupal.use-case.js'
-import type { DeleteVeterinarioGrupalUseCase } from '../../application/use-cases/delete-veterinario-grupal.use-case.js'
-import type { AddVeterinarioAnimalUseCase } from '../../application/use-cases/add-veterinario-animal.use-case.js'
-import type { UpdateVeterinarioAnimalUseCase } from '../../application/use-cases/update-veterinario-animal.use-case.js'
-import type { RemoveVeterinarioAnimalUseCase } from '../../application/use-cases/remove-veterinario-animal.use-case.js'
+import type { ListVeterinariosGrupalesUseCase } from '../../../application/use-cases/list-veterinarios-grupales.use-case.js'
+import type { GetVeterinarioGrupalUseCase } from '../../../application/use-cases/get-veterinario-grupal.use-case.js'
+import type { CrearVeterinarioGrupalUseCase } from '../../../application/use-cases/crear-veterinario-grupal.use-case.js'
+import type { UpdateVeterinarioGrupalUseCase } from '../../../application/use-cases/update-veterinario-grupal.use-case.js'
+import type { DeleteVeterinarioGrupalUseCase } from '../../../application/use-cases/delete-veterinario-grupal.use-case.js'
+import type { AddVeterinarioAnimalUseCase } from '../../../application/use-cases/add-veterinario-animal.use-case.js'
+import type { UpdateVeterinarioAnimalUseCase } from '../../../application/use-cases/update-veterinario-animal.use-case.js'
+import type { RemoveVeterinarioAnimalUseCase } from '../../../application/use-cases/remove-veterinario-animal.use-case.js'
 
 // DTOs
 import type {
@@ -54,7 +54,7 @@ import type {
   UpdatePartoAnimalDto,
   UpdateVeterinarioAnimalDto,
   UpdateVeterinarioGrupalDto,
-} from '../../application/dtos/index.js'
+} from '../../../application/dtos/index.js'
 
 @injectable()
 export class ServiciosController {

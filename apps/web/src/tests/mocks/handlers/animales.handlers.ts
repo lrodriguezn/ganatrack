@@ -7,7 +7,7 @@ import { http, HttpResponse } from 'msw';
 
 const BASE_URL = 'http://localhost:3000';
 
-const mockAnimales = [
+const mockAnimales: any[] = [
   { id: 1, predioId: 1, codigo: 'GAN-001', nombre: 'Don Toro', fechaNacimiento: '2020-03-15', sexoKey: 0, tipoIngresoId: 0, configRazasId: 1, potreroId: 1, madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0, razaNombre: 'Brahman', potreroNombre: 'Potrero Norte' },
   { id: 2, predioId: 1, codigo: 'GAN-002', nombre: 'El Bravo', fechaNacimiento: '2020-05-20', sexoKey: 0, tipoIngresoId: 0, configRazasId: 4, potreroId: 1, madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0, razaNombre: 'Nelore', potreroNombre: 'Potrero Norte' },
   { id: 3, predioId: 1, codigo: 'GAN-003', nombre: 'Matambo', fechaNacimiento: '2019-08-10', sexoKey: 0, tipoIngresoId: 0, configRazasId: 3, potreroId: 2, madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0, razaNombre: 'Romosinuano', potreroNombre: 'Potrero Sur' },

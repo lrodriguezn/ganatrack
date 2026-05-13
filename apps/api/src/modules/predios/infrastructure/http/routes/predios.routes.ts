@@ -80,8 +80,8 @@ type PrediosRepos = {
 
 type ListQuery = { Querystring: { page?: number; limit?: number; search?: string } }
 type IdParams = { Params: { id: number } }
-type PredioIdParams = { Params: { periodoId: number } }
-type EntityIdParams = { Params: { periodoId: number; id: number } }
+type PredioIdParams = { Params: { predioId: number } }
+type EntityIdParams = { Params: { predioId: number; id: number } }
 
 export async function registerPrediosRoutes(app: FastifyInstance, repos: PrediosRepos): Promise<void> {
   const { propioRepo, potreroRepo, sectorRepo, loteRepo, grupoRepo, configParamRepo } = repos
@@ -92,27 +92,27 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
   const listPrediosUseCase = new ListPrediosUseCase(propioRepo)
   const updatePredioUseCase = new UpdatePredioUseCase(propioRepo)
   const deletePredioUseCase = new DeletePredioUseCase(propioRepo)
-  const crearPotreroUseCase = new CrearPotreroUseCase(potreroRepo, propioRepo)
+  const crearPotreroUseCase = new CrearPotreroUseCase(potreroRepo)
   const getPotreroUseCase = new GetPotreroUseCase(potreroRepo)
   const listPotrerosUseCase = new ListPotrerosUseCase(potreroRepo)
   const updatePotreroUseCase = new UpdatePotreroUseCase(potreroRepo)
   const deletePotreroUseCase = new DeletePotreroUseCase(potreroRepo)
-  const crearSectorUseCase = new CrearSectorUseCase(sectorRepo, propioRepo)
+  const crearSectorUseCase = new CrearSectorUseCase(sectorRepo)
   const getSectorUseCase = new GetSectorUseCase(sectorRepo)
   const listSectoresUseCase = new ListSectoresUseCase(sectorRepo)
   const updateSectorUseCase = new UpdateSectorUseCase(sectorRepo)
   const deleteSectorUseCase = new DeleteSectorUseCase(sectorRepo)
-  const crearLoteUseCase = new CrearLoteUseCase(loteRepo, propioRepo)
+  const crearLoteUseCase = new CrearLoteUseCase(loteRepo)
   const getLoteUseCase = new GetLoteUseCase(loteRepo)
   const listLotesUseCase = new ListLotesUseCase(loteRepo)
   const updateLoteUseCase = new UpdateLoteUseCase(loteRepo)
   const deleteLoteUseCase = new DeleteLoteUseCase(loteRepo)
-  const crearGrupoUseCase = new CrearGrupoUseCase(grupoRepo, propioRepo)
+  const crearGrupoUseCase = new CrearGrupoUseCase(grupoRepo)
   const getGrupoUseCase = new GetGrupoUseCase(grupoRepo)
   const listGruposUseCase = new ListGruposUseCase(grupoRepo)
   const updateGrupoUseCase = new UpdateGrupoUseCase(grupoRepo)
   const deleteGrupoUseCase = new DeleteGrupoUseCase(grupoRepo)
-  const crearConfigParamUseCase = new CrearConfigParametroPredioUseCase(configParamRepo, propioRepo)
+  const crearConfigParamUseCase = new CrearConfigParametroPredioUseCase(configParamRepo)
   const getConfigParamUseCase = new GetConfigParametroPredioUseCase(configParamRepo)
   const listConfigParamsUseCase = new ListConfigParametrosPredioUseCase(configParamRepo)
   const updateConfigParamUseCase = new UpdateConfigParametroPredioUseCase(configParamRepo)
@@ -124,7 +124,8 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { querystring: listQuerySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await listPrediosUseCase.execute(request.query)
+    const { page = 1, limit = 20, search } = request.query
+    const result = await listPrediosUseCase.execute({ page, limit, search })
     return reply.code(200).send({ success: true, ...result })
   })
 
@@ -170,7 +171,8 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: PredioIdParamsSchema, querystring: listQuerySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await listPotrerosUseCase.execute(request.params.predioId, request.query)
+    const { page = 1, limit = 20, search } = request.query as any
+    const result = await listPotrerosUseCase.execute(request.params.predioId, { page, limit, search })
     return reply.code(200).send({ success: true, ...result })
   })
 
@@ -188,7 +190,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: PredioIdParamsSchema, body: createPotreroBodySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await crearPotreroUseCase.execute(request.body, request.params.predioId)
+    const result = await crearPotreroUseCase.execute(request.body as any, request.params.predioId)
     return reply.code(201).send({ success: true, data: result })
   })
 
@@ -197,7 +199,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema, body: updatePotreroBodySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await updatePotreroUseCase.execute(request.params.id, request.body, request.params.predioId)
+    const result = await updatePotreroUseCase.execute(request.params.id, request.body as any, request.params.predioId)
     return reply.code(200).send({ success: true, data: result })
   })
 
@@ -216,7 +218,8 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: PredioIdParamsSchema, querystring: listQuerySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await listSectoresUseCase.execute(request.params.predioId, request.query)
+    const { page = 1, limit = 20, search } = request.query as any
+    const result = await listSectoresUseCase.execute(request.params.predioId, { page, limit, search })
     return reply.code(200).send({ success: true, ...result })
   })
 
@@ -234,7 +237,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: PredioIdParamsSchema, body: createSectorBodySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await crearSectorUseCase.execute(request.body, request.params.predioId)
+    const result = await crearSectorUseCase.execute(request.body as any, request.params.predioId)
     return reply.code(201).send({ success: true, data: result })
   })
 
@@ -243,7 +246,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema, body: updateSectorBodySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await updateSectorUseCase.execute(request.params.id, request.body, request.params.predioId)
+    const result = await updateSectorUseCase.execute(request.params.id, request.body as any, request.params.predioId)
     return reply.code(200).send({ success: true, data: result })
   })
 
@@ -262,7 +265,8 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: PredioIdParamsSchema, querystring: listQuerySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await listLotesUseCase.execute(request.params.predioId, request.query)
+    const { page = 1, limit = 20, search } = request.query as any
+    const result = await listLotesUseCase.execute(request.params.predioId, { page, limit, search })
     return reply.code(200).send({ success: true, ...result })
   })
 
@@ -280,7 +284,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: PredioIdParamsSchema, body: createLoteBodySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await crearLoteUseCase.execute(request.body, request.params.predioId)
+    const result = await crearLoteUseCase.execute(request.body as any, request.params.predioId)
     return reply.code(201).send({ success: true, data: result })
   })
 
@@ -289,7 +293,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema, body: updateLoteBodySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await updateLoteUseCase.execute(request.params.id, request.body, request.params.predioId)
+    const result = await updateLoteUseCase.execute(request.params.id, request.body as any, request.params.predioId)
     return reply.code(200).send({ success: true, data: result })
   })
 
@@ -308,7 +312,8 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: PredioIdParamsSchema, querystring: listQuerySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await listGruposUseCase.execute(request.params.predioId, request.query)
+    const { page = 1, limit = 20, search } = request.query as any
+    const result = await listGruposUseCase.execute(request.params.predioId, { page, limit, search })
     return reply.code(200).send({ success: true, ...result })
   })
 
@@ -326,7 +331,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: PredioIdParamsSchema, body: createGrupoBodySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await crearGrupoUseCase.execute(request.body, request.params.predioId)
+    const result = await crearGrupoUseCase.execute(request.body as any, request.params.predioId)
     return reply.code(201).send({ success: true, data: result })
   })
 
@@ -335,7 +340,7 @@ export async function registerPrediosRoutes(app: FastifyInstance, repos: Predios
     schema: { params: entityIdParamsSchema, body: updateGrupoBodySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await updateGrupoUseCase.execute(request.params.id, request.body, request.params.predioId)
+    const result = await updateGrupoUseCase.execute(request.params.id, request.body as any, request.params.predioId)
     return reply.code(200).send({ success: true, data: result })
   })
 

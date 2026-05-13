@@ -31,7 +31,7 @@ export class DrizzlePalpacionAnimalRepository implements IPalpacionAnimalReposit
 
   async create(data: Omit<PalpacionAnimalEntity, 'id' | 'createdAt' | 'updatedAt'>): Promise<PalpacionAnimalEntity> {
     const [row] = await this.db.insert(serviciosPalpacionesAnimales).values({ ...data, activo: 1 }).returning()
-    return row
+    return row!
   }
 
   async createMany(data: Omit<PalpacionAnimalEntity, 'id' | 'createdAt' | 'updatedAt'>[]): Promise<PalpacionAnimalEntity[]> {

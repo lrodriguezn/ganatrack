@@ -14,7 +14,7 @@ type ProductosRepos = {
   productoImagenRepo: IProductoImagenRepository
 }
 
-type ListQuery = { Querystring: { page?: number; limit?: number; search?: string } }
+type ListQuery = { Querystring: { page?: number; limit?: number; tipo_producto_key?: string } }
 type IdParams = { Params: { id: number } }
 
 export async function registerProductosRoutes(app: FastifyInstance, repos: ProductosRepos): Promise<void> {
@@ -29,8 +29,8 @@ export async function registerProductosRoutes(app: FastifyInstance, repos: Produ
     schema: { querystring: listProductosQuerySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const { page = 1, limit = 20, search } = request.query
-    const result = await listProductosUseCase.execute(0, { page, limit, search })
+    const { page = 1, limit = 20, tipo_producto_key } = request.query
+    const result = await listProductosUseCase.execute(0, { page, limit, tipoProducto: tipo_producto_key })
     return reply.code(200).send({ success: true, ...result })
   })
 
@@ -46,7 +46,7 @@ export async function registerProductosRoutes(app: FastifyInstance, repos: Produ
     schema: { body: createProductoBodySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await crearProductoUseCase.execute(request.body as any)
+    const result = await crearProductoUseCase.execute(request.body as any, 0)
     return reply.code(201).send({ success: true, data: result })
   })
 
@@ -54,7 +54,7 @@ export async function registerProductosRoutes(app: FastifyInstance, repos: Produ
     schema: { params: idParamsSchema, body: updateProductoBodySchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    const result = await updateProductoUseCase.execute(request.params.id, request.body)
+    const result = await updateProductoUseCase.execute(request.params.id, request.body as any, 0)
     return reply.code(200).send({ success: true, data: result })
   })
 
@@ -62,7 +62,7 @@ export async function registerProductosRoutes(app: FastifyInstance, repos: Produ
     schema: { params: idParamsSchema },
     preHandler: [authMiddleware],
   }, async (request, reply) => {
-    await deleteProductoUseCase.execute(request.params.id)
+    await deleteProductoUseCase.execute(request.params.id, 0)
     return reply.code(200).send({ success: true, data: { message: 'Producto eliminado' } })
   })
 }

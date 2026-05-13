@@ -58,18 +58,18 @@ export function DropzoneArea({
         const file = rejection.file;
         const error = rejection.errors[0];
 
-        if (error.code === 'file-too-large') {
+        if (error?.code === 'file-too-large') {
           const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
           const maxMB = (maxSize / (1024 * 1024)).toFixed(0);
           newErrors.push(
             `Archivo muy grande (${sizeMB}MB). Máximo ${maxMB}MB.`
           );
-        } else if (error.code === 'file-invalid-type') {
+        } else if (error?.code === 'file-invalid-type') {
           newErrors.push(
             `Formato no soportado para "${file.name}". Usa JPEG, PNG o WebP.`
           );
         } else {
-          newErrors.push(`Error con "${file.name}": ${error.message}`);
+          newErrors.push(`Error con "${file.name}": ${error?.message}`);
         }
       }
 

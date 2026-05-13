@@ -21,7 +21,7 @@ export class DrizzlePartoCriaRepository implements IPartoCriaRepository {
 
   async create(data: Omit<PartoCriaEntity, 'id' | 'createdAt'>): Promise<PartoCriaEntity> {
     const [row] = await this.db.insert(serviciosPartosCrias).values({ ...data, activo: 1 }).returning()
-    return row
+    return row!
   }
 
   async createMany(data: Omit<PartoCriaEntity, 'id' | 'createdAt'>[]): Promise<PartoCriaEntity[]> {

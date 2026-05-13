@@ -28,7 +28,7 @@ export function registerConfiguracionModule(): void {
 
 export async function registerConfiguracionModuleRoutes(app: FastifyInstance): Promise<void> {
   // Create instances on-demand
-  const db: DbClient = createClient()
+  const db = createClient() as unknown as DbClient
   
   // Create repositories
   const razaRepo: IConfigRazaRepository = new DrizzleConfigRazaRepository(db)

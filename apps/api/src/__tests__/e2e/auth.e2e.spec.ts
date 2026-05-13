@@ -14,7 +14,7 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 // Try to load better-sqlite3, skip tests if unavailable
-let Database: typeof import('better-sqlite3').default
+let Database: any
 let canRunTests = false
 
 try {

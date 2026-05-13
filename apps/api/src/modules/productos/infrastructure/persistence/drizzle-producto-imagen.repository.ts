@@ -21,6 +21,6 @@ export class DrizzleProductoImagenRepository implements IProductoImagenRepositor
 
   async create(data: Omit<ProductoImagenEntity, 'id' | 'createdAt'>): Promise<ProductoImagenEntity> {
     const [row] = await this.db.insert(productosImagenes).values({ ...data, activo: 1 }).returning()
-    return row
+    return row!
   }
 }

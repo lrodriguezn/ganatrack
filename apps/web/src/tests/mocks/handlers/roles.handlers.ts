@@ -18,7 +18,7 @@ const MODULOS = [
 ];
 const ACCIONES = ['ver', 'crear', 'editar', 'eliminar'];
 
-const mockRoles = [
+const mockRoles: any[] = [
   { id: 1, nombre: 'Administrador', descripcion: 'Acceso completo a todos los módulos', esSistema: true },
   { id: 2, nombre: 'Veterinario', descripcion: 'Gestión de servicios y reportes de salud', esSistema: true },
   { id: 3, nombre: 'Operario', descripcion: 'Registro diario de actividades', esSistema: true },
@@ -104,7 +104,8 @@ export const rolesHandlers = [
     const rolId = Number(params.id);
     const body = await request.json() as { permisos: { modulo: string; accion: string; enabled: boolean }[] };
 
-    if (!storePermisos[rolId]) {
+    const permisos = storePermisos[rolId];
+    if (!permisos) {
       return HttpResponse.json(
         { message: `Rol con ID ${rolId} no encontrado` },
         { status: 404 }
@@ -113,7 +114,7 @@ export const rolesHandlers = [
 
     // Apply batch updates
     for (const perm of body.permisos) {
-      const existing = storePermisos[rolId].find(
+      const existing = permisos.find(
         p => p.modulo === perm.modulo && p.accion === perm.accion
       );
       if (existing) {
@@ -124,7 +125,7 @@ export const rolesHandlers = [
     // Return updated matrix
     const cells = MODULOS.flatMap(modulo =>
       ACCIONES.map(accion => {
-        const found = storePermisos[rolId].find(p => p.modulo === modulo && p.accion === accion);
+        const found = permisos.find(p => p.modulo === modulo && p.accion === accion);
         return {
           modulo,
           accion,

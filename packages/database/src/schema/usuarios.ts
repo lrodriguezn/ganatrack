@@ -9,7 +9,7 @@ export const usuarios = sqliteTable('usuarios', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   nombre: text('nombre', { length: 100 }).notNull(),
   email: text('email', { length: 100 }).notNull().unique(),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -21,7 +21,7 @@ export const usuariosContrasena = sqliteTable('usuarios_contrasena', {
   contrasenaHash: text('contrasena_hash').notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
 })
 
 // usuarios_historial_contrasenas - Password history for reuse prevention
@@ -30,7 +30,7 @@ export const usuariosHistorialContrasenas = sqliteTable('usuarios_historial_cont
   usuarioId: integer('usuario_id').notNull().references(() => usuarios.id),
   contrasenaHash: text('contrasena_hash').notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
 })
 
 // usuarios_login - Login sessions with refresh tokens
@@ -43,7 +43,7 @@ export const usuariosLogin = sqliteTable('usuarios_login', {
   userAgent: text('user_agent'),
   fechaExpiracion: integer('fecha_expiracion', { mode: 'timestamp' }),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
 })
 
 // usuarios_autenticacion_dos_factores - 2FA configuration
@@ -57,7 +57,7 @@ export const usuariosAutenticacionDosFactores = sqliteTable('usuarios_autenticac
   habilitado: integer('habilitado').default(0),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
 })
 
 // usuarios_roles - Role definitions
@@ -67,7 +67,7 @@ export const usuariosRoles = sqliteTable('usuarios_roles', {
   descripcion: text('descripcion'),
   esSistema: integer('es_sistema').default(0),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
 })
 
 // usuarios_permisos - Permission definitions
@@ -77,7 +77,7 @@ export const usuariosPermisos = sqliteTable('usuarios_permisos', {
   accion: text('accion', { length: 50 }).notNull(),
   nombre: text('nombre', { length: 100 }).notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
 })
 
 // roles_permisos - Junction table for role-permission relationship
@@ -86,7 +86,7 @@ export const rolesPermisos = sqliteTable('roles_permisos', {
   rolId: integer('rol_id').notNull().references(() => usuariosRoles.id),
   permisoId: integer('permiso_id').notNull().references(() => usuariosPermisos.id),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
 }, (table) => [
   unique('uq_roles_permisos').on(table.rolId, table.permisoId),
 ])
@@ -96,7 +96,7 @@ export const usuariosPredios = sqliteTable('usuarios_predios', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   usuarioId: integer('usuario_id').notNull().references(() => usuarios.id),
   predioId: integer('predio_id').notNull().references(() => predios.id),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 })
 
@@ -106,7 +106,7 @@ export const usuariosRolesAsignacion = sqliteTable('usuarios_roles_asignacion', 
   usuarioId: integer('usuario_id').notNull().references(() => usuarios.id),
   rolId: integer('rol_id').notNull().references(() => usuariosRoles.id),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
 }, (table) => [
   unique('uq_usuarios_roles').on(table.usuarioId, table.rolId),
 ])

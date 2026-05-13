@@ -51,7 +51,7 @@ export class DrizzlePreferenciaRepository implements IPreferenciaRepository {
       )
       .limit(1)
 
-    return row ?? null
+    return (row as NotificacionPreferencia) ?? null
   }
 
   async upsert(data: CrearPreferenciaParams): Promise<NotificacionPreferencia> {

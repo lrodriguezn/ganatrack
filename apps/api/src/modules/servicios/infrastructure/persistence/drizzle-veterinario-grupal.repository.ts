@@ -14,7 +14,8 @@ export class DrizzleVeterinarioGrupalRepository implements IVeterinarioGrupalRep
     const { page, limit } = opts
     const conditions = [eq(serviciosVeterinariosGrupal.predioId, predioId), eq(serviciosVeterinariosGrupal.activo, 1)]
     const rows = await this.db.select().from(serviciosVeterinariosGrupal).where(and(...conditions)).orderBy(desc(serviciosVeterinariosGrupal.fecha)).limit(limit).offset((page - 1) * limit)
-    const [{ total }] = await this.db.select({ total: count() }).from(serviciosVeterinariosGrupal).where(and(...conditions))
+    const [countResult] = await this.db.select({ total: count() }).from(serviciosVeterinariosGrupal).where(and(...conditions))
+    const total = countResult?.total ?? 0
     return { data: rows, total }
   }
 
@@ -30,7 +31,7 @@ export class DrizzleVeterinarioGrupalRepository implements IVeterinarioGrupalRep
 
   async create(data: Omit<VeterinarioGrupalEntity, 'id' | 'createdAt' | 'updatedAt'>): Promise<VeterinarioGrupalEntity> {
     const [row] = await this.db.insert(serviciosVeterinariosGrupal).values({ ...data, activo: 1 }).returning()
-    return row
+    return row!
   }
 
   async update(id: number, data: Partial<Omit<VeterinarioGrupalEntity, 'id' | 'createdAt' | 'updatedAt'>>): Promise<VeterinarioGrupalEntity | null> {

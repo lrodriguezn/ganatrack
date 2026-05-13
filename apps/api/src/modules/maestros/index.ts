@@ -26,7 +26,7 @@ import { registerMaestrosRoutes } from './infrastructure/http/routes/maestros.ro
 export function registerMaestrosModule(): void {}
 
 export async function registerMaestrosModuleRoutes(app: FastifyInstance): Promise<void> {
-  const db: DbClient = createClient()
+  const db = createClient() as unknown as DbClient
   
   const repo = {
     veterinarioRepo: new DrizzleVeterinarioRepository(db) as IVeterinarioRepository,

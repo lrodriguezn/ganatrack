@@ -12,7 +12,7 @@ import { http, HttpResponse } from 'msw';
 const BASE_URL = 'http://localhost:3000';
 
 // Seed data
-const mockImagenes = [
+const mockImagenes: any[] = [
   {
     id: 1, url: '/placeholder-product-1.jpg', thumbnailUrl: '/placeholder-product-1-thumb.jpg',
     entidadTipo: 'producto', entidadId: 1, filename: 'ivermectina-frasco.jpg',

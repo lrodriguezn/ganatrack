@@ -21,7 +21,7 @@ import type { AnimalFilters } from '../types/animal.types';
 
 export function useAnimales(filters: AnimalFilters) {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: queryKeys.animales.list(filters),
+    queryKey: queryKeys.animales.list(filters as Record<string, unknown>),
     queryFn: () => animalService.getAll(filters),
     staleTime: StaleTimes.LIST,
   });

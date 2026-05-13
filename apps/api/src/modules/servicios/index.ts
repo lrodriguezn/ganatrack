@@ -31,7 +31,7 @@ export function registerServiciosModule(): void {
 }
 
 export async function registerServiciosModuleRoutes(app: FastifyInstance): Promise<void> {
-  const db: DbClient = createClient()
+  const db = createClient() as unknown as DbClient
   
   const palpacionGrupalRepo: IPalpacionGrupalRepository = new DrizzlePalpacionGrupalRepository(db)
   const palpacionAnimalRepo: IPalpacionAnimalRepository = new DrizzlePalpacionAnimalRepository(db)

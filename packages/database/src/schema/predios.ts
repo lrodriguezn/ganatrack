@@ -11,7 +11,7 @@ export const predios = sqliteTable('predios', {
   areaHectareas: real('area_hectareas').default(0),
   capacidadMaxima: integer('capacidad_maxima').default(0),
   tipoExplotacionId: integer('tipo_explotacion_id'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -26,7 +26,7 @@ export const potreros = sqliteTable('potreros', {
   tipoPasto: text('tipo_pasto', { length: 100 }),
   capacidadMaxima: integer('capacidad_maxima').default(0),
   estado: text('estado', { length: 20 }).default('activo'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 }, (table) => [
@@ -43,7 +43,7 @@ export const sectores = sqliteTable('sectores', {
   tipoPasto: text('tipo_pasto', { length: 100 }),
   capacidadMaxima: integer('capacidad_maxima').default(0),
   estado: text('estado', { length: 20 }).default('activo'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 }, (table) => [
@@ -57,7 +57,7 @@ export const lotes = sqliteTable('lotes', {
   nombre: text('nombre', { length: 100 }).notNull(),
   descripcion: text('descripcion'),
   tipo: text('tipo', { length: 50 }).default('producción'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -68,7 +68,7 @@ export const grupos = sqliteTable('grupos', {
   predioId: integer('predio_id').notNull().references(() => predios.id),
   nombre: text('nombre', { length: 100 }).notNull(),
   descripcion: text('descripcion'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -82,7 +82,7 @@ export const configParametrosPredio = sqliteTable('config_parametros_predio', {
   descripcion: text('descripcion'),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
 }, (table) => [
   unique('uq_parametros_predio_codigo').on(table.predioId, table.codigo),
 ])

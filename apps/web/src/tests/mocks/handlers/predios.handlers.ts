@@ -12,22 +12,24 @@ const BASE_URL = 'http://localhost:3000';
 let prediosMock: Predio[] = [
   {
     id: 1,
+    codigo: 'P001',
     nombre: 'Finca La Esperanza',
     departamento: 'Cundinamarca',
     municipio: 'Guatavita',
     vereda: 'El Pantano',
     areaHectareas: 120,
-    tipo: 'cría',
-    estado: 'activo',
+    tipoExplotacionId: 1,
+    activo: 1,
   },
   {
     id: 2,
+    codigo: 'P002',
     nombre: 'Hacienda San Pedro',
     departamento: 'Boyacá',
     municipio: 'Duitama',
     areaHectareas: 85,
-    tipo: 'lechería',
-    estado: 'activo',
+    tipoExplotacionId: 2,
+    activo: 1,
   },
 ];
 
@@ -47,11 +49,11 @@ export const prediosHandlers = [
    * Creates a new predio.
    */
   http.post(`${BASE_URL}/api/v1/predios`, async ({ request }) => {
-    const body = await request.json() as Omit<Predio, 'id' | 'estado'>;
+    const body = await request.json() as Omit<Predio, 'id'>;
     const newPredio: Predio = {
       ...body,
       id: nextId++,
-      estado: 'activo',
+      activo: 1,
     };
     prediosMock.push(newPredio);
     return HttpResponse.json(newPredio, { status: 201 });
@@ -73,7 +75,7 @@ export const prediosHandlers = [
       );
     }
 
-    prediosMock[index] = { ...prediosMock[index], ...body, id };
+    prediosMock[index] = { ...prediosMock[index], ...body, id } as Predio;
     return HttpResponse.json(prediosMock[index]);
   }),
 
@@ -104,22 +106,24 @@ export function resetPrediosMock(): void {
   prediosMock = [
     {
       id: 1,
+      codigo: 'P001',
       nombre: 'Finca La Esperanza',
       departamento: 'Cundinamarca',
       municipio: 'Guatavita',
       vereda: 'El Pantano',
       areaHectareas: 120,
-      tipo: 'cría',
-      estado: 'activo',
+      tipoExplotacionId: 1,
+      activo: 1,
     },
     {
       id: 2,
+      codigo: 'P002',
       nombre: 'Hacienda San Pedro',
       departamento: 'Boyacá',
       municipio: 'Duitama',
       areaHectareas: 85,
-      tipo: 'lechería',
-      estado: 'activo',
+      tipoExplotacionId: 2,
+      activo: 1,
     },
   ];
   nextId = 3;

@@ -20,7 +20,7 @@ import type { IPermisoRepository } from '../../../domain/repositories/permiso.re
 
 export async function registerUsuarioRoutes(app: FastifyInstance): Promise<void> {
   // Create instances on-demand
-  const db: DbClient = createClient()
+  const db = createClient() as unknown as DbClient
   
   // Dynamic imports to avoid circular dependency issues
   const { DrizzleUsuarioRepository } = await import('../../persistence/drizzle-usuario.repository.js')
@@ -48,10 +48,10 @@ export async function registerUsuarioRoutes(app: FastifyInstance): Promise<void>
   const createUsuarioUseCase = new CreateUsuarioUseCase(usuarioRepo, rolRepo, db)
   const updateUsuarioUseCase = new UpdateUsuarioUseCase(usuarioRepo, rolRepo, db)
   const deleteUsuarioUseCase = new DeleteUsuarioUseCase(usuarioRepo)
-  const listUsuariosUseCase = new ListUsuariosUseCase(usuarioRepo)
-  const getUsuarioUseCase = new GetUsuarioUseCase(usuarioRepo)
-  const getMeUseCase = new GetMeUseCase(usuarioRepo, rolRepo)
-  const assignRolesUseCase = new AssignRolesUseCase(rolRepo, usuarioRepo, db)
+  const listUsuariosUseCase = new ListUsuariosUseCase(usuarioRepo, db)
+  const getUsuarioUseCase = new GetUsuarioUseCase(usuarioRepo, db)
+  const getMeUseCase = new GetMeUseCase(usuarioRepo, rolRepo, db)
+  const assignRolesUseCase = new AssignRolesUseCase(usuarioRepo, rolRepo, db)
   const createRolUseCase = new CreateRolUseCase(rolRepo)
   const updateRolUseCase = new UpdateRolUseCase(rolRepo)
   const listRolesUseCase = new ListRolesUseCase(rolRepo)
@@ -205,7 +205,7 @@ export async function registerUsuarioRoutes(app: FastifyInstance): Promise<void>
   )
 
   // POST /api/v1/usuarios/:id/roles - Assign roles to usuario
-  app.post<{ Body: CreateRolDto; Params: { id: string } }>(
+  app.post<{ Body: { rolesIds: number[] }; Params: { id: string } }>(
     '/:id/roles',
     {
       schema: {
@@ -225,7 +225,7 @@ export async function registerUsuarioRoutes(app: FastifyInstance): Promise<void>
     },
     async (request, reply) => {
       const usuarioId = parseInt(request.params.id, 10)
-      const result = await assignRolesUseCase.execute(usuarioId, request.body.roles)
+      const result = await assignRolesUseCase.execute(usuarioId, request.body.rolesIds)
       return reply.code(200).send({ success: true, data: result })
     }
   )

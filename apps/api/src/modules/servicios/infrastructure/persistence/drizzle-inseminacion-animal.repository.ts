@@ -31,7 +31,7 @@ export class DrizzleInseminacionAnimalRepository implements IInseminacionAnimalR
 
   async create(data: Omit<InseminacionAnimalEntity, 'id' | 'createdAt' | 'updatedAt'>): Promise<InseminacionAnimalEntity> {
     const [row] = await this.db.insert(serviciosInseminacionAnimales).values({ ...data, activo: 1 }).returning()
-    return row
+    return row!
   }
 
   async createMany(data: Omit<InseminacionAnimalEntity, 'id' | 'createdAt' | 'updatedAt'>[]): Promise<InseminacionAnimalEntity[]> {

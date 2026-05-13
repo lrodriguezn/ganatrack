@@ -14,7 +14,8 @@ export class DrizzleImagenRepository implements IImagenRepository {
     const { page, limit } = opts
     const conditions = [eq(imagenes.predioId, predioId), eq(imagenes.activo, 1)]
     const rows = await this.db.select().from(imagenes).where(and(...conditions)).orderBy(desc(imagenes.createdAt)).limit(limit).offset((page - 1) * limit)
-    const [{ total }] = await this.db.select({ total: count() }).from(imagenes).where(and(...conditions))
+    const [countResult] = await this.db.select({ total: count() }).from(imagenes).where(and(...conditions))
+    const total = countResult?.total ?? 0
     return { data: rows, total }
   }
 
@@ -25,7 +26,7 @@ export class DrizzleImagenRepository implements IImagenRepository {
 
   async create(data: Omit<ImagenEntity, 'id' | 'createdAt'>): Promise<ImagenEntity> {
     const [row] = await this.db.insert(imagenes).values({ ...data, activo: 1 }).returning()
-    return row
+    return row!
   }
 
   async update(id: number, data: Partial<Omit<ImagenEntity, 'id' | 'createdAt'>>): Promise<ImagenEntity | null> {

@@ -6,7 +6,7 @@ import { registerImagenesRoutes } from './infrastructure/http/routes/imagenes.ro
 export function registerImagenesModule(): void {}
 
 export async function registerImagenesModuleRoutes(app: FastifyInstance): Promise<void> {
-  const db: DbClient = createClient()
+  const db = createClient() as unknown as DbClient
   const imagenRepo = new DrizzleImagenRepository(db)
   await registerImagenesRoutes(app, { imagenRepo })
 }

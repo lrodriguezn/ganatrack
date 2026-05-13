@@ -26,7 +26,7 @@ export function registerPrediosModule(): void {
 
 export async function registerPrediosModuleRoutes(app: FastifyInstance): Promise<void> {
   // Create DB client
-  const db: DbClient = createClient()
+  const db = createClient() as unknown as DbClient
   
   // Create repositories
   const propioRepo: IPredioRepository = new DrizzlePredioRepository(db)

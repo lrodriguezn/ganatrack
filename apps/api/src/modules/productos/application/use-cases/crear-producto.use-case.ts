@@ -21,7 +21,7 @@ export class CrearProductoUseCase {
     const entity = await this.repo.create({
       predioId,
       codigo: dto.codigo,
-      nombre: dto.nombre ?? null,
+      nombre: dto.nombre ?? '',
       descripcion: dto.descripcion ?? null,
       tipoProducto: dto.tipoProducto ?? null,
       categoria: dto.categoria ?? null,

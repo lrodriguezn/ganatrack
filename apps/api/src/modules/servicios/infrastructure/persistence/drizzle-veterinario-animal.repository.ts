@@ -31,7 +31,7 @@ export class DrizzleVeterinarioAnimalRepository implements IVeterinarioAnimalRep
 
   async create(data: Omit<VeterinarioAnimalEntity, 'id' | 'createdAt' | 'updatedAt'>): Promise<VeterinarioAnimalEntity> {
     const [row] = await this.db.insert(serviciosVeterinariosAnimales).values({ ...data, activo: 1 }).returning()
-    return row
+    return row!
   }
 
   async createMany(data: Omit<VeterinarioAnimalEntity, 'id' | 'createdAt' | 'updatedAt'>[]): Promise<VeterinarioAnimalEntity[]> {

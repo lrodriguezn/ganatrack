@@ -49,7 +49,7 @@ export function ReporteChart({
   error,
   className,
 }: ReporteChartProps) {
-  const responsiveOptions: ApexCharts.ApexResponsive[] = [
+  const responsiveOptions: any[] = [
     {
       breakpoint: 640, // sm
       options: {

@@ -12,7 +12,7 @@ export const serviciosPalpacionesGrupal = sqliteTable('servicios_palpaciones_gru
   fecha: integer('fecha', { mode: 'timestamp' }).notNull(),
   veterinariosId: integer('veterinarios_id'),
   observaciones: text('observaciones'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -33,7 +33,7 @@ export const serviciosPalpacionesAnimales = sqliteTable('servicios_palpaciones_a
   diasGestacion: integer('dias_gestacion'),
   fechaParto: integer('fecha_parto', { mode: 'timestamp' }),
   comentarios: text('comentarios'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -50,7 +50,7 @@ export const serviciosInseminacionGrupal = sqliteTable('servicios_inseminacion_g
   fecha: integer('fecha', { mode: 'timestamp' }).notNull(),
   veterinariosId: integer('veterinarios_id'),
   observaciones: text('observaciones'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -69,7 +69,7 @@ export const serviciosInseminacionAnimales = sqliteTable('servicios_inseminacion
   // Forward reference to diagnosticos_veterinarios.id - resolved in barrel export
   diagnosticoId: integer('diagnostico_id'),
   observaciones: text('observaciones'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -90,7 +90,7 @@ export const serviciosPartosAnimales = sqliteTable('servicios_partos_animales', 
   peso: real('peso'),
   tipoPartoKey: integer('tipo_parto_key').default(0),
   observaciones: text('observaciones'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -104,7 +104,7 @@ export const serviciosPartosCrias = sqliteTable('servicios_partos_crias', {
   sexoKey: integer('sexo_key').default(0),
   pesoNacimiento: real('peso_nacimiento'),
   observaciones: text('observaciones'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 })
 
@@ -121,7 +121,7 @@ export const serviciosVeterinariosGrupal = sqliteTable('servicios_veterinarios_g
   veterinariosId: integer('veterinarios_id'),
   tipoServicio: text('tipo_servicio', { length: 100 }),
   observaciones: text('observaciones'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -142,7 +142,7 @@ export const serviciosVeterinariosAnimales = sqliteTable('servicios_veterinarios
   medicamentos: text('medicamentos'),
   dosis: text('dosis'),
   comentarios: text('comentarios'),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 })
@@ -155,7 +155,7 @@ export const serviciosVeterinariosProductos = sqliteTable('servicios_veterinario
   productoId: integer('producto_id').notNull(),
   cantidad: real('cantidad').default(1),
   unidad: text('unidad', { length: 20 }),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 })
 

@@ -17,7 +17,7 @@ export const productos = sqliteTable('productos', {
   fechaVencimiento: integer('fecha_vencimiento', { mode: 'timestamp' }),
   laboratorio: text('laboratorio', { length: 100 }),
   registroInvima: text('registro_invima', { length: 50 }),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
 }, (table) => [
@@ -30,7 +30,7 @@ export const productosImagenes = sqliteTable('productos_imagenes', {
   productoId: integer('producto_id').notNull().references(() => productos.id),
   // Forward reference to imagenes.id - resolved in barrel export
   imagenId: integer('imagen_id').notNull(),
-  activo: integer('activo').default(1),
+  activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 }, (table) => [
   unique('uq_productos_imagenes').on(table.productoId, table.imagenId),

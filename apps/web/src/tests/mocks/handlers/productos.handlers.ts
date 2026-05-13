@@ -11,7 +11,7 @@ import { http, HttpResponse } from 'msw';
 const BASE_URL = 'http://localhost:3000';
 
 // Seed data
-const mockProductos = [
+const mockProductos: any[] = [
   {
     id: 1, predioId: 1, nombre: 'Ivermectina 1%', descripcion: 'Antiparasitario de amplio espectro',
     tipoKey: 1, unidadMedida: 'ml', precioUnitario: 45000, stockActual: 25, stockMinimo: 10,

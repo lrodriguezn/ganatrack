@@ -51,10 +51,36 @@ function createRealService(): AuthService {
   return new RealAuthService();
 }
 
+let _authService: AuthService | undefined;
+
+function getService(): AuthService {
+  if (!_authService) {
+    _authService = USE_MOCKS ? createMockService() : createRealService();
+  }
+  return _authService;
+}
+
 /**
- * Auth service singleton — mock or real based on NEXT_PUBLIC_USE_MOCKS.
- * Default to real service when env var is not set (falsy).
+ * Auth service singleton — lazy-initialized to avoid require() during Next.js
+ * static prerendering, which can fail with "Cannot find module" in App Router.
  */
-export const authService: AuthService = USE_MOCKS
-  ? createMockService()
-  : createRealService();
+export const authService: AuthService = {
+  login(credentials) {
+    return getService().login(credentials);
+  },
+  verify2FA(tempToken, code) {
+    return getService().verify2FA(tempToken, code);
+  },
+  refreshToken() {
+    return getService().refreshToken();
+  },
+  logout() {
+    return getService().logout();
+  },
+  getMe() {
+    return getService().getMe();
+  },
+  getPredios() {
+    return getService().getPredios();
+  },
+};

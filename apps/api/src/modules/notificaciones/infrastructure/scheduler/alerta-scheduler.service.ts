@@ -218,7 +218,6 @@ export class AlertaSchedulerService {
       .from(serviciosInseminacionAnimales)
       .where(
         and(
-          eq(serviciosInseminacionAnimales.predioId, predioId),
           eq(serviciosInseminacionAnimales.activo, 1)
         )
       )
@@ -304,7 +303,6 @@ export class AlertaSchedulerService {
       .from(serviciosInseminacionAnimales)
       .where(
         and(
-          eq(serviciosInseminacionAnimales.predioId, predioId),
           eq(serviciosInseminacionAnimales.activo, 1)
         )
       )
@@ -451,7 +449,6 @@ export class AlertaSchedulerService {
       .from(serviciosVeterinariosAnimales)
       .where(
         and(
-          eq(serviciosVeterinariosAnimales.predioId, predioId),
           eq(serviciosVeterinariosAnimales.activo, 1)
         )
       )

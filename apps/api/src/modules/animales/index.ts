@@ -20,7 +20,7 @@ export function registerAnimalesModule(): void {
 
 export async function registerAnimalesModuleRoutes(app: FastifyInstance): Promise<void> {
   // Create DB client
-  const db: DbClient = createClient()
+  const db = createClient() as unknown as DbClient
   
   // Create repositories
   const animalRepo: IAnimalRepository = new DrizzleAnimalRepository(db)

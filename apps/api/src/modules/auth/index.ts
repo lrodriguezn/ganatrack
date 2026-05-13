@@ -1,5 +1,6 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { createClient } from '@ganatrack/database'
+import type { DbClient } from '@ganatrack/database'
 import { AUTH_REPOSITORY } from './domain/repositories/auth.repository.js'
 import type { IAuthRepository } from './domain/repositories/auth.repository.js'
 import { DrizzleAuthRepository } from './infrastructure/persistence/drizzle-auth.repository.js'
@@ -11,7 +12,6 @@ import { Verify2faUseCase } from './application/use-cases/verify-2fa.use-case.js
 import { Resend2faUseCase } from './application/use-cases/resend-2fa.use-case.js'
 import { ChangePasswordUseCase } from './application/use-cases/change-password.use-case.js'
 import { registerAuthRoutes } from './infrastructure/http/routes/auth.routes.js'
-import type { FastifyInstance } from 'fastify'
 
 export { AUTH_REPOSITORY }
 export { registerAuthRoutes }
@@ -22,7 +22,7 @@ export function registerAuthModule(): void {
 
 export async function registerAuthModuleRoutes(app: FastifyInstance): Promise<void> {
   // Create instances on-demand for this route registration
-  const db = createClient()
+  const db = createClient() as unknown as DbClient
   const authRepo: IAuthRepository = new DrizzleAuthRepository(db)
   const domainService = new AuthDomainService()
 
@@ -30,8 +30,8 @@ export async function registerAuthModuleRoutes(app: FastifyInstance): Promise<vo
   const logoutUseCase = new LogoutUseCase(authRepo)
   const refreshTokenUseCase = new RefreshTokenUseCase(authRepo)
   const verify2faUseCase = new Verify2faUseCase(authRepo, domainService)
-  const resend2faUseCase = new Resend2faUseCase(authRepo)
-  const changePasswordUseCase = new ChangePasswordUseCase(authRepo)
+  const resend2faUseCase = new Resend2faUseCase(authRepo, domainService)
+  const changePasswordUseCase = new ChangePasswordUseCase(authRepo, domainService)
 
   await registerAuthRoutes(app, {
     loginUseCase,
