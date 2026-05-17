@@ -8,10 +8,8 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Suspense } from 'react';
-import { CreatePotreroSchema, type CreatePotreroDto } from '@ganatrack/shared-types';
+import { type CreatePotreroDto } from '@ganatrack/shared-types';
 import { useCreatePotrero } from '@/modules/predios/hooks';
 import { PotreroForm, type PotreroFormData } from '@/modules/predios/components/potrero-form';
 import { Skeleton } from '@/shared/components/ui/skeleton';
@@ -34,23 +32,8 @@ function NuevoPotreroContent(): JSX.Element {
     },
   });
 
-  const form = useForm<CreatePotreroDto>({
-    resolver: zodResolver(CreatePotreroSchema),
-    defaultValues: {
-      nombre: '',
-      areaHectareas: undefined,
-      tipoPasto: '',
-      capacidadMaxima: undefined,
-      estado: 'activo',
-    },
-  });
-
   const onSubmit = (data: PotreroFormData) => {
     mutate(id, data as CreatePotreroDto);
-  };
-
-  const handleCancel = () => {
-    router.push(`/dashboard/predios/${id}/potreros`);
   };
 
   return (

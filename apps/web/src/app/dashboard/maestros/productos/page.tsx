@@ -16,7 +16,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Plus } from 'lucide-react';
 import { usePredioStore } from '@/store/predio.store';
 import { productoService } from '@/modules/productos/services';
@@ -28,7 +27,6 @@ import { Modal } from '@/shared/components/ui/modal';
 import type { Producto } from '@/modules/productos/types/producto.types';
 
 export default function ProductosListPage(): JSX.Element {
-  const router = useRouter();
   const { predioActivo } = usePredioStore();
 
   // Pagination state

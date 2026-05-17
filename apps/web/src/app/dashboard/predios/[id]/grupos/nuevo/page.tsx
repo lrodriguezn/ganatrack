@@ -8,12 +8,10 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Suspense } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { CreateGrupoSchema, type CreateGrupoDto } from '@ganatrack/shared-types';
+import { type CreateGrupoDto } from '@ganatrack/shared-types';
 import { useCreateGrupo } from '@/modules/predios/hooks';
 import { GrupoForm, type GrupoFormData } from '@/modules/predios/components/grupo-form';
 import { Button } from '@/shared/components/ui/button';
@@ -34,20 +32,8 @@ function NuevoGrupoContent(): JSX.Element {
     },
   });
 
-  const form = useForm<CreateGrupoDto>({
-    resolver: zodResolver(CreateGrupoSchema),
-    defaultValues: {
-      nombre: '',
-      descripcion: '',
-    },
-  });
-
   const onSubmit = (data: GrupoFormData) => {
     mutate(id, data as CreateGrupoDto);
-  };
-
-  const handleCancel = () => {
-    router.push(`/dashboard/predios/${id}/grupos`);
   };
 
   return (

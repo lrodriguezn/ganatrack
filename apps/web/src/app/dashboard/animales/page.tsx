@@ -23,7 +23,6 @@ import { usePredioRequerido } from '@/shared/hooks';
 import { animalService } from '@/modules/animales/services';
 import { AnimalTable } from '@/modules/animales/components/animal-table';
 import { Button } from '@/shared/components/ui/button';
-import { Input } from '@/shared/components/ui/input';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 import type { AnimalEstadisticas } from '@/modules/animales/types/animal.types';
 import type { Animal } from '@/modules/animales/types/animal.types';
@@ -48,7 +47,7 @@ export default function AnimalesListPage(): JSX.Element | null {
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [estadisticas, setEstadisticas] = useState<AnimalEstadisticas | null>(null);
+  const [estadisticas] = useState<AnimalEstadisticas | null>(null);
 
   // Row selection for bulk actions
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});

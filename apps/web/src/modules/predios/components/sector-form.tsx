@@ -18,8 +18,6 @@ import { Button } from '@/shared/components/ui/button';
 import {
   CreateSectorSchema,
   UpdateSectorSchema,
-  type CreateSectorDto,
-  type UpdateSectorDto,
   type SectorEstado,
 } from '@ganatrack/shared-types';
 

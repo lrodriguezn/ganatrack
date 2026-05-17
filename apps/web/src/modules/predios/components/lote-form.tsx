@@ -18,8 +18,6 @@ import { Button } from '@/shared/components/ui/button';
 import {
   CreateLoteSchema,
   UpdateLoteSchema,
-  type CreateLoteDto,
-  type UpdateLoteDto,
   type LoteTipo,
 } from '@ganatrack/shared-types';
 

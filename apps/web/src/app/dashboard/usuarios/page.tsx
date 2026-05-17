@@ -16,20 +16,17 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Plus, Search } from 'lucide-react';
 import { usePredioStore } from '@/store/predio.store';
 import { usuariosService } from '@/modules/usuarios/services';
 import { UsuarioTable } from '@/modules/usuarios/components/usuario-table';
 import { Button } from '@/shared/components/ui/button';
-import { Input } from '@/shared/components/ui/input';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 import { Can } from '@/modules/auth/components/can';
 import type { Usuario } from '@/modules/usuarios/types/usuarios.types';
 import { useRoles } from '@/modules/usuarios/hooks/use-roles';
 
 export default function UsuariosListPage(): JSX.Element {
-  const router = useRouter();
   const { predioActivo } = usePredioStore();
   const { data: roles } = useRoles();
 

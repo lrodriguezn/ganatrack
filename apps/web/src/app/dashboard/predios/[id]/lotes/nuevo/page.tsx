@@ -8,12 +8,10 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Suspense } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { CreateLoteSchema, type CreateLoteDto } from '@ganatrack/shared-types';
+import { type CreateLoteDto } from '@ganatrack/shared-types';
 import { useCreateLote } from '@/modules/predios/hooks';
 import { LoteForm, type LoteFormData } from '@/modules/predios/components/lote-form';
 import { Button } from '@/shared/components/ui/button';
@@ -34,21 +32,8 @@ function NuevoLoteContent(): JSX.Element {
     },
   });
 
-  const form = useForm<CreateLoteDto>({
-    resolver: zodResolver(CreateLoteSchema),
-    defaultValues: {
-      nombre: '',
-      descripcion: '',
-      tipo: 'producción',
-    },
-  });
-
   const onSubmit = (data: LoteFormData) => {
     mutate(id, data as CreateLoteDto);
-  };
-
-  const handleCancel = () => {
-    router.push(`/dashboard/predios/${id}/lotes`);
   };
 
   return (

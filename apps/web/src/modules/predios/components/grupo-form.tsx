@@ -18,8 +18,6 @@ import { Button } from '@/shared/components/ui/button';
 import {
   CreateGrupoSchema,
   UpdateGrupoSchema,
-  type CreateGrupoDto,
-  type UpdateGrupoDto,
 } from '@ganatrack/shared-types';
 
 export type GrupoFormData = {
