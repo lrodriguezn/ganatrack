@@ -83,6 +83,7 @@ export default [
     files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'],
     rules: {
       'no-console': 'off',
+      'react/display-name': 'off',
     },
   },
 
