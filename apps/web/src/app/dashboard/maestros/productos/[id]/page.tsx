@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import { usePredioStore } from '@/store/predio.store';
+
 import { useImagenes } from '@/modules/imagenes/hooks/use-imagenes';
 import { ProductoDetail } from '@/modules/productos/components/producto-detail';
 import { Button } from '@/shared/components/ui/button';
@@ -22,7 +22,6 @@ import type { Producto } from '@/modules/productos/types/producto.types';
 export default function ProductoDetailPage(): JSX.Element {
   const params = useParams();
   const router = useRouter();
-  const { predioActivo } = usePredioStore();
   const id = Number(params.id);
 
   const [producto, setProducto] = useState<Producto | null>(null);

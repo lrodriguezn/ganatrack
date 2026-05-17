@@ -71,7 +71,7 @@ describe('sync-handlers', () => {
 
       await moveToFailedSyncQueue(request, 'Network error');
 
-      const { get, set } = await import('idb-keyval');
+      const { set } = await import('idb-keyval');
       expect(set).toHaveBeenCalledWith(
         'ganatrack-failed-sync',
         expect.arrayContaining([
@@ -256,7 +256,7 @@ describe('sync-handlers', () => {
     });
 
     it('debería retornar true para 404 (recurso eliminado)', async () => {
-      const { handleReplayResponse, moveToConflictQueue } = await import('../sync-handlers');
+      const { handleReplayResponse } = await import('../sync-handlers');
       const request = createMockRequest('https://example.com/api/v1/animals/1');
       const response = createMockResponse({ error: { message: 'Resource not found' } }, 404);
 

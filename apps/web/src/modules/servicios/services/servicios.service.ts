@@ -10,18 +10,16 @@
 
 import type {
   PalpacionEvento,
-  PalpacionAnimal,
   CreatePalpacionEventoDto,
   InseminacionEvento,
-  InseminacionAnimal,
   CreateInseminacionEventoDto,
   Parto,
   CreatePartoDto,
-  PaginationParams,
   PaginatedEventos,
   ServicioVeterinarioEvento,
   CreateServicioVeterinarioEventoDto,
   PaginatedServiciosVeterinarios,
+  PaginationParams,
 } from '../types/servicios.types';
 
 // ============================================================================

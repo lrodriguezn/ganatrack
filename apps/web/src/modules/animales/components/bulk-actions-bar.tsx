@@ -43,7 +43,7 @@ export function BulkActionsBar({
   onClearSelection,
   isLoading = false,
 }: BulkActionsBarProps): JSX.Element | null {
-  const [potreros, setPotreros] = useState<CatalogoBase[]>([]);
+  const [, setPotreros] = useState<CatalogoBase[]>([]);
   const [selectedPotreroId, setSelectedPotreroId] = useState<number | ''>('');
 
   // Load potreros from catalogo (or use maestro data)
@@ -51,7 +51,7 @@ export function BulkActionsBar({
     async function loadPotreros() {
       try {
         // Using catalogoService for potreros as they are part of predios
-        const data = await catalogoService.getAll('colores'); // Placeholder - should be potreros
+        await catalogoService.getAll('colores'); // Placeholder - should be potreros
         // In real implementation, this would load potreros
         setPotreros([]);
       } catch (err) {

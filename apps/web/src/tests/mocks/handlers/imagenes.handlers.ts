@@ -69,7 +69,7 @@ export const imagenesHandlers = [
 
   // POST /api/v1/imagenes/upload — upload image (multipart/form-data)
   http.post(`${BASE_URL}/api/v1/imagenes/upload`, async ({ request }) => {
-    const contentType = request.headers.get('content-type') ?? '';
+    request.headers.get('content-type');
 
     // For MSW, we simulate the upload response
     const entidadTipo = 'producto'; // Default for mock

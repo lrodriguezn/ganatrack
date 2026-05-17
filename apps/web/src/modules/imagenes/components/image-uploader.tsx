@@ -19,7 +19,7 @@
 
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { ImagePlus, Upload } from 'lucide-react';
 import { Modal } from '@/shared/components/ui/modal';
 import { Button } from '@/shared/components/ui/button';
@@ -52,7 +52,6 @@ export function ImageUploader({
   onComplete,
 }: ImageUploaderProps): JSX.Element {
   const { queue, addFiles, removeFile, clearAll, clearCompleted } = useImagenStore();
-  const [uploadStarted, setUploadStarted] = useState(false);
 
   const { uploadAll, uploadFile, cancelUpload, isUploading } = useUploadImagen({
     entidadTipo,
@@ -67,13 +66,11 @@ export function ImageUploader({
   const handleFilesAccepted = useCallback(
     async (files: File[]) => {
       await addFiles(files);
-      setUploadStarted(false);
     },
     [addFiles],
   );
 
   const handleUpload = useCallback(async () => {
-    setUploadStarted(true);
     await uploadAll();
   }, [uploadAll]);
 
@@ -100,7 +97,6 @@ export function ImageUploader({
 
   const handleClose = useCallback(() => {
     clearAll();
-    setUploadStarted(false);
     onClose();
   }, [clearAll, onClose]);
 

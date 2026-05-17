@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { authMiddleware } from '../../../../../shared/middleware/index.js'
-import { listImagenesQuerySchema, idParamsSchema } from '../schemas/imagenes.schema.js'
+import { idParamsSchema, listImagenesQuerySchema } from '../schemas/imagenes.schema.js'
 import { ListImagenesUseCase } from '../../../application/use-cases/list-imagenes.use-case.js'
 import { GetImagenUseCase } from '../../../application/use-cases/get-imagen.use-case.js'
 import { DeleteImagenUseCase } from '../../../application/use-cases/delete-imagen.use-case.js'

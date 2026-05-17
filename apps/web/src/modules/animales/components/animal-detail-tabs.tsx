@@ -13,7 +13,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useMemo } from 'react';
+
 import type { Animal } from '../types/animal.types';
 
 interface AnimalDetailTabsProps {

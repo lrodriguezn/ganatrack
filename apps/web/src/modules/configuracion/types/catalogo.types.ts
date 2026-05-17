@@ -35,25 +35,15 @@ export interface CatalogoBase {
 // Entity interfaces
 // ============================================================================
 
-export interface CatalogoRaza extends CatalogoBase {
-  // razas use base fields only
-}
+export type CatalogoRaza = CatalogoBase;
 
-export interface CatalogoCondiciones extends CatalogoBase {
-  // condiciones corporales use base fields only
-}
+export type CatalogoCondiciones = CatalogoBase;
 
-export interface CatalogoTiposExplotacion extends CatalogoBase {
-  // tipos explotacion use base fields only
-}
+export type CatalogoTiposExplotacion = CatalogoBase;
 
-export interface CatalogoCalidad extends CatalogoBase {
-  // calidad animal use base fields only
-}
+export type CatalogoCalidad = CatalogoBase;
 
-export interface CatalogoColor extends CatalogoBase {
-  // colores use base fields only
-}
+export type CatalogoColor = CatalogoBase;
 
 // ============================================================================
 // Zod schemas

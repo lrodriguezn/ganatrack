@@ -140,7 +140,7 @@ describe('useDeletePredio', () => {
 
       try {
         await result.current.mutateAsync(1);
-      } catch (e) {
+      } catch {
         // Expected
       }
 

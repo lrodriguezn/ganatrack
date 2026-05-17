@@ -39,7 +39,7 @@ export function UploadProgress({
   onCancel,
   onRemove,
 }: UploadProgressProps): JSX.Element {
-  const { queue, removeFile } = useImagenStore();
+  const { queue } = useImagenStore();
 
   if (queue.length === 0) {
     return <></>;

@@ -18,8 +18,6 @@ import { Button } from '@/shared/components/ui/button';
 import {
   CreatePotreroSchema,
   UpdatePotreroSchema,
-  type CreatePotreroDto,
-  type UpdatePotreroDto,
   type PotreroEstado,
 } from '@ganatrack/shared-types';
 

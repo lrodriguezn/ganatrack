@@ -1,4 +1,4 @@
-import { createClient, type DbClient } from '@ganatrack/database'
+import { type DbClient, createClient } from '@ganatrack/database'
 import type { FastifyInstance } from 'fastify'
 import { DrizzleImagenRepository } from './infrastructure/persistence/drizzle-imagen.repository.js'
 import { registerImagenesRoutes } from './infrastructure/http/routes/imagenes.routes.js'

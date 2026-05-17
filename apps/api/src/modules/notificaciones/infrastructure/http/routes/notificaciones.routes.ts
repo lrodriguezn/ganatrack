@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { authMiddleware } from '../../../../../shared/middleware/index.js'
-import { listNotificacionesQuerySchema, idParamsSchema } from '../schemas/notificaciones.schema.js'
+import { idParamsSchema, listNotificacionesQuerySchema } from '../schemas/notificaciones.schema.js'
 import { ListarNotificacionesUseCase } from '../../../application/use-cases/listar-notificaciones.use-case.js'
 import type { INotificacionRepository } from '../../../domain/repositories/notificacion.repository.js'
 import type { IPreferenciaRepository } from '../../../domain/repositories/preferencia.repository.js'

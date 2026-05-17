@@ -27,7 +27,7 @@ import { Modal } from '@/shared/components/ui/modal';
 import { Button } from '@/shared/components/ui/button';
 import { useUiStore } from '@/store/ui.store';
 import { ApiError } from '@/shared/lib/errors';
-import { z } from 'zod';
+import type { z } from 'zod';
 import type { CatalogoTipo, CatalogoBase, CatalogoConfig } from '../types/catalogo.types';
 import { CatalogoSchemas } from '../types/catalogo.types';
 

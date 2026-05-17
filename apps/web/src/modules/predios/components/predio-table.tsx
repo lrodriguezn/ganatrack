@@ -28,7 +28,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import Link from 'next/link';
+
 import type { ColumnDef } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
 import { DataTable } from '@/shared/components/ui/data-table';
@@ -224,7 +224,7 @@ export function PredioTable({
         isLoading={isLoading}
         emptyState={
           localSearch.trim() ? (
-            <p>No se encontraron predios con "{localSearch}"</p>
+            <p>No se encontraron predios con &quot;{localSearch}&quot;</p>
           ) : (
             <p>No hay predios registrados</p>
           )

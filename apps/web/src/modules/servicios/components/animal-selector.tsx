@@ -11,9 +11,8 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useAnimales } from '@/modules/animales';
-import type { Animal } from '@/modules/animales';
 
 interface AnimalSelectorProps {
   predioId: number;

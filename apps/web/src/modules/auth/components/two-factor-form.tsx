@@ -19,7 +19,6 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import type { Verify2FAFormData } from '../schemas/login.schema';
 
 interface TwoFactorFormProps {
   onSubmit: (code: string) => void;
@@ -128,7 +127,6 @@ export function TwoFactorForm({
         });
 
         // Focus last filled input or first empty
-        const lastFilledIndex = Math.min(pastedData.length, INPUT_COUNT) - 1;
         const focusIndex = pastedData.length >= INPUT_COUNT ? INPUT_COUNT - 1 : pastedData.length;
         inputRefs.current[focusIndex]?.focus();
 

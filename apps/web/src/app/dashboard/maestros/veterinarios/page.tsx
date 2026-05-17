@@ -12,6 +12,7 @@ import {
   VeterinarioSchema,
   type Veterinario,
   type MaestroFieldDef,
+  type MaestroBase,
 } from '@/modules/maestros/types/maestro.types';
 
 const FIELDS: MaestroFieldDef[] = [
@@ -51,7 +52,7 @@ export default function VeterinariosPage(): JSX.Element | null {
       description="Gestiona los veterinarios que prestan servicios en tus predios"
       singularName="Veterinario"
       fields={FIELDS}
-      columns={COLUMNS as ColumnDef<import('@/modules/maestros/types/maestro.types').MaestroBase>[]}
+      columns={COLUMNS as ColumnDef<MaestroBase>[]}
       schema={VeterinarioSchema}
     />
   );

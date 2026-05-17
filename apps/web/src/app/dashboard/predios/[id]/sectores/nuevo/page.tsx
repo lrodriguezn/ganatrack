@@ -8,12 +8,10 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Suspense } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { CreateSectorSchema, type CreateSectorDto } from '@ganatrack/shared-types';
+import { type CreateSectorDto } from '@ganatrack/shared-types';
 import { useCreateSector } from '@/modules/predios/hooks';
 import { SectorForm, type SectorFormData } from '@/modules/predios/components/sector-form';
 import { Button } from '@/shared/components/ui/button';
@@ -34,23 +32,8 @@ function NuevoSectorContent(): JSX.Element {
     },
   });
 
-  const form = useForm<CreateSectorDto>({
-    resolver: zodResolver(CreateSectorSchema),
-    defaultValues: {
-      nombre: '',
-      areaHectareas: undefined,
-      tipoPasto: '',
-      capacidadMaxima: undefined,
-      estado: 'activo',
-    },
-  });
-
   const onSubmit = (data: SectorFormData) => {
     mutate(id, data as CreateSectorDto);
-  };
-
-  const handleCancel = () => {
-    router.push(`/dashboard/predios/${id}/sectores`);
   };
 
   return (

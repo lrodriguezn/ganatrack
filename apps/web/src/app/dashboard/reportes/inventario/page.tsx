@@ -7,7 +7,7 @@
 
 'use client';
 
-import { Archive, BarChart3, PieChart as PieIcon } from 'lucide-react';
+import { Archive } from 'lucide-react';
 import { useReporteInventario } from '@/modules/reportes/hooks/use-reporte-inventario';
 import { usePredioRequerido } from '@/shared/hooks';
 import { useFiltrosReportes } from '@/modules/reportes/hooks/use-filtros-reportes';

@@ -82,7 +82,7 @@ export function useFailedSync(): FailedSyncState {
       });
     } catch {
       // IndexedDB not accessible or queue doesn't exist yet
-      setState((prev) => ({
+      setState(() => ({
         ...initialState,
         refetch: readQueues,
       }));

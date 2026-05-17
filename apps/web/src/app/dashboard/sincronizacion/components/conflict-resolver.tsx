@@ -123,7 +123,7 @@ export function ConflictResolver({
   onAcceptServer,
   onClose,
 }: ConflictResolverProps): JSX.Element {
-  const [selectedOption, setSelectedOption] = useState<'local' | 'server' | null>(null);
+  const [, setSelectedOption] = useState<'local' | 'server' | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const localData = parseBody(item.body);
@@ -133,16 +133,6 @@ export function ConflictResolver({
     setSelectedOption('local');
     try {
       await onKeepLocal();
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleAcceptServer = async () => {
-    setIsLoading(true);
-    setSelectedOption('server');
-    try {
-      await onAcceptServer();
     } finally {
       setIsLoading(false);
     }

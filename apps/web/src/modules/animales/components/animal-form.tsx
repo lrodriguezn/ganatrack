@@ -19,7 +19,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import type { z } from 'zod';
 import { createAnimalSchema } from '@ganatrack/shared-types';
 import { SexoEnum, OrigenAnimalEnum } from '@ganatrack/shared-types';
 import { FormField } from '@/shared/components/ui/form-field';
@@ -87,7 +87,7 @@ export function AnimalForm({
   // Watch for conditional field visibility
   const sexoKey = watch('sexoKey');
   const tipoIngresoId = watch('tipoIngresoId');
-  const fechaNacimiento = watch('fechaNacimiento');
+
 
   const isFemenino = sexoKey === SexoEnum.FEMENINO;
   const isComprado = tipoIngresoId === OrigenAnimalEnum.COMPRADO;

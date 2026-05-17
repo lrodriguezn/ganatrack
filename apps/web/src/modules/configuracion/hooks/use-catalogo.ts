@@ -15,7 +15,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { catalogoService } from '../services';
 import { queryKeys } from '@/shared/lib/query-keys';
 import { StaleTimes } from '@/shared/lib/query-client';
-import type { CreateCatalogoDto, CatalogoTipo, CatalogoBase } from '../types/catalogo.types';
+import type { CreateCatalogoDto, CatalogoTipo } from '../types/catalogo.types';
 
 export function useCatalogo(tipo: CatalogoTipo) {
   const queryClient = useQueryClient();

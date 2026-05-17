@@ -43,7 +43,7 @@ const SEED_PREFERENCIAS = {
 };
 
 const storeNotificaciones = SEED_NOTIFICACIONES.map(n => ({ ...n }));
-let idCounter = SEED_NOTIFICACIONES.length + 1;
+
 
 export const notificacionesHandlers = [
   // GET /api/v1/notificaciones/resumen — notification summary

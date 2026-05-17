@@ -220,8 +220,8 @@ export class MockReportesService implements ReportesService {
   }
 
   async exportar(
-    tipo: string,
-    request: ExportRequest,
+    _tipo: string,
+    _request: ExportRequest,
   ): Promise<{ jobId: string }> {
     await delay(400);
     return { jobId: `mock-job-${Date.now()}` };

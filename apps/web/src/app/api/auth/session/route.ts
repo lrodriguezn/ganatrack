@@ -12,8 +12,8 @@
  * DELETE — clear refreshToken cookie on logout
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import type { NextRequest} from 'next/server';
+import { NextResponse } from 'next/server';
 
 const COOKIE_NAME = 'refreshToken';
 const COOKIE_MAX_AGE = 7 * 24 * 60 * 60; // 7 days in seconds

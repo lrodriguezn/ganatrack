@@ -143,7 +143,7 @@ describe('useUpdatePredio', () => {
 
       try {
         await result.current.mutateAsync(1, { nombre: 'Test' });
-      } catch (e) {
+      } catch {
         // Expected
       }
 

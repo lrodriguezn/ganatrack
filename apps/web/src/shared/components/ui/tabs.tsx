@@ -70,9 +70,7 @@ export function Tabs({
   orientation = 'horizontal',
   variant = 'underline',
   className,
-  contentClassName,
   syncUrl = false,
-  lazy = false,
   children,
 }: TabsProps) {
   const router = useRouter();
@@ -128,7 +126,7 @@ export function Tabs({
     };
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+       
       if (typeof window !== 'undefined' && window) {
         window.addEventListener('popstate', handlePopState);
         return () => window.removeEventListener('popstate', handlePopState);
@@ -225,8 +223,6 @@ export function TabsContent({
 }: React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content> & {
   lazy?: boolean;
 }) {
-  const activatedRef = useRef(false);
-
   // We need to know if this tab is currently active
   // Since we can't access the root context directly easily, we use a simpler approach:
   // lazy=true means we render only when the tab is activated (handled by Radix data-state)

@@ -11,7 +11,7 @@
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
-import type { PalpacionEvento, PaginationParams, PaginatedEventos } from '../types/servicios.types';
+import type { PalpacionEvento, PaginatedEventos } from '../types/servicios.types';
 import { DataTable } from '@/shared/components/ui/data-table';
 
 interface PalpacionesTableProps {

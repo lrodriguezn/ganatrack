@@ -7,7 +7,7 @@
 
 'use client';
 
-import { Stethoscope, AlertCircle } from 'lucide-react';
+import { Stethoscope } from 'lucide-react';
 import { useReporteSanitario } from '@/modules/reportes/hooks/use-reporte-sanitario';
 import { usePredioRequerido } from '@/shared/hooks';
 import { useFiltrosReportes } from '@/modules/reportes/hooks/use-filtros-reportes';
@@ -21,10 +21,6 @@ export default function ReporteSanitarioPage(): JSX.Element | null {
 
   const chartColors = ['#f59e0b', '#3b82f6', '#10b981', '#ef4444', '#8b5cf6', '#ec4899'];
 
-  const toSeries = (items: { label: string; value: number }[]) =>
-    items.map((i) => i.value);
-  const toLabels = (items: { label: string; value: number }[]) =>
-    items.map((i) => i.label);
   const toTimeCategories = (items: { date: string }[]) =>
     items.map((i) => i.date);
   const toTimeValues = (items: { date: string; values: Record<string, number> }[], key: string) =>
@@ -83,7 +79,7 @@ export default function ReporteSanitarioPage(): JSX.Element | null {
               stroke: { show: true, width: 1, colors: ['transparent'] },
               legend: { position: 'bottom' },
             }}
-            series={data?.graficos.eventosPorTipo.map((tipo, idx) => ({
+            series={data?.graficos.eventosPorTipo.map((tipo) => ({
               name: tipo.label,
               data: data ? toTimeValues(data.graficos.vacunaciones, tipo.label.toLowerCase()) : [],
             })) ?? []}

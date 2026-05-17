@@ -102,7 +102,6 @@ interface AnimalTableProps {
   totalRows: number;
   pageCount: number;
   onPaginationChange: (pagination: { pageIndex: number; pageSize: number }) => void;
-  onRowClick?: (animal: Animal) => void;
   onDelete?: (animal: Animal) => void;
   rowSelection?: Record<string, boolean>;
   onRowSelectionChange?: (selection: Record<string, boolean>) => void;
@@ -116,7 +115,6 @@ export function AnimalTable({
   totalRows,
   pageCount,
   onPaginationChange,
-  onRowClick,
   onDelete,
   rowSelection,
   onRowSelectionChange,
@@ -304,14 +302,6 @@ export function AnimalTable({
       ),
     },
   ], [router, onDelete]);
-
-  const handleRowClick = (animal: Animal) => {
-    if (onRowClick) {
-      onRowClick(animal);
-    } else {
-      router.push(`/dashboard/animales/${animal.id}`);
-    }
-  };
 
   return (
     <DataTable

@@ -72,7 +72,6 @@ export class MockImagenService implements ImagenService {
     entidadTipo: EntidadTipo,
     entidadId: number,
     onProgress?: (pct: number) => void,
-    onXhr?: (xhr: XMLHttpRequest) => void,
   ): Promise<Imagen> {
     // Simulate upload progress
     for (let pct = 0; pct <= 100; pct += 20) {

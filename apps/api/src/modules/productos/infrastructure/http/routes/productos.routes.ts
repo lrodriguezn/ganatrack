@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { authMiddleware } from '../../../../../shared/middleware/index.js'
-import { listProductosQuerySchema, createProductoBodySchema, idParamsSchema, updateProductoBodySchema } from '../schemas/productos.schema.js'
+import { createProductoBodySchema, idParamsSchema, listProductosQuerySchema, updateProductoBodySchema } from '../schemas/productos.schema.js'
 import { ListProductosUseCase } from '../../../application/use-cases/list-productos.use-case.js'
 import { GetProductoUseCase } from '../../../application/use-cases/get-producto.use-case.js'
 import { CrearProductoUseCase } from '../../../application/use-cases/crear-producto.use-case.js'

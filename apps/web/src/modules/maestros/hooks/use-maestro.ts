@@ -18,7 +18,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { maestrosService } from '../services';
 import { queryKeys } from '@/shared/lib/query-keys';
-import type { CreateMaestroDto, MaestroTipo, MaestroBase } from '../types/maestro.types';
+import type { CreateMaestroDto, MaestroTipo } from '../types/maestro.types';
 
 export interface UseMaestroPagination {
   page: number;

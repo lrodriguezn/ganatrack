@@ -140,12 +140,4 @@ function isTwoFactorResponse(
   return 'requires2FA' in response && response.requires2FA === true;
 }
 
-/**
- * Validate redirect URL is internal (same-origin, starts with /)
- */
-function isValidRedirect(redirect: string): boolean {
-  if (!redirect.startsWith('/')) return false;
-  if (redirect.includes('://')) return false;
-  if (redirect.startsWith('//')) return false;
-  return true;
-}
+

@@ -15,12 +15,9 @@ import type {
   PaginatedUsuarios,
   UsuarioFilters,
   Rol,
-  RolDetail,
-  PermisoMatrix,
 } from '../types/usuarios.types';
 import type {
   PermisoMatrixState,
-  RolSummary,
   BatchSavePermisosPayload,
 } from '../types/roles.types';
 

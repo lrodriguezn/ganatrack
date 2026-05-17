@@ -159,7 +159,7 @@ describe('useCreatePredio', () => {
 
       try {
         await result.current.mutateAsync({ nombre: 'Nuevo' });
-      } catch (e) {
+      } catch {
         // Expected
       }
 

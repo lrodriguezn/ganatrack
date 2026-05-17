@@ -13,7 +13,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { UsuarioTable } from './usuario-table';
-import { BrowserRouter } from 'react-router-dom';
+
 
 // Mock next/navigation
 vi.mock('next/navigation', () => ({
@@ -26,7 +26,7 @@ vi.mock('next/navigation', () => ({
 
 // Mock auth Can component
 vi.mock('@/modules/auth/components/can', () => ({
-  Can: ({ children, permission }: { children: React.ReactNode; permission: string }) => <>{children}</>,
+  Can: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 const mockUsuarios = [

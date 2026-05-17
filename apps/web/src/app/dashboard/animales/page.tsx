@@ -17,20 +17,18 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+
 import { Plus, Search, Filter } from 'lucide-react';
 import { usePredioRequerido } from '@/shared/hooks';
 import { animalService } from '@/modules/animales/services';
 import { AnimalTable } from '@/modules/animales/components/animal-table';
 import { Button } from '@/shared/components/ui/button';
-import { Input } from '@/shared/components/ui/input';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 import type { AnimalEstadisticas } from '@/modules/animales/types/animal.types';
 import type { Animal } from '@/modules/animales/types/animal.types';
 import { SexoEnum, EstadoAnimalEnum } from '@ganatrack/shared-types';
 
 export default function AnimalesListPage(): JSX.Element | null {
-  const router = useRouter();
   const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
 
   // Pagination state
@@ -48,7 +46,7 @@ export default function AnimalesListPage(): JSX.Element | null {
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [estadisticas, setEstadisticas] = useState<AnimalEstadisticas | null>(null);
+  const [estadisticas] = useState<AnimalEstadisticas | null>(null);
 
   // Row selection for bulk actions
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
@@ -110,10 +108,6 @@ export default function AnimalesListPage(): JSX.Element | null {
   const handleSearchChange = (value: string) => {
     setSearch(value);
     setPageIndex(0); // Reset to first page on search
-  };
-
-  const handleRowClick = (animal: Animal) => {
-    router.push(`/dashboard/animales/${animal.id}`);
   };
 
   const handleFilterChange = (type: 'sexo' | 'estado', value: number | undefined) => {
@@ -298,7 +292,6 @@ export default function AnimalesListPage(): JSX.Element | null {
       totalRows={total}
       pageCount={totalPages}
       onPaginationChange={handlePaginationChange}
-      onRowClick={handleRowClick}
       onDelete={handleDelete}
       rowSelection={rowSelection}
       onRowSelectionChange={setRowSelection}
