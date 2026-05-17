@@ -12,7 +12,7 @@
 
 'use client';
 
-import Link from 'next/link';
+
 import type { Genealogia } from '../types/animal.types';
 
 interface GenealogiaTreeProps {

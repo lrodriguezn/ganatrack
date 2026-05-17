@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import type { Metadata } from 'next';
+
 import { WifiOff, Home, PawPrint, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

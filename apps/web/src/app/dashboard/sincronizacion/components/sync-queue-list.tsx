@@ -11,7 +11,6 @@ import { useState } from 'react';
 import { AlertTriangle, CheckCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { clsx } from 'clsx';
 import { FailedItemCard } from './failed-item-card';
-import type { IFailedItemCardProps } from './failed-item-card';
 
 export interface ISyncQueueItem {
   url: string;

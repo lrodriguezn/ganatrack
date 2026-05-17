@@ -25,7 +25,7 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
+
 import { usePredio, usePotreros, useSectores, useLotes, useGrupos } from '../hooks';
 import { useCatalogo } from '@/modules/configuracion/hooks';
 import { Button } from '@/shared/components/ui/button';

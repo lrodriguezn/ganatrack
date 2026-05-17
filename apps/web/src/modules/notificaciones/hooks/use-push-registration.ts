@@ -16,6 +16,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import type { FirebaseApp } from 'firebase/app';
 import { notificacionesService } from '../services';
 
 export function usePushRegistration() {
@@ -27,7 +28,7 @@ export function usePushRegistration() {
   );
   const [isSubscribed, setIsSubscribed] = useState(false);
   const tokenRef = useRef<string | null>(null);
-  const firebaseAppRef = useRef<ReturnType<typeof import('firebase/app')['initializeApp']> | null>(null);
+  const firebaseAppRef = useRef<FirebaseApp | null>(null);
 
   useEffect(() => {
     // Check if browser supports notifications and service workers
@@ -50,7 +51,7 @@ export function usePushRegistration() {
 
     try {
       // Lazy-load Firebase messaging only when needed
-      const { initializeApp, getApps, getApp } = await import('firebase/app');
+      const { initializeApp, getApps } = await import('firebase/app');
       const { getMessaging, getToken } = await import('firebase/messaging');
 
       const firebaseConfig = {

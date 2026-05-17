@@ -52,12 +52,6 @@ export function MaestroForm<T extends z.ZodTypeAny>({
     defaultValues: defaultValues ?? ({} as FormData),
   });
 
-  const onFormSubmit = async (data: FormData) => {
-    if (onSubmit) {
-      await onSubmit(data);
-    }
-  };
-
   return (
     <form
       className="flex flex-col gap-4"

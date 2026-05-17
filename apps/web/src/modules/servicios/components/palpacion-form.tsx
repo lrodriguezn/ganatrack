@@ -29,7 +29,6 @@ export interface PalpacionEventoFormRef {
 
 interface PalpacionEventoFormProps {
   onSubmit: (data: PalpacionEventoFormValues) => void;
-  formRef?: React.RefObject<PalpacionEventoFormRef | null>;
 }
 
 interface Veterinario {
@@ -56,7 +55,7 @@ export function isDiagnosticoPositiva(nombre: string): boolean {
 }
 
 export const PalpacionEventoForm = forwardRef<PalpacionEventoFormRef, PalpacionEventoFormProps>(
-  function PalpacionEventoForm({ onSubmit, formRef }: PalpacionEventoFormProps, ref): JSX.Element {
+  function PalpacionEventoForm({ onSubmit }: PalpacionEventoFormProps, ref): JSX.Element {
     const { predioActivo } = usePredioStore();
     const [veterinarios, setVeterinarios] = useState<Veterinario[]>([]);
     const [isLoadingVets, setIsLoadingVets] = useState(true);

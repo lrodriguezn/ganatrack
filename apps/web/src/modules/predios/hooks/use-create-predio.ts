@@ -37,7 +37,7 @@ export function useCreatePredio(
   const queryClient = useQueryClient();
   const setPredios = usePredioStore((s) => s.setPredios);
 
-  const { mutate, mutateAsync, isPending, error, reset } = useMutation({
+  const { mutate, mutateAsync, isPending, error } = useMutation({
     mutationFn: (data: CreatePredioDto) => prediosService.createPredio(data),
 
     onMutate: async (data) => {

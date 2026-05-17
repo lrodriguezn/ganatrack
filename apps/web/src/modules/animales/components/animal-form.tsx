@@ -87,7 +87,7 @@ export function AnimalForm({
   // Watch for conditional field visibility
   const sexoKey = watch('sexoKey');
   const tipoIngresoId = watch('tipoIngresoId');
-  const fechaNacimiento = watch('fechaNacimiento');
+
 
   const isFemenino = sexoKey === SexoEnum.FEMENINO;
   const isComprado = tipoIngresoId === OrigenAnimalEnum.COMPRADO;

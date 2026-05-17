@@ -10,7 +10,7 @@
 
 import { use } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+
 import { usePredioRequerido } from '@/shared/hooks';
 import { ArrowLeft, Edit } from 'lucide-react';
 import { useAnimal } from '@/modules/animales/hooks';
@@ -24,7 +24,6 @@ interface AnimalDetailPageProps {
 
 export default function AnimalDetailPage({ params }: AnimalDetailPageProps): JSX.Element | null {
   const resolvedParams = use(params);
-  const router = useRouter();
   const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
   const animalId = parseInt(resolvedParams.id, 10);
   if (predioLoading || !predioActivo) return null;

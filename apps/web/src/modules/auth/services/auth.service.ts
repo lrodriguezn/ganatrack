@@ -11,7 +11,6 @@
 import type {
   LoginRequest,
   LoginResponse,
-  Verify2FARequest,
   AuthResponse,
   RefreshResponse,
   User,

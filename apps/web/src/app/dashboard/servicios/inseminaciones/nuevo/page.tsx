@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState } from 'react';
 import { usePredioRequerido } from '@/shared/hooks';
 import { useCreateInseminacion } from '@/modules/servicios';
 import {

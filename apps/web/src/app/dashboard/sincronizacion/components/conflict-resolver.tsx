@@ -138,16 +138,6 @@ export function ConflictResolver({
     }
   };
 
-  const handleAcceptServer = async () => {
-    setIsLoading(true);
-    setSelectedOption('server');
-    try {
-      await onAcceptServer();
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}

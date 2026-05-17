@@ -18,7 +18,7 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { reportesService } from '../services';
 import { queryKeys } from '@/shared/lib/query-keys';
-import type { ReporteFiltros, TimeSeriesItem } from '../types/reportes.types';
+import type { ReporteFiltros } from '../types/reportes.types';
 
 export function useReporteMortalidad(filtros: ReporteFiltros) {
   const { data, isLoading, error, refetch } = useQuery({

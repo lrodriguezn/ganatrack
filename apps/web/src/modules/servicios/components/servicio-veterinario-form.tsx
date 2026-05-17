@@ -29,7 +29,6 @@ export interface ServicioVeterinarioEventoFormRef {
 
 interface ServicioVeterinarioEventoFormProps {
   onSubmit: (data: ServicioVeterinarioEventoFormData) => void;
-  formRef?: React.RefObject<ServicioVeterinarioEventoFormRef | null>;
   initialData?: Partial<ServicioVeterinarioEventoFormData>;
 }
 
@@ -44,7 +43,7 @@ interface Diagnostico {
 }
 
 export const ServicioVeterinarioEventoForm = forwardRef<ServicioVeterinarioEventoFormRef, ServicioVeterinarioEventoFormProps>(
-  function ServicioVeterinarioEventoForm({ onSubmit, formRef, initialData }: ServicioVeterinarioEventoFormProps, ref): JSX.Element {
+  function ServicioVeterinarioEventoForm({ onSubmit, initialData }: ServicioVeterinarioEventoFormProps, ref): JSX.Element {
     const { predioActivo } = usePredioStore();
     const [veterinarios, setVeterinarios] = useState<Veterinario[]>([]);
     const [isLoadingVets, setIsLoadingVets] = useState(true);

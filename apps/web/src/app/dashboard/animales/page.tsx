@@ -17,7 +17,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+
 import { Plus, Search, Filter } from 'lucide-react';
 import { usePredioRequerido } from '@/shared/hooks';
 import { animalService } from '@/modules/animales/services';
@@ -29,7 +29,6 @@ import type { Animal } from '@/modules/animales/types/animal.types';
 import { SexoEnum, EstadoAnimalEnum } from '@ganatrack/shared-types';
 
 export default function AnimalesListPage(): JSX.Element | null {
-  const router = useRouter();
   const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
 
   // Pagination state
@@ -109,10 +108,6 @@ export default function AnimalesListPage(): JSX.Element | null {
   const handleSearchChange = (value: string) => {
     setSearch(value);
     setPageIndex(0); // Reset to first page on search
-  };
-
-  const handleRowClick = (animal: Animal) => {
-    router.push(`/dashboard/animales/${animal.id}`);
   };
 
   const handleFilterChange = (type: 'sexo' | 'estado', value: number | undefined) => {
@@ -297,7 +292,6 @@ export default function AnimalesListPage(): JSX.Element | null {
       totalRows={total}
       pageCount={totalPages}
       onPaginationChange={handlePaginationChange}
-      onRowClick={handleRowClick}
       onDelete={handleDelete}
       rowSelection={rowSelection}
       onRowSelectionChange={setRowSelection}
