@@ -212,9 +212,10 @@ export function useExportacion() {
 
   // Cleanup all polling intervals on unmount
   useEffect(() => {
+    const intervals = intervalsRef.current;
     return () => {
-      intervalsRef.current.forEach((interval) => clearInterval(interval));
-      intervalsRef.current.clear();
+      intervals.forEach((interval) => clearInterval(interval));
+      intervals.clear();
     };
   }, []);
 
