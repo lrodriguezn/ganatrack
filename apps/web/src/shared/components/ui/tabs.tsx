@@ -108,7 +108,6 @@ export function Tabs({
   }, [currentValue, syncUrl, searchParams, router, pathname, validTabIds]);
 
   // URL sync: respond to browser back/forward
-  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (!syncUrl) return;
 
@@ -139,7 +138,6 @@ export function Tabs({
   }, [syncUrl, validTabIds, onValueChange]);
 
   // Sync from URL on mount
-  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (syncUrl && initialUrlValue && initialUrlValue !== currentValue) {
       setInternalValue(initialUrlValue);
@@ -277,7 +275,6 @@ function LazyContent({
     // This is a simplified approach — in practice, Radix handles the visibility
     // via CSS display:none for inactive tabs, so content is always in DOM.
     // For true lazy loading, consumers should conditionally render inside TabsContent.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (active || hasActivated) {
       setHasActivated(true);
     }
