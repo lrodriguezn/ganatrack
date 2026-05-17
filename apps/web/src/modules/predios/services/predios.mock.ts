@@ -227,7 +227,7 @@ const MOCK_SECTORES: MockSector[] = [
 // ============================================================================
 
 // Clone seed data to avoid mutations affecting the original
-let predios: MockPredio[] = [...MOCK_PREDIOS];
+const predios: MockPredio[] = [...MOCK_PREDIOS];
 let potreros: MockPotrero[] = [...MOCK_POTREROS];
 let lotes: MockLote[] = [...MOCK_LOTES];
 let grupos: MockGrupo[] = [...MOCK_GRUPOS];

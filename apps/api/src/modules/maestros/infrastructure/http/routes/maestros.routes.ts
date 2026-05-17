@@ -87,22 +87,22 @@ import type { ILugarVentaRepository } from '../../../domain/repositories/lugar-v
 
 // Types
 import type {
-  CreateVeterinarioDto,
-  UpdateVeterinarioDto,
-  CreatePropietarioDto,
-  UpdatePropietarioDto,
-  CreateHierroDto,
-  UpdateHierroDto,
-  CreateDiagnosticoVeterinarioDto,
-  UpdateDiagnosticoVeterinarioDto,
-  CreateMotivoVentaDto,
-  UpdateMotivoVentaDto,
   CreateCausaMuerteDto,
-  UpdateCausaMuerteDto,
+  CreateDiagnosticoVeterinarioDto,
+  CreateHierroDto,
   CreateLugarCompraDto,
-  UpdateLugarCompraDto,
   CreateLugarVentaDto,
+  CreateMotivoVentaDto,
+  CreatePropietarioDto,
+  CreateVeterinarioDto,
+  UpdateCausaMuerteDto,
+  UpdateDiagnosticoVeterinarioDto,
+  UpdateHierroDto,
+  UpdateLugarCompraDto,
   UpdateLugarVentaDto,
+  UpdateMotivoVentaDto,
+  UpdatePropietarioDto,
+  UpdateVeterinarioDto,
 } from '../../../application/dtos/maestros.dto.js'
 
 type MaestrosRepos = {

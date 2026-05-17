@@ -1,10 +1,10 @@
-import { createClient, type DbClient } from '@ganatrack/database'
+import { type DbClient, createClient } from '@ganatrack/database'
 import type { FastifyInstance } from 'fastify'
 
 // Import repositories
-import { USUARIO_REPOSITORY, type IUsuarioRepository } from './domain/repositories/usuario.repository.js'
-import { ROL_REPOSITORY, type IRolRepository } from './domain/repositories/rol.repository.js'
-import { PERMISO_REPOSITORY, type IPermisoRepository } from './domain/repositories/permiso.repository.js'
+import { type IUsuarioRepository, USUARIO_REPOSITORY } from './domain/repositories/usuario.repository.js'
+import { type IRolRepository, ROL_REPOSITORY } from './domain/repositories/rol.repository.js'
+import { type IPermisoRepository, PERMISO_REPOSITORY } from './domain/repositories/permiso.repository.js'
 import { DrizzleUsuarioRepository } from './infrastructure/persistence/drizzle-usuario.repository.js'
 import { DrizzleRolRepository } from './infrastructure/persistence/drizzle-rol.repository.js'
 import { DrizzlePermisoRepository } from './infrastructure/persistence/drizzle-permiso.repository.js'

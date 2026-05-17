@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { authMiddleware } from '../../../../../shared/middleware/index.js'
-import { listQuerySchema, idParamsSchema } from '../schemas/configuracion.schema.js'
+import { idParamsSchema, listQuerySchema } from '../schemas/configuracion.schema.js'
 
 import type { IConfigRazaRepository } from '../../../domain/repositories/config-raza.repository.js'
 import type { IConfigCondicionCorporalRepository } from '../../../domain/repositories/config-condicion-corporal.repository.js'

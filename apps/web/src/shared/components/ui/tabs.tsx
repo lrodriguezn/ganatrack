@@ -128,7 +128,7 @@ export function Tabs({
     };
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+       
       if (typeof window !== 'undefined' && window) {
         window.addEventListener('popstate', handlePopState);
         return () => window.removeEventListener('popstate', handlePopState);

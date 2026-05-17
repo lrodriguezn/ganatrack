@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { authMiddleware } from '../../../../../shared/middleware/index.js'
-import { listPalpacionesQuerySchema, idParamsSchema } from '../schemas/palpaciones.schema.js'
+import { idParamsSchema, listPalpacionesQuerySchema } from '../schemas/palpaciones.schema.js'
 import { listInseminacionesQuerySchema } from '../schemas/inseminaciones.schema.js'
 import { listPartosQuerySchema } from '../schemas/partos.schema.js'
 import { listVeterinariosQuerySchema } from '../schemas/veterinarios.schema.js'

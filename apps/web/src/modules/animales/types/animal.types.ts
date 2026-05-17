@@ -7,7 +7,7 @@
  */
 
 import type { z } from 'zod';
-import { createAnimalSchema } from '@ganatrack/shared-types';
+import type { createAnimalSchema } from '@ganatrack/shared-types';
 
 // Re-export schema types
 export type { CreateAnimalDto } from '@ganatrack/shared-types';

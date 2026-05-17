@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { authMiddleware } from '../../../../../shared/middleware/index.js'
-import { listAnimalesQuerySchema, createAnimalBodySchema, idParamsSchema, updateAnimalBodySchema } from '../schemas/animales.schema.js'
+import { createAnimalBodySchema, idParamsSchema, listAnimalesQuerySchema, updateAnimalBodySchema } from '../schemas/animales.schema.js'
 import type { CreateAnimalDto, UpdateAnimalDto } from '../../../application/dtos/animal.dto.js'
 
 // Repository interfaces

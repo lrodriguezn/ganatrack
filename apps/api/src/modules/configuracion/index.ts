@@ -1,4 +1,4 @@
-import { createClient, type DbClient } from '@ganatrack/database'
+import { type DbClient, createClient } from '@ganatrack/database'
 import type { FastifyInstance } from 'fastify'
 
 // Routes
