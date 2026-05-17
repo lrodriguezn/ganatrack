@@ -78,12 +78,13 @@ export default [
     },
   },
 
-  // Allow console in test files
+  // Allow console and any in test files
   {
-    files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'],
+    files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx', '**/tests/mocks/**/*.ts'],
     rules: {
       'no-console': 'off',
       'react/display-name': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
 
