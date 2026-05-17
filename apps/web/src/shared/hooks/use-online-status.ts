@@ -19,7 +19,8 @@ export function useOnlineStatus(): boolean {
   const [isOnline, setIsOnline] = useState<boolean>(true);
 
   useEffect(() => {
-    // Initialize with current status
+    // Initialize with current status (safe sync setState for initial value)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsOnline(navigator.onLine);
 
     const handleOnline = () => setIsOnline(true);

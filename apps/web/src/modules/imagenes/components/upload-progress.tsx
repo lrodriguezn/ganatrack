@@ -18,6 +18,7 @@
 'use client';
 
 import { CheckCircle2, XCircle, Loader2, RotateCcw, X } from 'lucide-react';
+import Image from 'next/image';
 import { useImagenStore } from '@/store/imagen.store';
 import type { UploadQueueItem } from '../types/imagen.types';
 
@@ -57,11 +58,13 @@ export function UploadProgress({
             className="flex items-center gap-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-3"
           >
             {/* Preview */}
-            <div className="h-10 w-10 flex-shrink-0 overflow-hidden rounded">
-              <img
+            <div className="h-10 w-10 flex-shrink-0 overflow-hidden rounded relative">
+              <Image
                 src={item.preview}
                 alt={item.file.name}
-                className="h-full w-full object-cover"
+                fill
+                className="object-cover"
+                unoptimized
               />
             </div>
 

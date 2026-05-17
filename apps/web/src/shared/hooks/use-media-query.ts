@@ -29,6 +29,8 @@ export function useMediaQuery(query: string): boolean {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(query);
+    // Sync initial match state (safe sync setState for initialization)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMatches(mediaQuery.matches);
 
     const handler = (event: MediaQueryListEvent) => {
