@@ -24,6 +24,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, Trash2, X } from 'lucide-react';
+import Image from 'next/image';
 import { Modal } from '@/shared/components/ui/modal';
 import { Button } from '@/shared/components/ui/button';
 import type { Imagen } from '../types/imagen.types';
@@ -148,12 +149,15 @@ export function Lightbox({
       ) : (
         <div className="relative">
           {/* Image */}
-          <div className="flex items-center justify-center min-h-[300px]">
+          <div className="flex items-center justify-center min-h-[300px] relative">
             {currentImage && (
-              <img
+              <Image
                 src={currentImage.url}
                 alt={currentImage.filename}
+                width={800}
+                height={600}
                 className="max-h-[60vh] max-w-full object-contain rounded"
+                unoptimized
               />
             )}
           </div>

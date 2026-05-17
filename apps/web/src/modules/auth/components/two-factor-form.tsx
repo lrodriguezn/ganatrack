@@ -59,6 +59,7 @@ export function TwoFactorForm({
     const firstEmptyIndex = code.findIndex((c) => c === '');
     const focusIndex = firstEmptyIndex === -1 ? INPUT_COUNT - 1 : firstEmptyIndex;
     inputRefs.current[focusIndex]?.focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleInputChange = useCallback(

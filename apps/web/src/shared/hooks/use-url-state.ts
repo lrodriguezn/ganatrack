@@ -58,14 +58,12 @@ export function useUrlState<T extends string | number | boolean | string[]>(
 
   const { defaultValue, parse, serialize = defaultSerialize } = options;
 
-  const searchParamsStr = searchParams.toString();
-
   const value = useMemo((): T => {
     const raw = searchParams.get(key);
     if (raw === null) return defaultValue;
     const parser = parse ?? ((v: string) => defaultParse<T>(v, defaultValue));
     return parser(raw);
-  }, [searchParamsStr, key, defaultValue, parse]);
+  }, [key, defaultValue, parse, searchParams]);
 
   const setValue = useCallback((newValue: T) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -79,7 +77,7 @@ export function useUrlState<T extends string | number | boolean | string[]>(
     const query = params.toString();
     const url = query ? `${pathname}?${query}` : pathname;
     router.replace(url, { scroll: false });
-  }, [key, defaultValue, serialize, pathname, router]);
+  }, [key, defaultValue, serialize, pathname, router, searchParams]);
 
   return [value, setValue];
 }

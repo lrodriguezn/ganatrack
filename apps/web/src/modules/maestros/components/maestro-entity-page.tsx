@@ -105,7 +105,7 @@ export function MaestroEntityPage<T extends z.ZodSchema>({
     setDeleteItem(item);
   };
 
-  const handleLimitChange = (e: any) => {
+  const handleLimitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLimit(Number(e.target.value));
     setPage(1);
   };

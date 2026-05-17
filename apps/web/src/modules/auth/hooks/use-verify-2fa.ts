@@ -59,9 +59,11 @@ export function useVerify2FA(tempToken: string): UseVerify2FAReturn {
     },
   });
 
+  const shouldRunTimer = secondsLeft > 0;
+
   // Countdown timer
   useEffect(() => {
-    if (secondsLeft <= 0) return;
+    if (!shouldRunTimer) return;
 
     const timer = setInterval(() => {
       setSecondsLeft((prev) => {
@@ -74,11 +76,13 @@ export function useVerify2FA(tempToken: string): UseVerify2FAReturn {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [secondsLeft > 0]);
+  }, [shouldRunTimer]);
+
+  const shouldRunCooldown = resendCooldown > 0;
 
   // Resend cooldown timer
   useEffect(() => {
-    if (resendCooldown <= 0) return;
+    if (!shouldRunCooldown) return;
 
     const timer = setInterval(() => {
       setResendCooldown((prev) => {
@@ -91,7 +95,7 @@ export function useVerify2FA(tempToken: string): UseVerify2FAReturn {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [resendCooldown > 0]);
+  }, [shouldRunCooldown]);
 
   const canResend = resendCooldown === 0 && secondsLeft > 0;
 
@@ -177,7 +181,7 @@ export function useVerify2FA(tempToken: string): UseVerify2FAReturn {
     } catch {
       setError('No se pudo reenviar. Intenta de nuevo.');
     }
-  }, [canResend, tempToken]);
+  }, [canResend]);
 
   return {
     form,

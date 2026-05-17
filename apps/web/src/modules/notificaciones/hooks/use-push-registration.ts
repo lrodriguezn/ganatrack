@@ -37,6 +37,8 @@ export function usePushRegistration() {
       'Notification' in window &&
       'serviceWorker' in navigator;
 
+    // Initialize support state (safe sync setState for initialization)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsSupported(supported);
 
     if (supported) {

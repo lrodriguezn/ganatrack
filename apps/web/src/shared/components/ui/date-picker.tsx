@@ -79,7 +79,7 @@ export function DatePicker({
     return () => {
       pickerRef.current?.destroy();
     };
-  }, [mode, minDate, maxDate, locale]);
+  }, [mode, minDate, maxDate, locale, onChange]);
 
   // Update value when prop changes
   useEffect(() => {
