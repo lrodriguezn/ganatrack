@@ -19,6 +19,7 @@ import type {
   ServicioVeterinarioEvento,
   CreateServicioVeterinarioEventoDto,
   PaginatedServiciosVeterinarios,
+  PaginationParams,
 } from '../types/servicios.types';
 
 // ============================================================================
