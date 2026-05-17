@@ -24,7 +24,7 @@ interface PreferenciasFormProps {
 export function PreferenciasForm({ className }: PreferenciasFormProps): JSX.Element {
   const { preferencias, isLoading, togglePreferencia, isPending } = useNotificacionPreferencias();
   const { isSupported, permission, requestPermission, isSubscribed, unsubscribe } = usePushRegistration();
-  const [showPushPrompt, setShowPushPrompt] = useState(false);
+  const [, setShowPushPrompt] = useState(false);
 
   if (isLoading || !preferencias) {
     return (

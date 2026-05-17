@@ -39,8 +39,6 @@ interface DataTableProps<TData> {
   pageSize?: number;
   totalRows?: number;
   onPaginationChange?: (pagination: PaginationState) => void;
-  onSortingChange?: (sorting: SortingState) => void;
-  onFilterChange?: (filters: ColumnFiltersState) => void;
   isLoading?: boolean;
   isFetching?: boolean;
   emptyState?: React.ReactNode;
@@ -56,8 +54,6 @@ export function DataTable<TData>({
   pageSize = 10,
   totalRows,
   onPaginationChange,
-  onSortingChange,
-  onFilterChange,
   isLoading = false,
   isFetching = false,
   emptyState,
@@ -99,7 +95,6 @@ export function DataTable<TData>({
   };
 
   const selectedRowCount = table.getFilteredSelectedRowModel().rows.length;
-  const totalRowCount = table.getFilteredRowModel().rows.length;
 
   const renderEmptyState = () => {
     if (emptyState) return emptyState;

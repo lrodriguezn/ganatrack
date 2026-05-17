@@ -15,7 +15,7 @@
  */
 
 import { apiClient } from '@/shared/lib/api-client';
-import { ApiError, normalizeApiError } from '@/shared/lib/errors';
+import { ApiError } from '@/shared/lib/errors';
 import type {
   LoginRequest,
   LoginResponse,
@@ -76,7 +76,7 @@ export class RealAuthService implements AuthService {
           const payload = JSON.parse(atob(tokenParts[1]));
           permissions = payload.permisos || [];
         }
-      } catch (e) {
+      } catch {
         console.warn('[auth.api] Could not decode JWT to extract permissions');
       }
       
@@ -145,7 +145,7 @@ export class RealAuthService implements AuthService {
           const payload = JSON.parse(atob(tokenParts[1]));
           permissions = payload.permisos || [];
         }
-      } catch (e) {
+      } catch {
         console.warn('[auth.api] Could not decode JWT to extract permissions');
       }
 
@@ -245,10 +245,7 @@ export class RealAuthService implements AuthService {
 
 // Import schemas for parsing
 import {
-  LoginResponseSchema,
-  AuthResponseSchema,
   RefreshResponseSchema,
-  UserSchema,
   PredioSchema,
 } from '@ganatrack/shared-types';
 import { z } from 'zod';
