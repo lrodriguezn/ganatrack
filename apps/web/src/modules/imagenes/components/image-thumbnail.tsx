@@ -16,6 +16,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Trash2, Loader2 } from 'lucide-react';
 import type { Imagen } from '../types/imagen.types';
 
@@ -60,11 +61,13 @@ export function ImageThumbnail({
           <span className="text-xs">Error al cargar</span>
         </div>
       ) : (
-        <img
+        <Image
           src={imagen.thumbnailUrl || imagen.url}
           alt={imagen.filename}
-          className="h-full w-full object-cover transition-opacity"
-          loading="lazy"
+          fill
+          className="object-cover transition-opacity"
+          sizes="(max-width: 768px) 50vw, 25vw"
+          unoptimized
           onLoad={() => setIsLoading(false)}
           onError={() => {
             setIsLoading(false);
