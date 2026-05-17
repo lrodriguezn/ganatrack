@@ -40,8 +40,8 @@ interface ImageGalleryProps {
 
 export function ImageGallery({
   imagenes,
-  entidadTipo,
-  entidadId,
+  _entidadTipo,
+  _entidadId,
   onUploadClick,
   onDelete,
   isLoading = false,

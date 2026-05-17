@@ -21,7 +21,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Path } from 'react-hook-form';
-import { useEffect } from 'react';
+
 import { FormField } from '@/shared/components/ui/form-field';
 import { Input, Textarea } from '@/shared/components/ui/input';
 import { Button } from '@/shared/components/ui/button';

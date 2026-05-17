@@ -84,7 +84,7 @@ const SEED_NOTIFICACIONES: Notificacion[] = [
 
 const storeNotificaciones: Notificacion[] = [...SEED_NOTIFICACIONES];
 
-let idCounter = 6;
+
 
 const defaultPreferencias: NotificacionPreferencias = {
   partosProximos: true,
@@ -107,7 +107,7 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 // ============================================================================
 
 export class MockNotificacionesService implements INotificacionesService {
-  async getResumen(predioId: number): Promise<NotificacionResumen> {
+  async getResumen(_predioId: number): Promise<NotificacionResumen> {
     await delay(200);
     // In mock mode, predioId is ignored — return same data
     const unread = storeNotificaciones.filter((n) => !n.leida);

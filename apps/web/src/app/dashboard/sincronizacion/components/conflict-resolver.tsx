@@ -123,7 +123,7 @@ export function ConflictResolver({
   onAcceptServer,
   onClose,
 }: ConflictResolverProps): JSX.Element {
-  const [selectedOption, setSelectedOption] = useState<'local' | 'server' | null>(null);
+  const [, setSelectedOption] = useState<'local' | 'server' | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const localData = parseBody(item.body);

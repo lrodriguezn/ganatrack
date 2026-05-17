@@ -10,7 +10,7 @@
  * - Store initialization from localStorage, matchMedia, and default
  */
 
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 // ============================================================================
 // Mocks

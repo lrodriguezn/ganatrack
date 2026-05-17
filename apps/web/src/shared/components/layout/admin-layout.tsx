@@ -26,7 +26,6 @@ interface AdminLayoutProps {
 }
 
 export function AdminLayout({ children }: AdminLayoutProps): JSX.Element {
-  const isMobileOpen = useSidebarStore((s) => s.isMobileOpen);
   const isCollapsed = useSidebarStore((s) => s.isCollapsed);
 
   return (

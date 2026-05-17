@@ -31,7 +31,7 @@ vi.mock('sonner', () => ({
 async function renderToastProvider() {
   vi.resetModules();
   // Re-import to get fresh mock
-  const { Toaster } = await import('sonner');
+  await import('sonner');
   const { ToastProvider } = await import('../toast-provider');
 
   return render(<ToastProvider />);

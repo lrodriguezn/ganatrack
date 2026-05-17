@@ -20,10 +20,8 @@
 import * as React from 'react';
 import {
   type ColumnDef,
-  type ColumnFiltersState,
   type PaginationState,
   type RowSelectionState,
-  type SortingState,
   flexRender,
   getCoreRowModel,
   useReactTable,

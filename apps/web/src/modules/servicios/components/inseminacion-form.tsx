@@ -14,7 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { usePredioStore } from '@/store/predio.store';
 import { maestrosService } from '@/modules/maestros/services';
 import { inseminacionEventoSchema, type InseminacionEventoFormValues } from '../schemas/inseminacion.schema';
-import { AnimalSelector } from './animal-selector';
+
 import type { CreateInseminacionAnimalDto } from '../types/servicios.types';
 
 // ============================================================================
@@ -28,7 +28,6 @@ export interface InseminacionEventoFormRef {
 
 interface InseminacionEventoFormProps {
   onSubmit: (data: InseminacionEventoFormValues) => void;
-  formRef?: React.RefObject<InseminacionEventoFormRef | null>;
 }
 
 interface Veterinario {
@@ -37,7 +36,7 @@ interface Veterinario {
 }
 
 export const InseminacionEventoForm = forwardRef<InseminacionEventoFormRef, InseminacionEventoFormProps>(
-  function InseminacionEventoForm({ onSubmit, formRef }: InseminacionEventoFormProps, ref): JSX.Element {
+  function InseminacionEventoForm({ onSubmit }: InseminacionEventoFormProps, ref): JSX.Element {
     const { predioActivo } = usePredioStore();
     const [veterinarios, setVeterinarios] = useState<Veterinario[]>([]);
     const [isLoadingVets, setIsLoadingVets] = useState(true);

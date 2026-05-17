@@ -35,7 +35,7 @@ const initialState: NotificacionesState = {
   unreadCount: 0,
 };
 
-export const useNotificacionesStore = create<NotificacionesStore>((set, get) => ({
+export const useNotificacionesStore = create<NotificacionesStore>((set) => ({
   ...initialState,
 
   openPanel: () => {

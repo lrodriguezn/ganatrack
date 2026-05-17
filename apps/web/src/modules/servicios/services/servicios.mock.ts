@@ -233,7 +233,7 @@ export class MockServiciosService implements ServiciosService {
       veterinarioNombre: 'Veterinario Mock',
       totalAnimales: data.animales.length,
       createdAt: new Date().toISOString(),
-      animales: data.animales.map((a, idx) => ({
+      animales: data.animales.map((a) => ({
         id: palpacionAnimalIdCounter++,
         eventoId: newPalpacionId,
         animalesId: a.animalesId,
