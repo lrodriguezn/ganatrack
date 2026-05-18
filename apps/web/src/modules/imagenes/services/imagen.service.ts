@@ -31,6 +31,9 @@ export interface ImagenService {
   delete(id: number): Promise<void>;
 }
 
+import { MockImagenService } from './imagen.mock';
+import { RealImagenService } from './imagen.api';
+
 // ============================================================================
 // Factory
 // ============================================================================
@@ -38,16 +41,10 @@ export interface ImagenService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): ImagenService {
-  const mockModule = './imagen.mock';
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockImagenService } = require(mockModule);
   return new MockImagenService();
 }
 
 function createRealService(): ImagenService {
-  const apiModule = './imagen.api';
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealImagenService } = require(apiModule);
   return new RealImagenService();
 }
 

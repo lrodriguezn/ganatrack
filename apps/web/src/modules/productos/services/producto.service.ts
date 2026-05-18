@@ -28,6 +28,9 @@ export interface ProductoService {
   delete(id: number): Promise<void>;
 }
 
+import { MockProductoService } from './producto.mock';
+import { RealProductoService } from './producto.api';
+
 // ============================================================================
 // Factory
 // ============================================================================
@@ -35,16 +38,10 @@ export interface ProductoService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): ProductoService {
-  const mockModule = './producto.mock';
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockProductoService } = require(mockModule);
   return new MockProductoService();
 }
 
 function createRealService(): ProductoService {
-  const apiModule = './producto.api';
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealProductoService } = require(apiModule);
   return new RealProductoService();
 }
 

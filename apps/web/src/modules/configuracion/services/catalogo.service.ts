@@ -21,6 +21,9 @@ export interface CatalogoService {
   remove(tipo: CatalogoTipo, id: number): Promise<void>;
 }
 
+import { MockCatalogoService } from './catalogo.mock';
+import { RealCatalogoService } from './catalogo.api';
+
 // ============================================================================
 // Factory
 // ============================================================================
@@ -28,16 +31,10 @@ export interface CatalogoService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): CatalogoService {
-  const mockModule = './catalogo.mock';
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockCatalogoService } = require(mockModule);
   return new MockCatalogoService();
 }
 
 function createRealService(): CatalogoService {
-  const apiModule = './catalogo.api';
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealCatalogoService } = require(apiModule);
   return new RealCatalogoService();
 }
 

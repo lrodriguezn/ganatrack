@@ -67,6 +67,9 @@ export interface PrediosService {
   deleteSector(predioId: number, id: number): Promise<void>;
 }
 
+import { MockPrediosService } from './predios.mock';
+import { RealPrediosService } from './predios.api';
+
 // ============================================================================
 // Factory
 // ============================================================================
@@ -74,16 +77,10 @@ export interface PrediosService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): PrediosService {
-  const mockModule = './predios.mock';
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockPrediosService } = require(mockModule);
   return new MockPrediosService();
 }
 
 function createRealService(): PrediosService {
-  const apiModule = './predios.api';
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealPrediosService } = require(apiModule);
   return new RealPrediosService();
 }
 

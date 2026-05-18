@@ -45,6 +45,9 @@ export interface AnimalService {
   getEstadisticas(predioId: number): Promise<AnimalEstadisticas>;
 }
 
+import { MockAnimalService } from './animal.mock';
+import { RealAnimalService } from './animal.api';
+
 // ============================================================================
 // Factory
 // ============================================================================
@@ -52,16 +55,10 @@ export interface AnimalService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): AnimalService {
-  const mockModule = './animal.mock';
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockAnimalService } = require(mockModule);
   return new MockAnimalService();
 }
 
 function createRealService(): AnimalService {
-  const apiModule = './animal.api';
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealAnimalService } = require(apiModule);
   return new RealAnimalService();
 }
 

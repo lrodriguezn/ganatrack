@@ -20,6 +20,9 @@ export interface MaestrosService {
   remove(tipo: MaestroTipo, id: number): Promise<void>;
 }
 
+import { MockMaestrosService } from './maestros.mock';
+import { RealMaestrosService } from './maestros.api';
+
 // ============================================================================
 // Factory
 // ============================================================================
@@ -27,16 +30,10 @@ export interface MaestrosService {
 const USE_MOCKS = process.env.NEXT_PUBLIC_USE_MOCKS === 'true';
 
 function createMockService(): MaestrosService {
-  const mockModule = './maestros.mock';
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MockMaestrosService } = require(mockModule);
   return new MockMaestrosService();
 }
 
 function createRealService(): MaestrosService {
-  const apiModule = './maestros.api';
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { RealMaestrosService } = require(apiModule);
   return new RealMaestrosService();
 }
 
