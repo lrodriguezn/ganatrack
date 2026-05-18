@@ -26,7 +26,7 @@ test.describe('Registro de Parto', () => {
   // =========================================================================
   // E2E-05 Scenario 1: Registrar parto exitoso con cria
   // =========================================================================
-  test('debería registrar parto exitoso con cria vinculada', async ({ authenticatedPage }) => {
+  test('debería registrar parto exitoso con cria vinculada', async () => {
     const page = wizard;
 
     // Navigate to parto wizard
@@ -86,7 +86,7 @@ test.describe('Registro de Parto', () => {
   // =========================================================================
   // E2E-05 Scenario 2: Registrar parto sin seleccionar madre
   // =========================================================================
-  test('debería mostrar error al registrar parto sin madre', async ({ authenticatedPage }) => {
+  test('debería mostrar error al registrar parto sin madre', async () => {
     const page = wizard;
 
     // Navigate to parto wizard
@@ -110,7 +110,7 @@ test.describe('Registro de Parto', () => {
   // =========================================================================
   // E2E-05 Scenario 3: Registrar parto con complicaciones
   // =========================================================================
-  test('debería registrar parto con complicaciones', async ({ authenticatedPage }) => {
+  test('debería registrar parto con complicaciones', async () => {
     const page = wizard;
 
     // Navigate to parto wizard
@@ -152,7 +152,7 @@ test.describe('Registro de Parto', () => {
   // =========================================================================
   // E2E-05 Scenario 4: Validar peso de cria fuera de rango
   // =========================================================================
-  test('debería mostrar warning para peso de cria fuera de rango', async ({ authenticatedPage }) => {
+  test('debería mostrar warning para peso de cria fuera de rango', async () => {
     const page = wizard;
 
     // Navigate to parto wizard
@@ -202,7 +202,7 @@ test.describe('Registro de Parto', () => {
   // =========================================================================
   // Additional: Cancel and preserve no data
   // =========================================================================
-  test('debería cancelar registro de parto sin guardar', async ({ authenticatedPage }) => {
+  test('debería cancelar registro de parto sin guardar', async () => {
     const page = wizard;
 
     // Navigate to parto wizard

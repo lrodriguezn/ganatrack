@@ -26,7 +26,7 @@ test.describe('Wizard Palpación Grupal', () => {
   // =========================================================================
   // E2E-04 Scenario 1: Completar wizard de palpación grupal exitosamente
   // =========================================================================
-  test('debería completar el wizard de palpación exitosamente', async ({ authenticatedPage }) => {
+  test('debería completar el wizard de palpación exitosamente', async () => {
     const page = wizard;
 
     // Navigate to palpación wizard
@@ -85,7 +85,7 @@ test.describe('Wizard Palpación Grupal', () => {
   // =========================================================================
   // E2E-04 Scenario 2: Wizard palpación sin seleccionar animales
   // =========================================================================
-  test('debería mostrar error si no hay animales seleccionados', async ({ authenticatedPage }) => {
+  test('debería mostrar error si no hay animales seleccionados', async () => {
     const page = wizard;
 
     // Navigate to palpación wizard
@@ -109,7 +109,7 @@ test.describe('Wizard Palpación Grupal', () => {
   // =========================================================================
   // E2E-04 Scenario 3: Navegación entre pasos del wizard
   // =========================================================================
-  test('debería permitir navegación entre pasos preservando datos', async ({ authenticatedPage }) => {
+  test('debería permitir navegación entre pasos preservando datos', async () => {
     const page = wizard;
 
     // Navigate to palpación wizard
@@ -144,7 +144,7 @@ test.describe('Wizard Palpación Grupal', () => {
   // =========================================================================
   // E2E-04 Scenario 4: Cancelar wizard en cualquier paso
   // =========================================================================
-  test('debería cancelar wizard y no guardar datos', async ({ authenticatedPage }) => {
+  test('debería cancelar wizard y no guardar datos', async () => {
     const page = wizard;
 
     // Navigate to palpación wizard
@@ -176,7 +176,7 @@ test.describe('Wizard Palpación Grupal', () => {
   // =========================================================================
   // Additional: Validate step fields before proceeding
   // =========================================================================
-  test('debería validar campos obligatorios antes de avanzar', async ({ authenticatedPage }) => {
+  test('debería validar campos obligatorios antes de avanzar', async () => {
     const page = wizard;
 
     // Navigate to palpación wizard
