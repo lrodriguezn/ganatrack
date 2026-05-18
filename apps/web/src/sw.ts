@@ -607,6 +607,12 @@ self.addEventListener('message', (event) => {
       break;
     }
 
+    case 'SKIP_WAITING': {
+      // Skip waiting to activate the new service worker immediately
+      void self.skipWaiting();
+      break;
+    }
+
     default:
       break;
   }
