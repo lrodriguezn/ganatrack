@@ -8,7 +8,7 @@
 'use client';
 
 
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { usePredioStore } from '@/store/predio.store';
 import { useAnimales } from '@/modules/animales';
@@ -34,7 +34,7 @@ export function PartoForm({ onSubmit, isLoading }: PartoFormProps): JSX.Element 
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     formState: { errors },
   } = useForm<PartoFormValues>({
     resolver: zodResolver(partoSchema),
@@ -50,9 +50,10 @@ export function PartoForm({ onSubmit, isLoading }: PartoFormProps): JSX.Element 
     },
   });
 
-  const machos = watch('machos');
-  const hembras = watch('hembras');
-  const muertos = watch('muertos');
+  // useWatch is React Compiler compatible
+  const machos = useWatch({ control, name: 'machos' }) ?? 0;
+  const hembras = useWatch({ control, name: 'hembras' }) ?? 0;
+  const muertos = useWatch({ control, name: 'muertos' }) ?? 0;
   const totalCrias = machos + hembras + muertos;
 
   const hembrasActivas = animalesData?.data ?? [];
