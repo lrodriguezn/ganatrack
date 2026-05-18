@@ -16,6 +16,7 @@
  */
 
 'use client';
+'use no memo';
 
 import * as React from 'react';
 import {
@@ -63,6 +64,7 @@ export function DataTable<TData>({
     pageSize,
   };
 
+// eslint-disable-next-line react-hooks/incompatible-library -- TanStack Table is required for server-side pagination; React Compiler skips memoization safely here.
   const table = useReactTable({
     data,
     columns,

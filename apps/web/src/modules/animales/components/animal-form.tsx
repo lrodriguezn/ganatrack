@@ -17,7 +17,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
 import { createAnimalSchema } from '@ganatrack/shared-types';
@@ -56,7 +56,6 @@ export function AnimalForm({
   const {
     control,
     handleSubmit,
-    watch,
     formState: { errors },
     reset,
   } = useForm<AnimalFormData>({
@@ -84,9 +83,9 @@ export function AnimalForm({
     },
   });
 
-  // Watch for conditional field visibility
-  const sexoKey = watch('sexoKey');
-  const tipoIngresoId = watch('tipoIngresoId');
+  // Watch for conditional field visibility (useWatch is React Compiler compatible)
+  const sexoKey = useWatch({ control, name: 'sexoKey' });
+  const tipoIngresoId = useWatch({ control, name: 'tipoIngresoId' });
 
 
   const isFemenino = sexoKey === SexoEnum.FEMENINO;
