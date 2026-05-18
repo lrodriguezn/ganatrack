@@ -33,7 +33,7 @@ test.describe('CRUD Animales', () => {
   // =========================================================================
   // E2E-03 Scenario 1: Crear nuevo animal completo
   // =========================================================================
-  test('debería crear un nuevo animal con datos válidos', async ({ authenticatedPage }) => {
+  test('debería crear un nuevo animal con datos válidos', async () => {
     const page = animalesPage;
 
     // Navigate to create form
@@ -57,7 +57,7 @@ test.describe('CRUD Animales', () => {
   // =========================================================================
   // E2E-03 Scenario 2: Crear animal con código duplicado
   // =========================================================================
-  test('debería mostrar error al crear animal con código duplicado', async ({ authenticatedPage }) => {
+  test('debería mostrar error al crear animal con código duplicado', async () => {
     const page = animalesPage;
 
     // Navigate to create form
@@ -83,7 +83,7 @@ test.describe('CRUD Animales', () => {
   // =========================================================================
   // E2E-03 Scenario 3: Editar animal existente
   // =========================================================================
-  test('debería editar un animal existente', async ({ authenticatedPage }) => {
+  test('debería editar un animal existente', async () => {
     const page = animalesPage;
 
     // Navigate to edit for TEST_ANIMAL
@@ -110,7 +110,7 @@ test.describe('CRUD Animales', () => {
   // =========================================================================
   // E2E-03 Scenario 4: Cambiar estado del animal
   // =========================================================================
-  test('debería cambiar el estado del animal', async ({ authenticatedPage }) => {
+  test('debería cambiar el estado del animal', async () => {
     const page = animalesPage;
 
     // Navigate to animal detail
@@ -151,7 +151,7 @@ test.describe('CRUD Animales', () => {
   // =========================================================================
   // E2E-03 Scenario 5: Eliminar animal
   // =========================================================================
-  test('debería eliminar un animal con confirmación', async ({ authenticatedPage }) => {
+  test('debería eliminar un animal con confirmación', async () => {
     const page = animalesPage;
 
     // Navigate to detail page for TEST_ANIMAL_DELETE (dedicated animal for delete test)
@@ -184,7 +184,7 @@ test.describe('CRUD Animales', () => {
   // =========================================================================
   // E2E-03 Scenario 6: Validación de formulario vacío
   // =========================================================================
-  test('debería mostrar validación de campos obligatorios', async ({ authenticatedPage }) => {
+  test('debería mostrar validación de campos obligatorios', async () => {
     const page = animalesPage;
 
     // Navigate to create form
@@ -207,7 +207,7 @@ test.describe('CRUD Animales', () => {
   // =========================================================================
   // Additional: List page filtering
   // =========================================================================
-  test('debería filtrar animales por búsqueda', async ({ authenticatedPage }) => {
+  test('debería filtrar animales por búsqueda', async () => {
     const page = animalesPage;
 
     // Go to list

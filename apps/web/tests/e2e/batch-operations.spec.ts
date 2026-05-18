@@ -31,7 +31,7 @@ test.describe('Operaciones en Lote - Animales', () => {
   // =========================================================================
   // E2E-08 Scenario 1: Selección múltiple de animales
   // =========================================================================
-  test('debería permitir seleccionar múltiples animales', async ({ authenticatedPage }) => {
+  test('debería permitir seleccionar múltiples animales', async () => {
     const page = animalesPage;
 
     // Select first animal checkbox
@@ -51,7 +51,7 @@ test.describe('Operaciones en Lote - Animales', () => {
   // =========================================================================
   // E2E-08 Scenario 2: Aplicar acción en lote - Cambiar estado
   // =========================================================================
-  test('debería cambiar estado de múltiples animales en lote', async ({ authenticatedPage }) => {
+  test('debería cambiar estado de múltiples animales en lote', async () => {
     const page = animalesPage;
 
     // Select multiple animals
@@ -97,7 +97,7 @@ test.describe('Operaciones en Lote - Animales', () => {
   // =========================================================================
   // E2E-08 Scenario 3: Aplicar acción en lote - Asignar potrero
   // =========================================================================
-  test('debería asignar potrero a múltiples animales en lote', async ({ authenticatedPage }) => {
+  test('debería asignar potrero a múltiples animales en lote', async () => {
     const page = animalesPage;
 
     // Select animals
@@ -135,7 +135,7 @@ test.describe('Operaciones en Lote - Animales', () => {
   // =========================================================================
   // E2E-08 Scenario 4: Selección de todos los animales
   // =========================================================================
-  test('debería seleccionar y deseleccionar todos los animales', async ({ authenticatedPage }) => {
+  test('debería seleccionar y deseleccionar todos los animales', async () => {
     const page = animalesPage;
 
     // Look for "select all" checkbox in table header
@@ -176,7 +176,7 @@ test.describe('Operaciones en Lote - Animales', () => {
   // =========================================================================
   // E2E-08 Scenario 5: Operación en lote con validación (delete confirmation)
   // =========================================================================
-  test('debería requerir confirmación para eliminar múltiples animales', async ({ authenticatedPage }) => {
+  test('debería requerir confirmación para eliminar múltiples animales', async () => {
     const page = animalesPage;
 
     // Select multiple animals
