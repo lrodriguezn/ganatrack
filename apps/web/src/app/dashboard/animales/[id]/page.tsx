@@ -26,9 +26,8 @@ export default function AnimalDetailPage({ params }: AnimalDetailPageProps): JSX
   const resolvedParams = use(params);
   const { predioActivo, isLoading: predioLoading } = usePredioRequerido();
   const animalId = parseInt(resolvedParams.id, 10);
-  if (predioLoading || !predioActivo) return null;
-
   const { data: animal, isLoading, error } = useAnimal(animalId);
+  if (predioLoading || !predioActivo) return null;
 
   if (error) {
     return (

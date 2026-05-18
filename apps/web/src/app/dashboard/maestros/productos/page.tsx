@@ -71,9 +71,10 @@ export default function ProductosListPage(): JSX.Element {
     } finally {
       setIsLoading(false);
     }
-  }, [predioActivo?.id, pageIndex, pageSize, search, tipoKey, estadoKey]);
+  }, [predioActivo, pageIndex, pageSize, search, tipoKey, estadoKey]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadProductos();
   }, [loadProductos]);
 

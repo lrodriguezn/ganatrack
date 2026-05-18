@@ -61,7 +61,10 @@ function isSyncQueueItem(value: unknown): value is SyncQueueItem {
 export function useFailedSync(): FailedSyncState {
   const [state, setState] = useState<FailedSyncState>(initialState);
   const stateRef = useRef(state);
-  stateRef.current = state;
+
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
 
   const readQueues = useCallback(async (): Promise<void> => {
     try {

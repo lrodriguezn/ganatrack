@@ -16,7 +16,7 @@
 'use client';
 
 import * as SelectPrimitive from '@radix-ui/react-select';
-import { forwardRef, useCallback, useMemo, useRef, useState } from 'react';
+import { forwardRef, useCallback, useId, useMemo, useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 // ============================================================================
@@ -123,7 +123,8 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
     const [search, setSearch] = useState('');
     const [open, setOpen] = useState(false);
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const selectId = id || `select-${Math.random().toString(36).slice(2, 9)}`;
+    const generatedId = useId();
+    const selectId = id || `select-${generatedId}`;
 
     const handleSearchChange = useCallback(
       (e: React.ChangeEvent<HTMLInputElement>) => {

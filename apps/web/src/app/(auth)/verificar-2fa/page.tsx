@@ -19,6 +19,9 @@ function TwoFactorContent(): JSX.Element {
   const searchParams = useSearchParams();
   const tempToken = searchParams.get('temp') || '';
 
+  const { error, isLoading, secondsLeft, canResend, resendCooldown, onSubmit, onResend } =
+    useVerify2FA(tempToken);
+
   if (!tempToken) {
     return (
       <div className="w-full max-w-md p-6 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
@@ -36,9 +39,6 @@ function TwoFactorContent(): JSX.Element {
       </div>
     );
   }
-
-  const { error, isLoading, secondsLeft, canResend, resendCooldown, onSubmit, onResend } =
-    useVerify2FA(tempToken);
 
   return (
     <div className="w-full max-w-md px-4">
