@@ -23,3 +23,4 @@ export { PageSkeleton } from './page-skeleton';
 export { ChartSkeleton } from './chart-skeleton';
 export { SyncStatusIndicator } from './sync-status-indicator';
 export { SyncConflictToast } from './sync-conflict-toast';
+export { SWUpdateToast } from './sw-update-toast';
