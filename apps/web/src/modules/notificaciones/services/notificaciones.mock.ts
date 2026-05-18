@@ -96,7 +96,7 @@ const defaultPreferencias: NotificacionPreferencias = {
 
 let preferencias = { ...defaultPreferencias };
 
-let idCounter = 6;
+let _idCounter = 6;
 
 // ============================================================================
 // Helpers
@@ -190,6 +190,6 @@ export class MockNotificacionesService implements INotificacionesService {
 export function resetNotificacionesMock(): void {
   storeNotificaciones.length = 0;
   storeNotificaciones.push(...SEED_NOTIFICACIONES.map((n) => ({ ...n })));
-  idCounter = 6;
+  _idCounter = 6;
   preferencias = { ...defaultPreferencias };
 }
