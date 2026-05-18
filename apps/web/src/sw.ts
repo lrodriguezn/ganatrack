@@ -255,15 +255,14 @@ const serwist = new Serwist({
       }),
     },
 
-    // 5. Catalogs — NetworkFirst (user can mutate via CRUD; must show fresh data)
+    // 5. Catalogs — StaleWhileRevalidate (serve cached instantly, refresh in background)
     {
       matcher: ({ url }) =>
         /\/api\/v1\/(configuracion|maestros)\//.test(url.pathname),
-      handler: new NetworkFirst({
+      handler: new StaleWhileRevalidate({
         cacheName: "api-catalogs",
-        networkTimeoutSeconds: 3,
         plugins: [
-          new ExpirationPlugin({ maxEntries: 100, maxAgeSeconds: 3600 }),
+          new ExpirationPlugin({ maxEntries: 100, maxAgeSeconds: 300 }), // 5 minutes
         ],
       }),
       method: "GET",
