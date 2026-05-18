@@ -140,6 +140,7 @@ export function Tabs({
   // Sync from URL on mount
   useEffect(() => {
     if (syncUrl && initialUrlValue && initialUrlValue !== currentValue) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setInternalValue(initialUrlValue);
     }
   }, [syncUrl, initialUrlValue]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -276,6 +277,7 @@ function LazyContent({
     // via CSS display:none for inactive tabs, so content is always in DOM.
     // For true lazy loading, consumers should conditionally render inside TabsContent.
     if (active || hasActivated) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHasActivated(true);
     }
   }, [active, hasActivated]);

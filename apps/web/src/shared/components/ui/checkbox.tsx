@@ -20,7 +20,7 @@
 'use client';
 
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import { forwardRef } from 'react';
+import { forwardRef, useId } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 type CheckboxSize = 'sm' | 'md';
@@ -102,7 +102,8 @@ export const Checkbox = forwardRef<
     },
     ref,
   ) => {
-    const checkboxId = id || props.name || `checkbox-${Math.random().toString(36).slice(2, 9)}`;
+    const generatedId = useId();
+    const checkboxId = id || props.name || `checkbox-${generatedId}`;
 
     return (
       <div className="flex items-center gap-2">

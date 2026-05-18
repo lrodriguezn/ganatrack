@@ -68,9 +68,10 @@ export default function UsuariosListPage(): JSX.Element {
     } finally {
       setIsLoading(false);
     }
-  }, [predioActivo?.id, pageIndex, pageSize, search, rolId, activo]);
+  }, [predioActivo, pageIndex, pageSize, search, rolId, activo]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadUsuarios();
   }, [loadUsuarios]);
 

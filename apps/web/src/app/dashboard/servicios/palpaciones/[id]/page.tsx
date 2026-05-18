@@ -14,8 +14,8 @@ import { Button } from '@/shared/components/ui/button';
 export default function PalpacionDetailPage(): JSX.Element {
   const params = useParams();
   const id = Number(params.id);
-  if (isNaN(id)) return notFound();
   const { data, isLoading, error } = usePalpacion(id);
+  if (isNaN(id)) return notFound();
 
   if (isLoading) {
     return (

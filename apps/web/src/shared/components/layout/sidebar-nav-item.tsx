@@ -76,6 +76,7 @@ function SidebarNavItemInner({ item, isCollapsed, depth = 0 }: SidebarNavItemPro
   // Auto-expand if a child becomes active
   useEffect(() => {
     if (childIsActive) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsExpanded(true);
     }
   }, [childIsActive]);

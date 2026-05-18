@@ -58,6 +58,7 @@ export function EstadoChangeModal({
 
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedEstado(currentEstado === EstadoAnimalEnum.ACTIVO ? EstadoAnimalEnum.VENDIDO : EstadoAnimalEnum.MUERTO);
       setFecha(new Date());
       setPrecioVenta('');
