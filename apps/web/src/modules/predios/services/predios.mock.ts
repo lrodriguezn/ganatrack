@@ -43,53 +43,43 @@ interface MockPredio extends Omit<Predio, 'id'> {
 const MOCK_PREDIOS: MockPredio[] = [
   {
     id: 1,
-    nombre: 'Finca La Esperanza',
+    codigo: 'FLE', nombre: 'Finca La Esperanza',
     departamento: 'Antioquia',
     municipio: 'Medellín',
     vereda: 'El Carmen',
     areaHectareas: 150.5,
-    tipo: 'doble propósito',
-    estado: 'activo',
   },
   {
     id: 2,
-    nombre: 'Hacienda El Roble',
+    codigo: 'HER', nombre: 'Hacienda El Roble',
     departamento: 'Cundinamarca',
     municipio: 'Bogotá',
     vereda: 'La Calera',
     areaHectareas: 320.0,
-    tipo: 'lechería',
-    estado: 'activo',
   },
   {
     id: 3,
-    nombre: 'Finca San José',
+    codigo: 'FSJ', nombre: 'Finca San José',
     departamento: 'Caldas',
     municipio: 'Manizales',
     vereda: 'La Reina',
     areaHectareas: 85.3,
-    tipo: 'cría',
-    estado: 'activo',
   },
   {
     id: 4,
-    nombre: 'Hacienda Santa María',
+    codigo: 'HSM', nombre: 'Hacienda Santa María',
     departamento: 'Tolima',
     municipio: 'Ibagué',
     vereda: 'Coello',
     areaHectareas: 450.0,
-    tipo: 'engorde',
-    estado: 'activo',
   },
   {
     id: 5,
-    nombre: 'Finca El Porvenir',
+    codigo: 'FEP', nombre: 'Finca El Porvenir',
     departamento: 'Santander',
     municipio: 'Bucaramanga',
     vereda: 'Rio Negro',
     areaHectareas: 200.75,
-    tipo: 'doble propósito',
-    estado: 'inactivo',
   },
 ];
 
@@ -100,37 +90,14 @@ interface MockPotrero extends Omit<Potrero, 'id' | 'predioId'> {
 
 const MOCK_POTREROS: MockPotrero[] = [
   // Predio 1 - Finca La Esperanza (150.5 has)
-  { id: 1, predioId: 1, codigo: 'PE-01', nombre: 'Potrero Norte', areaHectareas: 25.0, tipoPasto: 'Brachiaria Decumbens', capacidadMaxima: 50, estado: 'activo' },
-  { id: 2, predioId: 1, codigo: 'PE-02', nombre: 'Potrero Sur', areaHectareas: 20.5, tipoPasto: 'Guinea Panic', capacidadMaxima: 40, estado: 'activo' },
-  { id: 3, predioId: 1, codigo: 'PE-03', nombre: 'Potrero Este', areaHectareas: 18.0, tipoPasto: 'Brachiaria Decumbens', capacidadMaxima: 35, estado: 'en_descanso' },
-  { id: 4, predioId: 1, codigo: 'PE-04', nombre: 'Potrero Oeste', areaHectareas: 22.0, tipoPasto: 'Angleton', capacidadMaxima: 45, estado: 'activo' },
-  { id: 5, predioId: 1, codigo: 'PE-05', nombre: 'Potrero Central', areaHectareas: 30.0, tipoPasto: 'Brachiaria Hybrid', capacidadMaxima: 60, estado: 'activo' },
-  { id: 6, predioId: 1, codigo: 'PE-06', nombre: 'Potrero Loma', areaHectareas: 35.0, tipoPasto: 'Jaragua', capacidadMaxima: 70, estado: 'activo' },
 
   // Predio 2 - Hacienda El Roble (320 has)
-  { id: 7, predioId: 2, codigo: 'HER-01', nombre: 'Sector A - Alta', areaHectareas: 40.0, tipoPasto: 'Kikuyu', capacidadMaxima: 80, estado: 'activo' },
-  { id: 8, predioId: 2, codigo: 'HER-02', nombre: 'Sector A - Baja', areaHectareas: 45.0, tipoPasto: 'Kikuyu', capacidadMaxima: 90, estado: 'activo' },
-  { id: 9, predioId: 2, codigo: 'HER-03', nombre: 'Sector B', areaHectareas: 50.0, tipoPasto: 'Ryegrass', capacidadMaxima: 100, estado: 'en_descanso' },
-  { id: 10,predioId: 2, codigo: 'HER-04', nombre: 'Sector C', areaHectareas: 55.0, tipoPasto: 'Festuca', capacidadMaxima: 110, estado: 'activo' },
-  { id: 11,predioId: 2, codigo: 'HER-05', nombre: 'Sector D', areaHectareas: 60.0, tipoPasto: 'Bluegrass', capacidadMaxima: 120, estado: 'activo' },
-  { id: 12,predioId: 2, codigo: 'HER-06', nombre: 'Potrero Loma', areaHectareas: 70.0, tipoPasto: 'Kikuyu', capacidadMaxima: 140, estado: 'activo' },
 
   // Predio 3 - Finca San José (85.3 has)
-  { id: 13,predioId: 3, codigo: 'FSJ-01', nombre: 'Alto', areaHectareas: 20.0, tipoPasto: 'Brachiaria', capacidadMaxima: 40, estado: 'activo' },
-  { id: 14,predioId: 3, codigo: 'FSJ-02', nombre: 'Medio', areaHectareas: 25.0, tipoPasto: 'Guinea', capacidadMaxima: 50, estado: 'activo' },
-  { id: 15,predioId: 3, codigo: 'FSJ-03', nombre: 'Bajo', areaHectareas: 40.3, tipoPasto: 'Brachiaria', capacidadMaxima: 80, estado: 'en_descanso' },
 
   // Predio 4 - Hacienda Santa María (450 has)
-  { id: 16,predioId: 4, codigo: 'HSM-01', nombre: 'Norte Grande', areaHectareas: 75.0, tipoPasto: 'Angleton', capacidadMaxima: 150, estado: 'activo' },
-  { id: 17,predioId: 4, codigo: 'HSM-02', nombre: 'Sur Grande', areaHectareas: 80.0, tipoPasto: 'Brachiaria', capacidadMaxima: 160, estado: 'activo' },
-  { id: 18,predioId: 4, codigo: 'HSM-03', nombre: 'Este', areaHectareas: 70.0, tipoPasto: 'Guinea', capacidadMaxima: 140, estado: 'activo' },
-  { id: 19,predioId: 4, codigo: 'HSM-04', nombre: 'Oeste', areaHectareas: 65.0, tipoPasto: 'Brachiaria', capacidadMaxima: 130, estado: 'en_descanso' },
-  { id: 20,predioId: 4, codigo: 'HSM-05', nombre: 'Central', areaHectareas: 80.0, tipoPasto: 'Angleton', capacidadMaxima: 160, estado: 'activo' },
-  { id: 21,predioId: 4, codigo: 'HSM-06', nombre: 'Loma', areaHectareas: 80.0, tipoPasto: 'Jaragua', capacidadMaxima: 160, estado: 'activo' },
 
   // Predio 5 - Finca El Porvenir (200.75 has) - Inactivo
-  { id: 22,predioId: 5, codigo: 'FEP-01', nombre: 'Principal', areaHectareas: 100.0, tipoPasto: 'Brachiaria', capacidadMaxima: 200, estado: 'activo' },
-  { id: 23,predioId: 5, codigo: 'FEP-02', nombre: 'Secundario', areaHectareas: 100.75, tipoPasto: 'Guinea', capacidadMaxima: 200, estado: 'activo' },
 ];
 
 interface MockLote extends Omit<Lote, 'id' | 'predioId'> {
@@ -140,29 +107,14 @@ interface MockLote extends Omit<Lote, 'id' | 'predioId'> {
 
 const MOCK_LOTES: MockLote[] = [
   // Predio 1
-  { id: 1, predioId: 1, nombre: 'Vacas en Producción', descripcion: 'Grupo de vacas actuales en ordeño', tipo: 'producción' },
-  { id: 2, predioId: 1, nombre: 'Vacas Secas', descripcion: 'Vacas en período seco', tipo: 'cría' },
-  { id: 3, predioId: 1, nombre: 'Levante', descripcion: 'Novillas de 12-18 meses', tipo: 'levante' },
-  { id: 4, predioId: 1, nombre: 'Engorde', descripcion: 'Animales en finalización', tipo: 'engorde' },
 
   // Predio 2
-  { id: 5, predioId: 2, nombre: 'Producción Alta', descripcion: 'Vacas con producción mayor a 20L/día', tipo: 'producción' },
-  { id: 6, predioId: 2, nombre: 'Producción Media', descripcion: 'Vacas con producción 10-20L/día', tipo: 'producción' },
-  { id: 7, predioId: 2, nombre: 'Producción Baja', descripcion: 'Vacas con producción menor a 10L/día', tipo: 'producción' },
-  { id: 8, predioId: 2, nombre: 'Gestantes', descripcion: 'Vacas preñadas', tipo: 'cría' },
 
   // Predio 3
-  { id: 9,  predioId: 3, nombre: 'Madres con Cría', descripcion: 'Vacas con terneros al pie', tipo: 'cría' },
-  { id: 10,predioId: 3, nombre: 'Destete Reciente', descripcion: 'Terneros recién destetados', tipo: 'levante' },
 
   // Predio 4
-  { id: 11,predioId: 4, nombre: 'Engorde 1', descripcion: 'Lote de engorde fase 1', tipo: 'engorde' },
-  { id: 12,predioId: 4, nombre: 'Engorde 2', descripcion: 'Lote de engorde fase 2', tipo: 'engorde' },
-  { id: 13,predioId: 4, nombre: 'Engorde 3', descripcion: 'Lote de engorde fase 3 - Finalización', tipo: 'engorde' },
 
   // Predio 5
-  { id: 14,predioId: 5, nombre: 'Producción', descripcion: 'Vacas en producción', tipo: 'producción' },
-  { id: 15,predioId: 5, nombre: 'Levante', descripcion: 'Novillas en crecimiento', tipo: 'levante' },
 ];
 
 interface MockGrupo extends Omit<Grupo, 'id' | 'predioId'> {
@@ -199,27 +151,14 @@ interface MockSector extends Omit<Sector, 'id' | 'predioId'> {
 
 const MOCK_SECTORES: MockSector[] = [
   // Predio 1 - Finca La Esperanza
-  { id: 1,  predioId: 1, codigo: 'SEC-PE-01', nombre: 'Zona Norte', areaHectareas: 50.0, tipoPasto: 'Brachiaria Decumbens', capacidadMaxima: 100, estado: 'activo' },
-  { id: 2,  predioId: 1, codigo: 'SEC-PE-02', nombre: 'Zona Sur', areaHectareas: 45.5, tipoPasto: 'Guinea Panic', capacidadMaxima: 90, estado: 'activo' },
-  { id: 3,  predioId: 1, codigo: 'SEC-PE-03', nombre: 'Zona Centro', areaHectareas: 55.0, tipoPasto: 'Brachiaria Hybrid', capacidadMaxima: 110, estado: 'en_descanso' },
 
   // Predio 2 - Hacienda El Roble
-  { id: 4,  predioId: 2, codigo: 'SEC-HER-01', nombre: 'Sector Alta Montana', areaHectareas: 120.0, tipoPasto: 'Kikuyu', capacidadMaxima: 240, estado: 'activo' },
-  { id: 5,  predioId: 2, codigo: 'SEC-HER-02', nombre: 'Sector Baja Montana', areaHectareas: 100.0, tipoPasto: 'Ryegrass', capacidadMaxima: 200, estado: 'activo' },
-  { id: 6,  predioId: 2, codigo: 'SEC-HER-03', nombre: 'Sector Valle', areaHectareas: 100.0, tipoPasto: 'Bluegrass', capacidadMaxima: 200, estado: 'activo' },
 
   // Predio 3 - Finca San José
-  { id: 7,  predioId: 3, codigo: 'SEC-FSJ-01', nombre: 'Altiplano', areaHectareas: 40.0, tipoPasto: 'Brachiaria', capacidadMaxima: 80, estado: 'activo' },
-  { id: 8,  predioId: 3, codigo: 'SEC-FSJ-02', nombre: ' Bajio', areaHectareas: 45.3, tipoPasto: 'Guinea', capacidadMaxima: 90, estado: 'en_descanso' },
 
   // Predio 4 - Hacienda Santa María
-  { id: 9,  predioId: 4, codigo: 'SEC-HSM-01', nombre: 'Norte Extensive', areaHectareas: 150.0, tipoPasto: 'Angleton', capacidadMaxima: 300, estado: 'activo' },
-  { id: 10, predioId: 4, codigo: 'SEC-HSM-02', nombre: 'Sur Extensive', areaHectareas: 150.0, tipoPasto: 'Brachiaria', capacidadMaxima: 300, estado: 'activo' },
-  { id: 11,predioId: 4, codigo: 'SEC-HSM-03', nombre: 'Centro Intensivo', areaHectareas: 150.0, tipoPasto: 'Guinea', capacidadMaxima: 300, estado: 'activo' },
 
   // Predio 5 - Finca El Porvenir (Inactivo)
-  { id: 12,predioId: 5, codigo: 'SEC-FEP-01', nombre: 'Principal Norte', areaHectareas: 100.0, tipoPasto: 'Brachiaria', capacidadMaxima: 200, estado: 'activo' },
-  { id: 13,predioId: 5, codigo: 'SEC-FEP-02', nombre: 'Principal Sur', areaHectareas: 100.75, tipoPasto: 'Guinea', capacidadMaxima: 200, estado: 'activo' },
 ];
 
 // ============================================================================
@@ -277,8 +216,7 @@ export class MockPrediosService implements PrediosService {
     const newPredio: MockPredio = {
       id: nextPredioId++,
       ...data,
-      estado: 'activo',
-    };
+    } as MockPredio;
     predios.push(newPredio);
     return { ...newPredio };
   }
@@ -289,7 +227,7 @@ export class MockPrediosService implements PrediosService {
     if (index === -1) {
       throw new ApiError(404, 'NOT_FOUND', `Predio con ID ${id} no encontrado`);
     }
-    predios[index] = { ...predios[index], ...data };
+    predios[index] = { ...predios[index], ...data } as MockPredio;
     return { ...predios[index] };
   }
 
@@ -335,8 +273,7 @@ export class MockPrediosService implements PrediosService {
       id: nextPotreroId++,
       predioId,
       ...data,
-      estado: data.estado ?? 'activo',
-    };
+    } as MockPotrero;
     potreros.push(newPotrero);
     return { ...newPotrero };
   }
@@ -347,7 +284,7 @@ export class MockPrediosService implements PrediosService {
     if (index === -1) {
       throw new ApiError(404, 'NOT_FOUND', `Potrero con ID ${id} no encontrado`);
     }
-    potreros[index] = { ...potreros[index], ...data };
+    potreros[index] = { ...potreros[index], ...data } as MockPotrero;
     return { ...potreros[index] };
   }
 
@@ -398,7 +335,7 @@ export class MockPrediosService implements PrediosService {
     if (index === -1) {
       throw new ApiError(404, 'NOT_FOUND', `Lote con ID ${id} no encontrado`);
     }
-    lotes[index] = { ...lotes[index], ...data };
+    lotes[index] = { ...lotes[index], ...data } as MockLote;
     return { ...lotes[index] };
   }
 
@@ -450,7 +387,7 @@ export class MockPrediosService implements PrediosService {
     if (index === -1) {
       throw new ApiError(404, 'NOT_FOUND', `Grupo con ID ${id} no encontrado`);
     }
-    grupos[index] = { ...grupos[index], ...data };
+    grupos[index] = { ...grupos[index], ...data } as MockGrupo;
     return { ...grupos[index] };
   }
 
@@ -490,7 +427,6 @@ export class MockPrediosService implements PrediosService {
       id: nextSectorId++,
       predioId,
       ...data,
-      estado: data.estado ?? 'activo',
     };
     sectores.push(newSector);
     return { ...newSector };
@@ -502,7 +438,7 @@ export class MockPrediosService implements PrediosService {
     if (index === -1) {
       throw new ApiError(404, 'NOT_FOUND', `Sector con ID ${id} no encontrado`);
     }
-    sectores[index] = { ...sectores[index], ...data };
+    sectores[index] = { ...sectores[index], ...data } as MockSector;
     return { ...sectores[index] };
   }
 

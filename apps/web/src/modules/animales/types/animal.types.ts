@@ -26,7 +26,7 @@ export interface Animal {
   sexoKey: number;
   tipoIngresoId: number;
   configRazasId: number;
-  potreroId?: number;
+  potreroId?: number | null;
   madreId?: number | null;
   padreId?: number | null;
   codigoMadre?: string;

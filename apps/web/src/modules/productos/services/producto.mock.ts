@@ -146,7 +146,7 @@ export class MockProductoService implements ProductoService {
     if (index === -1) {
       throw new ApiError(404, 'NOT_FOUND', `Producto con ID ${id} no encontrado`);
     }
-    seedData[index] = { ...seedData[index], ...data, updatedAt: new Date().toISOString() };
+    seedData[index] = { ...seedData[index], ...data, updatedAt: new Date().toISOString() } as Producto;
     return { ...seedData[index] };
   }
 
@@ -157,7 +157,10 @@ export class MockProductoService implements ProductoService {
       throw new ApiError(404, 'NOT_FOUND', `Producto con ID ${id} no encontrado`);
     }
     // Soft delete — set estado to inactivo
-    seedData[index].estadoKey = 2;
+    const producto = seedData[index];
+    if (producto) {
+      producto.estadoKey = 2;
+    }
   }
 }
 

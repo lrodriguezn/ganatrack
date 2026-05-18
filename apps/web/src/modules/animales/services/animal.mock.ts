@@ -192,7 +192,6 @@ const SEED_ANIMALS: Animal[] = [
     id: 24,predioId: 1, codigo: 'GAN-024', nombre: 'Relámpago', fechaNacimiento: '2019-04-10',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 1, potreroId: undefined,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 1, saludAnimalKey: 0,
-    precioVenta: 3500000, lugarVentaId: 1,
     razaNombre: 'Brahman', potreroNombre: undefined,
   },
   // Muertos (1)
@@ -200,7 +199,6 @@ const SEED_ANIMALS: Animal[] = [
     id: 25,predioId: 1, codigo: 'GAN-025', nombre: 'Sombra', fechaNacimiento: '2018-02-20',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 3, potreroId: undefined,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 2, saludAnimalKey: 0,
-    causaMuerteId: 1, diagnosticoId: 5,
     razaNombre: 'Romosinuano', potreroNombre: undefined,
   },
 ];
@@ -219,10 +217,6 @@ const storeAnimals: Animal[] = SEED_ANIMALS.map(a => ({
   pesoCompra: a.pesoCompra,
   codigoRfid: a.codigoRfid,
   codigoArete: a.codigoArete,
-  precioVenta: (a as { precioVenta?: number }).precioVenta,
-  lugarVentaId: (a as { lugarVentaId?: number }).lugarVentaId,
-  causaMuerteId: (a as { causaMuerteId?: number }).causaMuerteId,
-  diagnosticoId: (a as { diagnosticoId?: number }).diagnosticoId,
 }));
 
 let idCounter = 26;
@@ -308,7 +302,7 @@ export class MockAnimalService implements AnimalService {
     if (index === -1) {
       throw new ApiError(404, 'NOT_FOUND', `Animal con ID ${id} no encontrado`);
     }
-    storeAnimals[index] = { ...storeAnimals[index], ...data };
+    storeAnimals[index] = { ...storeAnimals[index], ...data } as Animal;
     return { ...storeAnimals[index] };
   }
 
@@ -319,17 +313,20 @@ export class MockAnimalService implements AnimalService {
       throw new ApiError(404, 'NOT_FOUND', `Animal con ID ${id} no encontrado`);
     }
     // Soft delete — set estado to inactivo
-    storeAnimals[index].estadoAnimalKey = 99; // custom inactive state
+    const animal = storeAnimals[index];
+    if (animal) {
+      animal.estadoAnimalKey = 99; // custom inactive state
+    }
   }
 
   async cambiarEstado(id: number, data: CambioEstadoDto): Promise<Animal> {
     await delay(300);
-    const index = storeAnimals.findIndex(a => a.id === id);
-    if (index === -1) {
+    const animal = storeAnimals.find(a => a.id === id);
+    if (!animal) {
       throw new ApiError(404, 'NOT_FOUND', `Animal con ID ${id} no encontrado`);
     }
-    storeAnimals[index].estadoAnimalKey = data.estadoAnimalKey;
-    return { ...storeAnimals[index] };
+    animal.estadoAnimalKey = data.estadoAnimalKey;
+    return { ...animal };
   }
 
   async getGenealogia(id: number): Promise<Genealogia> {

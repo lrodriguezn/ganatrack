@@ -103,7 +103,7 @@ export class MockCatalogoService implements CatalogoService {
     const newItem: CatalogoBase = {
       id: idCounters[tipo]++,
       activo: true,
-      ...data,
+      ...data as CreateCatalogoDto,
     };
     store[tipo].push(newItem);
     return { ...newItem };
@@ -116,7 +116,7 @@ export class MockCatalogoService implements CatalogoService {
     if (index === -1) {
       throw new ApiError(404, 'NOT_FOUND', `Registro con ID ${id} no encontrado`);
     }
-    items[index] = { ...items[index], ...data };
+    items[index] = { ...items[index], ...data } as CatalogoBase;
     return { ...items[index] };
   }
 

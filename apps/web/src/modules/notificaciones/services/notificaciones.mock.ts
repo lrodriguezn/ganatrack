@@ -96,6 +96,8 @@ const defaultPreferencias: NotificacionPreferencias = {
 
 let preferencias = { ...defaultPreferencias };
 
+let idCounter = 6;
+
 // ============================================================================
 // Helpers
 // ============================================================================

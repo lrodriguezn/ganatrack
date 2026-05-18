@@ -17,7 +17,7 @@ import type {
 import type {
   PermisoMatrixState,
   BatchSavePermisosPayload,
-  Rol,
+  RolSummary,
   PermisoCell,
   ModuloKey,
   AccionPermiso,
@@ -30,7 +30,7 @@ import { MODULOS_PERMISOS, ACCIONES_PERMISOS } from '../types/roles.types';
 // Seed Data — 15 realistic users
 // ============================================================================
 
-const SEED_ROLES: Rol[] = [
+const SEED_ROLES: RolSummary[] = [
   { id: 1, nombre: 'Administrador', descripcion: 'Acceso completo a todos los módulos', esSistema: true },
   { id: 2, nombre: 'Veterinario', descripcion: 'Gestión de servicios y reportes de salud', esSistema: true },
   { id: 3, nombre: 'Operario', descripcion: 'Registro diario de actividades', esSistema: true },
@@ -57,7 +57,7 @@ const SEED_USUARIOS: Usuario[] = [
 ];
 
 const storeUsuarios: Usuario[] = SEED_USUARIOS.map(u => ({ ...u }));
-const storeRoles: Rol[] = SEED_ROLES.map(r => ({ ...r }));
+const storeRoles: RolSummary[] = SEED_ROLES.map(r => ({ ...r }));
 let idCounter = 16;
 
 // Generate default permission matrix for a role
@@ -195,14 +195,18 @@ export class MockUsuariosService implements UsuariosService {
     }
 
     // Check duplicate email (excluding self)
-    if (data.email && data.email !== storeUsuarios[index].email) {
+    const existingUsuario = storeUsuarios[index];
+    if (!existingUsuario) {
+      throw new ApiError(404, 'NOT_FOUND', `Usuario con ID ${id} no encontrado`);
+    }
+    if (data.email && data.email !== existingUsuario.email) {
       const duplicate = storeUsuarios.find(u => u.email === data.email && u.id !== id);
       if (duplicate) {
         throw new ApiError(409, 'DUPLICATE_EMAIL', `El email "${data.email}" ya está registrado`);
       }
     }
 
-    storeUsuarios[index] = { ...storeUsuarios[index], ...data };
+    storeUsuarios[index] = { ...existingUsuario, ...data } as Usuario;
     if (data.rolId) {
       storeUsuarios[index].rolNombre = storeRoles.find(r => r.id === data.rolId)?.nombre;
     }
@@ -211,24 +215,24 @@ export class MockUsuariosService implements UsuariosService {
 
   async deactivate(id: number): Promise<void> {
     await delay(300);
-    const index = storeUsuarios.findIndex(u => u.id === id);
-    if (index === -1) {
+    const usuario = storeUsuarios.find(u => u.id === id);
+    if (!usuario) {
       throw new ApiError(404, 'NOT_FOUND', `Usuario con ID ${id} no encontrado`);
     }
-    storeUsuarios[index].activo = false;
+    usuario.activo = false;
   }
 
   async activate(id: number): Promise<Usuario> {
     await delay(300);
-    const index = storeUsuarios.findIndex(u => u.id === id);
-    if (index === -1) {
+    const usuario = storeUsuarios.find(u => u.id === id);
+    if (!usuario) {
       throw new ApiError(404, 'NOT_FOUND', `Usuario con ID ${id} no encontrado`);
     }
-    storeUsuarios[index].activo = true;
-    return { ...storeUsuarios[index] };
+    usuario.activo = true;
+    return { ...usuario };
   }
 
-  async getRoles(): Promise<Rol[]> {
+  async getRoles(): Promise<RolSummary[]> {
     await delay(300);
     return storeRoles.map(r => ({ ...r }));
   }
