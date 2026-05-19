@@ -72,7 +72,7 @@ describe('useCreatePalpacion', () => {
 
       await result.current.mutateAsync(mockData);
 
-      expect(mockServiciosService.createPalpacion).toHaveBeenCalledWith(mockData);
+      expect(mockServiciosService.createPalpacion).toHaveBeenCalledWith(mockData, undefined);
     });
 
 
@@ -83,7 +83,7 @@ describe('useCreatePalpacion', () => {
 
       await result.current.mutateAsync({ animalId: 1 });
 
-      expect(mockServiciosService.createPalpacion).toHaveBeenCalledWith({ animalId: 1 });
+      expect(mockServiciosService.createPalpacion).toHaveBeenCalledWith({ animalId: 1 }, undefined);
     });
 
     it('debería retornar error cuando el servicio falla', async () => {
@@ -108,6 +108,20 @@ describe('useCreatePalpacion', () => {
       await waitFor(() => {
         expect(mockPush).toHaveBeenCalledWith('/dashboard/servicios/palpaciones');
       });
+    });
+
+    it('debería pasar headers al servicio cuando se proporcionan', async () => {
+      const mockData = { animalId: 1, fecha: '2024-01-15', resultado: 'positiva' };
+      const mockHeaders = { 'X-Idempotency-Key': 'test-key' };
+      const mockResponse = { id: 1, ...mockData };
+
+      mockServiciosService.createPalpacion.mockResolvedValueOnce(mockResponse);
+
+      const { result } = renderHook(() => useCreatePalpacion(), { wrapper: createWrapper() });
+
+      await result.current.mutateAsync(mockData, mockHeaders);
+
+      expect(mockServiciosService.createPalpacion).toHaveBeenCalledWith(mockData, mockHeaders);
     });
   });
 });

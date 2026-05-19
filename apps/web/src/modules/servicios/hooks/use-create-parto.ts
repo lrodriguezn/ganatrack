@@ -16,7 +16,8 @@ export function useCreateParto() {
   const router = useRouter();
 
   const mutation = useMutation({
-    mutationFn: (data: CreatePartoDto) => serviciosService.createParto(data),
+    mutationFn: ({ data, headers }: { data: CreatePartoDto; headers?: Record<string, string> }) =>
+      serviciosService.createParto(data, headers),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.servicios.partos.all });
       router.push('/dashboard/servicios/partos');
@@ -27,7 +28,8 @@ export function useCreateParto() {
   });
 
   return {
-    mutateAsync: mutation.mutateAsync,
+    mutateAsync: (data: CreatePartoDto, headers?: Record<string, string>) =>
+      mutation.mutateAsync({ data, headers }),
     isPending: mutation.isPending,
     error: mutation.error as Error | null,
     reset: mutation.reset,

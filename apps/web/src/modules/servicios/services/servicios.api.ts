@@ -38,8 +38,8 @@ export class RealServiciosService implements ServiciosService {
     return response.json();
   }
 
-  async createPalpacion(data: CreatePalpacionEventoDto): Promise<PalpacionEvento> {
-    const response = await apiClient.post('servicios/palpaciones', { json: data });
+  async createPalpacion(data: CreatePalpacionEventoDto, headers?: Record<string, string>): Promise<PalpacionEvento> {
+    const response = await apiClient.post('servicios/palpaciones', { json: data, headers });
     return response.json();
   }
 
@@ -78,8 +78,8 @@ export class RealServiciosService implements ServiciosService {
     return response.json();
   }
 
-  async createParto(data: CreatePartoDto): Promise<Parto> {
-    const response = await apiClient.post('servicios/partos', { json: data });
+  async createParto(data: CreatePartoDto, headers?: Record<string, string>): Promise<Parto> {
+    const response = await apiClient.post('servicios/partos', { json: data, headers });
     return response.json();
   }
 

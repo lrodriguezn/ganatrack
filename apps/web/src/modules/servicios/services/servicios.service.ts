@@ -30,7 +30,7 @@ export interface ServiciosService {
   // Palpaciones
   getPalpaciones(params: PaginationParams): Promise<PaginatedEventos<PalpacionEvento>>;
   getPalpacionById(id: number): Promise<PalpacionEvento>;
-  createPalpacion(data: CreatePalpacionEventoDto): Promise<PalpacionEvento>;
+  createPalpacion(data: CreatePalpacionEventoDto, headers?: Record<string, string>): Promise<PalpacionEvento>;
 
   // Inseminaciones
   getInseminaciones(params: PaginationParams): Promise<PaginatedEventos<InseminacionEvento>>;
@@ -40,7 +40,7 @@ export interface ServiciosService {
   // Partos
   getPartos(params: PaginationParams): Promise<PaginatedEventos<Parto>>;
   getPartoById(id: number): Promise<Parto>;
-  createParto(data: CreatePartoDto): Promise<Parto>;
+  createParto(data: CreatePartoDto, headers?: Record<string, string>): Promise<Parto>;
 
   // Servicios Veterinarios
   getServiciosVeterinarios(filters: { predioId: number; page: number; limit: number }): Promise<PaginatedServiciosVeterinarios>;
