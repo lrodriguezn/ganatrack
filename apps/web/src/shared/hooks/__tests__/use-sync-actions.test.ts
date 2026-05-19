@@ -4,8 +4,9 @@
  *
  * Coverage targets:
  * - discardItem sends postMessage to service worker
- * - retryItem retries a failed mutation
- * - resolveConflict handles conflict resolution
+ * - retryItem retries a failed mutation with auth headers
+ * - resolveConflict handles conflict resolution with auth headers
+ * - Token refresh on 401 during retry
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
@@ -28,12 +29,46 @@ Object.defineProperty(globalThis, 'navigator', {
   configurable: true,
 });
 
+// Mock Zustand stores
+const mockAuthStore = {
+  accessToken: 'test-access-token-123',
+  user: null,
+  permissions: [],
+  clearAuth: vi.fn(),
+  setAuth: vi.fn((data) => {
+    mockAuthStore.accessToken = data.accessToken;
+    mockAuthStore.user = data.user;
+    mockAuthStore.permissions = data.permissions;
+  }),
+};
+
+const mockPredioStore = {
+  predioActivo: { id: 42, nombre: 'Test Predio' },
+};
+
+vi.mock('@/store/auth.store', () => ({
+  useAuthStore: Object.assign(
+    vi.fn(),
+    { getState: () => mockAuthStore },
+  ),
+}));
+
+vi.mock('@/store/predio.store', () => ({
+  usePredioStore: Object.assign(
+    vi.fn(),
+    { getState: () => mockPredioStore },
+  ),
+}));
+
 describe('useSyncActions', () => {
   let fetchSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     postMessageCalls.length = 0;
     fetchSpy = vi.spyOn(globalThis, 'fetch');
+    // Reset store mocks
+    mockAuthStore.accessToken = 'test-access-token-123';
+    mockPredioStore.predioActivo = { id: 42, nombre: 'Test Predio' };
   });
 
   afterEach(() => {
@@ -73,12 +108,82 @@ describe('useSyncActions', () => {
 
       expect(response.ok).toBe(true);
       expect(response.status).toBe(201);
-      expect(fetchSpy).toHaveBeenCalledWith('/api/v1/animales', {
+    });
+
+    it('debería incluir headers de autenticación en el retry', async () => {
+      const { retryItem } = await import('../use-sync-actions');
+
+      fetchSpy.mockResolvedValueOnce(
+        new Response(JSON.stringify({ id: '123' }), {
+          status: 201,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      );
+
+      await retryItem({
+        url: '/api/v1/animales',
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: '{"nombre":"Vaca"}',
-        credentials: 'include',
+        timestamp: Date.now(),
       });
+
+      const callArgs = fetchSpy.mock.calls[0];
+      expect(callArgs[0]).toBe('/api/v1/animales');
+      const options = callArgs[1] as RequestInit;
+      expect(options.method).toBe('POST');
+      expect(options.body).toBe('{"nombre":"Vaca"}');
+      expect(options.credentials).toBe('include');
+
+      const headers = options.headers as Headers;
+      expect(headers.get('Content-Type')).toBe('application/json');
+      expect(headers.get('Authorization')).toBe('Bearer test-access-token-123');
+      expect(headers.get('X-Predio-Id')).toBe('42');
+    });
+
+    it('debería NO incluir Authorization si no hay token', async () => {
+      mockAuthStore.accessToken = null;
+      const { retryItem } = await import('../use-sync-actions');
+
+      fetchSpy.mockResolvedValueOnce(
+        new Response(JSON.stringify({ id: '123' }), {
+          status: 201,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      );
+
+      await retryItem({
+        url: '/api/v1/animales',
+        method: 'POST',
+        body: '{"nombre":"Vaca"}',
+        timestamp: Date.now(),
+      });
+
+      const callArgs = fetchSpy.mock.calls[0];
+      const headers = callArgs[1].headers as Headers;
+      expect(headers.get('Authorization')).toBeNull();
+    });
+
+    it('debería NO incluir X-Predio-Id si no hay predio activo', async () => {
+      mockPredioStore.predioActivo = null;
+      const { retryItem } = await import('../use-sync-actions');
+
+      fetchSpy.mockResolvedValueOnce(
+        new Response(JSON.stringify({ id: '123' }), {
+          status: 201,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      );
+
+      await retryItem({
+        url: '/api/v1/animales',
+        method: 'POST',
+        body: '{"nombre":"Vaca"}',
+        timestamp: Date.now(),
+      });
+
+      const callArgs = fetchSpy.mock.calls[0];
+      const headers = callArgs[1].headers as Headers;
+      expect(headers.get('X-Predio-Id')).toBeNull();
     });
 
     it('debería lanzar error si el retry falla', async () => {
@@ -99,6 +204,83 @@ describe('useSyncActions', () => {
           timestamp: Date.now(),
         }),
       ).rejects.toThrow('Retry failed: 400');
+    });
+
+    it('debería refrescar token y reintentar en 401', async () => {
+      const { retryItem } = await import('../use-sync-actions');
+
+      // First call returns 401
+      fetchSpy.mockResolvedValueOnce(
+        new Response('{"error":"Unauthorized"}', {
+          status: 401,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      );
+
+      // Refresh token call succeeds
+      fetchSpy.mockResolvedValueOnce(
+        new Response(JSON.stringify({
+          success: true,
+          data: { accessToken: 'new-refreshed-token', expiresIn: 3600 },
+        }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      );
+
+      // Retry with new token succeeds
+      fetchSpy.mockResolvedValueOnce(
+        new Response(JSON.stringify({ id: '123' }), {
+          status: 201,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      );
+
+      const response = await retryItem({
+        url: '/api/v1/animales',
+        method: 'POST',
+        body: '{"nombre":"Vaca"}',
+        timestamp: Date.now(),
+      });
+
+      expect(response.ok).toBe(true);
+      expect(response.status).toBe(201);
+
+      // Verify the retry used the new token
+      const calls = fetchSpy.mock.calls;
+      // Third call should be the retry with new token
+      const retryCall = calls[2];
+      const retryHeaders = retryCall[1].headers as Headers;
+      expect(retryHeaders.get('Authorization')).toBe('Bearer new-refreshed-token');
+    });
+
+    it('debería lanzar error de autenticación si refresh token también falla', async () => {
+      const { retryItem } = await import('../use-sync-actions');
+
+      // First call returns 401
+      fetchSpy.mockResolvedValueOnce(
+        new Response('{"error":"Unauthorized"}', {
+          status: 401,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      );
+
+      // Refresh token call fails
+      fetchSpy.mockResolvedValueOnce(
+        new Response('{"error":"Refresh failed"}', {
+          status: 401,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      );
+
+      await expect(
+        retryItem({
+          url: '/api/v1/animales',
+          method: 'POST',
+          body: '{}',
+          timestamp: Date.now(),
+        }),
+      ).rejects.toThrow('Sesión expirada. Por favor, inicia sesión nuevamente.');
     });
   });
 
@@ -123,12 +305,44 @@ describe('useSyncActions', () => {
         true,
       );
 
-      expect(fetchSpy).toHaveBeenCalledWith('/api/v1/animales/123', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'X-Force-Update': 'true' },
-        body: '{"nombre":"Mi Vaca"}',
-        credentials: 'include',
-      });
+      const callArgs = fetchSpy.mock.calls[0];
+      expect(callArgs[0]).toBe('/api/v1/animales/123');
+      const options = callArgs[1] as RequestInit;
+      expect(options.method).toBe('PUT');
+      expect(options.body).toBe('{"nombre":"Mi Vaca"}');
+      expect(options.credentials).toBe('include');
+
+      const headers = options.headers as Headers;
+      expect(headers.get('Content-Type')).toBe('application/json');
+      expect(headers.get('X-Force-Update')).toBe('true');
+      expect(headers.get('Authorization')).toBe('Bearer test-access-token-123');
+      expect(headers.get('X-Predio-Id')).toBe('42');
+    });
+
+    it('debería incluir headers de autenticación al mantener local', async () => {
+      const { resolveConflict } = await import('../use-sync-actions');
+
+      fetchSpy.mockResolvedValueOnce(
+        new Response(JSON.stringify({ id: '123' }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      );
+
+      await resolveConflict(
+        {
+          url: '/api/v1/animales/123',
+          method: 'PUT',
+          body: '{"nombre":"Mi Vaca"}',
+          timestamp: Date.now(),
+        },
+        true,
+      );
+
+      const callArgs = fetchSpy.mock.calls[0];
+      const headers = callArgs[1].headers as Headers;
+      expect(headers.get('Authorization')).toBe('Bearer test-access-token-123');
+      expect(headers.get('X-Predio-Id')).toBe('42');
     });
 
     it('debería lanzar error si la resolución falla', async () => {
@@ -174,6 +388,53 @@ describe('useSyncActions', () => {
         type: 'DISCARD_CONFLICT_ITEM',
         payload: { url: '/api/v1/animales/123' },
       });
+    });
+
+    it('debería refrescar token y reintentar en 401 al mantener local', async () => {
+      const { resolveConflict } = await import('../use-sync-actions');
+
+      // First call returns 401
+      fetchSpy.mockResolvedValueOnce(
+        new Response('{"error":"Unauthorized"}', {
+          status: 401,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      );
+
+      // Refresh token call succeeds
+      fetchSpy.mockResolvedValueOnce(
+        new Response(JSON.stringify({
+          success: true,
+          data: { accessToken: 'new-refreshed-token', expiresIn: 3600 },
+        }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      );
+
+      // Retry with new token succeeds
+      fetchSpy.mockResolvedValueOnce(
+        new Response(JSON.stringify({ id: '123' }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      );
+
+      await resolveConflict(
+        {
+          url: '/api/v1/animales/123',
+          method: 'PUT',
+          body: '{"nombre":"Mi Vaca"}',
+          timestamp: Date.now(),
+        },
+        true,
+      );
+
+      // Verify the retry used the new token
+      const calls = fetchSpy.mock.calls;
+      const retryCall = calls[2];
+      const retryHeaders = retryCall[1].headers as Headers;
+      expect(retryHeaders.get('Authorization')).toBe('Bearer new-refreshed-token');
     });
   });
 });

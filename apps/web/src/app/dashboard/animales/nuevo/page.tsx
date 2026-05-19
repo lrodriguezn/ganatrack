@@ -3,10 +3,14 @@
  * Nuevo Animal page — create form.
  *
  * Route: /dashboard/animales/nuevo
+ *
+ * Supports offline submission: when offline, form data is queued
+ * to IndexedDB and synced when connectivity returns.
  */
 
 'use client';
 
+import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
@@ -14,23 +18,44 @@ import { AnimalForm } from '@/modules/animales/components/animal-form';
 import { Button } from '@/shared/components/ui/button';
 import { useCreateAnimal } from '@/modules/animales/hooks';
 import { usePredioStore } from '@/store/predio.store';
+import { submitFormWithOfflineSupport } from '@/shared/lib/offline/submit-form';
+import type { CreateAnimalDto } from '@/modules/animales/types/animal.types';
 
 export default function NuevoAnimalPage(): JSX.Element {
   const router = useRouter();
   const { predioActivo } = usePredioStore();
   const { mutateAsync, isPending, error } = useCreateAnimal();
+  const [isOfflineQueued, setIsOfflineQueued] = useState(false);
 
-  const handleSubmit = async (data: Parameters<typeof mutateAsync>[0]) => {
+  const handleSubmit = useCallback(async (data: CreateAnimalDto) => {
+    const isOnline = navigator.onLine;
+    const predioId = predioActivo?.id ?? 0;
+
     try {
-      await mutateAsync({
-        ...data,
-        predioId: predioActivo?.id ?? 0,
+      const result = await submitFormWithOfflineSupport({
+        formType: 'animal',
+        payload: data as Record<string, unknown>,
+        endpoint: '/api/v1/animales',
+        predioId,
+        submitFn: async (headers) => {
+          return mutateAsync({
+            ...data,
+            predioId,
+          } as Parameters<typeof mutateAsync>[0]);
+        },
+        isOnline,
       });
-      router.push('/dashboard/animales');
+
+      if (result.mode === 'online') {
+        router.push('/dashboard/animales');
+      } else {
+        // Queued for offline sync
+        setIsOfflineQueued(true);
+      }
     } catch (err) {
       console.error('Error creating animal:', err);
     }
-  };
+  }, [mutateAsync, predioActivo?.id, router]);
 
   return (
     <div className="space-y-6">
@@ -52,8 +77,17 @@ export default function NuevoAnimalPage(): JSX.Element {
         </div>
       </div>
 
+      {/* Offline queued message */}
+      {isOfflineQueued && (
+        <div className="rounded-md bg-blue-50 dark:bg-blue-500/10 p-4">
+          <p className="text-sm text-blue-600 dark:text-blue-400">
+            Guardado offline — se sincronizará cuando haya conexión.
+          </p>
+        </div>
+      )}
+
       {/* Error message */}
-      {error && (
+      {error && !isOfflineQueued && (
         <div className="rounded-md bg-red-50 dark:bg-red-500/10 p-4">
           <p className="text-sm text-red-600 dark:text-red-400">
             Error al crear el animal: {(error as Error).message}

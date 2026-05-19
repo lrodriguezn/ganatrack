@@ -4,11 +4,14 @@
  *
  * Provides functions to:
  * - discardItem: Remove an item from the sync queue
- * - retryItem: Retry a failed mutation
- * - resolveConflict: Resolve a conflict (keep local or accept server)
+ * - retryItem: Retry a failed mutation with auth headers and token refresh
+ * - resolveConflict: Resolve a conflict (keep local or accept server) with auth headers
  */
 
 'use client';
+
+import { useAuthStore } from '@/store/auth.store';
+import { usePredioStore } from '@/store/predio.store';
 
 /**
  * Sync queue item structure.
@@ -21,6 +24,117 @@ export interface ISyncQueueItem {
   error?: string;
   status?: number;
   reason?: string;
+}
+
+// ============================================================================
+// Auth Helpers
+// ============================================================================
+
+/**
+ * Builds request headers with auth info from Zustand stores.
+ * Mirrors the attachAuthHeaders pattern from api-client.ts.
+ */
+function buildAuthHeaders(): Record<string, string> {
+  const authStore = useAuthStore.getState();
+  const predioStore = usePredioStore.getState();
+  const headers: Record<string, string> = {};
+
+  if (authStore.accessToken) {
+    headers['Authorization'] = `Bearer ${authStore.accessToken}`;
+  }
+
+  if (predioStore.predioActivo?.id) {
+    headers['X-Predio-Id'] = String(predioStore.predioActivo.id);
+  }
+
+  return headers;
+}
+
+/**
+ * Refreshes the access token via the Next.js proxy route.
+ * Updates the auth store with the new token on success.
+ * @returns The new access token or null if refresh fails
+ */
+async function refreshAccessToken(): Promise<string | null> {
+  try {
+    const response = await fetch('/api/auth/refresh', {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const wrapped = (await response.json()) as {
+      success: boolean;
+      data: { accessToken: string; expiresIn: number };
+    };
+    const { accessToken } = wrapped.data;
+
+    // Update auth store with new token
+    const authStore = useAuthStore.getState();
+    authStore.setAuth({
+      accessToken,
+      user: authStore.user ?? null,
+      permissions: authStore.permissions,
+    });
+
+    return accessToken;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Performs an authenticated fetch with automatic token refresh on 401.
+ *
+ * @param url - Request URL
+ * @param options - Fetch options
+ * @returns Response
+ * @throws Error on non-ok response or unrecoverable auth failure
+ */
+async function fetchWithAuth(
+  url: string,
+  options: RequestInit,
+): Promise<Response> {
+  const authHeaders = buildAuthHeaders();
+  const headers = new Headers(options.headers);
+
+  // Merge auth headers
+  for (const [key, value] of Object.entries(authHeaders)) {
+    headers.set(key, value);
+  }
+
+  const response = await fetch(url, {
+    ...options,
+    headers,
+    credentials: 'include',
+  });
+
+  // If 401, attempt token refresh and retry once
+  if (response.status === 401) {
+    const newToken = await refreshAccessToken();
+
+    if (!newToken) {
+      // Refresh failed — clear auth and throw
+      const authStore = useAuthStore.getState();
+      authStore.clearAuth();
+      throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
+    }
+
+    // Retry with new token
+    headers.set('Authorization', `Bearer ${newToken}`);
+    const retryResponse = await fetch(url, {
+      ...options,
+      headers,
+      credentials: 'include',
+    });
+
+    return retryResponse;
+  }
+
+  return response;
 }
 
 /**
@@ -51,7 +165,7 @@ export async function discardItem(url: string): Promise<void> {
 }
 
 /**
- * Retries a failed mutation.
+ * Retries a failed mutation with auth headers and token refresh.
  *
  * @param item - The sync queue item to retry
  * @returns The response from the retry
@@ -59,13 +173,12 @@ export async function discardItem(url: string): Promise<void> {
  */
 export async function retryItem(item: ISyncQueueItem): Promise<Response> {
   try {
-    const response = await fetch(item.url, {
+    const response = await fetchWithAuth(item.url, {
       method: item.method,
       headers: {
         'Content-Type': 'application/json',
       },
       body: item.body,
-      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -95,14 +208,13 @@ export async function resolveConflict(
 ): Promise<void> {
   if (keepLocal) {
     // Send PUT with X-Force-Update header to override server version
-    const response = await fetch(item.url, {
+    const response = await fetchWithAuth(item.url, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'X-Force-Update': 'true',
       },
       body: item.body,
-      credentials: 'include',
     });
 
     if (!response.ok) {

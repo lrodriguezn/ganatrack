@@ -279,7 +279,7 @@ export class MockAnimalService implements AnimalService {
     return { ...animal };
   }
 
-  async create(data: CreateAnimalDto): Promise<Animal> {
+  async create(data: CreateAnimalDto, _headers?: Record<string, string>): Promise<Animal> {
     await delay(300);
     const newAnimal: Animal = {
       id: idCounter++,

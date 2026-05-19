@@ -21,6 +21,7 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { AuthProvider } from './auth-provider';
 import { queryClient } from '../lib/query-client';
 import { createIDBPersister } from '../lib/idb-persister';
+import { SWUpdateToast } from '../components/feedback/sw-update-toast';
 
 interface AppProvidersProps {
   children: ReactNode;
@@ -52,6 +53,7 @@ export function AppProviders({ children }: AppProvidersProps): JSX.Element {
         }}
       >
         {children}
+        <SWUpdateToast />
       </PersistQueryClientProvider>
     </AuthProvider>
   );

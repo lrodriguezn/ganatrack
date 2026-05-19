@@ -28,7 +28,7 @@ export interface AnimalService {
   // CRUD
   getAll(filters: AnimalFilters): Promise<PaginatedAnimales>;
   getById(id: number): Promise<Animal>;
-  create(data: CreateAnimalDto): Promise<Animal>;
+  create(data: CreateAnimalDto, headers?: Record<string, string>): Promise<Animal>;
   update(id: number, data: UpdateAnimalDto): Promise<Animal>;
   delete(id: number): Promise<void>;
 

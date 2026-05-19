@@ -1,5 +1,6 @@
 import type { FastifyInstance } from 'fastify'
-import { authMiddleware } from '../../../../../shared/middleware/index.js'
+import { authMiddleware, createIdempotencyMiddleware, storeIdempotencyResult } from '../../../../../shared/middleware/index.js'
+import { InMemoryIdempotencyStore } from '../../../../../shared/lib/idempotency-store.js'
 import { createAnimalBodySchema, idParamsSchema, listAnimalesQuerySchema, updateAnimalBodySchema } from '../schemas/animales.schema.js'
 import type { CreateAnimalDto, UpdateAnimalDto } from '../../../application/dtos/animal.dto.js'
 
@@ -23,6 +24,10 @@ type AnimalesRepos = {
 
 type ListQuery = { Querystring: { page?: number; limit?: number; search?: string; estado?: string; potreroId?: number } }
 type IdParams = { Params: { id: number } }
+
+// Shared idempotency store (single instance for all routes)
+const idempotencyStore = new InMemoryIdempotencyStore()
+const idempotencyMiddleware = createIdempotencyMiddleware(idempotencyStore)
 
 export async function registerAnimalesRoutes(app: FastifyInstance, repos: AnimalesRepos): Promise<void> {
   const { animalRepo } = repos
@@ -62,11 +67,15 @@ export async function registerAnimalesRoutes(app: FastifyInstance, repos: Animal
   // POST /api/v1/animales
   app.post<{ Body: CreateAnimalDto }>('/animales', {
     schema: { body: createAnimalBodySchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, idempotencyMiddleware],
   }, async (request, reply) => {
     const currentUser = (request as any).currentUser
     const activoPredioId = currentUser?.predioIds?.[0] ?? 0
     const result = await crearAnimalUseCase.execute(request.body, activoPredioId)
+
+    // Store idempotency result if key was provided
+    await storeIdempotencyResult(request, result.id, result)
+
     return reply.code(201).send({ success: true, data: result })
   })
 

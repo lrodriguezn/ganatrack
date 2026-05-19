@@ -1,6 +1,7 @@
 export { useDebounce } from './use-debounce';
 export { useFailedSync } from './use-failed-sync';
 export { useMediaQuery, useIsMobile, useIsTablet, useIsDesktop } from './use-media-query';
+export { useOfflineQueue } from './use-offline-queue';
 export { useOnlineStatus } from './use-online-status';
 export { usePagination } from './use-pagination';
 export { usePredioRequerido } from './use-predio-requerido';

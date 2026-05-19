@@ -1,8 +1,9 @@
 import type { FastifyInstance } from 'fastify'
-import { authMiddleware } from '../../../../../shared/middleware/index.js'
-import { idParamsSchema, listPalpacionesQuerySchema } from '../schemas/palpaciones.schema.js'
+import { authMiddleware, createIdempotencyMiddleware, storeIdempotencyResult } from '../../../../../shared/middleware/index.js'
+import { InMemoryIdempotencyStore } from '../../../../../shared/lib/idempotency-store.js'
+import { idParamsSchema, listPalpacionesQuerySchema, createPalpacionGrupalBodySchema } from '../schemas/palpaciones.schema.js'
 import { listInseminacionesQuerySchema } from '../schemas/inseminaciones.schema.js'
-import { listPartosQuerySchema } from '../schemas/partos.schema.js'
+import { listPartosQuerySchema, createPartoAnimalBodySchema } from '../schemas/partos.schema.js'
 import { listVeterinariosQuerySchema } from '../schemas/veterinarios.schema.js'
 
 // Repository interfaces
@@ -17,14 +18,23 @@ import type { IVeterinarioAnimalRepository } from '../../../domain/repositories/
 import type { IVeterinarioProductoRepository } from '../../../domain/repositories/veterinario-producto.repository.js'
 
 // Use cases
+import { CrearPalpacionGrupalUseCase } from '../../../application/use-cases/crear-palpacion-grupal.use-case.js'
 import { ListPalpacionesGrupalesUseCase } from '../../../application/use-cases/list-palpaciones-grupales.use-case.js'
 import { GetPalpacionGrupalUseCase } from '../../../application/use-cases/get-palpacion-grupal.use-case.js'
+import { CrearPartoUseCase } from '../../../application/use-cases/crear-parto.use-case.js'
 import { ListInseminacionesGrupalesUseCase } from '../../../application/use-cases/list-inseminaciones-grupales.use-case.js'
 import { GetInseminacionGrupalUseCase } from '../../../application/use-cases/get-inseminacion-grupal.use-case.js'
 import { ListPartosUseCase } from '../../../application/use-cases/list-partos.use-case.js'
 import { GetPartoUseCase } from '../../../application/use-cases/get-parto.use-case.js'
 import { ListVeterinariosGrupalesUseCase } from '../../../application/use-cases/list-veterinarios-grupales.use-case.js'
 import { GetVeterinarioGrupalUseCase } from '../../../application/use-cases/get-veterinario-grupal.use-case.js'
+
+// DTOs
+import type { CreatePalpacionGrupalDto } from '../../../application/dtos/palpacion.dto.js'
+import type { CreatePartoAnimalDto } from '../../../application/dtos/parto.dto.js'
+
+// Transaction manager (needed for create use cases)
+import type { ITransactionManager } from '../../../../../shared/types/transaction.js'
 
 type ServiciosRepos = {
   palpacionGrupalRepo: IPalpacionGrupalRepository
@@ -36,10 +46,15 @@ type ServiciosRepos = {
   veterinarioGrupalRepo: IVeterinarioGrupalRepository
   veterinarioAnimalRepo: IVeterinarioAnimalRepository
   veterinarioProductoRepo: IVeterinarioProductoRepository
+  txManager: ITransactionManager
 }
 
 type ListQuery = { Querystring: { page?: number; limit?: number; search?: string } }
 type IdParams = { Params: { id: number } }
+
+// Shared idempotency store (single instance for all routes)
+const idempotencyStore = new InMemoryIdempotencyStore()
+const idempotencyMiddleware = createIdempotencyMiddleware(idempotencyStore)
 
 export async function registerServiciosRoutes(app: FastifyInstance, repos: ServiciosRepos): Promise<void> {
   const {
@@ -52,11 +67,14 @@ export async function registerServiciosRoutes(app: FastifyInstance, repos: Servi
     veterinarioGrupalRepo,
     veterinarioAnimalRepo,
     veterinarioProductoRepo,
+    txManager,
   } = repos
 
   // Create use cases
+  const crearPalpacionGrupalUseCase = new CrearPalpacionGrupalUseCase(palpacionGrupalRepo, palpacionAnimalRepo, txManager)
   const listPalpacionesGrupalesUseCase = new ListPalpacionesGrupalesUseCase(palpacionGrupalRepo)
   const getPalpacionGrupalUseCase = new GetPalpacionGrupalUseCase(palpacionGrupalRepo, palpacionAnimalRepo)
+  const crearPartoUseCase = new CrearPartoUseCase(partoAnimalRepo, partoCriaRepo, txManager)
   const listInseminacionesGrupalesUseCase = new ListInseminacionesGrupalesUseCase(inseminacionGrupalRepo)
   const getInseminacionGrupalUseCase = new GetInseminacionGrupalUseCase(inseminacionGrupalRepo, inseminacionAnimalRepo)
   const listPartosUseCase = new ListPartosUseCase(partoAnimalRepo)
@@ -65,6 +83,20 @@ export async function registerServiciosRoutes(app: FastifyInstance, repos: Servi
   const getVeterinarioGrupalUseCase = new GetVeterinarioGrupalUseCase(veterinarioGrupalRepo, veterinarioAnimalRepo, veterinarioProductoRepo)
 
   // ============ PALPACIONES ============
+  // POST /api/v1/servicios/palpaciones
+  app.post<{ Body: CreatePalpacionGrupalDto }>('/servicios/palpaciones', {
+    schema: { body: createPalpacionGrupalBodySchema },
+    preHandler: [authMiddleware, idempotencyMiddleware],
+  }, async (request, reply) => {
+    const currentUser = (request as any).currentUser
+    const activoPredioId = currentUser?.predioIds?.[0] ?? 0
+    const result = await crearPalpacionGrupalUseCase.execute(request.body, activoPredioId)
+
+    await storeIdempotencyResult(request, result.id, result)
+
+    return reply.code(201).send({ success: true, data: result })
+  })
+
   app.get<ListQuery>('/servicios/palpaciones', {
     schema: { querystring: listPalpacionesQuerySchema },
     preHandler: [authMiddleware],
@@ -101,6 +133,20 @@ export async function registerServiciosRoutes(app: FastifyInstance, repos: Servi
   })
 
   // ============ PARTOS ============
+  // POST /api/v1/servicios/partos
+  app.post<{ Body: CreatePartoAnimalDto }>('/servicios/partos', {
+    schema: { body: createPartoAnimalBodySchema },
+    preHandler: [authMiddleware, idempotencyMiddleware],
+  }, async (request, reply) => {
+    const currentUser = (request as any).currentUser
+    const activoPredioId = currentUser?.predioIds?.[0] ?? 0
+    const result = await crearPartoUseCase.execute(request.body, activoPredioId)
+
+    await storeIdempotencyResult(request, result.id, result)
+
+    return reply.code(201).send({ success: true, data: result })
+  })
+
   app.get<ListQuery>('/servicios/partos', {
     schema: { querystring: listPartosQuerySchema },
     preHandler: [authMiddleware],
