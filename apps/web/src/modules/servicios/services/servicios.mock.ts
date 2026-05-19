@@ -220,7 +220,7 @@ export class MockServiciosService implements ServiciosService {
     return { ...evento, animales: [...evento.animales] };
   }
 
-  async createPalpacion(data: CreatePalpacionEventoDto): Promise<PalpacionEvento> {
+  async createPalpacion(data: CreatePalpacionEventoDto, _headers?: Record<string, string>): Promise<PalpacionEvento> {
     await delay(300);
     const newPalpacionId = palpacionIdCounter++;
     const newEvento: PalpacionEvento = {
@@ -315,7 +315,7 @@ export class MockServiciosService implements ServiciosService {
     return { ...parto };
   }
 
-  async createParto(data: CreatePartoDto): Promise<Parto> {
+  async createParto(data: CreatePartoDto, _headers?: Record<string, string>): Promise<Parto> {
     await delay(300);
     const newParto: Parto = {
       id: partoIdCounter++,

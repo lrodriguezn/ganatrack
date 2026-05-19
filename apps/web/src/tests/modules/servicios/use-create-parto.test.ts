@@ -72,7 +72,7 @@ describe('useCreateParto', () => {
 
       await result.current.mutateAsync(mockData);
 
-      expect(mockServiciosService.createParto).toHaveBeenCalledWith(mockData);
+      expect(mockServiciosService.createParto).toHaveBeenCalledWith(mockData, undefined);
     });
 
     it('debería ejecutar la mutación correctamente', async () => {
@@ -82,7 +82,7 @@ describe('useCreateParto', () => {
 
       await result.current.mutateAsync({ animalId: 1 });
 
-      expect(mockServiciosService.createParto).toHaveBeenCalledWith({ animalId: 1 });
+      expect(mockServiciosService.createParto).toHaveBeenCalledWith({ animalId: 1 }, undefined);
     });
 
     it('debería retornar error cuando el servicio falla', async () => {
@@ -107,6 +107,20 @@ describe('useCreateParto', () => {
       await waitFor(() => {
         expect(mockPush).toHaveBeenCalledWith('/dashboard/servicios/partos');
       });
+    });
+
+    it('debería pasar headers al servicio cuando se proporcionan', async () => {
+      const mockData = { animalId: 1, fecha: '2024-01-15', tipo: 'natural' };
+      const mockHeaders = { 'X-Idempotency-Key': 'test-key' };
+      const mockResponse = { id: 1, ...mockData };
+
+      mockServiciosService.createParto.mockResolvedValueOnce(mockResponse);
+
+      const { result } = renderHook(() => useCreateParto(), { wrapper: createWrapper() });
+
+      await result.current.mutateAsync(mockData, mockHeaders);
+
+      expect(mockServiciosService.createParto).toHaveBeenCalledWith(mockData, mockHeaders);
     });
   });
 });

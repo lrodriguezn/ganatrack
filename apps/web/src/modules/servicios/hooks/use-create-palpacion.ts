@@ -16,7 +16,8 @@ export function useCreatePalpacion() {
   const router = useRouter();
 
   const mutation = useMutation({
-    mutationFn: (data: CreatePalpacionEventoDto) => serviciosService.createPalpacion(data),
+    mutationFn: ({ data, headers }: { data: CreatePalpacionEventoDto; headers?: Record<string, string> }) =>
+      serviciosService.createPalpacion(data, headers),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.servicios.palpaciones.all });
       router.push('/dashboard/servicios/palpaciones');
@@ -27,7 +28,8 @@ export function useCreatePalpacion() {
   });
 
   return {
-    mutateAsync: mutation.mutateAsync,
+    mutateAsync: (data: CreatePalpacionEventoDto, headers?: Record<string, string>) =>
+      mutation.mutateAsync({ data, headers }),
     isPending: mutation.isPending,
     error: mutation.error as Error | null,
     reset: mutation.reset,
