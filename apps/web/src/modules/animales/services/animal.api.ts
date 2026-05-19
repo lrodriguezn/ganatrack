@@ -41,8 +41,8 @@ export class RealAnimalService implements AnimalService {
     return ((json as { data?: Animal }).data ?? json) as Animal;
   }
 
-  async create(data: CreateAnimalDto): Promise<Animal> {
-    const response = await apiClient.post('animales', { json: data });
+  async create(data: CreateAnimalDto, headers?: Record<string, string>): Promise<Animal> {
+    const response = await apiClient.post('animales', { json: data, headers });
     return response.json();
   }
 
