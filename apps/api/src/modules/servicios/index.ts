@@ -23,6 +23,9 @@ import { DrizzleVeterinarioGrupalRepository } from './infrastructure/persistence
 import { DrizzleVeterinarioAnimalRepository } from './infrastructure/persistence/drizzle-veterinario-animal.repository.js'
 import { DrizzleVeterinarioProductoRepository } from './infrastructure/persistence/drizzle-veterinario-producto.repository.js'
 
+// Transaction manager
+import { DrizzleTransactionManager } from '../../shared/services/transaction-manager.js'
+
 // Routes
 import { registerServiciosRoutes } from './infrastructure/http/routes/servicios.routes.js'
 
@@ -32,7 +35,8 @@ export function registerServiciosModule(): void {
 
 export async function registerServiciosModuleRoutes(app: FastifyInstance): Promise<void> {
   const db = createClient() as unknown as DbClient
-  
+  const txManager = new DrizzleTransactionManager(db)
+
   const palpacionGrupalRepo: IPalpacionGrupalRepository = new DrizzlePalpacionGrupalRepository(db)
   const palpacionAnimalRepo: IPalpacionAnimalRepository = new DrizzlePalpacionAnimalRepository(db)
   const inseminacionGrupalRepo: IInseminacionGrupalRepository = new DrizzleInseminacionGrupalRepository(db)
@@ -53,5 +57,6 @@ export async function registerServiciosModuleRoutes(app: FastifyInstance): Promi
     veterinarioGrupalRepo,
     veterinarioAnimalRepo,
     veterinarioProductoRepo,
+    txManager,
   })
 }
