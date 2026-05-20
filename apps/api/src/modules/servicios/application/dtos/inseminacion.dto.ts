@@ -24,6 +24,7 @@ export interface InseminacionGrupalResponseDto {
   activo: number
   createdAt: string | null
   updatedAt: string | null
+  version: number
   animales: InseminacionAnimalResponseDto[]
 }
 

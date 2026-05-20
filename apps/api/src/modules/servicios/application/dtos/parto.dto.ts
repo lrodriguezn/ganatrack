@@ -35,6 +35,7 @@ export interface PartoAnimalResponseDto {
   activo: number
   createdAt: string | null
   updatedAt: string | null
+  version: number
   crias: PartoCriaResponseDto[]
 }
 

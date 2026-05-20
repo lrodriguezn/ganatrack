@@ -13,6 +13,7 @@ export class InseminacionGrupalMapper {
       activo: e.activo,
       createdAt: e.createdAt?.toISOString() ?? null,
       updatedAt: e.updatedAt?.toISOString() ?? null,
+      version: e.version,
       animales: [],
     }
   }

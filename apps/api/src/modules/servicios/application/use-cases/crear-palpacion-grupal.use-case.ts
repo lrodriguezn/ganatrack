@@ -38,6 +38,7 @@ export class CrearPalpacionGrupalUseCase {
         veterinariosId: dto.veterinariosId ?? null,
         observaciones: dto.observaciones ?? null,
         activo: 1,
+        version: 1,
       })
 
       // Create animal records

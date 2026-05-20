@@ -12,6 +12,7 @@ export interface InseminacionGrupalEntity {
   activo: number
   createdAt: Date | null
   updatedAt: Date | null
+  version: number
 }
 
 /**

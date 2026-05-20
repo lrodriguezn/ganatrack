@@ -28,6 +28,7 @@ export class CrearPartoUseCase {
         tipoPartoKey: dto.tipoPartoKey ?? null,
         observaciones: dto.observaciones ?? null,
         activo: 1,
+        version: 1,
       })
 
       const criasData = (dto.crias || []).map((c: CreatePartoCriaDto) => ({

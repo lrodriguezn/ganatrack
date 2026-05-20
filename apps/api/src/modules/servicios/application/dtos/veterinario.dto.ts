@@ -27,6 +27,7 @@ export interface VeterinarioGrupalResponseDto {
   activo: number
   createdAt: string | null
   updatedAt: string | null
+  version: number
   animales: VeterinarioAnimalResponseDto[]
 }
 
