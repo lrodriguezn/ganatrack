@@ -18,6 +18,53 @@ import { usePredioStore } from '@/store/predio.store';
 import { ApiError, normalizeApiError } from './errors';
 
 // ============================================================================
+// Version Cache — Optimistic Locking Support
+// ============================================================================
+
+/**
+ * Module-level Map that stores resource versions from X-Resource-Version headers.
+ * Keyed by URL path (e.g., '/api/v1/animales/1').
+ * Used to attach If-Match headers on subsequent PUT requests.
+ */
+const versionStore = new Map<string, number>();
+
+/**
+ * Public API for the version cache.
+ */
+export const versionCache = {
+  /** Store a version for a given URL */
+  setVersion(url: string, version: number): void {
+    versionStore.set(url, version);
+  },
+
+  /** Retrieve the stored version for a URL, or undefined */
+  getVersion(url: string): number | undefined {
+    return versionStore.get(url);
+  },
+
+  /** Clear all stored versions */
+  clear(): void {
+    versionStore.clear();
+  },
+};
+
+/**
+ * Builds If-Match header for PUT requests when a version is cached.
+ * Returns empty object for non-PUT methods or when no version exists.
+ */
+export function buildIfMatchHeaders(
+  url: string,
+  method: string,
+): Record<string, string> {
+  if (method !== 'PUT') return {};
+
+  const version = versionStore.get(url);
+  if (version === undefined) return {};
+
+  return { 'If-Match': String(version) };
+}
+
+// ============================================================================
 // Configuration
 // ============================================================================
 
@@ -106,6 +153,47 @@ async function executeRefresh(): Promise<string> {
     throw new ApiError(401, 'REFRESH_FAILED', 'No se pudo refresh token');
   }
 }
+
+// ============================================================================
+// Version Interceptors — Optimistic Locking
+// ============================================================================
+
+/**
+ * AfterResponseHook: reads X-Resource-Version from responses and stores it.
+ * Applies to all successful responses that include the header.
+ */
+const captureResourceVersion: AfterResponseHook = async (
+  _request,
+  _options,
+  response,
+) => {
+  if (!response.ok) return response;
+
+  const versionHeader = response.headers.get('X-Resource-Version');
+  if (versionHeader) {
+    const version = parseInt(versionHeader, 10);
+    if (!Number.isNaN(version) && version > 0) {
+      // Normalize URL: strip prefixUrl if present to use relative path as key
+      const url = response.url;
+      versionStore.set(url, version);
+    }
+  }
+
+  return response;
+};
+
+/**
+ * BeforeRequestHook: attaches If-Match header on PUT requests
+ * when a version is cached for the URL.
+ */
+const attachIfMatchHeader: BeforeRequestHook = (request) => {
+  if (request.method !== 'PUT') return;
+
+  const version = versionStore.get(request.url);
+  if (version !== undefined) {
+    request.headers.set('If-Match', String(version));
+  }
+};
 
 // ============================================================================
 // Request Interceptor
@@ -221,8 +309,8 @@ export const apiClient: KyInstance = ky.create({
   timeout: 30000,
   retry: 0,
   hooks: {
-    beforeRequest: [attachAuthHeaders],
-    afterResponse: [handleResponseErrors],
+    beforeRequest: [attachIfMatchHeader, attachAuthHeaders],
+    afterResponse: [captureResourceVersion, handleResponseErrors],
   },
 });
 
