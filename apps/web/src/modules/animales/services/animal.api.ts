@@ -6,7 +6,7 @@
  * Uses apiClient from @/shared/lib/api-client
  */
 
-import { apiClient } from '@/shared/lib/api-client';
+import { apiClient, versionCache } from '@/shared/lib/api-client';
 import type {
   Animal,
   CreateAnimalDto,
@@ -46,7 +46,11 @@ export class RealAnimalService implements AnimalService {
     return response.json();
   }
 
-  async update(id: number, data: UpdateAnimalDto): Promise<Animal> {
+  async update(id: number, data: UpdateAnimalDto, expectedVersion?: number): Promise<Animal> {
+    // If explicit version provided, store it so the ky interceptor picks it up
+    if (expectedVersion !== undefined) {
+      versionCache.setVersion(`animales/${id}`, expectedVersion);
+    }
     const response = await apiClient.put(`animales/${id}`, { json: data });
     return response.json();
   }

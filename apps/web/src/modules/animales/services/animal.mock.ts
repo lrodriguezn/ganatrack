@@ -296,7 +296,7 @@ export class MockAnimalService implements AnimalService {
     return { ...newAnimal };
   }
 
-  async update(id: number, data: UpdateAnimalDto): Promise<Animal> {
+  async update(id: number, data: UpdateAnimalDto, _expectedVersion?: number): Promise<Animal> {
     await delay(300);
     const index = storeAnimals.findIndex(a => a.id === id);
     if (index === -1) {
