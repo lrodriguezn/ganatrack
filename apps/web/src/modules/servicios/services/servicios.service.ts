@@ -31,21 +31,25 @@ export interface ServiciosService {
   getPalpaciones(params: PaginationParams): Promise<PaginatedEventos<PalpacionEvento>>;
   getPalpacionById(id: number): Promise<PalpacionEvento>;
   createPalpacion(data: CreatePalpacionEventoDto, headers?: Record<string, string>): Promise<PalpacionEvento>;
+  updatePalpacion(id: number, data: Partial<CreatePalpacionEventoDto>, version: number): Promise<PalpacionEvento>;
 
   // Inseminaciones
   getInseminaciones(params: PaginationParams): Promise<PaginatedEventos<InseminacionEvento>>;
   getInseminacionById(id: number): Promise<InseminacionEvento>;
   createInseminacion(data: CreateInseminacionEventoDto): Promise<InseminacionEvento>;
+  updateInseminacion(id: number, data: Partial<CreateInseminacionEventoDto>, version: number): Promise<InseminacionEvento>;
 
   // Partos
   getPartos(params: PaginationParams): Promise<PaginatedEventos<Parto>>;
   getPartoById(id: number): Promise<Parto>;
   createParto(data: CreatePartoDto, headers?: Record<string, string>): Promise<Parto>;
+  updateParto(id: number, data: Partial<CreatePartoDto>, version: number): Promise<Parto>;
 
   // Servicios Veterinarios
   getServiciosVeterinarios(filters: { predioId: number; page: number; limit: number }): Promise<PaginatedServiciosVeterinarios>;
   getServicioVeterinarioById(id: number): Promise<ServicioVeterinarioEvento>;
   createServicioVeterinario(data: CreateServicioVeterinarioEventoDto): Promise<ServicioVeterinarioEvento>;
+  updateServicioVeterinario(id: number, data: Partial<CreateServicioVeterinarioEventoDto>, version: number): Promise<ServicioVeterinarioEvento>;
 }
 
 import { MockServiciosService } from './servicios.mock';

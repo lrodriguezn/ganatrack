@@ -71,11 +71,11 @@ const SEED_PALPACION_ANIMALES: PalpacionAnimal[] = [
 ];
 
 const SEED_PALPACIONES: PalpacionEvento[] = [
-  { id: 1, predioId: 1, codigo: 'PAL-2026-001', fecha: '2026-01-15', veterinariosId: 1, veterinarioNombre: 'Dr. Carlos Méndez', observaciones: 'Palpación de rutina - lote principal', totalAnimales: 5, createdAt: '2026-01-15T08:00:00Z', animales: SEED_PALPACION_ANIMALES.filter(a => a.eventoId === 1) },
-  { id: 2, predioId: 1, codigo: 'PAL-2026-002', fecha: '2026-02-10', veterinariosId: 2, veterinarioNombre: 'Dra. María López', observaciones: 'Seguimiento post-inseminación', totalAnimales: 4, createdAt: '2026-02-10T09:00:00Z', animales: SEED_PALPACION_ANIMALES.filter(a => a.eventoId === 2) },
-  { id: 3, predioId: 1, codigo: 'PAL-2026-003', fecha: '2026-03-05', veterinariosId: 1, veterinarioNombre: 'Dr. Carlos Méndez', observaciones: 'Revisión general potrero sur', totalAnimales: 3, createdAt: '2026-03-05T07:30:00Z', animales: SEED_PALPACION_ANIMALES.filter(a => a.eventoId === 3) },
-  { id: 4, predioId: 1, codigo: 'PAL-2025-012', fecha: '2025-12-20', veterinariosId: 3, veterinarioNombre: 'Dr. Pedro Gómez', observaciones: 'Palpación fin de año', totalAnimales: 6, createdAt: '2025-12-20T08:00:00Z', animales: [] },
-  { id: 5, predioId: 1, codigo: 'PAL-2025-011', fecha: '2025-11-15', veterinariosId: 2, veterinarioNombre: 'Dra. María López', observaciones: 'Control reproductivo noviembre', totalAnimales: 4, createdAt: '2025-11-15T09:00:00Z', animales: [] },
+  { id: 1, predioId: 1, codigo: 'PAL-2026-001', fecha: '2026-01-15', veterinariosId: 1, veterinarioNombre: 'Dr. Carlos Méndez', observaciones: 'Palpación de rutina - lote principal', totalAnimales: 5, createdAt: '2026-01-15T08:00:00Z', version: 1, animales: SEED_PALPACION_ANIMALES.filter(a => a.eventoId === 1) },
+  { id: 2, predioId: 1, codigo: 'PAL-2026-002', fecha: '2026-02-10', veterinariosId: 2, veterinarioNombre: 'Dra. María López', observaciones: 'Seguimiento post-inseminación', totalAnimales: 4, createdAt: '2026-02-10T09:00:00Z', version: 1, animales: SEED_PALPACION_ANIMALES.filter(a => a.eventoId === 2) },
+  { id: 3, predioId: 1, codigo: 'PAL-2026-003', fecha: '2026-03-05', veterinariosId: 1, veterinarioNombre: 'Dr. Carlos Méndez', observaciones: 'Revisión general potrero sur', totalAnimales: 3, createdAt: '2026-03-05T07:30:00Z', version: 1, animales: SEED_PALPACION_ANIMALES.filter(a => a.eventoId === 3) },
+  { id: 4, predioId: 1, codigo: 'PAL-2025-012', fecha: '2025-12-20', veterinariosId: 3, veterinarioNombre: 'Dr. Pedro Gómez', observaciones: 'Palpación fin de año', totalAnimales: 6, createdAt: '2025-12-20T08:00:00Z', version: 1, animales: [] },
+  { id: 5, predioId: 1, codigo: 'PAL-2025-011', fecha: '2025-11-15', veterinariosId: 2, veterinarioNombre: 'Dra. María López', observaciones: 'Control reproductivo noviembre', totalAnimales: 4, createdAt: '2025-11-15T09:00:00Z', version: 1, animales: [] },
 ];
 
 // ============================================================================
@@ -98,11 +98,11 @@ const SEED_INSEMINACION_ANIMALES: InseminacionAnimal[] = [
 ];
 
 const SEED_INSEMINACIONES: InseminacionEvento[] = [
-  { id: 1, predioId: 1, codigo: 'INS-2026-001', fecha: '2026-01-10', veterinariosId: 1, veterinarioNombre: 'Dr. Carlos Méndez', observaciones: 'Inseminación programada lote norte', totalAnimales: 4, createdAt: '2026-01-10T07:00:00Z', animales: SEED_INSEMINACION_ANIMALES.filter(a => a.eventoId === 1) },
-  { id: 2, predioId: 1, codigo: 'INS-2026-002', fecha: '2026-02-05', veterinariosId: 2, veterinarioNombre: 'Dra. María López', observaciones: 'Seguimiento reproductivo', totalAnimales: 3, createdAt: '2026-02-05T08:00:00Z', animales: SEED_INSEMINACION_ANIMALES.filter(a => a.eventoId === 2) },
-  { id: 3, predioId: 1, codigo: 'INS-2026-003', fecha: '2026-03-01', veterinariosId: 1, veterinarioNombre: 'Dr. Carlos Méndez', observaciones: 'Inseminación otoño', totalAnimales: 3, createdAt: '2026-03-01T07:30:00Z', animales: SEED_INSEMINACION_ANIMALES.filter(a => a.eventoId === 3) },
-  { id: 4, predioId: 1, codigo: 'INS-2025-015', fecha: '2025-12-15', veterinariosId: 3, veterinarioNombre: 'Dr. Pedro Gómez', observaciones: 'Inseminación fin de año', totalAnimales: 5, createdAt: '2025-12-15T08:00:00Z', animales: [] },
-  { id: 5, predioId: 1, codigo: 'INS-2025-014', fecha: '2025-11-20', veterinariosId: 2, veterinarioNombre: 'Dra. María López', observaciones: 'Control reproductivo', totalAnimales: 3, createdAt: '2025-11-20T09:00:00Z', animales: [] },
+  { id: 1, predioId: 1, codigo: 'INS-2026-001', fecha: '2026-01-10', veterinariosId: 1, veterinarioNombre: 'Dr. Carlos Méndez', observaciones: 'Inseminación programada lote norte', totalAnimales: 4, createdAt: '2026-01-10T07:00:00Z', version: 1, animales: SEED_INSEMINACION_ANIMALES.filter(a => a.eventoId === 1) },
+  { id: 2, predioId: 1, codigo: 'INS-2026-002', fecha: '2026-02-05', veterinariosId: 2, veterinarioNombre: 'Dra. María López', observaciones: 'Seguimiento reproductivo', totalAnimales: 3, createdAt: '2026-02-05T08:00:00Z', version: 1, animales: SEED_INSEMINACION_ANIMALES.filter(a => a.eventoId === 2) },
+  { id: 3, predioId: 1, codigo: 'INS-2026-003', fecha: '2026-03-01', veterinariosId: 1, veterinarioNombre: 'Dr. Carlos Méndez', observaciones: 'Inseminación otoño', totalAnimales: 3, createdAt: '2026-03-01T07:30:00Z', version: 1, animales: SEED_INSEMINACION_ANIMALES.filter(a => a.eventoId === 3) },
+  { id: 4, predioId: 1, codigo: 'INS-2025-015', fecha: '2025-12-15', veterinariosId: 3, veterinarioNombre: 'Dr. Pedro Gómez', observaciones: 'Inseminación fin de año', totalAnimales: 5, createdAt: '2025-12-15T08:00:00Z', version: 1, animales: [] },
+  { id: 5, predioId: 1, codigo: 'INS-2025-014', fecha: '2025-11-20', veterinariosId: 2, veterinarioNombre: 'Dra. María López', observaciones: 'Control reproductivo', totalAnimales: 3, createdAt: '2025-11-20T09:00:00Z', version: 1, animales: [] },
 ];
 
 // ============================================================================
@@ -113,7 +113,7 @@ const SEED_SERVICIOS_VETERINARIOS: ServicioVeterinarioEvento[] = [
   {
     id: 1, predioId: 1, codigo: 'SV-2025-001', fecha: '2025-03-15',
     veterinariosId: 1, observaciones: 'Campaña de desparasitación trimestral',
-    veterinarioNombre: 'Dr. Carlos Méndez', totalAnimales: 3, createdAt: '2025-03-15T08:00:00Z',
+    veterinarioNombre: 'Dr. Carlos Méndez', totalAnimales: 3, createdAt: '2025-03-15T08:00:00Z', version: 1,
     animales: [
       { id: 1, eventoId: 1, animalesId: 1, diagnosticosVeterinariosId: 2, medicamentos: 'Ivermectina 1%', dosis: '1ml/50kg', proximaAplicacion: '2025-06-15', observaciones: '', animalCodigo: 'GAN-001', diagnosticoNombre: 'Desparasitación' },
       { id: 2, eventoId: 1, animalesId: 2, diagnosticosVeterinariosId: 2, medicamentos: 'Ivermectina 1%', dosis: '1ml/50kg', proximaAplicacion: '2025-06-15', observaciones: '', animalCodigo: 'GAN-002', diagnosticoNombre: 'Desparasitación' },
@@ -123,7 +123,7 @@ const SEED_SERVICIOS_VETERINARIOS: ServicioVeterinarioEvento[] = [
   {
     id: 2, predioId: 1, codigo: 'SV-2025-002', fecha: '2025-04-01',
     veterinariosId: 1, observaciones: 'Vacunación contra aftosa',
-    veterinarioNombre: 'Dr. Carlos Méndez', totalAnimales: 4, createdAt: '2025-04-01T08:00:00Z',
+    veterinarioNombre: 'Dr. Carlos Méndez', totalAnimales: 4, createdAt: '2025-04-01T08:00:00Z', version: 1,
     animales: [
       { id: 4, eventoId: 2, animalesId: 4, diagnosticosVeterinariosId: 4, medicamentos: 'Vacuna Aftosa', dosis: '2ml IM', proximaAplicacion: '2025-10-01', observaciones: '', animalCodigo: 'GAN-004', diagnosticoNombre: 'Vacunación' },
       { id: 5, eventoId: 2, animalesId: 5, diagnosticosVeterinariosId: 4, medicamentos: 'Vacuna Aftosa', dosis: '2ml IM', proximaAplicacion: '2025-10-01', observaciones: '', animalCodigo: 'GAN-005', diagnosticoNombre: 'Vacunación' },
@@ -134,7 +134,7 @@ const SEED_SERVICIOS_VETERINARIOS: ServicioVeterinarioEvento[] = [
   {
     id: 3, predioId: 2, codigo: 'SV-2025-003', fecha: '2025-04-10',
     veterinariosId: 2, observaciones: 'Suplemento vitamínico pre-parto',
-    veterinarioNombre: 'Dra. María López', totalAnimales: 3, createdAt: '2025-04-10T08:00:00Z',
+    veterinarioNombre: 'Dra. María López', totalAnimales: 3, createdAt: '2025-04-10T08:00:00Z', version: 1,
     animales: [
       { id: 8, eventoId: 3, animalesId: 8, diagnosticosVeterinariosId: 1, medicamentos: 'Vitamina AD3E', dosis: '5ml IM', proximaAplicacion: '2025-05-10', observaciones: '', animalCodigo: 'GAN-008', diagnosticoNombre: 'Vitaminas' },
       { id: 9, eventoId: 3, animalesId: 9, diagnosticosVeterinariosId: 1, medicamentos: 'Vitamina AD3E', dosis: '5ml IM', proximaAplicacion: '2025-05-10', observaciones: '', animalCodigo: 'GAN-009', diagnosticoNombre: 'Vitaminas' },
@@ -144,7 +144,7 @@ const SEED_SERVICIOS_VETERINARIOS: ServicioVeterinarioEvento[] = [
   {
     id: 4, predioId: 1, codigo: 'SV-2025-004', fecha: '2025-05-01',
     veterinariosId: 1, observaciones: 'Tratamiento mastitis',
-    veterinarioNombre: 'Dr. Carlos Méndez', totalAnimales: 2, createdAt: '2025-05-01T08:00:00Z',
+    veterinarioNombre: 'Dr. Carlos Méndez', totalAnimales: 2, createdAt: '2025-05-01T08:00:00Z', version: 1,
     animales: [
       { id: 11, eventoId: 4, animalesId: 11, diagnosticosVeterinariosId: 3, medicamentos: 'Cefalexina intramamaria', dosis: '1 tubo/cuarto', proximaAplicacion: '2025-05-04', observaciones: 'Mastitis clínica grado 2', animalCodigo: 'GAN-011', diagnosticoNombre: 'Tratamiento' },
       { id: 12, eventoId: 4, animalesId: 12, diagnosticosVeterinariosId: 3, medicamentos: 'Cefalexina intramamaria', dosis: '1 tubo/cuarto', proximaAplicacion: '2025-05-04', observaciones: '', animalCodigo: 'GAN-012', diagnosticoNombre: 'Tratamiento' },
@@ -157,16 +157,16 @@ const SEED_SERVICIOS_VETERINARIOS: ServicioVeterinarioEvento[] = [
 // ============================================================================
 
 const SEED_PARTOS: Parto[] = [
-  { id: 1, predioId: 1, animalesId: 14, fecha: '2026-01-20', machos: 1, hembras: 0, muertos: 0, tipoParto: 'Normal', animalCodigo: 'GAN-014', animalNombre: 'La Negra', totalCrias: 1 },
-  { id: 2, predioId: 1, animalesId: 15, fecha: '2026-01-25', machos: 0, hembras: 1, muertos: 0, tipoParto: 'Normal', animalCodigo: 'GAN-015', animalNombre: 'Bella', totalCrias: 1 },
-  { id: 3, predioId: 1, animalesId: 17, fecha: '2026-02-08', machos: 1, hembras: 1, muertos: 0, tipoParto: 'Con Ayuda', animalCodigo: 'GAN-017', animalNombre: 'Estrella', totalCrias: 2 },
-  { id: 4, predioId: 1, animalesId: 18, fecha: '2026-02-14', machos: 0, hembras: 1, muertos: 0, tipoParto: 'Normal', animalCodigo: 'GAN-018', animalNombre: 'Margarita', totalCrias: 1 },
-  { id: 5, predioId: 1, animalesId: 20, fecha: '2026-02-28', machos: 1, hembras: 0, muertos: 1, tipoParto: 'Distocico', observaciones: 'Parto distócico, cría nació muerta', animalCodigo: 'GAN-020', animalNombre: 'Paloma', totalCrias: 2 },
-  { id: 6, predioId: 1, animalesId: 19, fecha: '2026-03-05', machos: 0, hembras: 1, muertos: 0, tipoParto: 'Normal', animalCodigo: 'GAN-019', animalNombre: 'Blanca', totalCrias: 1 },
-  { id: 7, predioId: 1, animalesId: 22, fecha: '2026-03-18', machos: 1, hembras: 0, muertos: 0, tipoParto: 'Normal', animalCodigo: 'GAN-022', animalNombre: 'Azucena', totalCrias: 1 },
-  { id: 8, predioId: 1, animalesId: 16, fecha: '2026-03-25', machos: 0, hembras: 0, muertos: 1, tipoParto: 'Mortinato', observaciones: 'Mortinato, cría no viable', animalCodigo: 'GAN-016', animalNombre: 'Luna', totalCrias: 1 },
-  { id: 9, predioId: 1, animalesId: 21, fecha: '2025-12-10', machos: 1, hembras: 1, muertos: 0, tipoParto: 'Con Ayuda', animalCodigo: 'GAN-021', animalNombre: 'Cereza', totalCrias: 2 },
-  { id: 10, predioId: 1, animalesId: 23, fecha: '2025-11-15', machos: 0, hembras: 1, muertos: 0, tipoParto: 'Normal', animalCodigo: 'GAN-023', animalNombre: 'Nube', totalCrias: 1 },
+  { id: 1, predioId: 1, animalesId: 14, fecha: '2026-01-20', machos: 1, hembras: 0, muertos: 0, tipoParto: 'Normal', animalCodigo: 'GAN-014', animalNombre: 'La Negra', totalCrias: 1, version: 1 },
+  { id: 2, predioId: 1, animalesId: 15, fecha: '2026-01-25', machos: 0, hembras: 1, muertos: 0, tipoParto: 'Normal', animalCodigo: 'GAN-015', animalNombre: 'Bella', totalCrias: 1, version: 1 },
+  { id: 3, predioId: 1, animalesId: 17, fecha: '2026-02-08', machos: 1, hembras: 1, muertos: 0, tipoParto: 'Con Ayuda', animalCodigo: 'GAN-017', animalNombre: 'Estrella', totalCrias: 2, version: 1 },
+  { id: 4, predioId: 1, animalesId: 18, fecha: '2026-02-14', machos: 0, hembras: 1, muertos: 0, tipoParto: 'Normal', animalCodigo: 'GAN-018', animalNombre: 'Margarita', totalCrias: 1, version: 1 },
+  { id: 5, predioId: 1, animalesId: 20, fecha: '2026-02-28', machos: 1, hembras: 0, muertos: 1, tipoParto: 'Distocico', observaciones: 'Parto distócico, cría nació muerta', animalCodigo: 'GAN-020', animalNombre: 'Paloma', totalCrias: 2, version: 1 },
+  { id: 6, predioId: 1, animalesId: 19, fecha: '2026-03-05', machos: 0, hembras: 1, muertos: 0, tipoParto: 'Normal', animalCodigo: 'GAN-019', animalNombre: 'Blanca', totalCrias: 1, version: 1 },
+  { id: 7, predioId: 1, animalesId: 22, fecha: '2026-03-18', machos: 1, hembras: 0, muertos: 0, tipoParto: 'Normal', animalCodigo: 'GAN-022', animalNombre: 'Azucena', totalCrias: 1, version: 1 },
+  { id: 8, predioId: 1, animalesId: 16, fecha: '2026-03-25', machos: 0, hembras: 0, muertos: 1, tipoParto: 'Mortinato', observaciones: 'Mortinato, cría no viable', animalCodigo: 'GAN-016', animalNombre: 'Luna', totalCrias: 1, version: 1 },
+  { id: 9, predioId: 1, animalesId: 21, fecha: '2025-12-10', machos: 1, hembras: 1, muertos: 0, tipoParto: 'Con Ayuda', animalCodigo: 'GAN-021', animalNombre: 'Cereza', totalCrias: 2, version: 1 },
+  { id: 10, predioId: 1, animalesId: 23, fecha: '2025-11-15', machos: 0, hembras: 1, muertos: 0, tipoParto: 'Normal', animalCodigo: 'GAN-023', animalNombre: 'Nube', totalCrias: 1, version: 1 },
 ];
 
 // ============================================================================
@@ -182,13 +182,13 @@ let inseminacionIdCounter = SEED_INSEMINACIONES.length + 1;
 let inseminacionAnimalIdCounter = SEED_INSEMINACION_ANIMALES.length + 1;
 let partoIdCounter = SEED_PARTOS.length + 1;
 
-let storeServiciosVeterinarios: ServicioVeterinarioEvento[] = SEED_SERVICIOS_VETERINARIOS.map(e => ({ ...e, animales: [...e.animales] }));
+let storeServiciosVeterinarios: ServicioVeterinarioEvento[] = SEED_SERVICIOS_VETERINARIOS.map(e => ({ ...e, animales: [...e.animales], version: 1 }));
 let idCounterVeterinarios = Math.max(...SEED_SERVICIOS_VETERINARIOS.map(e => e.id)) + 1;
 let servicioVeterinarioAnimalIdCounter = Math.max(...SEED_SERVICIOS_VETERINARIOS.flatMap(e => e.animales.map(a => a.id))) + 1;
 
-const storePalpaciones: PalpacionEvento[] = SEED_PALPACIONES.map(p => ({ ...p, animales: [...p.animales] }));
-const storeInseminaciones: InseminacionEvento[] = SEED_INSEMINACIONES.map(i => ({ ...i, animales: [...i.animales] }));
-const storePartos: Parto[] = SEED_PARTOS.map(p => ({ ...p }));
+const storePalpaciones: PalpacionEvento[] = SEED_PALPACIONES.map(p => ({ ...p, animales: [...p.animales], version: 1 }));
+const storeInseminaciones: InseminacionEvento[] = SEED_INSEMINACIONES.map(i => ({ ...i, animales: [...i.animales], version: 1 }));
+const storePartos: Parto[] = SEED_PARTOS.map(p => ({ ...p, version: 1 }));
 
 function paginate<T>(data: T[], page: number, limit: number): PaginatedEventos<T> {
   const total = data.length;
@@ -233,6 +233,7 @@ export class MockServiciosService implements ServiciosService {
       veterinarioNombre: 'Veterinario Mock',
       totalAnimales: data.animales.length,
       createdAt: new Date().toISOString(),
+      version: 1,
       animales: data.animales.map((a) => ({
         id: palpacionAnimalIdCounter++,
         eventoId: newPalpacionId,
@@ -250,6 +251,28 @@ export class MockServiciosService implements ServiciosService {
     };
     storePalpaciones.unshift(newEvento);
     return { ...newEvento };
+  }
+
+  async updatePalpacion(id: number, data: Partial<CreatePalpacionEventoDto>, version: number): Promise<PalpacionEvento> {
+    await delay(300);
+    const idx = storePalpaciones.findIndex(p => p.id === id);
+    if (idx === -1) {
+      throw new ApiError(404, 'NOT_FOUND', `Palpación con ID ${id} no encontrada`);
+    }
+    const existing = storePalpaciones[idx]!;
+    if (existing.version !== version) {
+      throw new ApiError(409, 'VERSION_CONFLICT', 'El recurso fue modificado por otro usuario. Recarga e intenta de nuevo.');
+    }
+    const updated: PalpacionEvento = {
+      ...existing,
+      ...(data.codigo && { codigo: data.codigo }),
+      ...(data.fecha && { fecha: data.fecha }),
+      ...(data.veterinariosId !== undefined && { veterinariosId: data.veterinariosId }),
+      ...(data.observaciones !== undefined && { observaciones: data.observaciones }),
+      version: version + 1,
+    };
+    storePalpaciones[idx] = updated;
+    return { ...updated };
   }
 
   // Inseminaciones
@@ -282,6 +305,7 @@ export class MockServiciosService implements ServiciosService {
       veterinarioNombre: 'Veterinario Mock',
       totalAnimales: data.animales.length,
       createdAt: new Date().toISOString(),
+      version: 1,
       animales: data.animales.map((a) => ({
         id: inseminacionAnimalIdCounter++,
         eventoId: newInseminacionId,
@@ -297,6 +321,28 @@ export class MockServiciosService implements ServiciosService {
     };
     storeInseminaciones.unshift(newEvento);
     return { ...newEvento };
+  }
+
+  async updateInseminacion(id: number, data: Partial<CreateInseminacionEventoDto>, version: number): Promise<InseminacionEvento> {
+    await delay(300);
+    const idx = storeInseminaciones.findIndex(i => i.id === id);
+    if (idx === -1) {
+      throw new ApiError(404, 'NOT_FOUND', `Inseminación con ID ${id} no encontrada`);
+    }
+    const existing = storeInseminaciones[idx]!;
+    if (existing.version !== version) {
+      throw new ApiError(409, 'VERSION_CONFLICT', 'El recurso fue modificado por otro usuario. Recarga e intenta de nuevo.');
+    }
+    const updated: InseminacionEvento = {
+      ...existing,
+      ...(data.codigo && { codigo: data.codigo }),
+      ...(data.fecha && { fecha: data.fecha }),
+      ...(data.veterinariosId !== undefined && { veterinariosId: data.veterinariosId }),
+      ...(data.observaciones !== undefined && { observaciones: data.observaciones }),
+      version: version + 1,
+    };
+    storeInseminaciones[idx] = updated;
+    return { ...updated };
   }
 
   // Partos
@@ -323,9 +369,34 @@ export class MockServiciosService implements ServiciosService {
       animalCodigo: `GAN-${String(data.animalesId).padStart(3, '0')}`,
       animalNombre: `Animal ${data.animalesId}`,
       totalCrias: data.machos + data.hembras + data.muertos,
+      version: 1,
     };
     storePartos.unshift(newParto);
     return { ...newParto };
+  }
+
+  async updateParto(id: number, data: Partial<CreatePartoDto>, version: number): Promise<Parto> {
+    await delay(300);
+    const idx = storePartos.findIndex(p => p.id === id);
+    if (idx === -1) {
+      throw new ApiError(404, 'NOT_FOUND', `Parto con ID ${id} no encontrado`);
+    }
+    const existing = storePartos[idx]!;
+    if (existing.version !== version) {
+      throw new ApiError(409, 'VERSION_CONFLICT', 'El recurso fue modificado por otro usuario. Recarga e intenta de nuevo.');
+    }
+    const updated: Parto = {
+      ...existing,
+      ...(data.fecha && { fecha: data.fecha }),
+      ...(data.machos !== undefined && { machos: data.machos }),
+      ...(data.hembras !== undefined && { hembras: data.hembras }),
+      ...(data.muertos !== undefined && { muertos: data.muertos }),
+      ...(data.tipoParto && { tipoParto: data.tipoParto }),
+      ...(data.observaciones !== undefined && { observaciones: data.observaciones }),
+      version: version + 1,
+    };
+    storePartos[idx] = updated;
+    return { ...updated };
   }
 
   // Servicios Veterinarios
@@ -364,6 +435,7 @@ export class MockServiciosService implements ServiciosService {
       veterinarioNombre: 'Veterinario Mock',
       totalAnimales: data.animales.length,
       createdAt: new Date().toISOString(),
+      version: 1,
       animales: data.animales.map((a) => ({
         id: servicioVeterinarioAnimalIdCounter++,
         eventoId: 0, // Will be set after creation
@@ -374,6 +446,28 @@ export class MockServiciosService implements ServiciosService {
     storeServiciosVeterinarios.unshift(newEvento);
     return { ...newEvento, animales: [...newEvento.animales] };
   }
+
+  async updateServicioVeterinario(id: number, data: Partial<CreateServicioVeterinarioEventoDto>, version: number): Promise<ServicioVeterinarioEvento> {
+    await delay(300);
+    const idx = storeServiciosVeterinarios.findIndex(e => e.id === id);
+    if (idx === -1) {
+      throw new ApiError(404, 'NOT_FOUND', `Servicio veterinario con ID ${id} no encontrado`);
+    }
+    const existing = storeServiciosVeterinarios[idx]!;
+    if (existing.version !== version) {
+      throw new ApiError(409, 'VERSION_CONFLICT', 'El recurso fue modificado por otro usuario. Recarga e intenta de nuevo.');
+    }
+    const updated: ServicioVeterinarioEvento = {
+      ...existing,
+      ...(data.codigo && { codigo: data.codigo }),
+      ...(data.fecha && { fecha: data.fecha }),
+      ...(data.veterinariosId !== undefined && { veterinariosId: data.veterinariosId }),
+      ...(data.observaciones !== undefined && { observaciones: data.observaciones }),
+      version: version + 1,
+    };
+    storeServiciosVeterinarios[idx] = updated;
+    return { ...updated, animales: [...updated.animales] };
+  }
 }
 
 // ============================================================================
@@ -382,12 +476,12 @@ export class MockServiciosService implements ServiciosService {
 
 export function resetServiciosMock(): void {
   storePalpaciones.length = 0;
-  storePalpaciones.push(...SEED_PALPACIONES.map(p => ({ ...p, animales: [...p.animales] })));
+  storePalpaciones.push(...SEED_PALPACIONES.map(p => ({ ...p, animales: [...p.animales], version: 1 })));
   storeInseminaciones.length = 0;
-  storeInseminaciones.push(...SEED_INSEMINACIONES.map(i => ({ ...i, animales: [...i.animales] })));
+  storeInseminaciones.push(...SEED_INSEMINACIONES.map(i => ({ ...i, animales: [...i.animales], version: 1 })));
   storePartos.length = 0;
-  storePartos.push(...SEED_PARTOS.map(p => ({ ...p })));
-  storeServiciosVeterinarios = SEED_SERVICIOS_VETERINARIOS.map(e => ({ ...e, animales: [...e.animales] }));
+  storePartos.push(...SEED_PARTOS.map(p => ({ ...p, version: 1 })));
+  storeServiciosVeterinarios = SEED_SERVICIOS_VETERINARIOS.map(e => ({ ...e, animales: [...e.animales], version: 1 }));
   palpacionIdCounter = SEED_PALPACIONES.length + 1;
   palpacionAnimalIdCounter = SEED_PALPACION_ANIMALES.length + 1;
   inseminacionIdCounter = SEED_INSEMINACIONES.length + 1;
@@ -398,7 +492,7 @@ export function resetServiciosMock(): void {
 }
 
 export function resetServiciosVeterinariosMock(): void {
-  storeServiciosVeterinarios = SEED_SERVICIOS_VETERINARIOS.map(e => ({ ...e, animales: [...e.animales] }));
+  storeServiciosVeterinarios = SEED_SERVICIOS_VETERINARIOS.map(e => ({ ...e, animales: [...e.animales], version: 1 }));
   idCounterVeterinarios = Math.max(...SEED_SERVICIOS_VETERINARIOS.map(e => e.id)) + 1;
   servicioVeterinarioAnimalIdCounter = Math.max(...SEED_SERVICIOS_VETERINARIOS.flatMap(e => e.animales.map(a => a.id))) + 1;
 }
