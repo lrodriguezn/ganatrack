@@ -16,7 +16,7 @@
  */
 
 import { generateIdempotencyKey } from './types';
-import type { FormQueueItem, FormType } from './types';
+import type { FormQueueItem, FormType, HttpMethod } from './types';
 import { enqueue } from './form-queue';
 
 export interface SubmitFormOptions<TResponse> {
@@ -26,6 +26,10 @@ export interface SubmitFormOptions<TResponse> {
   payload: Record<string, unknown>;
   /** API endpoint path (e.g., '/api/v1/animales') */
   endpoint: string;
+  /** HTTP method for the request (POST for create, PUT for update) */
+  method?: HttpMethod;
+  /** Expected version for optimistic locking (PUT requests) */
+  expectedVersion?: number;
   /** Predio ID for tenant context */
   predioId: number;
   /** Function to call when online. Receives headers object. */
@@ -76,7 +80,8 @@ export async function submitFormWithOfflineSupport<TResponse>(
     payload,
     idempotencyKey,
     endpoint,
-    method: 'POST',
+    method: options.method ?? 'POST',
+    expectedVersion: options.expectedVersion,
     predioId,
     createdAt: Date.now(),
     attempts: 0,

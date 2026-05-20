@@ -110,4 +110,58 @@ describe('submitFormWithOfflineSupport', () => {
       expect(result1.idempotencyKey).not.toBe(result2.idempotencyKey)
     })
   })
+
+  describe('offline mode with PUT method', () => {
+    it('should enqueue with PUT method when specified', async () => {
+      const submitFn = vi.fn()
+
+      const result = await submitFormWithOfflineSupport({
+        formType: 'animal',
+        payload: { id: 1, nombre: 'Updated' },
+        endpoint: '/api/v1/animales/1',
+        method: 'PUT',
+        predioId: 1,
+        submitFn,
+        isOnline: false,
+      })
+
+      expect(result.mode).toBe('offline')
+      expect(result.queueItem!.method).toBe('PUT')
+      expect(result.queueItem!.endpoint).toBe('/api/v1/animales/1')
+      expect(formQueue.enqueue).toHaveBeenCalledWith(result.queueItem)
+    })
+
+    it('should enqueue with expectedVersion when provided', async () => {
+      const submitFn = vi.fn()
+
+      const result = await submitFormWithOfflineSupport({
+        formType: 'animal',
+        payload: { id: 1, nombre: 'Updated' },
+        endpoint: '/api/v1/animales/1',
+        method: 'PUT',
+        expectedVersion: 3,
+        predioId: 1,
+        submitFn,
+        isOnline: false,
+      })
+
+      expect(result.queueItem!.expectedVersion).toBe(3)
+    })
+
+    it('should default to POST when method is not specified', async () => {
+      const submitFn = vi.fn()
+
+      const result = await submitFormWithOfflineSupport({
+        formType: 'animal',
+        payload: { codigo: 'A001' },
+        endpoint: '/api/v1/animales',
+        predioId: 1,
+        submitFn,
+        isOnline: false,
+      })
+
+      expect(result.queueItem!.method).toBe('POST')
+      expect(result.queueItem!.expectedVersion).toBeUndefined()
+    })
+  })
 })

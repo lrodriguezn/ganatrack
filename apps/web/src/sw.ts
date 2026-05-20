@@ -59,6 +59,7 @@ export interface SyncQueueItem {
   timestamp: number;
   error?: string;
   status?: number;
+  serverVersion?: number; // Version from server on 409 conflict
 }
 
 /**
@@ -124,15 +125,19 @@ class SyncResponsePlugin {
       }
 
       case 409: {
-        // Conflict — move to conflict queue
-        const body = await clonedResponse.json().catch(() => ({}));
+        // Conflict — move to conflict queue with server version info
+        const body = await clonedResponse.json().catch(() => ({})) as {
+          error?: { details?: { currentVersion?: number } };
+        };
+        const serverVersion = body?.error?.details?.currentVersion;
         await moveToConflictQueue({
           url: response.url,
-          method: 'POST', // Unknown method from BackgroundSync replay
+          method: 'PUT', // Default for conflict items (updates cause conflicts)
           body: JSON.stringify(body),
           timestamp: Date.now(),
           status: 409,
           error: 'Conflicto de versión',
+          ...(serverVersion !== undefined ? { serverVersion } : {}),
         });
         break;
       }
@@ -464,14 +469,20 @@ export async function handleReplayResponse(
       // Item is automatically removed from queue by BackgroundSync
       break;
 
-    case 409:
+    case 409: {
       // Conflict - move to conflict queue for user resolution
+      const errorData = await response.clone().json().catch(() => ({})) as {
+        error?: { details?: { currentVersion?: number } };
+      };
+      const serverVersion = errorData?.error?.details?.currentVersion;
       await moveToConflictQueue({
         ...item,
         status: 409,
         error: 'Conflicto de versión',
+        ...(serverVersion !== undefined ? { serverVersion } : {}),
       });
       break;
+    }
 
     case 400: {
       // Validation error - move to failed queue
