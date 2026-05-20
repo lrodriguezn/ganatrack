@@ -16,6 +16,9 @@ import { ListAnimalesUseCase } from '../../../application/use-cases/list-animale
 import { UpdateAnimalUseCase } from '../../../application/use-cases/update-animal.use-case.js'
 import { DeleteAnimalUseCase } from '../../../application/use-cases/delete-animal.use-case.js'
 
+// Errors
+import { VersionConflictError } from '../../../../../shared/errors/index.js'
+
 type AnimalesRepos = {
   animalRepo: IAnimalRepository
   imagenRepo: IImagenRepository
@@ -61,7 +64,10 @@ export async function registerAnimalesRoutes(app: FastifyInstance, repos: Animal
     const currentUser = (request as any).currentUser
     const activoPredioId = currentUser?.predioIds?.[0] ?? 0
     const result = await getAnimalUseCase.execute(request.params.id, activoPredioId)
-    return reply.code(200).send({ success: true, data: result })
+    return reply
+      .header('X-Resource-Version', result.version)
+      .code(200)
+      .send({ success: true, data: result })
   })
 
   // POST /api/v1/animales
@@ -76,7 +82,10 @@ export async function registerAnimalesRoutes(app: FastifyInstance, repos: Animal
     // Store idempotency result if key was provided
     await storeIdempotencyResult(request, result.id, result)
 
-    return reply.code(201).send({ success: true, data: result })
+    return reply
+      .code(201)
+      .header('X-Resource-Version', result.version)
+      .send({ success: true, data: result })
   })
 
   // PUT /api/v1/animales/:id
@@ -86,8 +95,51 @@ export async function registerAnimalesRoutes(app: FastifyInstance, repos: Animal
   }, async (request, reply) => {
     const currentUser = (request as any).currentUser
     const activoPredioId = currentUser?.predioIds?.[0] ?? 0
-    const result = await updateAnimalUseCase.execute(request.params.id, activoPredioId, request.body)
-    return reply.code(200).send({ success: true, data: result })
+
+    // Require If-Match header (REQ-5, REQ-17)
+    const ifMatch = request.headers['if-match']
+    if (!ifMatch) {
+      return reply.code(400).send({
+        success: false,
+        error: {
+          code: 'MISSING_IF_MATCH',
+          message: 'Se requiere el header If-Match para actualizar este recurso.',
+          details: { field: 'If-Match' },
+        },
+      })
+    }
+
+    const expectedVersion = parseInt(ifMatch as string, 10)
+    if (isNaN(expectedVersion)) {
+      return reply.code(400).send({
+        success: false,
+        error: {
+          code: 'INVALID_IF_MATCH',
+          message: 'El header If-Match debe ser un número entero.',
+          details: { field: 'If-Match' },
+        },
+      })
+    }
+
+    try {
+      const result = await updateAnimalUseCase.execute(request.params.id, activoPredioId, request.body, expectedVersion)
+      return reply
+        .header('X-Resource-Version', result.version)
+        .code(200)
+        .send({ success: true, data: result })
+    } catch (error) {
+      if (error instanceof VersionConflictError) {
+        return reply.code(409).send({
+          success: false,
+          error: {
+            code: error.code,
+            message: error.message,
+            details: error.details,
+          },
+        })
+      }
+      throw error
+    }
   })
 
   // DELETE /api/v1/animales/:id
