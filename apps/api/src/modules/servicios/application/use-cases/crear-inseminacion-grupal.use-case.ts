@@ -34,6 +34,7 @@ export class CrearInseminacionGrupalUseCase {
         veterinariosId: dto.veterinariosId ?? null,
         observaciones: dto.observaciones ?? null,
         activo: 1,
+        version: 1,
       })
 
       const animalesData = dto.animales.map((a: CreateInseminacionAnimalDto) => ({

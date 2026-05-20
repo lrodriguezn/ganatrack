@@ -16,6 +16,7 @@ export interface PartoAnimalEntity {
   activo: number
   createdAt: Date | null
   updatedAt: Date | null
+  version: number
 }
 
 /**

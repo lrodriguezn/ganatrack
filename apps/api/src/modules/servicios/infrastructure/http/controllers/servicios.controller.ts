@@ -118,7 +118,7 @@ export class ServiciosController {
   async updatePalpacion(request: FastifyRequest, reply: FastifyReply) {
     const predioId = (request as any).predioId || 0
     const { id } = request.params as any
-    const result = await this.updatePalpacionGrupalUseCase.execute(id, request.body as UpdatePalpacionGrupalDto, predioId)
+    const result = await this.updatePalpacionGrupalUseCase.execute(id, request.body as UpdatePalpacionGrupalDto, predioId, 1)
     return reply.code(200).send({ success: true, data: result })
   }
 
@@ -174,7 +174,7 @@ export class ServiciosController {
   async updateInseminacion(request: FastifyRequest, reply: FastifyReply) {
     const predioId = (request as any).predioId || 0
     const { id } = request.params as any
-    const result = await this.updateInseminacionGrupalUseCase.execute(id, request.body as UpdateInseminacionGrupalDto, predioId)
+    const result = await this.updateInseminacionGrupalUseCase.execute(id, request.body as UpdateInseminacionGrupalDto, predioId, 1)
     return reply.code(200).send({ success: true, data: result })
   }
 
@@ -230,7 +230,7 @@ export class ServiciosController {
   async updateParto(request: FastifyRequest, reply: FastifyReply) {
     const predioId = (request as any).predioId || 0
     const { id } = request.params as any
-    const result = await this.updatePartoUseCase.execute(id, request.body as UpdatePartoAnimalDto, predioId)
+    const result = await this.updatePartoUseCase.execute(id, request.body as UpdatePartoAnimalDto, predioId, 1)
     return reply.code(200).send({ success: true, data: result })
   }
 
@@ -265,7 +265,7 @@ export class ServiciosController {
   async updateVeterinario(request: FastifyRequest, reply: FastifyReply) {
     const predioId = (request as any).predioId || 0
     const { id } = request.params as any
-    const result = await this.updateVeterinarioGrupalUseCase.execute(id, request.body as UpdateVeterinarioGrupalDto, predioId)
+    const result = await this.updateVeterinarioGrupalUseCase.execute(id, request.body as UpdateVeterinarioGrupalDto, predioId, 1)
     return reply.code(200).send({ success: true, data: result })
   }
 

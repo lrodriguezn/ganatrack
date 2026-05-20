@@ -43,6 +43,14 @@ export class RealServiciosService implements ServiciosService {
     return response.json();
   }
 
+  async updatePalpacion(id: number, data: Partial<CreatePalpacionEventoDto>, version: number): Promise<PalpacionEvento> {
+    const response = await apiClient.put(`servicios/palpaciones/${id}`, {
+      json: data,
+      headers: { 'If-Match': String(version) },
+    });
+    return response.json();
+  }
+
   // Inseminaciones
   async getInseminaciones(params: PaginationParams): Promise<PaginatedEventos<InseminacionEvento>> {
     const searchParams = new URLSearchParams();
@@ -60,6 +68,14 @@ export class RealServiciosService implements ServiciosService {
 
   async createInseminacion(data: CreateInseminacionEventoDto): Promise<InseminacionEvento> {
     const response = await apiClient.post('servicios/inseminaciones', { json: data });
+    return response.json();
+  }
+
+  async updateInseminacion(id: number, data: Partial<CreateInseminacionEventoDto>, version: number): Promise<InseminacionEvento> {
+    const response = await apiClient.put(`servicios/inseminaciones/${id}`, {
+      json: data,
+      headers: { 'If-Match': String(version) },
+    });
     return response.json();
   }
 
@@ -83,6 +99,14 @@ export class RealServiciosService implements ServiciosService {
     return response.json();
   }
 
+  async updateParto(id: number, data: Partial<CreatePartoDto>, version: number): Promise<Parto> {
+    const response = await apiClient.put(`servicios/partos/${id}`, {
+      json: data,
+      headers: { 'If-Match': String(version) },
+    });
+    return response.json();
+  }
+
   // Servicios Veterinarios
   async getServiciosVeterinarios(filters: { predioId: number; page: number; limit: number }): Promise<PaginatedServiciosVeterinarios> {
     const response = await apiClient.get('servicios/veterinarios', { searchParams: filters });
@@ -96,6 +120,14 @@ export class RealServiciosService implements ServiciosService {
 
   async createServicioVeterinario(data: CreateServicioVeterinarioEventoDto): Promise<ServicioVeterinarioEvento> {
     const response = await apiClient.post('servicios/veterinarios', { json: data });
+    return response.json() as Promise<ServicioVeterinarioEvento>;
+  }
+
+  async updateServicioVeterinario(id: number, data: Partial<CreateServicioVeterinarioEventoDto>, version: number): Promise<ServicioVeterinarioEvento> {
+    const response = await apiClient.put(`servicios/veterinarios/${id}`, {
+      json: data,
+      headers: { 'If-Match': String(version) },
+    });
     return response.json() as Promise<ServicioVeterinarioEvento>;
   }
 }

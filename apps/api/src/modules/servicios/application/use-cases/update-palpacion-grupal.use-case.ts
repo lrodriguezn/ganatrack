@@ -3,7 +3,7 @@ import { PALPACION_GRUPAL_REPOSITORY } from '../../domain/repositories/palpacion
 import type { IPalpacionGrupalRepository } from '../../domain/repositories/palpacion-grupal.repository.js'
 import type { PalpacionGrupalResponseDto, UpdatePalpacionGrupalDto } from '../dtos/palpacion.dto.js'
 import { PalpacionGrupalMapper } from '../../infrastructure/mappers/palpacion.mapper.js'
-import { ConflictError, NotFoundError } from '../../../../shared/errors/index.js'
+import { ConflictError, NotFoundError, VersionConflictError } from '../../../../shared/errors/index.js'
 import type { PalpacionGrupalEntity } from '../../domain/entities/palpacion.entity.js'
 
 @injectable()
@@ -12,10 +12,15 @@ export class UpdatePalpacionGrupalUseCase {
     @inject(PALPACION_GRUPAL_REPOSITORY) private readonly repo: IPalpacionGrupalRepository,
   ) {}
 
-  async execute(id: number, dto: UpdatePalpacionGrupalDto, predioId: number): Promise<PalpacionGrupalResponseDto> {
+  async execute(id: number, dto: UpdatePalpacionGrupalDto, predioId: number, expectedVersion: number): Promise<PalpacionGrupalResponseDto> {
     const existing = await this.repo.findById(id, predioId)
     if (!existing) {
       throw new NotFoundError('PalpacionGrupal', id)
+    }
+
+    // Optimistic locking: check version
+    if (existing.version !== expectedVersion) {
+      throw new VersionConflictError(existing.version, expectedVersion)
     }
 
     // Check duplicate codigo if changed
@@ -26,7 +31,10 @@ export class UpdatePalpacionGrupalUseCase {
       }
     }
 
+    const newVersion = existing.version + 1
+
     const updateData: Partial<PalpacionGrupalEntity> = {
+      version: newVersion,
       updatedAt: new Date(),
     }
     if (dto.codigo !== undefined) updateData.codigo = dto.codigo

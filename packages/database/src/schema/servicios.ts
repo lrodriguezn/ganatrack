@@ -15,6 +15,7 @@ export const serviciosPalpacionesGrupal = sqliteTable('servicios_palpaciones_gru
   activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
+  version: integer('version').notNull().default(1),
 })
 
 // servicios_palpaciones_animales - Individual animal palpation results
@@ -53,6 +54,7 @@ export const serviciosInseminacionGrupal = sqliteTable('servicios_inseminacion_g
   activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
+  version: integer('version').notNull().default(1),
 })
 
 // servicios_inseminacion_animales - Individual animal insemination results
@@ -93,6 +95,7 @@ export const serviciosPartosAnimales = sqliteTable('servicios_partos_animales', 
   activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
+  version: integer('version').notNull().default(1),
 })
 
 // servicios_partos_crias - Offspring from parturition
@@ -124,6 +127,7 @@ export const serviciosVeterinariosGrupal = sqliteTable('servicios_veterinarios_g
   activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
+  version: integer('version').notNull().default(1),
 })
 
 // servicios_veterinarios_animales - Individual animal veterinary treatments

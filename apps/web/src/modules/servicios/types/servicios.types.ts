@@ -19,6 +19,7 @@ export interface EventoGrupal {
   fecha: string; // ISO string
   veterinariosId: number;
   observaciones?: string;
+  version: number;
   // Joined fields
   veterinarioNombre?: string;
   totalAnimales?: number;
@@ -121,6 +122,7 @@ export interface Parto {
   muertos: number;
   tipoParto: TipoParto;
   observaciones?: string;
+  version: number;
   // Joined fields
   animalCodigo?: string;
   animalNombre?: string;
