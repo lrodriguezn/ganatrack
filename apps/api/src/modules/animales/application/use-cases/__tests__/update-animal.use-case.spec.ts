@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { UpdateAnimalUseCase } from '../update-animal.use-case'
 import { ANIMAL_REPOSITORY } from '../../../domain/repositories/animal.repository'
 import type { IAnimalRepository } from '../../../domain/repositories/animal.repository'
-import { NotFoundError } from '../../../../../shared/errors'
+import { NotFoundError, VersionConflictError } from '../../../../../shared/errors'
 import type { AnimalEntity } from '../../../domain/entities/animal.entity'
 
 describe('UpdateAnimalUseCase', () => {
@@ -45,6 +45,7 @@ describe('UpdateAnimalUseCase', () => {
   const updatedAnimal: AnimalEntity = {
     ...existingAnimal,
     nombre: 'Updated Name',
+    version: 2,
     updatedAt: new Date(),
   }
 
@@ -67,11 +68,11 @@ describe('UpdateAnimalUseCase', () => {
       nombre: 'Updated Name',
     }
 
-    const result = await useCase.execute(1, 1, dto)
+    const result = await useCase.execute(1, 1, dto, 1)
 
     expect(result.nombre).toBe('Updated Name')
     expect(mockRepo.findById).toHaveBeenCalledWith(1, 1)
-    expect(mockRepo.update).toHaveBeenCalledWith(1, { nombre: 'Updated Name' })
+    expect(mockRepo.update).toHaveBeenCalledWith(1, expect.objectContaining({ nombre: 'Updated Name' }))
   })
 
   it('should throw NotFoundError when animal does not exist', async () => {
@@ -79,7 +80,7 @@ describe('UpdateAnimalUseCase', () => {
 
     const dto = { nombre: 'New Name' }
 
-    await expect(useCase.execute(99, 1, dto)).rejects.toThrow(NotFoundError)
+    await expect(useCase.execute(99, 1, dto, 1)).rejects.toThrow(NotFoundError)
   })
 
   it('should convert fechaNacimiento string to Date when updating', async () => {
@@ -87,11 +88,11 @@ describe('UpdateAnimalUseCase', () => {
       fechaNacimiento: '2024-01-15T00:00:00Z',
     }
 
-    await useCase.execute(1, 1, dto)
+    await useCase.execute(1, 1, dto, 1)
 
-    expect(mockRepo.update).toHaveBeenCalledWith(1, {
+    expect(mockRepo.update).toHaveBeenCalledWith(1, expect.objectContaining({
       fechaNacimiento: expect.any(Date),
-    })
+    }))
   })
 
   it('should handle null values for optional fields', async () => {
@@ -99,11 +100,11 @@ describe('UpdateAnimalUseCase', () => {
       fechaNacimiento: null,
     }
 
-    await useCase.execute(1, 1, dto)
+    await useCase.execute(1, 1, dto, 1)
 
-    expect(mockRepo.update).toHaveBeenCalledWith(1, {
+    expect(mockRepo.update).toHaveBeenCalledWith(1, expect.objectContaining({
       fechaNacimiento: null,
-    })
+    }))
   })
 
   it('should only update provided fields', async () => {
@@ -111,11 +112,11 @@ describe('UpdateAnimalUseCase', () => {
       nombre: 'Only Name Changed',
     }
 
-    await useCase.execute(1, 1, dto)
+    await useCase.execute(1, 1, dto, 1)
 
-    expect(mockRepo.update).toHaveBeenCalledWith(1, {
+    expect(mockRepo.update).toHaveBeenCalledWith(1, expect.objectContaining({
       nombre: 'Only Name Changed',
-    })
+    }))
   })
 
   it('should update multiple fields at once', async () => {
@@ -125,12 +126,59 @@ describe('UpdateAnimalUseCase', () => {
       precioCompra: 2000,
     }
 
-    await useCase.execute(1, 1, dto)
+    await useCase.execute(1, 1, dto, 1)
 
-    expect(mockRepo.update).toHaveBeenCalledWith(1, {
+    expect(mockRepo.update).toHaveBeenCalledWith(1, expect.objectContaining({
       nombre: 'New Name',
       potreroId: 5,
       precioCompra: 2000,
+    }))
+  })
+
+  describe('optimistic locking (REQ-5, REQ-6, REQ-7)', () => {
+    it('should throw VersionConflictError when expectedVersion does not match', async () => {
+      const dto = { nombre: 'Updated Name' }
+
+      await expect(useCase.execute(1, 1, dto, 999)).rejects.toThrow(VersionConflictError)
+    })
+
+    it('should include currentVersion and expectedVersion in error details', async () => {
+      const dto = { nombre: 'Updated Name' }
+
+      try {
+        await useCase.execute(1, 1, dto, 999)
+        expect.fail('Should have thrown')
+      } catch (error) {
+        expect(error).toBeInstanceOf(VersionConflictError)
+        const err = error as VersionConflictError
+        expect(err.details.currentVersion).toBe('1')
+        expect(err.details.expectedVersion).toBe('999')
+      }
+    })
+
+    it('should increment version and return updated entity when version matches', async () => {
+      const dto = { nombre: 'Updated Name' }
+
+      const result = await useCase.execute(1, 1, dto, 1)
+
+      expect(result.version).toBe(2)
+      expect(mockRepo.update).toHaveBeenCalledWith(1, expect.objectContaining({
+        nombre: 'Updated Name',
+        version: 2,
+      }))
+    })
+
+    it('should pass incremented version to repository update', async () => {
+      const animalV5: AnimalEntity = { ...existingAnimal, version: 5 }
+      mockRepo.findById.mockResolvedValue(animalV5)
+
+      const dto = { nombre: 'V5 Update' }
+
+      await useCase.execute(1, 1, dto, 5)
+
+      expect(mockRepo.update).toHaveBeenCalledWith(1, expect.objectContaining({
+        version: 6,
+      }))
     })
   })
 })

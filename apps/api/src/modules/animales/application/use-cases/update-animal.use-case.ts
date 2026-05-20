@@ -3,7 +3,7 @@ import { ANIMAL_REPOSITORY } from '../../domain/repositories/animal.repository.j
 import type { IAnimalRepository } from '../../domain/repositories/animal.repository.js'
 import type { AnimalResponseDto, UpdateAnimalDto } from '../dtos/animal.dto.js'
 import { AnimalMapper } from '../../infrastructure/mappers/animal.mapper.js'
-import { NotFoundError } from '../../../../shared/errors/index.js'
+import { NotFoundError, VersionConflictError } from '../../../../shared/errors/index.js'
 
 @injectable()
 export class UpdateAnimalUseCase {
@@ -11,14 +11,21 @@ export class UpdateAnimalUseCase {
     @inject(ANIMAL_REPOSITORY) private readonly repo: IAnimalRepository,
   ) {}
 
-  async execute(id: number, predioId: number, dto: UpdateAnimalDto): Promise<AnimalResponseDto> {
+  async execute(id: number, predioId: number, dto: UpdateAnimalDto, expectedVersion: number): Promise<AnimalResponseDto> {
     // Verify animal exists
     const existing = await this.repo.findById(id, predioId)
     if (!existing) {
       throw new NotFoundError('Animal', id)
     }
 
-    const updateData: Record<string, unknown> = {}
+    // Optimistic locking: check version (REQ-5, REQ-6)
+    if (existing.version !== expectedVersion) {
+      throw new VersionConflictError(existing.version, expectedVersion)
+    }
+
+    const newVersion = existing.version + 1
+
+    const updateData: Record<string, unknown> = { version: newVersion }
     if (dto.nombre !== undefined) updateData.nombre = dto.nombre
     if (dto.fechaNacimiento !== undefined) updateData.fechaNacimiento = dto.fechaNacimiento ? new Date(dto.fechaNacimiento) : null
     if (dto.fechaCompra !== undefined) updateData.fechaCompra = dto.fechaCompra ? new Date(dto.fechaCompra) : null
