@@ -285,7 +285,43 @@ describe('useSyncActions', () => {
   });
 
   describe('resolveConflict', () => {
-    it('debería enviar PUT con X-Force-Update al mantener local', async () => {
+    it('debería enviar PUT con If-Match al mantener local con serverVersion', async () => {
+      const { resolveConflict } = await import('../use-sync-actions');
+
+      fetchSpy.mockResolvedValueOnce(
+        new Response(JSON.stringify({ id: '123' }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      );
+
+      await resolveConflict(
+        {
+          url: '/api/v1/animales/123',
+          method: 'PUT',
+          body: '{"nombre":"Mi Vaca"}',
+          timestamp: Date.now(),
+          serverVersion: 5,
+        },
+        true,
+      );
+
+      const callArgs = fetchSpy.mock.calls[0];
+      expect(callArgs[0]).toBe('/api/v1/animales/123');
+      const options = callArgs[1] as RequestInit;
+      expect(options.method).toBe('PUT');
+      expect(options.body).toBe('{"nombre":"Mi Vaca"}');
+      expect(options.credentials).toBe('include');
+
+      const headers = options.headers as Headers;
+      expect(headers.get('Content-Type')).toBe('application/json');
+      expect(headers.get('If-Match')).toBe('5');
+      expect(headers.get('X-Force-Update')).toBeNull();
+      expect(headers.get('Authorization')).toBe('Bearer test-access-token-123');
+      expect(headers.get('X-Predio-Id')).toBe('42');
+    });
+
+    it('debería enviar PUT sin If-Match cuando no hay serverVersion', async () => {
       const { resolveConflict } = await import('../use-sync-actions');
 
       fetchSpy.mockResolvedValueOnce(
@@ -306,17 +342,9 @@ describe('useSyncActions', () => {
       );
 
       const callArgs = fetchSpy.mock.calls[0];
-      expect(callArgs[0]).toBe('/api/v1/animales/123');
       const options = callArgs[1] as RequestInit;
-      expect(options.method).toBe('PUT');
-      expect(options.body).toBe('{"nombre":"Mi Vaca"}');
-      expect(options.credentials).toBe('include');
-
       const headers = options.headers as Headers;
-      expect(headers.get('Content-Type')).toBe('application/json');
-      expect(headers.get('X-Force-Update')).toBe('true');
-      expect(headers.get('Authorization')).toBe('Bearer test-access-token-123');
-      expect(headers.get('X-Predio-Id')).toBe('42');
+      expect(headers.get('If-Match')).toBeNull();
     });
 
     it('debería incluir headers de autenticación al mantener local', async () => {
@@ -426,6 +454,7 @@ describe('useSyncActions', () => {
           method: 'PUT',
           body: '{"nombre":"Mi Vaca"}',
           timestamp: Date.now(),
+          serverVersion: 3,
         },
         true,
       );
@@ -435,6 +464,7 @@ describe('useSyncActions', () => {
       const retryCall = calls[2];
       const retryHeaders = retryCall[1].headers as Headers;
       expect(retryHeaders.get('Authorization')).toBe('Bearer new-refreshed-token');
+      expect(retryHeaders.get('If-Match')).toBe('3');
     });
   });
 });

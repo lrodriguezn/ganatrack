@@ -26,6 +26,7 @@ interface SyncQueueItem {
   reason?: string;
   error?: string;
   status?: number;
+  serverVersion?: number; // Version from server on 409 conflict
 }
 
 /**

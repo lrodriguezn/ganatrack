@@ -137,3 +137,34 @@ describe('SyncConflictToast — interacción', () => {
     expect(onDismiss).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('SyncConflictToast — versión del servidor', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('debería mostrar la versión del servidor cuando está disponible', async () => {
+    await renderSyncConflictToast({
+      conflictCount: 1,
+      serverVersion: 5,
+      onResolve: vi.fn(),
+      onDismiss: vi.fn(),
+    });
+
+    expect(
+      screen.getByText('El servidor tiene versión 5'),
+    ).toBeInTheDocument();
+  });
+
+  it('debería NO mostrar versión cuando serverVersion es undefined', async () => {
+    await renderSyncConflictToast({
+      conflictCount: 1,
+      onResolve: vi.fn(),
+      onDismiss: vi.fn(),
+    });
+
+    expect(
+      screen.queryByText(/El servidor tiene versión/),
+    ).not.toBeInTheDocument();
+  });
+});

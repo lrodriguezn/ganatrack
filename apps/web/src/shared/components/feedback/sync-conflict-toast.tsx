@@ -24,12 +24,14 @@ import { AlertTriangle } from 'lucide-react';
 
 interface SyncConflictToastProps {
   conflictCount: number;
+  serverVersion?: number;
   onResolve: () => void;
   onDismiss: () => void;
 }
 
 export function SyncConflictToast({
   conflictCount,
+  serverVersion,
   onResolve,
   onDismiss,
 }: SyncConflictToastProps): JSX.Element {
@@ -37,6 +39,10 @@ export function SyncConflictToast({
     conflictCount === 1
       ? '1 conflicto de sincronización detectado'
       : `${conflictCount} conflictos de sincronización detectados`;
+
+  const versionInfo = serverVersion !== undefined
+    ? `El servidor tiene versión ${serverVersion}`
+    : null;
 
   return (
     <div className="flex flex-col gap-3">
@@ -49,6 +55,11 @@ export function SyncConflictToast({
           <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
             Revise los conflictos antes de continuar sincronizando
           </p>
+          {versionInfo && (
+            <p className="mt-1 text-xs font-medium text-amber-700 dark:text-amber-300">
+              {versionInfo}
+            </p>
+          )}
         </div>
       </div>
 

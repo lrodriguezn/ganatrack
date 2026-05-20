@@ -24,6 +24,7 @@ export interface ISyncQueueItem {
   error?: string;
   status?: number;
   reason?: string;
+  serverVersion?: number; // Version from server on 409 conflict
 }
 
 // ============================================================================
@@ -198,7 +199,7 @@ export async function retryItem(item: ISyncQueueItem): Promise<Response> {
  * Resolves a conflict by either keeping the local version or accepting the server version.
  *
  * @param item - The conflict item
- * @param keepLocal - If true, sends PUT with force flag to keep local version
+ * @param keepLocal - If true, sends PUT with If-Match header using serverVersion to overwrite
  *                    If false, discards the local version (accepts server)
  * @throws Error if resolution fails
  */
@@ -207,13 +208,19 @@ export async function resolveConflict(
   keepLocal: boolean,
 ): Promise<void> {
   if (keepLocal) {
-    // Send PUT with X-Force-Update header to override server version
+    // Send PUT with If-Match header using the server's version to overwrite
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    // Use serverVersion for If-Match — tells the server "I know the current version"
+    if (item.serverVersion !== undefined) {
+      headers['If-Match'] = String(item.serverVersion);
+    }
+
     const response = await fetchWithAuth(item.url, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Force-Update': 'true',
-      },
+      headers,
       body: item.body,
     });
 
