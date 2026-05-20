@@ -3,7 +3,7 @@ import { INSEMINACION_GRUPAL_REPOSITORY } from '../../domain/repositories/insemi
 import type { IInseminacionGrupalRepository } from '../../domain/repositories/inseminacion-grupal.repository.js'
 import type { InseminacionGrupalResponseDto, UpdateInseminacionGrupalDto } from '../dtos/inseminacion.dto.js'
 import { InseminacionGrupalMapper } from '../../infrastructure/mappers/inseminacion.mapper.js'
-import { ConflictError, NotFoundError } from '../../../../shared/errors/index.js'
+import { ConflictError, NotFoundError, VersionConflictError } from '../../../../shared/errors/index.js'
 import type { InseminacionGrupalEntity } from '../../domain/entities/inseminacion.entity.js'
 
 @injectable()
@@ -12,10 +12,15 @@ export class UpdateInseminacionGrupalUseCase {
     @inject(INSEMINACION_GRUPAL_REPOSITORY) private readonly repo: IInseminacionGrupalRepository,
   ) {}
 
-  async execute(id: number, dto: UpdateInseminacionGrupalDto, predioId: number): Promise<InseminacionGrupalResponseDto> {
+  async execute(id: number, dto: UpdateInseminacionGrupalDto, predioId: number, expectedVersion: number): Promise<InseminacionGrupalResponseDto> {
     const existing = await this.repo.findById(id, predioId)
     if (!existing) {
       throw new NotFoundError('InseminacionGrupal', id)
+    }
+
+    // Optimistic locking: check version
+    if (existing.version !== expectedVersion) {
+      throw new VersionConflictError(existing.version, expectedVersion)
     }
 
     if (dto.codigo && dto.codigo !== existing.codigo) {
@@ -25,7 +30,9 @@ export class UpdateInseminacionGrupalUseCase {
       }
     }
 
-    const updateData: Partial<InseminacionGrupalEntity> = { updatedAt: new Date() }
+    const newVersion = existing.version + 1
+
+    const updateData: Partial<InseminacionGrupalEntity> = { version: newVersion, updatedAt: new Date() }
     if (dto.codigo !== undefined) updateData.codigo = dto.codigo
     if (dto.fecha !== undefined) updateData.fecha = new Date(dto.fecha)
     if (dto.veterinariosId !== undefined) updateData.veterinariosId = dto.veterinariosId

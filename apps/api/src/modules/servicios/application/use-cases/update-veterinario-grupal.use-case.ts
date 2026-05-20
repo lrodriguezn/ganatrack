@@ -3,7 +3,7 @@ import { VETERINARIO_GRUPAL_REPOSITORY } from '../../domain/repositories/veterin
 import type { IVeterinarioGrupalRepository } from '../../domain/repositories/veterinario-grupal.repository.js'
 import type { UpdateVeterinarioGrupalDto, VeterinarioGrupalResponseDto } from '../dtos/veterinario.dto.js'
 import { VeterinarioGrupalMapper } from '../../infrastructure/mappers/veterinario.mapper.js'
-import { ConflictError, NotFoundError } from '../../../../shared/errors/index.js'
+import { ConflictError, NotFoundError, VersionConflictError } from '../../../../shared/errors/index.js'
 import type { VeterinarioGrupalEntity } from '../../domain/entities/veterinario.entity.js'
 
 @injectable()
@@ -12,10 +12,15 @@ export class UpdateVeterinarioGrupalUseCase {
     @inject(VETERINARIO_GRUPAL_REPOSITORY) private readonly repo: IVeterinarioGrupalRepository,
   ) {}
 
-  async execute(id: number, dto: UpdateVeterinarioGrupalDto, predioId: number): Promise<VeterinarioGrupalResponseDto> {
+  async execute(id: number, dto: UpdateVeterinarioGrupalDto, predioId: number, expectedVersion: number): Promise<VeterinarioGrupalResponseDto> {
     const existing = await this.repo.findById(id, predioId)
     if (!existing) {
       throw new NotFoundError('VeterinarioGrupal', id)
+    }
+
+    // Optimistic locking: check version
+    if (existing.version !== expectedVersion) {
+      throw new VersionConflictError(existing.version, expectedVersion)
     }
 
     if (dto.codigo && dto.codigo !== existing.codigo) {
@@ -25,7 +30,9 @@ export class UpdateVeterinarioGrupalUseCase {
       }
     }
 
-    const updateData: Partial<VeterinarioGrupalEntity> = { updatedAt: new Date() }
+    const newVersion = existing.version + 1
+
+    const updateData: Partial<VeterinarioGrupalEntity> = { version: newVersion, updatedAt: new Date() }
     if (dto.codigo !== undefined) updateData.codigo = dto.codigo
     if (dto.fecha !== undefined) updateData.fecha = new Date(dto.fecha)
     if (dto.veterinariosId !== undefined) updateData.veterinariosId = dto.veterinariosId
