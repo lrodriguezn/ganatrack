@@ -11,6 +11,7 @@ describe('UpdateAnimalUseCase', () => {
 
   const existingAnimal: AnimalEntity = {
     id: 1,
+    version: 1,
     predioId: 1,
     codigo: 'A001',
     nombre: 'Original Name',

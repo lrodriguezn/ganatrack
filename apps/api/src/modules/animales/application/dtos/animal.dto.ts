@@ -53,6 +53,7 @@ export interface UpdateAnimalDto {
 
 export interface AnimalResponseDto {
   id: number
+  version: number
   predioId: number
   codigo: string
   nombre: string

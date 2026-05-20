@@ -5,6 +5,7 @@ import type { AnimalEntity, ImagenEntity } from '../../../domain/entities/animal
 describe('AnimalMapper', () => {
   const baseAnimal: AnimalEntity = {
     id: 1,
+    version: 1,
     predioId: 1,
     codigo: 'A001',
     nombre: null,
@@ -84,6 +85,17 @@ describe('AnimalMapper', () => {
       const result = AnimalMapper.toResponse(animal)
 
       expect(result.fechaNacimiento).toBeNull()
+    })
+
+    it('should map version from entity to response DTO (REQ-3)', () => {
+      const animal: AnimalEntity = {
+        ...baseAnimal,
+        version: 5,
+      }
+
+      const result = AnimalMapper.toResponse(animal)
+
+      expect(result.version).toBe(5)
     })
 
     it('should handle all optional fields as null', () => {
