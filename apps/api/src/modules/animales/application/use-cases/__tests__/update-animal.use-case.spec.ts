@@ -151,8 +151,8 @@ describe('UpdateAnimalUseCase', () => {
       } catch (error) {
         expect(error).toBeInstanceOf(VersionConflictError)
         const err = error as VersionConflictError
-        expect(err.details.currentVersion).toBe('1')
-        expect(err.details.expectedVersion).toBe('999')
+        expect(err.details.currentVersion).toEqual(['1'])
+        expect(err.details.expectedVersion).toEqual(['999'])
       }
     })
 

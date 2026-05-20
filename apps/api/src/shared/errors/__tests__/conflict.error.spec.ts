@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { ConflictError, VersionConflictError } from '../index.js'
+import { DomainError } from '../domain.error.js'
 
 describe('VersionConflictError', () => {
-  it('should extend ConflictError (REQ-6)', () => {
+  it('should extend DomainError (REQ-6)', () => {
     const error = new VersionConflictError(4, 2)
-    expect(error).toBeInstanceOf(ConflictError)
+    expect(error).toBeInstanceOf(DomainError)
     expect(error).toBeInstanceOf(Error)
   })
 
@@ -20,8 +21,8 @@ describe('VersionConflictError', () => {
 
   it('should include currentVersion and expectedVersion in details (REQ-20)', () => {
     const error = new VersionConflictError(4, 2)
-    expect(error.details.currentVersion).toBe('4')
-    expect(error.details.expectedVersion).toBe('2')
+    expect(error.details.currentVersion).toEqual(['4'])
+    expect(error.details.expectedVersion).toEqual(['2'])
   })
 
   it('should have human-readable Spanish message (REQ-6)', () => {

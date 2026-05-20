@@ -69,8 +69,13 @@ export class AnimalesController {
   async updateAnimal(request: FastifyRequest, reply: FastifyReply) {
     const predioId = (request as any).predioId || 0
     const { id } = request.params as any
-    const result = await this.updateAnimalUseCase.execute(id, predioId, request.body as UpdateAnimalDto)
-    return reply.code(200).send({ success: true, data: result })
+    const ifMatch = request.headers['if-match']
+    const expectedVersion = ifMatch ? parseInt(ifMatch as string, 10) : 1
+    const result = await this.updateAnimalUseCase.execute(id, predioId, request.body as UpdateAnimalDto, expectedVersion)
+    return reply
+      .header('X-Resource-Version', result.version)
+      .code(200)
+      .send({ success: true, data: result })
   }
 
   async deleteAnimal(request: FastifyRequest, reply: FastifyReply) {

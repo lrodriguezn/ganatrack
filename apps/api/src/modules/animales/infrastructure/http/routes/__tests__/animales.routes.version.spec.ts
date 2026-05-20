@@ -184,8 +184,8 @@ describe('animales routes - optimistic locking', () => {
       expect(response.statusCode).toBe(409)
       const body = response.json()
       expect(body.error.code).toBe('VERSION_CONFLICT')
-      expect(body.error.details.currentVersion).toBe('3')
-      expect(body.error.details.expectedVersion).toBe('1')
+      expect(body.error.details.currentVersion).toEqual(['3'])
+      expect(body.error.details.expectedVersion).toEqual(['1'])
     })
 
     it('should return 200 with X-Resource-Version on successful update', async () => {
