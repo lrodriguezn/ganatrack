@@ -86,7 +86,7 @@ describe('offline/types', () => {
       expect(result.success).toBe(false);
     });
 
-    it('debería rechazar un item con method distinto de POST', async () => {
+    it('debería rechazar un item con method GET (solo POST y PUT válidos)', async () => {
       const { formQueueItemSchema } = await import('../types');
       const invalidItem = {
         id: '550e8400-e29b-41d4-a716-446655440000',
@@ -118,6 +118,107 @@ describe('offline/types', () => {
         createdAt: Date.now(),
         attempts: 0,
         status: 'unknown',
+      };
+
+      const result = formQueueItemSchema.safeParse(invalidItem);
+      expect(result.success).toBe(false);
+    });
+
+    it('debería aceptar un item con method PUT', async () => {
+      const { formQueueItemSchema } = await import('../types');
+      const putItem = {
+        id: '550e8400-e29b-41d4-a716-446655440000',
+        formType: 'animal',
+        payload: { nombre: 'Vaca Actualizada' },
+        idempotencyKey: '550e8400-e29b-41d4-a716-446655440000-1716000000000-animal',
+        endpoint: '/api/v1/animales/1',
+        method: 'PUT',
+        predioId: 42,
+        createdAt: Date.now(),
+        attempts: 0,
+        status: 'pending',
+      };
+
+      const result = formQueueItemSchema.safeParse(putItem);
+      expect(result.success).toBe(true);
+    });
+
+    it('debería rechazar un item con method GET', async () => {
+      const { formQueueItemSchema } = await import('../types');
+      const invalidItem = {
+        id: '550e8400-e29b-41d4-a716-446655440000',
+        formType: 'animal',
+        payload: { nombre: 'Vaca Test' },
+        idempotencyKey: '550e8400-e29b-41d4-a716-446655440000-1716000000000-animal',
+        endpoint: '/api/v1/animales',
+        method: 'GET',
+        predioId: 42,
+        createdAt: Date.now(),
+        attempts: 0,
+        status: 'pending',
+      };
+
+      const result = formQueueItemSchema.safeParse(invalidItem);
+      expect(result.success).toBe(false);
+    });
+
+    it('debería aceptar expectedVersion en item PUT', async () => {
+      const { formQueueItemSchema } = await import('../types');
+      const putItemWithVersion = {
+        id: '550e8400-e29b-41d4-a716-446655440000',
+        formType: 'animal',
+        payload: { nombre: 'Vaca Actualizada' },
+        idempotencyKey: '550e8400-e29b-41d4-a716-446655440000-1716000000000-animal',
+        endpoint: '/api/v1/animales/1',
+        method: 'PUT',
+        expectedVersion: 3,
+        predioId: 42,
+        createdAt: Date.now(),
+        attempts: 0,
+        status: 'pending',
+      };
+
+      const result = formQueueItemSchema.safeParse(putItemWithVersion);
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.expectedVersion).toBe(3);
+      }
+    });
+
+    it('debería rechazar expectedVersion negativo', async () => {
+      const { formQueueItemSchema } = await import('../types');
+      const invalidItem = {
+        id: '550e8400-e29b-41d4-a716-446655440000',
+        formType: 'animal',
+        payload: { nombre: 'Vaca Test' },
+        idempotencyKey: '550e8400-e29b-41d4-a716-446655440000-1716000000000-animal',
+        endpoint: '/api/v1/animales/1',
+        method: 'PUT',
+        expectedVersion: -1,
+        predioId: 42,
+        createdAt: Date.now(),
+        attempts: 0,
+        status: 'pending',
+      };
+
+      const result = formQueueItemSchema.safeParse(invalidItem);
+      expect(result.success).toBe(false);
+    });
+
+    it('debería rechazar expectedVersion cero', async () => {
+      const { formQueueItemSchema } = await import('../types');
+      const invalidItem = {
+        id: '550e8400-e29b-41d4-a716-446655440000',
+        formType: 'animal',
+        payload: { nombre: 'Vaca Test' },
+        idempotencyKey: '550e8400-e29b-41d4-a716-446655440000-1716000000000-animal',
+        endpoint: '/api/v1/animales/1',
+        method: 'PUT',
+        expectedVersion: 0,
+        predioId: 42,
+        createdAt: Date.now(),
+        attempts: 0,
+        status: 'pending',
       };
 
       const result = formQueueItemSchema.safeParse(invalidItem);

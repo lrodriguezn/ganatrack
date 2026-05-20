@@ -38,6 +38,7 @@ export interface Animal {
   codigoArete?: string;
   estadoAnimalKey: number;
   saludAnimalKey: number;
+  version?: number; // Optimistic locking version (from X-Resource-Version header)
   // Joined fields
   razaNombre?: string;
   potreroNombre?: string;

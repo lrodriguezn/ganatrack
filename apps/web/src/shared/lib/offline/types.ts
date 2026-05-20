@@ -45,6 +45,11 @@ export const QueueStatusEnum = z.enum([
 ]);
 
 /**
+ * Valid HTTP methods for queue items (mutations only).
+ */
+export const HttpMethodEnum = z.enum(['POST', 'PUT']);
+
+/**
  * Zod schema for a form queue item.
  * Validates data before enqueueing to IndexedDB.
  */
@@ -54,7 +59,8 @@ export const formQueueItemSchema = z.object({
   payload: z.record(z.unknown()),
   idempotencyKey: z.string(),
   endpoint: z.string().min(1),
-  method: z.literal('POST'),
+  method: HttpMethodEnum,
+  expectedVersion: z.number().int().positive().optional(),
   predioId: z.number().int().positive(),
   createdAt: z.number().int(),
   attempts: z.number().int().min(0).default(0),
@@ -76,6 +82,11 @@ export type FormQueueItem = z.infer<typeof formQueueItemSchema>;
  * Type for form types.
  */
 export type FormType = z.infer<typeof FormTypeEnum>;
+
+/**
+ * Type for HTTP methods allowed in queue items.
+ */
+export type HttpMethod = z.infer<typeof HttpMethodEnum>;
 
 /**
  * Type for queue item statuses.

@@ -105,6 +105,17 @@ describe('AnimalService', () => {
       expect(animal.codigo).toBe('GAN-001');
     });
 
+    it('should return animal with optional version field', async () => {
+      const animal = await service.getById(1);
+
+      // version is optional — may be undefined or a positive integer
+      expect(animal).toHaveProperty('id');
+      if (animal.version !== undefined) {
+        expect(typeof animal.version).toBe('number');
+        expect(animal.version).toBeGreaterThan(0);
+      }
+    });
+
     it('should throw error for non-existent id', async () => {
       await expect(service.getById(999)).rejects.toThrow();
     });
