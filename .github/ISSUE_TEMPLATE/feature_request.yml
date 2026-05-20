@@ -1,0 +1,63 @@
+name: Feature Request
+description: Propose a new feature or improvement for GanaTrack
+title: "feat(scope): description"
+labels: ["enhancement", "status:needs-review"]
+body:
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight Checks
+      options:
+        - label: I have searched existing issues and this is not a duplicate
+          required: true
+        - label: I understand this issue needs status:approved before a PR can be opened
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Description
+      description: The pain point this feature solves
+      placeholder: Describe the problem or missing capability...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: How it should work from the user's perspective
+      placeholder: Describe the desired behavior, UI, or API changes...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected Area
+      description: Which area of the project does this affect?
+      options:
+        - Backend (API)
+        - Frontend (Web)
+        - Database / Schema
+        - Offline / PWA
+        - Auth / Security
+        - CI / Build
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Other approaches or workarounds you've thought about
+      placeholder: Describe alternatives and why they were rejected or less preferred...
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Mockups, examples, references, or anything else
+      placeholder: Links, screenshots, or design references...
