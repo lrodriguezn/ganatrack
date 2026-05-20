@@ -51,6 +51,7 @@ export const animales = sqliteTable('animales', {
   activo: integer('activo').notNull().default(1),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).$onUpdate(() => new Date()),
+  version: integer('version').notNull().default(1),
 }, (table) => [
   // Unique constraint: animal code is unique within each farm
   unique('uq_animales_predio_codigo').on(table.predioId, table.codigo),

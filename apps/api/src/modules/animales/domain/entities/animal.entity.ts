@@ -1,5 +1,6 @@
 // Animal entity with self-referencing lineage
 export interface AnimalEntity {
+  version: number
   id: number
   predioId: number
   codigo: string

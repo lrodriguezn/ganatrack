@@ -49,7 +49,7 @@ export class DrizzleAnimalRepository implements IAnimalRepository {
   }
 
   async create(data: Omit<AnimalEntity, 'id' | 'createdAt' | 'updatedAt'>): Promise<AnimalEntity> {
-    const [row] = await this.db.insert(animales).values({ ...data, activo: 1 }).returning()
+    const [row] = await this.db.insert(animales).values({ ...data, activo: 1, version: data.version ?? 1 }).returning()
     return row
   }
 

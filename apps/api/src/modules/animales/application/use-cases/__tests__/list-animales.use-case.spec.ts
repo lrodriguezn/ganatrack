@@ -11,6 +11,7 @@ describe('ListAnimalesUseCase', () => {
 
   const mockAnimal: AnimalEntity = {
     id: 1,
+    version: 1,
     predioId: 1,
     codigo: 'A001',
     nombre: null,

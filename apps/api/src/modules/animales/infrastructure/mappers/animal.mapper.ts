@@ -4,7 +4,7 @@ import type { AnimalResponseDto, ImagenResponseDto } from '../../application/dto
 export class AnimalMapper {
   static toResponse(e: AnimalEntity): AnimalResponseDto {
     return {
-      id: e.id, predioId: e.predioId, codigo: e.codigo, nombre: e.nombre ?? '',
+      id: e.id, version: e.version, predioId: e.predioId, codigo: e.codigo, nombre: e.nombre ?? '',
       fechaNacimiento: e.fechaNacimiento?.toISOString() ?? null,
       fechaCompra: e.fechaCompra?.toISOString() ?? null,
       sexoKey: e.sexoKey, tipoIngresoId: e.tipoIngresoId, madreId: e.madreId,
