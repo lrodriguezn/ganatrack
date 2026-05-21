@@ -37,7 +37,7 @@ export default function NuevoAnimalPage(): JSX.Element {
         payload: data as Record<string, unknown>,
         endpoint: '/api/v1/animales',
         predioId,
-        submitFn: async (headers) => {
+        submitFn: async (_headers) => {
           return mutateAsync({
             ...data,
             predioId,

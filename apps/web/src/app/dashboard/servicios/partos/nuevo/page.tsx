@@ -25,11 +25,9 @@ export default function NuevoPartoPage(): JSX.Element | null {
   const { mutateAsync, isPending, error } = useCreateParto();
   const [isOfflineQueued, setIsOfflineQueued] = useState(false);
 
-  if (predioLoading || !predioActivo) return null;
-
   const handleSubmit = useCallback(async (data: CreatePartoDto) => {
     const isOnline = navigator.onLine;
-    const predioId = predioActivo.id;
+    const predioId = predioActivo?.id ?? 0;
 
     try {
       const result = await submitFormWithOfflineSupport({
@@ -54,7 +52,9 @@ export default function NuevoPartoPage(): JSX.Element | null {
     } catch (err) {
       console.error('Error creating parto:', err);
     }
-  }, [mutateAsync, predioActivo.id, router]);
+  }, [mutateAsync, predioActivo?.id, router]);
+
+  if (predioLoading || !predioActivo) return null;
 
   return (
     <div className="space-y-6">

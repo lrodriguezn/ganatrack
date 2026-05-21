@@ -37,23 +37,6 @@ export default function NuevaPalpacionPage(): JSX.Element | null {
   const [resultados, setResultados] = useState<Record<number, CreatePalpacionAnimalDto>>({});
   const [isOfflineQueued, setIsOfflineQueued] = useState(false);
 
-  if (predioLoading || !predioActivo) return null;
-
-  const handleNextStep1 = async () => {
-    const isValid = await formRef.current?.trigger();
-    if (isValid) {
-      const values = formRef.current?.getValues();
-      if (values) {
-        setEventoData(values);
-        setStep(2);
-      }
-    }
-  };
-
-  const handleResultadoChange = (animalId: number, data: CreatePalpacionAnimalDto) => {
-    setResultados((prev) => ({ ...prev, [animalId]: data }));
-  };
-
   const handleSubmit = useCallback(async () => {
     if (!eventoData) return;
 
@@ -93,6 +76,23 @@ export default function NuevaPalpacionPage(): JSX.Element | null {
       console.error('Error creating palpacion:', err);
     }
   }, [eventoData, selectedAnimals, resultados, mutateAsync, router]);
+
+  if (predioLoading || !predioActivo) return null;
+
+  const handleNextStep1 = async () => {
+    const isValid = await formRef.current?.trigger();
+    if (isValid) {
+      const values = formRef.current?.getValues();
+      if (values) {
+        setEventoData(values);
+        setStep(2);
+      }
+    }
+  };
+
+  const handleResultadoChange = (animalId: number, data: CreatePalpacionAnimalDto) => {
+    setResultados((prev) => ({ ...prev, [animalId]: data }));
+  };
 
   return (
     <div className="space-y-4">

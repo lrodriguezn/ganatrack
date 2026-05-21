@@ -63,8 +63,10 @@ export function useOfflineQueue(): UseOfflineQueueReturn {
 
   // Initialize queue count on mount
   useEffect(() => {
-    void refreshCount();
-  }, [refreshCount]);
+    getStatus().then((status) => {
+      setQueueCount(status.count);
+    });
+  }, []);
 
   // Subscribe to online/offline events
   useEffect(() => {
