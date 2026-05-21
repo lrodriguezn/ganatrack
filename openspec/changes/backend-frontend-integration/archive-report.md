@@ -20,17 +20,16 @@ Successfully completed the first two phases of backend-frontend integration, est
 |------|--------|-------|
 | 1.1 Add `db:push` script | ✅ Complete | Added to packages/database/package.json |
 | 1.2 Add `db:studio` script | ✅ Complete | Added to packages/database/package.json |
-| 1.3 Run `db:push` to create tables | ✅ Complete | Created dev.db with custom push-schema.ts |
+| 1.3 Run `db:push` to create tables | ✅ Complete | Created dev.db with `drizzle-kit push` |
 | 1.4 Run seed script | ✅ Complete | Seeded admin user, roles, permissions, catalogs |
 | 1.5 Verify dev.db | ✅ Complete | 50 tables, 12 indexes created |
 
 **Errors Resolved:**
 - `better-sqlite3` NODE_MODULE_VERSION mismatch (108 vs 109) — resolved with `npm rebuild`
-- `drizzle-kit` Node.js version incompatibility — resolved with custom `push-schema.ts` script
+- `drizzle-kit` Node.js version incompatibility — resolved with `drizzle-kit push` (drizzle-kit is now the source of truth for schema management)
 
 **Files Created/Modified:**
 - `packages/database/package.json` — Modified (added Drizzle CLI scripts)
-- `packages/database/push-schema.ts` — Created (custom schema push script)
 - `packages/database/dev.db` — Created (SQLite database with seed data)
 
 ### Phase 2: Frontend Configuration ✅
@@ -107,7 +106,6 @@ No new specifications introduced in this change. The integration work connects e
 | Proposal | openspec/changes/backend-frontend-integration/proposal.md |
 | Tasks | openspec/changes/backend-frontend-integration/tasks.md |
 | Database Package | packages/database/package.json |
-| Custom Push Script | packages/database/push-schema.ts |
 | SQLite Database | packages/database/dev.db |
 | Frontend Env | apps/web/.env.local |
 | Backend Env | apps/api/.env |
