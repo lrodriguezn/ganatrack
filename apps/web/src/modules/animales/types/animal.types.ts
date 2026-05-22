@@ -19,6 +19,7 @@ export type UpdateAnimalDto = Partial<z.infer<typeof createAnimalSchema>>;
 
 export interface Animal {
   id: number;
+  version: number;
   predioId: number;
   codigo: string;
   nombre?: string;

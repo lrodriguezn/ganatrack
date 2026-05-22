@@ -37,8 +37,9 @@ export class RealAnimalService implements AnimalService {
   async getById(id: number): Promise<Animal> {
     const response = await apiClient.get(`animales/${id}`);
     const json = await response.json();
-    // API returns { data: { animal } } - extract inner object
-    return ((json as { data?: Animal }).data ?? json) as Animal;
+    // API returns { data: Animal } - extract inner object
+    const animal = ((json as { data?: Animal }).data ?? json) as Animal;
+    return animal;
   }
 
   async create(data: CreateAnimalDto, headers?: Record<string, string>): Promise<Animal> {
@@ -46,8 +47,11 @@ export class RealAnimalService implements AnimalService {
     return response.json();
   }
 
-  async update(id: number, data: UpdateAnimalDto): Promise<Animal> {
-    const response = await apiClient.put(`animales/${id}`, { json: data });
+  async update(id: number, data: UpdateAnimalDto, version: number): Promise<Animal> {
+    const response = await apiClient.put(`animales/${id}`, {
+      json: data,
+      headers: { 'If-Match': String(version) },
+    });
     return response.json();
   }
 

@@ -27,6 +27,7 @@ export default function EditarAnimalPage({ params }: EditarAnimalPageProps): JSX
   const animalId = parseInt(resolvedParams.id, 10);
 
   const [animal, setAnimal] = useState<Animal | null>(null);
+  const [animalVersion, setAnimalVersion] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -36,6 +37,7 @@ export default function EditarAnimalPage({ params }: EditarAnimalPageProps): JSX
       try {
         const data = await animalService.getById(animalId);
         setAnimal(data);
+        setAnimalVersion(data.version);
       } catch (err) {
         setError(err as Error);
       } finally {
@@ -48,7 +50,7 @@ export default function EditarAnimalPage({ params }: EditarAnimalPageProps): JSX
   const handleSubmit = async (data: CreateAnimalDto) => {
     try {
       setIsSaving(true);
-      await animalService.update(animalId, data);
+      await animalService.update(animalId, data, animalVersion);
       router.push(`/dashboard/animales/${animalId}`);
     } catch (err) {
       setError(err as Error);
