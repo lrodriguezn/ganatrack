@@ -29,7 +29,7 @@ export interface AnimalService {
   getAll(filters: AnimalFilters): Promise<PaginatedAnimales>;
   getById(id: number): Promise<Animal>;
   create(data: CreateAnimalDto, headers?: Record<string, string>): Promise<Animal>;
-  update(id: number, data: UpdateAnimalDto): Promise<Animal>;
+  update(id: number, data: UpdateAnimalDto, version: number): Promise<Animal>;
   delete(id: number): Promise<void>;
 
   // Estado

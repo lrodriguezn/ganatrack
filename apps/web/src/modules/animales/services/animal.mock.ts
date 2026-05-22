@@ -28,160 +28,160 @@ import { ApiError } from '@/shared/lib/errors';
 const SEED_ANIMALS: Animal[] = [
   // Machos (15)
   {
-    id: 1, predioId: 1, codigo: 'GAN-001', nombre: 'Don Toro', fechaNacimiento: '2020-03-15',
+    id: 1, version: 1, predioId: 1, codigo: 'GAN-001', nombre: 'Don Toro', fechaNacimiento: '2020-03-15',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 1, potreroId: 1,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Brahman', potreroNombre: 'Potrero Norte',
   },
   {
-    id: 2, predioId: 1, codigo: 'GAN-002', nombre: 'El Bravo', fechaNacimiento: '2020-05-20',
+    id: 2, version: 1, predioId: 1, codigo: 'GAN-002', nombre: 'El Bravo', fechaNacimiento: '2020-05-20',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 4, potreroId: 1,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Nelore', potreroNombre: 'Potrero Norte',
   },
   {
-    id: 3, predioId: 1, codigo: 'GAN-003', nombre: 'Matambo', fechaNacimiento: '2019-08-10',
+    id: 3, version: 1, predioId: 1, codigo: 'GAN-003', nombre: 'Matambo', fechaNacimiento: '2019-08-10',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 3, potreroId: 2,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Romosinuano', potreroNombre: 'Potrero Sur',
   },
   {
-    id: 4, predioId: 1, codigo: 'GAN-004', nombre: 'Cupido', fechaNacimiento: '2021-02-28',
+    id: 4, version: 1, predioId: 1, codigo: 'GAN-004', nombre: 'Cupido', fechaNacimiento: '2021-02-28',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 1, potreroId: 2,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Brahman', potreroNombre: 'Potrero Sur',
   },
   {
-    id: 5, predioId: 1, codigo: 'GAN-005', nombre: 'El Herrero', fechaNacimiento: '2020-11-05',
+    id: 5, version: 1, predioId: 1, codigo: 'GAN-005', nombre: 'El Herrero', fechaNacimiento: '2020-11-05',
     sexoKey: 0, tipoIngresoId: 1, configRazasId: 5, potreroId: 3,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     precioCompra: 2500000, pesoCompra: 180, codigoArete: 'ARE-005',
     razaNombre: 'Simmental', potreroNombre: 'Potrero Este',
   },
   {
-    id: 6, predioId: 1, codigo: 'GAN-006', nombre: 'Tornado', fechaNacimiento: '2021-06-12',
+    id: 6, version: 1, predioId: 1, codigo: 'GAN-006', nombre: 'Tornado', fechaNacimiento: '2021-06-12',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 2, potreroId: 3,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Holstein', potreroNombre: 'Potrero Este',
   },
   {
-    id: 7, predioId: 1, codigo: 'GAN-007', nombre: 'Cimarrón', fechaNacimiento: '2018-04-30',
+    id: 7, version: 1, predioId: 1, codigo: 'GAN-007', nombre: 'Cimarrón', fechaNacimiento: '2018-04-30',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 7, potreroId: 1,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Criollo', potreroNombre: 'Potrero Norte',
   },
   {
-    id: 8, predioId: 1, codigo: 'GAN-008', nombre: 'Palomo', fechaNacimiento: '2020-09-18',
+    id: 8, version: 1, predioId: 1, codigo: 'GAN-008', nombre: 'Palomo', fechaNacimiento: '2020-09-18',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 1, potreroId: 2,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Brahman', potreroNombre: 'Potrero Sur',
   },
   {
-    id: 9, predioId: 1, codigo: 'GAN-009', nombre: 'El Zorro', fechaNacimiento: '2022-01-08',
+    id: 9, version: 1, predioId: 1, codigo: 'GAN-009', nombre: 'El Zorro', fechaNacimiento: '2022-01-08',
     sexoKey: 0, tipoIngresoId: 1, configRazasId: 6, potreroId: 4,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     precioCompra: 1800000, pesoCompra: 150, codigoRfid: 'RFID-009',
     razaNombre: 'Gyr', potreroNombre: 'Potrero Oeste',
   },
   {
-    id: 10, predioId: 1, codigo: 'GAN-010', nombre: 'Pescador', fechaNacimiento: '2019-12-25',
+    id: 10, version: 1, predioId: 1, codigo: 'GAN-010', nombre: 'Pescador', fechaNacimiento: '2019-12-25',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 3, potreroId: 3,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Romosinuano', potreroNombre: 'Potrero Este',
   },
   {
-    id: 11,predioId: 1, codigo: 'GAN-011', nombre: 'Becerro', fechaNacimiento: '2022-05-14',
+    id: 11, version: 1, predioId: 1, codigo: 'GAN-011', nombre: 'Becerro', fechaNacimiento: '2022-05-14',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 1, potreroId: 1,
     madreId: 14, padreId: 1, codigoMadre: 'GAN-014', codigoPadre: 'GAN-001',
     tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Brahman', potreroNombre: 'Potrero Norte',
   },
   {
-    id: 12,predioId: 1, codigo: 'GAN-012', nombre: 'Alazán', fechaNacimiento: '2020-07-22',
+    id: 12, version: 1, predioId: 1, codigo: 'GAN-012', nombre: 'Alazán', fechaNacimiento: '2020-07-22',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 5, potreroId: 2,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Simmental', potreroNombre: 'Potrero Sur',
   },
   {
-    id: 13,predioId: 1, codigo: 'GAN-013', nombre: 'Navarro', fechaNacimiento: '2021-03-03',
+    id: 13, version: 1, predioId: 1, codigo: 'GAN-013', nombre: 'Navarro', fechaNacimiento: '2021-03-03',
     sexoKey: 0, tipoIngresoId: 1, configRazasId: 4, potreroId: 3,
     precioCompra: 2200000, pesoCompra: 200, codigoArete: 'ARE-013',
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Nelore', potreroNombre: 'Potrero Este',
   },
   {
-    id: 31,predioId: 1, codigo: 'GAN-031', nombre: 'Roble', fechaNacimiento: '2023-02-10',
+    id: 31, version: 1, predioId: 1, codigo: 'GAN-031', nombre: 'Roble', fechaNacimiento: '2023-02-10',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 1, potreroId: 2,
     madreId: 20, padreId: 2, codigoMadre: 'GAN-020', codigoPadre: 'GAN-002',
     tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Brahman', potreroNombre: 'Potrero Sur',
   },
   {
-    id: 32,predioId: 1, codigo: 'GAN-032', nombre: 'Centella', fechaNacimiento: '2023-04-18',
+    id: 32, version: 1, predioId: 1, codigo: 'GAN-032', nombre: 'Centella', fechaNacimiento: '2023-04-18',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 3, potreroId: 1,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Romosinuano', potreroNombre: 'Potrero Norte',
   },
   // Hembras (10)
   {
-    id: 14,predioId: 1, codigo: 'GAN-014', nombre: 'La Negra', fechaNacimiento: '2019-06-15',
+    id: 14, version: 1, predioId: 1, codigo: 'GAN-014', nombre: 'La Negra', fechaNacimiento: '2019-06-15',
     sexoKey: 1, tipoIngresoId: 0, configRazasId: 1, potreroId: 2,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Brahman', potreroNombre: 'Potrero Sur',
   },
   {
-    id: 15,predioId: 1, codigo: 'GAN-015', nombre: 'Bella', fechaNacimiento: '2020-02-10',
+    id: 15, version: 1, predioId: 1, codigo: 'GAN-015', nombre: 'Bella', fechaNacimiento: '2020-02-10',
     sexoKey: 1, tipoIngresoId: 0, configRazasId: 6, potreroId: 3,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Gyr', potreroNombre: 'Potrero Este',
   },
   {
-    id: 16,predioId: 1, codigo: 'GAN-016', nombre: 'Luna', fechaNacimiento: '2021-04-25',
+    id: 16, version: 1, predioId: 1, codigo: 'GAN-016', nombre: 'Luna', fechaNacimiento: '2021-04-25',
     sexoKey: 1, tipoIngresoId: 0, configRazasId: 2, potreroId: 4,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Holstein', potreroNombre: 'Potrero Oeste',
   },
   {
-    id: 17,predioId: 1, codigo: 'GAN-017', nombre: 'Estrella', fechaNacimiento: '2020-08-30',
+    id: 17, version: 1, predioId: 1, codigo: 'GAN-017', nombre: 'Estrella', fechaNacimiento: '2020-08-30',
     sexoKey: 1, tipoIngresoId: 1, configRazasId: 1, potreroId: 2,
     precioCompra: 2800000, pesoCompra: 200, codigoArete: 'ARE-017',
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Brahman', potreroNombre: 'Potrero Sur',
   },
   {
-    id: 18,predioId: 1, codigo: 'GAN-018', nombre: 'Margarita', fechaNacimiento: '2018-11-12',
+    id: 18, version: 1, predioId: 1, codigo: 'GAN-018', nombre: 'Margarita', fechaNacimiento: '2018-11-12',
     sexoKey: 1, tipoIngresoId: 0, configRazasId: 3, potreroId: 1,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Romosinuano', potreroNombre: 'Potrero Norte',
   },
   {
-    id: 19,predioId: 1, codigo: 'GAN-019', nombre: 'Blanca', fechaNacimiento: '2022-03-05',
+    id: 19, version: 1, predioId: 1, codigo: 'GAN-019', nombre: 'Blanca', fechaNacimiento: '2022-03-05',
     sexoKey: 1, tipoIngresoId: 0, configRazasId: 5, potreroId: 3,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Simmental', potreroNombre: 'Potrero Este',
   },
   {
-    id: 20,predioId: 1, codigo: 'GAN-020', nombre: 'Paloma', fechaNacimiento: '2019-09-20',
+    id: 20, version: 1, predioId: 1, codigo: 'GAN-020', nombre: 'Paloma', fechaNacimiento: '2019-09-20',
     sexoKey: 1, tipoIngresoId: 0, configRazasId: 1, potreroId: 2,
     madreId: 14, padreId: 1, codigoMadre: 'GAN-014', codigoPadre: 'GAN-001',
     tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Brahman', potreroNombre: 'Potrero Sur',
   },
   {
-    id: 21,predioId: 1, codigo: 'GAN-021', nombre: 'Cereza', fechaNacimiento: '2021-07-14',
+    id: 21, version: 1, predioId: 1, codigo: 'GAN-021', nombre: 'Cereza', fechaNacimiento: '2021-07-14',
     sexoKey: 1, tipoIngresoId: 0, configRazasId: 6, potreroId: 4,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Gyr', potreroNombre: 'Potrero Oeste',
   },
   {
-    id: 22,predioId: 1, codigo: 'GAN-022', nombre: 'Azucena', fechaNacimiento: '2020-12-01',
+    id: 22, version: 1, predioId: 1, codigo: 'GAN-022', nombre: 'Azucena', fechaNacimiento: '2020-12-01',
     sexoKey: 1, tipoIngresoId: 1, configRazasId: 4, potreroId: 3,
     precioCompra: 2600000, pesoCompra: 190, codigoRfid: 'RFID-022',
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
     razaNombre: 'Nelore', potreroNombre: 'Potrero Este',
   },
   {
-    id: 23,predioId: 1, codigo: 'GAN-023', nombre: 'Nube', fechaNacimiento: '2022-06-28',
+    id: 23, version: 1, predioId: 1, codigo: 'GAN-023', nombre: 'Nube', fechaNacimiento: '2022-06-28',
     sexoKey: 1, tipoIngresoId: 0, configRazasId: 2, potreroId: 4,
     madreId: 16, padreId: 6, codigoMadre: 'GAN-016', codigoPadre: 'GAN-006',
     tipoPadreKey: 0, estadoAnimalKey: 0, saludAnimalKey: 0,
@@ -189,14 +189,14 @@ const SEED_ANIMALS: Animal[] = [
   },
   // Vendidos (2)
   {
-    id: 24,predioId: 1, codigo: 'GAN-024', nombre: 'Relámpago', fechaNacimiento: '2019-04-10',
+    id: 24, version: 1, predioId: 1, codigo: 'GAN-024', nombre: 'Relámpago', fechaNacimiento: '2019-04-10',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 1, potreroId: undefined,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 1, saludAnimalKey: 0,
     razaNombre: 'Brahman', potreroNombre: undefined,
   },
   // Muertos (1)
   {
-    id: 25,predioId: 1, codigo: 'GAN-025', nombre: 'Sombra', fechaNacimiento: '2018-02-20',
+    id: 25, version: 1, predioId: 1, codigo: 'GAN-025', nombre: 'Sombra', fechaNacimiento: '2018-02-20',
     sexoKey: 0, tipoIngresoId: 0, configRazasId: 3, potreroId: undefined,
     madreId: null, padreId: null, tipoPadreKey: 0, estadoAnimalKey: 2, saludAnimalKey: 0,
     razaNombre: 'Romosinuano', potreroNombre: undefined,
@@ -283,6 +283,7 @@ export class MockAnimalService implements AnimalService {
     await delay(300);
     const newAnimal: Animal = {
       id: idCounter++,
+      version: 1,
       ...data,
       fechaNacimiento: typeof data.fechaNacimiento === 'string'
         ? data.fechaNacimiento
@@ -296,13 +297,14 @@ export class MockAnimalService implements AnimalService {
     return { ...newAnimal };
   }
 
-  async update(id: number, data: UpdateAnimalDto): Promise<Animal> {
+  async update(id: number, data: UpdateAnimalDto, _version: number): Promise<Animal> {
     await delay(300);
     const index = storeAnimals.findIndex(a => a.id === id);
     if (index === -1) {
       throw new ApiError(404, 'NOT_FOUND', `Animal con ID ${id} no encontrado`);
     }
-    storeAnimals[index] = { ...storeAnimals[index], ...data } as Animal;
+    const current = storeAnimals[index]!;
+    storeAnimals[index] = { ...current, ...data, version: current.version + 1 } as Animal;
     return { ...storeAnimals[index] };
   }
 
