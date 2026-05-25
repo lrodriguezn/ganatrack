@@ -27,7 +27,9 @@ export function useNotificacionesResumen(predioId: number | undefined) {
   const { data, isLoading, error } = useQuery({
     queryKey: queryKeys.notificaciones.resumen(predioId ?? -1),
     queryFn: () => notificacionesService.getResumen(predioId!),
-    enabled: isOnline && !!predioId,
+    // TEMPORAL: Deshabilitado mientras el endpoint no responde correctamente.
+    // Revertir a: enabled: isOnline && !!predioId
+    enabled: false,
     refetchInterval: 30_000,
     refetchIntervalInBackground: false,
     staleTime: 10_000,
