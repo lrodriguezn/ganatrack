@@ -1,5 +1,5 @@
 import type { FastifyInstance } from 'fastify'
-import { authMiddleware, createIdempotencyMiddleware, storeIdempotencyResult } from '../../../../../shared/middleware/index.js'
+import { authMiddleware, tenantContextMiddleware, createIdempotencyMiddleware, storeIdempotencyResult } from '../../../../../shared/middleware/index.js'
 import { InMemoryIdempotencyStore } from '../../../../../shared/lib/idempotency-store.js'
 import { createAnimalBodySchema, idParamsSchema, listAnimalesQuerySchema, updateAnimalBodySchema } from '../schemas/animales.schema.js'
 import type { CreateAnimalDto, UpdateAnimalDto } from '../../../application/dtos/animal.dto.js'
@@ -32,6 +32,11 @@ type IdParams = { Params: { id: number } }
 const idempotencyStore = new InMemoryIdempotencyStore()
 const idempotencyMiddleware = createIdempotencyMiddleware(idempotencyStore)
 
+// Helper to get PredioId from request (tenant-scoped entities)
+function getPredioId(request: any): number {
+  return request.predioId || 0
+}
+
 export async function registerAnimalesRoutes(app: FastifyInstance, repos: AnimalesRepos): Promise<void> {
   const { animalRepo } = repos
 
@@ -46,12 +51,10 @@ export async function registerAnimalesRoutes(app: FastifyInstance, repos: Animal
   // GET /api/v1/animales
   app.get<ListQuery>('/animales', {
     schema: { querystring: listAnimalesQuerySchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     const { page = 1, limit = 20, search, potreroId, estado } = request.query
-    // Get activo user from auth middleware
-    const currentUser = (request as any).currentUser
-    const activoPredioId = currentUser?.predioIds?.[0] ?? 0
+    const activoPredioId = getPredioId(request)
     const result = await listAnimalesUseCase.execute(activoPredioId, { page, limit, search, potreroId, estado: estado ? Number(estado) : undefined })
     return reply.code(200).send({ success: true, data: result.data, meta: { page: result.page, limit: result.limit, total: result.total } })
   })
@@ -59,10 +62,9 @@ export async function registerAnimalesRoutes(app: FastifyInstance, repos: Animal
   // GET /api/v1/animales/:id
   app.get<IdParams>('/animales/:id', {
     schema: { params: idParamsSchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
-    const currentUser = (request as any).currentUser
-    const activoPredioId = currentUser?.predioIds?.[0] ?? 0
+    const activoPredioId = getPredioId(request)
     const result = await getAnimalUseCase.execute(request.params.id, activoPredioId)
     return reply
       .header('X-Resource-Version', result.version)
@@ -73,10 +75,9 @@ export async function registerAnimalesRoutes(app: FastifyInstance, repos: Animal
   // POST /api/v1/animales
   app.post<{ Body: CreateAnimalDto }>('/animales', {
     schema: { body: createAnimalBodySchema },
-    preHandler: [authMiddleware, idempotencyMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware, idempotencyMiddleware],
   }, async (request, reply) => {
-    const currentUser = (request as any).currentUser
-    const activoPredioId = currentUser?.predioIds?.[0] ?? 0
+    const activoPredioId = getPredioId(request)
     const result = await crearAnimalUseCase.execute(request.body, activoPredioId)
 
     // Store idempotency result if key was provided
@@ -91,10 +92,9 @@ export async function registerAnimalesRoutes(app: FastifyInstance, repos: Animal
   // PUT /api/v1/animales/:id
   app.put<{ Params: { id: number }; Body: UpdateAnimalDto }>('/animales/:id', {
     schema: { params: idParamsSchema, body: updateAnimalBodySchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
-    const currentUser = (request as any).currentUser
-    const activoPredioId = currentUser?.predioIds?.[0] ?? 0
+    const activoPredioId = getPredioId(request)
 
     // Require If-Match header (REQ-5, REQ-17)
     const ifMatch = request.headers['if-match']
@@ -145,10 +145,9 @@ export async function registerAnimalesRoutes(app: FastifyInstance, repos: Animal
   // DELETE /api/v1/animales/:id
   app.delete<IdParams>('/animales/:id', {
     schema: { params: idParamsSchema },
-    preHandler: [authMiddleware],
+    preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
-    const currentUser = (request as any).currentUser
-    const activoPredioId = currentUser?.predioIds?.[0] ?? 0
+    const activoPredioId = getPredioId(request)
     await deleteAnimalUseCase.execute(request.params.id, activoPredioId)
     return reply.code(200).send({ success: true, data: { message: 'Animal eliminado' } })
   })
