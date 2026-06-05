@@ -186,16 +186,196 @@ describe('Configuracion Integration Tests', () => {
   })
 })
 
-/**
- * Route-level integration tests for /config/condiciones-corporales:
- *
- * Tasks 1.2 and 1.3 require testing HTTP routes:
- * - GET /config/condiciones-corporales returns 5 items
- * - GET /config/condiciones-corporales/:id returns specific item
- *
- * These tests will be implemented after route registration (Task 2.1).
- * The routes are NOT registered yet, so these would return 404.
- *
- * Route tests require full Fastify app setup with proper DI - to be verified
- * manually after implementation or via E2E tests against running server.
- */
+// =============================================================================
+// Route-level integration tests for /config/condiciones-corporales
+// =============================================================================
+// Tasks 1.2 and 1.3: real HTTP integration tests using Fastify app.inject().
+// - GET /condiciones-corporales returns 5 items
+// - GET /condiciones-corporales/:id returns specific item
+// The routes require authMiddleware, so we generate a valid JWT for the tests.
+
+describe('GET /config/condiciones-corporales routes (HTTP)', () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let sqlite: any = null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let db: any = null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let app: any = null
+  let token: string
+
+  const testOrSkip = canRunTests ? it : it.skip
+
+  beforeEach(async () => {
+    if (!canRunTests) return
+
+    const Database = (await import('better-sqlite3')).default
+    const { drizzle } = await import('drizzle-orm/better-sqlite3')
+    const schema = await import('@ganatrack/database/schema')
+
+    sqlite = new Database(':memory:')
+    sqlite.pragma('foreign_keys = ON')
+    db = drizzle(sqlite, { schema })
+
+    // Create only the table we need for the route tests
+    sqlite.exec(`
+      CREATE TABLE config_condiciones_corporales (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT(100) NOT NULL,
+        descripcion TEXT,
+        valor_min INTEGER DEFAULT 1,
+        valor_max INTEGER DEFAULT 5,
+        activo INTEGER NOT NULL DEFAULT 1,
+        created_at INTEGER,
+        updated_at INTEGER
+      );
+    `)
+
+    // Seed 5 records (matches seed.ts id 1-5)
+    await db.insert(schema.configCondicionesCorporales).values([
+      { id: 1, nombre: 'Muy delgado', valorMin: 1, valorMax: 1, descripcion: 'Costillas visibles, espinazo prominente', activo: 1 },
+      { id: 2, nombre: 'Delgado', valorMin: 2, valorMax: 2, descripcion: 'Costillas palpables', activo: 1 },
+      { id: 3, nombre: 'Ideal', valorMin: 3, valorMax: 3, descripcion: 'Costillas cubiertas, buena condición', activo: 1 },
+      { id: 4, nombre: 'Gordo', valorMin: 4, valorMax: 4, descripcion: 'Costillas no palpables, grasa visible', activo: 1 },
+      { id: 5, nombre: 'Muy gordo', valorMin: 5, valorMax: 5, descripcion: 'Exceso de grasa, pliegues', activo: 1 },
+    ])
+
+    // Generate a valid JWT for the auth middleware
+    const { signAccessToken } = await import('../../shared/utils/jwt.utils.js')
+    token = signAccessToken({
+      sub: 1,
+      roles: ['ADMIN'],
+      permisos: ['config:read'],
+      predioIds: [1],
+    })
+
+    // Build a minimal Fastify app and register the configuracion routes
+    // with the real condicionCorpRepo bound to our in-memory DB and stub repos
+    // for the other catalog resources.
+    const Fastify = (await import('fastify')).default
+    app = Fastify({ logger: false })
+
+    const { DrizzleConfigCondicionCorporalRepository } = await import(
+      '../../modules/configuracion/infrastructure/persistence/drizzle-config-condicion-corporal.repository.js'
+    )
+    const condicionCorpRepo = new DrizzleConfigCondicionCorporalRepository(db)
+
+    // Stubs for repos the other catalog routes need (not exercised by these tests)
+    const stubRepo = () => ({
+      findAll: async () => ({ data: [], total: 0 }),
+      findById: async () => null,
+      create: async () => ({}),
+      update: async () => null,
+      softDelete: async () => true,
+    })
+
+    const { registerConfiguracionRoutes } = await import(
+      '../../modules/configuracion/infrastructure/http/routes/configuracion.routes.js'
+    )
+    await registerConfiguracionRoutes(app, {
+      condicionCorpRepo,
+      razaRepo: stubRepo() as never,
+      tipoExpRepo: stubRepo() as never,
+      calidadAnimalRepo: stubRepo() as never,
+      colorRepo: stubRepo() as never,
+      rangoEdadRepo: stubRepo() as never,
+      keyValueRepo: stubRepo() as never,
+    })
+    await app.ready()
+  })
+
+  afterEach(async () => {
+    if (app) {
+      try { await app.close() } catch { /* ignore */ }
+      app = null
+    }
+    if (sqlite) {
+      try { sqlite.close() } catch { /* ignore */ }
+      sqlite = null
+      db = null
+    }
+  })
+
+  // -------- Task 1.2: GET /condiciones-corporales (list) --------
+
+  testOrSkip('GET /condiciones-corporales returns 200 with paginated payload', async () => {
+    if (!app) return
+
+    const response = await app.inject({
+      method: 'GET',
+      url: '/condiciones-corporales',
+      headers: { authorization: `Bearer ${token}` },
+    })
+
+    expect(response.statusCode).toBe(200)
+    const body = response.json()
+    expect(body.success).toBe(true)
+    expect(body.data).toHaveLength(5)
+    expect(body.page).toBe(1)
+    expect(body.limit).toBe(20)
+    expect(body.total).toBe(5)
+  })
+
+  testOrSkip('GET /condiciones-corporales items have all required fields', async () => {
+    if (!app) return
+
+    const response = await app.inject({
+      method: 'GET',
+      url: '/condiciones-corporales',
+      headers: { authorization: `Bearer ${token}` },
+    })
+
+    const body = response.json()
+    const item = body.data[0]
+    expect(item).toHaveProperty('id')
+    expect(item).toHaveProperty('nombre')
+    expect(item).toHaveProperty('valorMin')
+    expect(item).toHaveProperty('valorMax')
+    expect(item).toHaveProperty('descripcion')
+    expect(item).toHaveProperty('activo')
+  })
+
+  testOrSkip('GET /condiciones-corporales returns 401 without auth token', async () => {
+    if (!app) return
+
+    const response = await app.inject({
+      method: 'GET',
+      url: '/condiciones-corporales',
+    })
+
+    expect(response.statusCode).toBe(401)
+  })
+
+  // -------- Task 1.3: GET /condiciones-corporales/:id (get by id) --------
+
+  testOrSkip('GET /condiciones-corporales/3 returns 200 with the matching record', async () => {
+    if (!app) return
+
+    const response = await app.inject({
+      method: 'GET',
+      url: '/condiciones-corporales/3',
+      headers: { authorization: `Bearer ${token}` },
+    })
+
+    expect(response.statusCode).toBe(200)
+    const body = response.json()
+    expect(body.success).toBe(true)
+    expect(body.data.id).toBe(3)
+    expect(body.data.nombre).toBe('Ideal')
+    expect(body.data).toHaveProperty('valorMin')
+    expect(body.data).toHaveProperty('valorMax')
+    expect(body.data).toHaveProperty('descripcion')
+    expect(body.data).toHaveProperty('activo')
+  })
+
+  testOrSkip('GET /condiciones-corporales/9999 returns 404 for unknown id', async () => {
+    if (!app) return
+
+    const response = await app.inject({
+      method: 'GET',
+      url: '/condiciones-corporales/9999',
+      headers: { authorization: `Bearer ${token}` },
+    })
+
+    expect(response.statusCode).toBe(404)
+  })
+})
