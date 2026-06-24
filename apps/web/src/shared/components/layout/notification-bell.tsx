@@ -45,8 +45,7 @@ export function NotificationBell(): JSX.Element {
       onClick={handleClick}
     >
       <BellIcon className="h-5 w-5" />
-      {/* TEMPORAL: Badge oculto mientras el polling de notificaciones está deshabilitado */}
-      {/* <Badge count={unreadCount} max={99} /> */}
+      <Badge count={unreadCount} max={99} />
     </button>
   );
 }

@@ -141,7 +141,7 @@ export function NotificationCenter(): JSX.Element {
               </div>
             )}
 
-            {!isLoading && !error && (!data?.ultimas || data.ultimas.length === 0) && (
+            {!isLoading && !error && data?.ultimas && data.ultimas.length === 0 && (
               <div className="flex flex-col items-center justify-center py-12 px-4">
                 <BellAlertIcon className="h-12 w-12 text-gray-300 dark:text-gray-600 mb-3" />
                 <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
