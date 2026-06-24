@@ -11,9 +11,10 @@ export class ObtenerResumenUseCase {
   ) {}
 
   async execute(predioId: number): Promise<NotificacionResumenDto> {
-    const [noLeidas, porTipo] = await Promise.all([
+    const [noLeidas, porTipo, ultimasPage] = await Promise.all([
       this.repo.countNoLeidas(predioId),
       this.repo.countByTipo(predioId),
+      this.repo.findByPredio(predioId, { page: 1, limit: 5 }),
     ])
 
     return {
@@ -22,6 +23,7 @@ export class ObtenerResumenUseCase {
         tipo: t.tipo,
         count: t.count,
       })),
+      ultimas: ultimasPage.data.map(NotificacionMapper.toResponseDto),
     }
   }
 }
