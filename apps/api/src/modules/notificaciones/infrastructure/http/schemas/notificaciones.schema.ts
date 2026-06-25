@@ -139,6 +139,13 @@ export const resumenResponseSchema = {
             },
           },
         },
+        // Regression A.W7: ultimas was missing from the schema. The
+        // schema is now correct. NOT wired into the route's
+        // `schema: { response: ... }` in this PR — out of scope.
+        ultimas: {
+          type: 'array',
+          items: { $ref: 'NotificacionResponseSchema#' },
+        },
       },
     },
   },

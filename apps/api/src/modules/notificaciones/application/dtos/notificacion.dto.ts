@@ -59,6 +59,7 @@ export interface NotificacionResponseDto {
 export interface NotificacionResumenDto {
   noLeidas: number
   porTipo: { tipo: NotificacionTipo; count: number }[]
+  ultimas: NotificacionResponseDto[]
 }
 
 export interface PreferenciaResponseDto {

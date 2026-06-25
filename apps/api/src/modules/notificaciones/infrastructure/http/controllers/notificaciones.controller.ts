@@ -18,6 +18,21 @@ import type {
 } from '../../../application/dtos/notificacion.dto.js'
 import type { NotificacionTipo } from '../../../domain/entities/notificacion.entity.js'
 
+/**
+ * NotificacionesController — currently DEAD CODE.
+ *
+ * This class is defined and exported but never imported anywhere.
+ * The HTTP layer registers routes directly in
+ * `infrastructure/http/routes/notificaciones.routes.ts`, which uses
+ * inline route handlers (not the controller).
+ *
+ * The 4 `(request as any).predioId` / `(request as any).currentUser?.id`
+ * casts in this file are intentionally left in place. Refactoring
+ * them would expand scope beyond this PR. If/when the routes file
+ * is migrated to use this controller, replace those casts with the
+ * `getPredioId` helper from `maestros.routes.ts` (see commit
+ * "refactor(notificaciones)" in the same PR).
+ */
 @injectable()
 export class NotificacionesController {
   constructor(

@@ -22,6 +22,10 @@ export class RealNotificacionesService implements INotificacionesService {
     const response = await apiClient.get('notificaciones/resumen', {
       searchParams: { predio_id: predioId },
     });
+    // `porTipo` is intentionally not yet consumed by the UI but is
+    // reserved on the NotificacionResumen type for a future per-type
+    // badge feature. The cast below is necessary because ky's response
+    // typing does not propagate generic shapes.
     return response.json() as Promise<NotificacionResumen>;
   }
 

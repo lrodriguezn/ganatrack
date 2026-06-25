@@ -1,4 +1,4 @@
-import { sqliteTable, integer, text, unique } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, index, integer, text, unique } from 'drizzle-orm/sqlite-core'
 import { usuarios } from './usuarios'
 
 // ============================================================================
@@ -19,7 +19,14 @@ export const notificaciones = sqliteTable('notificaciones', {
   fechaEvento: integer('fecha_evento', { mode: 'timestamp' }),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   activo: integer('activo').notNull().default(1),
-})
+}, (table) => [
+  // Covers findByPredio and the partial predicate `activo=1` for the
+  // count queries (noLeidas, porTipo). Keep as composite — single-column
+  // on (predio_id) would not help when both filters are applied.
+  index('idx_notificaciones_predio_activo').on(table.predioId, table.activo),
+  // Covers the unread filters (`leida=0`) used by noLeidas and porTipo.
+  index('idx_notificaciones_predio_leida').on(table.predioId, table.leida),
+])
 
 // notificaciones_preferencias - User notification preferences
 export const notificacionesPreferencias = sqliteTable('notificaciones_preferencias', {

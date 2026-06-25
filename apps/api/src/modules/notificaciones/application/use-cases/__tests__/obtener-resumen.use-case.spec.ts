@@ -31,6 +31,10 @@ describe('ObtenerResumenUseCase', () => {
         { tipo: 'CELO_ESTIMADO', count: 1 },
         { tipo: 'VACUNA_PENDIENTE', count: 2 },
       ])
+      vi.mocked(mockRepo.findByPredio).mockResolvedValue({
+        data: [],
+        total: 0,
+      })
 
       const result = await useCase.execute(1)
 
@@ -40,18 +44,25 @@ describe('ObtenerResumenUseCase', () => {
         { tipo: 'CELO_ESTIMADO', count: 1 },
         { tipo: 'VACUNA_PENDIENTE', count: 2 },
       ])
+      expect(result.ultimas).toEqual([])
       expect(mockRepo.countNoLeidas).toHaveBeenCalledWith(1)
       expect(mockRepo.countByTipo).toHaveBeenCalledWith(1)
+      expect(mockRepo.findByPredio).toHaveBeenCalledWith(1, { page: 1, limit: 5 })
     })
 
     it('should return zero counts when no notifications', async () => {
       vi.mocked(mockRepo.countNoLeidas).mockResolvedValue(0)
       vi.mocked(mockRepo.countByTipo).mockResolvedValue([])
+      vi.mocked(mockRepo.findByPredio).mockResolvedValue({
+        data: [],
+        total: 0,
+      })
 
       const result = await useCase.execute(1)
 
       expect(result.noLeidas).toBe(0)
       expect(result.porTipo).toEqual([])
+      expect(result.ultimas).toEqual([])
     })
 
     it('should handle user with predio context', async () => {
@@ -59,12 +70,133 @@ describe('ObtenerResumenUseCase', () => {
       vi.mocked(mockRepo.countByTipo).mockResolvedValue([
         { tipo: 'PARTO_PROXIMO', count: 3 },
       ])
+      vi.mocked(mockRepo.findByPredio).mockResolvedValue({
+        data: [],
+        total: 0,
+      })
 
       const result = await useCase.execute(1)
 
       expect(result.noLeidas).toBe(3)
       expect(result.porTipo).toEqual([{ tipo: 'PARTO_PROXIMO', count: 3 }])
       expect(mockRepo.countNoLeidas).toHaveBeenCalledWith(1)
+    })
+
+    it('should call findByPredio with page 1 and limit 5 and map items newest-first', async () => {
+      // Drizzle's findByPredio already orders desc(createdAt); the use case
+      // trusts that ordering and maps each item to its response DTO.
+      const baseRow = {
+        id: 0,
+        predioId: 1,
+        usuarioId: 1,
+        tipo: 'PARTO_PROXIMO' as const,
+        titulo: '',
+        mensaje: '',
+        entidadTipo: null,
+        entidadId: null,
+        leida: 0,
+        fechaEvento: null,
+        activo: 1,
+      }
+      const newer = new Date('2026-06-24T10:00:00Z')
+      const older = new Date('2026-06-24T09:00:00Z')
+      vi.mocked(mockRepo.countNoLeidas).mockResolvedValue(2)
+      vi.mocked(mockRepo.countByTipo).mockResolvedValue([
+        { tipo: 'PARTO_PROXIMO', count: 2 },
+      ])
+      vi.mocked(mockRepo.findByPredio).mockResolvedValue({
+        data: [
+          { ...baseRow, id: 2, titulo: 'newer', createdAt: newer },
+          { ...baseRow, id: 1, titulo: 'older', createdAt: older },
+        ],
+        total: 2,
+      })
+
+      const result = await useCase.execute(1)
+
+      // result.ultimas preserves repository ordering (newest first)
+      expect(result.ultimas).toHaveLength(2)
+      expect(result.ultimas[0]).toMatchObject({ id: 2, titulo: 'newer', fechaCreacion: newer.toISOString() })
+      expect(result.ultimas[1]).toMatchObject({ id: 1, titulo: 'older', fechaCreacion: older.toISOString() })
+      expect(mockRepo.findByPredio).toHaveBeenCalledWith(1, { page: 1, limit: 5 })
+    })
+
+    it('should pass through repository items without modifying count (regression: A.W3)', async () => {
+      // Contract: the use case is a pass-through for `ultimas`. The repository
+      // is responsible for the `limit: 5` cap (via `findByPredio` options).
+      // The use case must not slice, dedupe, or reorder `ultimas`.
+      const baseRow = {
+        id: 0,
+        predioId: 1,
+        usuarioId: 1,
+        tipo: 'PARTO_PROXIMO' as const,
+        titulo: '',
+        mensaje: '',
+        entidadTipo: null,
+        entidadId: null,
+        leida: 0,
+        fechaEvento: null,
+        activo: 1,
+      }
+
+      // Case 1: repository returns 5 items — use case returns 5.
+      const fiveRows = Array.from({ length: 5 }, (_, i) => ({
+        ...baseRow,
+        id: 100 + i,
+        titulo: `n${i}`,
+        createdAt: new Date(2026, 0, 1, 0, 5 - i),
+      }))
+      vi.mocked(mockRepo.countNoLeidas).mockResolvedValue(5)
+      vi.mocked(mockRepo.countByTipo).mockResolvedValue([
+        { tipo: 'PARTO_PROXIMO', count: 5 },
+      ])
+      vi.mocked(mockRepo.findByPredio).mockResolvedValue({ data: fiveRows, total: 5 })
+
+      const result5 = await useCase.execute(1)
+      expect(result5.ultimas).toHaveLength(5)
+
+      // Case 2: repository returns 10 items — use case still returns 10.
+      // (The cap is the repository's job, not the use case's.)
+      const tenRows = Array.from({ length: 10 }, (_, i) => ({
+        ...baseRow,
+        id: 200 + i,
+        titulo: `t${i}`,
+        createdAt: new Date(2026, 0, 2, 0, 10 - i),
+      }))
+      vi.mocked(mockRepo.countNoLeidas).mockResolvedValue(10)
+      vi.mocked(mockRepo.countByTipo).mockResolvedValue([
+        { tipo: 'PARTO_PROXIMO', count: 10 },
+      ])
+      vi.mocked(mockRepo.findByPredio).mockResolvedValue({ data: tenRows, total: 10 })
+
+      const result10 = await useCase.execute(1)
+      expect(result10.ultimas).toHaveLength(10)
+    })
+
+    it('should reject the whole resumen when countByTipo throws (regression: A.W6)', async () => {
+      // Promise.all is atomic: any of the 3 calls failing rejects the
+      // whole call. Documented in the use case JSDoc.
+      vi.mocked(mockRepo.countNoLeidas).mockResolvedValue(0)
+      vi.mocked(mockRepo.countByTipo).mockRejectedValue(new Error('countByTipo failed'))
+      vi.mocked(mockRepo.findByPredio).mockResolvedValue({ data: [], total: 0 })
+
+      await expect(useCase.execute(1)).rejects.toThrow('countByTipo failed')
+    })
+
+    it('should reject the whole resumen when countNoLeidas throws (regression: A.W6)', async () => {
+      vi.mocked(mockRepo.countNoLeidas).mockRejectedValue(new Error('countNoLeidas failed'))
+      vi.mocked(mockRepo.countByTipo).mockResolvedValue([])
+      vi.mocked(mockRepo.findByPredio).mockResolvedValue({ data: [], total: 0 })
+
+      await expect(useCase.execute(1)).rejects.toThrow('countNoLeidas failed')
+    })
+
+    it('should reject the whole resumen when findByPredio throws (regression: A.W6)', async () => {
+      vi.mocked(mockRepo.countNoLeidas).mockResolvedValue(0)
+      vi.mocked(mockRepo.countByTipo).mockResolvedValue([])
+      vi.mocked(mockRepo.findByPredio).mockRejectedValue(new Error('findByPredio failed'))
+
+      await expect(useCase.execute(1)).rejects.toThrow('findByPredio failed')
     })
   })
 })
