@@ -1,4 +1,4 @@
-import type { FastifyInstance } from 'fastify'
+import type { FastifyInstance, FastifyRequest } from 'fastify'
 import { authMiddleware, tenantContextMiddleware } from '../../../../../shared/middleware/index.js'
 import { ForbiddenError } from '../../../../../shared/errors/index.js'
 import { idParamsSchema, listNotificacionesQuerySchema } from '../schemas/notificaciones.schema.js'
@@ -17,6 +17,13 @@ type NotificacionesRepos = {
 
 type ListQuery = { Querystring: { page?: number; limit?: number; leida?: number } }
 type IdParams = { Params: { id: number } }
+
+// Helper to get PredioId from request (tenant-scoped entities).
+// Mirrors `getPredioId` in `maestros.routes.ts` to keep tenant reads
+// consistent across modules. Regression B.W1.
+function getPredioId(request: FastifyRequest): number {
+  return (request as unknown as { predioId?: number }).predioId ?? 0
+}
 
 export async function registerNotificacionesRoutes(app: FastifyInstance, repos: NotificacionesRepos): Promise<void> {
   const { notificacionRepo } = repos
@@ -37,7 +44,7 @@ export async function registerNotificacionesRoutes(app: FastifyInstance, repos: 
   app.get('/notificaciones/resumen', {
     preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
-    const predioId = (request as unknown as { predioId?: number }).predioId ?? 0
+    const predioId = getPredioId(request)
     if (predioId <= 0) {
       throw new ForbiddenError('X-Predio-Id es requerido')
     }

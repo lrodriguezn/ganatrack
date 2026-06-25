@@ -98,22 +98,14 @@ describe('GET /notificaciones/resumen (HTTP)', () => {
     )
     const notificacionRepo = new DrizzleNotificacionRepository(db)
 
-    // Stubs for repos the other catalog routes need (not exercised by these tests)
-    const stubRepo = () => ({
-      findAll: async () => ({ data: [], total: 0 }),
-      findById: async () => null,
-      create: async () => ({}),
-      update: async () => null,
-      softDelete: async () => true,
-    })
-
     const { registerNotificacionesRoutes } = await import(
       '../../../modules/notificaciones/infrastructure/http/routes/notificaciones.routes.js'
     )
+    const { makeStubRepo } = await import('../../helpers/make-stub-repo.js')
     await registerNotificacionesRoutes(app, {
       notificacionRepo,
-      preferenciaRepo: stubRepo() as never,
-      pushTokenRepo: stubRepo() as never,
+      preferenciaRepo: makeStubRepo(),
+      pushTokenRepo: makeStubRepo(),
     })
     await app.ready()
   })
