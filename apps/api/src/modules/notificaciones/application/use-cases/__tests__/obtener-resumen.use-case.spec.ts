@@ -172,5 +172,31 @@ describe('ObtenerResumenUseCase', () => {
       const result10 = await useCase.execute(1)
       expect(result10.ultimas).toHaveLength(10)
     })
+
+    it('should reject the whole resumen when countByTipo throws (regression: A.W6)', async () => {
+      // Promise.all is atomic: any of the 3 calls failing rejects the
+      // whole call. Documented in the use case JSDoc.
+      vi.mocked(mockRepo.countNoLeidas).mockResolvedValue(0)
+      vi.mocked(mockRepo.countByTipo).mockRejectedValue(new Error('countByTipo failed'))
+      vi.mocked(mockRepo.findByPredio).mockResolvedValue({ data: [], total: 0 })
+
+      await expect(useCase.execute(1)).rejects.toThrow('countByTipo failed')
+    })
+
+    it('should reject the whole resumen when countNoLeidas throws (regression: A.W6)', async () => {
+      vi.mocked(mockRepo.countNoLeidas).mockRejectedValue(new Error('countNoLeidas failed'))
+      vi.mocked(mockRepo.countByTipo).mockResolvedValue([])
+      vi.mocked(mockRepo.findByPredio).mockResolvedValue({ data: [], total: 0 })
+
+      await expect(useCase.execute(1)).rejects.toThrow('countNoLeidas failed')
+    })
+
+    it('should reject the whole resumen when findByPredio throws (regression: A.W6)', async () => {
+      vi.mocked(mockRepo.countNoLeidas).mockResolvedValue(0)
+      vi.mocked(mockRepo.countByTipo).mockResolvedValue([])
+      vi.mocked(mockRepo.findByPredio).mockRejectedValue(new Error('findByPredio failed'))
+
+      await expect(useCase.execute(1)).rejects.toThrow('findByPredio failed')
+    })
   })
 })

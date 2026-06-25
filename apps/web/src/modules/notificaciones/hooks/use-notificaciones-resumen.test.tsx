@@ -16,7 +16,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, type UseQueryOptions } from '@tanstack/react-query';
 
 // Mock online status (default: online)
 const mockUseOnlineStatus = vi.fn(() => true);
@@ -45,10 +45,10 @@ vi.mock('@/store/notificaciones.store', () => ({
 // Spy on useQuery options
 const useQuerySpy = vi.fn();
 vi.mock('@tanstack/react-query', async () => {
-  const actual = await vi.importActual<typeof import('@tanstack/react-query')>('@tanstack/react-query');
+  const actual = await vi.importActual('@tanstack/react-query');
   return {
     ...actual,
-    useQuery: (opts: unknown) => {
+    useQuery: (opts: UseQueryOptions) => {
       useQuerySpy(opts);
       return { data: undefined, isLoading: false, error: null };
     },

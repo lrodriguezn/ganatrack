@@ -45,6 +45,11 @@ export async function registerNotificacionesRoutes(app: FastifyInstance, repos: 
     preHandler: [authMiddleware, tenantContextMiddleware],
   }, async (request, reply) => {
     const predioId = getPredioId(request)
+    // Inline 403: tenantContextMiddleware silently sets predioId=0 on
+    // missing header (used by animales/maestros to allow listing all
+    // predios). For resumen we throw to match the spec contract.
+    // TODO: follow-up issue to refactor tenantContextMiddleware globally.
+    // Regression B.W3.
     if (predioId <= 0) {
       throw new ForbiddenError('X-Predio-Id es requerido')
     }

@@ -17,28 +17,27 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { createElement, type ReactNode } from 'react';
 import { render, screen } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Mock Radix Dialog primitives — only the parts NotificationCenter actually uses
-vi.mock('@radix-ui/react-dialog', () => {
-  const ReactMod = require('react');
-  return {
-    Root: ({ children, open }: { children: React.ReactNode; open: boolean }) =>
-      ReactMod.createElement('div', { 'data-dialog-root': '', 'data-open': open }, children),
-    Portal: ({ children }: { children: React.ReactNode }) => ReactMod.createElement('div', { 'data-dialog-portal': '' }, children),
-    Overlay: ({ children }: { children?: React.ReactNode }) =>
-      ReactMod.createElement('div', { 'data-dialog-overlay': '' }, children),
-    Content: ({ children }: { children: React.ReactNode }) =>
-      ReactMod.createElement('div', { 'data-dialog-content': '' }, children),
-    Title: ({ children }: { children: React.ReactNode }) =>
-      ReactMod.createElement('h2', null, children),
-    Description: ({ children }: { children: React.ReactNode }) =>
-      ReactMod.createElement('p', null, children),
-    Close: ({ children, ...rest }: { children: React.ReactNode; [k: string]: unknown }) =>
-      ReactMod.createElement('button', rest, children),
-  };
-});
+vi.mock('@radix-ui/react-dialog', () => ({
+  Root: ({ children, open }: { children: ReactNode; open: boolean }) =>
+    createElement('div', { 'data-dialog-root': '', 'data-open': open }, children),
+  Portal: ({ children }: { children: ReactNode }) =>
+    createElement('div', { 'data-dialog-portal': '' }, children),
+  Overlay: ({ children }: { children?: ReactNode }) =>
+    createElement('div', { 'data-dialog-overlay': '' }, children),
+  Content: ({ children }: { children: ReactNode }) =>
+    createElement('div', { 'data-dialog-content': '' }, children),
+  Title: ({ children }: { children: ReactNode }) =>
+    createElement('h2', null, children),
+  Description: ({ children }: { children: ReactNode }) =>
+    createElement('p', null, children),
+  Close: ({ children, ...rest }: { children: ReactNode; [k: string]: unknown }) =>
+    createElement('button', rest, children),
+}));
 
 // Mock next/link
 vi.mock('next/link', () => ({
@@ -164,6 +163,17 @@ describe('NotificationCenter — render', () => {
 
     expect(screen.getByText('No tienes notificaciones')).toBeInTheDocument();
     expect(screen.queryAllByTestId('notification-item')).toHaveLength(0);
+  });
+
+  it('shows the empty-state message when data is undefined (regression: A.W4)', async () => {
+    // After the A.W4 fix, the condition is `(!data?.ultimas || length === 0)`.
+    // The panel must show the empty-state when data is undefined (no cached
+    // data yet) — not just when ultimas is an empty array.
+    mockUseNotificacionesResumen.mockReturnValue({ data: undefined, isLoading: false, error: null });
+    const NotificationCenter = await importCenter();
+    render(<NotificationCenter />, { wrapper: createWrapper() });
+
+    expect(screen.getByText('No tienes notificaciones')).toBeInTheDocument();
   });
 
   it('shows the loading spinner when isLoading', async () => {

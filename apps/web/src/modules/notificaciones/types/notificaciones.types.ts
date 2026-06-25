@@ -58,6 +58,13 @@ export interface Notificacion {
 
 export interface NotificacionResumen {
   noLeidas: number;
+  /**
+   * Per-type unread counts. The API ships this in the /resumen
+   * payload; the UI does not consume it yet but reserves the field
+   * for future per-type badges in the panel.
+   * Regression A.W2.
+   */
+  porTipo?: { tipo: NotificacionTipo; count: number }[];
   ultimas: Notificacion[];     // Últimas 5 para preview
 }
 

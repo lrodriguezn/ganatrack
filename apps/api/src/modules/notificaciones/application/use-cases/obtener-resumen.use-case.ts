@@ -17,10 +17,16 @@ export class ObtenerResumenUseCase {
     @inject(NOTIFICACION_REPOSITORY) private readonly repo: INotificacionRepository
   ) {}
 
+  /**
+   * Atomic: any of the 3 calls failing rejects the whole resumen.
+   * Regression A.W6.
+   */
   async execute(predioId: number): Promise<NotificacionResumenDto> {
     const [noLeidas, porTipo, ultimasPage] = await Promise.all([
       this.repo.countNoLeidas(predioId),
       this.repo.countByTipo(predioId),
+      // ultimas order comes from findByPredio's desc(createdAt);
+      // see drizzle-notificacion.repository.ts:39-67. Regression B.W6.
       this.repo.findByPredio(predioId, { page: 1, limit: ULTIMAS_LIMIT }),
     ])
 
