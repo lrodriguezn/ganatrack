@@ -1,0 +1,2 @@
+CREATE INDEX `idx_notificaciones_predio_activo` ON `notificaciones` (`predio_id`,`activo`);--> statement-breakpoint
+CREATE INDEX `idx_notificaciones_predio_leida` ON `notificaciones` (`predio_id`,`leida`);
