@@ -2,7 +2,7 @@
 
 ## Context
 
-`GET /api/v1/notificaciones/resumen` returns 400 because the route is not registered; the request matches `GET /notificaciones/:id` with `id="resumen"` and fails Zod. The `tenantContextMiddleware` is also missing on that path, the DTO/use case omit the `ultimas` array, and commit `4fd86fa` stubbed the UI. Fix: register the static route before `:id`, add `tenantContextMiddleware` with an explicit 403 guard, populate `ultimas` via `findByPredio({ page: 1, limit: 5 })`, revert the three frontend files.
+`GET /api/v1/notificaciones/resumen` returns 400 because the route is not registered; the request matches `GET /notificaciones/:id` with `id="resumen"` and fails Zod. The `tenantContextMiddleware` is also missing on that path, the DTO/use case omit the `ultimas` array, and commit `4fd86fa` stubbed the UI. Fix: register the static route before `:id`, add `tenantContextMiddleware` with an explicit 403 guard, populate `ultimas` via `findByPredio({ page: 1, limit: ULTIMAS_LIMIT })`, revert the three frontend files.
 
 ## Goals / Non-Goals
 

@@ -31,14 +31,14 @@ Tests ship with code; commit by deliverable behavior. Two commits.
 ### 2. [GREEN] Register the route and add the 403 guard
 
 - [ ] 2.1 In `notificaciones.routes.ts`, register `app.get('/notificaciones/resumen', ...)` **before** `GET /notificaciones/:id`. PreHandler: `[authMiddleware, tenantContextMiddleware]`.
-- [ ] 2.2 Add the 403 guard: if `(request as any).predioId <= 0` throw `ForbiddenError('X-Predio-Id es requerido')`; then `obtenerResumenUseCase.execute(predioId)` and reply `{ success: true, data }`.
+- [ ] 2.2 Add the 403 guard: use the `getPredioId(request)` helper (extracted at the top of `notificaciones.routes.ts`); if `predioId <= 0` throw `ForbiddenError('X-Predio-Id es requerido')`; then `obtenerResumenUseCase.execute(predioId)` and reply `{ success: true, data }`.
 - [ ] 2.3 Rerun the integration spec; all six scenarios pass.
 
 ### 3. [GREEN] Extend the DTO and wire `findByPredio` into the use case
 
 - [ ] 3.1 In `notificacion.dto.ts`, add `ultimas: NotificacionResponseDto[]` to `NotificacionResumenDto`.
-- [ ] 3.2 In `obtener-resumen.use-case.ts`, run `Promise.all([countNoLeidas, countByTipo, findByPredio(predioId, { page: 1, limit: 5 })])`; map the third result via `NotificacionMapper.toResponseDto` into `ultimas`.
-- [ ] 3.3 In `obtener-resumen.use-case.spec.ts`, assert `result.ultimas.length <= 5`, newest-first ordering, and that `findByPredio` was called with `{ page: 1, limit: 5 }`.
+- [ ] 3.2 In `obtener-resumen.use-case.ts`, run `Promise.all([countNoLeidas, countByTipo, findByPredio(predioId, { page: 1, limit: ULTIMAS_LIMIT })])`; map the third result via `NotificacionMapper.toResponseDto` into `ultimas`. The cap (`ULTIMAS_LIMIT = 5`) is the repository's job — the use case is a pass-through.
+- [ ] 3.3 In `obtener-resumen.use-case.spec.ts`, assert the **pass-through contract**: when the repository returns 5 items, `result.ultimas.length === 5`; when it returns 10 items, `result.ultimas.length === 10`. The actual cap is asserted in the integration spec (seed 12 rows → `length === 5`). Newest-first ordering comes from `findByPredio`'s `desc(createdAt)`.
 
 ### 4. Revert the frontend workaround (`4fd86fa`)
 
