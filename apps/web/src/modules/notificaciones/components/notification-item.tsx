@@ -31,12 +31,19 @@ interface NotificationItemProps {
 }
 
 const TIPO_ICONS: Record<NotificacionTipo, React.ComponentType<{ className?: string }>> = {
+  // web-native (lower_snake)
   parto_proximo: HeartIcon,
   celo_detectado: BellAlertIcon,
   servicio_pendiente: ArrowPathIcon,
   alerta_sanitaria: ExclamationTriangleIcon,
   sync_completado: CheckCircleIcon,
   sync_fallido: ExclamationTriangleIcon,
+  // API surface (UPPER_SNAKE) — regression A.C3
+  PARTO_PROXIMO: HeartIcon,
+  CELO_ESTIMADO: BellAlertIcon,
+  INSEMINACION_PENDIENTE: ArrowPathIcon,
+  VACUNA_PENDIENTE: ExclamationTriangleIcon,
+  ANIMAL_ENFERMO: ExclamationTriangleIcon,
 };
 
 function relativeDate(isoDate: string): string {
