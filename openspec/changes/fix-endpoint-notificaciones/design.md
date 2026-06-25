@@ -20,7 +20,7 @@ Inline use-case instantiation matches the existing pattern in this file (line 20
 app.get('/notificaciones/resumen', {
   preHandler: [authMiddleware, tenantContextMiddleware],
 }, async (request, reply) => {
-  const predioId = (request as any).predioId ?? 0
+  const predioId = getPredioId(request)
   if (predioId <= 0) throw new ForbiddenError('X-Predio-Id es requerido')
   const data = await obtenerResumenUseCase.execute(predioId)
   return reply.code(200).send({ success: true, data })
@@ -33,7 +33,7 @@ app.get('/notificaciones/resumen', {
 const [noLeidas, porTipo, ultimasPage] = await Promise.all([
   this.repo.countNoLeidas(predioId),
   this.repo.countByTipo(predioId),
-  this.repo.findByPredio(predioId, { page: 1, limit: 5 }),
+  this.repo.findByPredio(predioId, { page: 1, limit: ULTIMAS_LIMIT }),
 ])
 return {
   noLeidas,
@@ -66,7 +66,7 @@ Three reverts reversing `4fd86fa`:
 |---|---|
 | `use-notificaciones-resumen.ts` | `enabled: false` → `enabled: isOnline && !!predioId` (drop 2 comment lines) |
 | `notification-bell.tsx` | Uncomment `<Badge count={unreadCount} max={99} />` |
-| `notification-center.tsx` | Empty-state condition: `(!data?.ultimas \|\| length === 0)` → `data?.ultimas && length === 0` |
+| `notification-center.tsx` | Empty-state condition: `data?.ultimas && length === 0` → `(!data?.ultimas \|\| length === 0)` (defensive: shows empty state also when `data === undefined`) |
 
 ## Tenant Middleware Decision
 
@@ -86,7 +86,7 @@ The check catches the `predioId === 0` case set by the middleware when the heade
 
 1. **RED** — write the integration spec covering all 6 HTTP scenarios. Watch it fail (route missing).
 2. **GREEN** — register the route + tenant middleware + 403 guard; add `ultimas` to DTO. All 6 HTTP tests pass.
-3. **REFACTOR** — wire `findByPredio({ page: 1, limit: 5 })` into the use case. Update `obtener-resumen.use-case.spec.ts` to assert `result.ultimas.length <= 5` and that `findByPredio` was called with `{ page: 1, limit: 5 }`.
+3. **REFACTOR** — wire `findByPredio({ page: 1, limit: ULTIMAS_LIMIT })` into the use case. Update `obtener-resumen.use-case.spec.ts` to assert the **pass-through contract**: `findByPredio` is called with `{ page: 1, limit: ULTIMAS_LIMIT }` and the use case returns the items unchanged in count and order (asserts both 5-item and 10-item cases). The cap is the repository's job, not the use case's.
 
 ### Integration test pattern (from `configuracion.integration.spec.ts`)
 
@@ -103,7 +103,10 @@ The check catches the `predioId === 0` case set by the middleware when the heade
 | 200 with empty list | empty DB → `ultimas === []`, `noLeidas === 0`, `porTipo === []` |
 | ultimas newest-first, max 5 | seed 12 → `length === 5`, first is newest |
 
-Frontend scenarios (polling, badge, panel) revert to pre-workaround code that already passed existing tests; no new frontend tests required.
+Frontend scenarios (polling, badge, panel) are now covered by **three new test files** added in the Round 1 review fixes:
+- `use-notificaciones-resumen.test.tsx` (7 tests: enabled flag, refetchInterval, online/offline behavior, store sync)
+- `notification-bell.test.tsx` (8 tests: badge count, max=99, conditional render)
+- `notification-center.test.tsx` (7 tests: ultimas list rendering, empty state, data-undefined regression)
 
 ## Rollout
 
