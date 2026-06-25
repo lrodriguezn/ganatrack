@@ -132,8 +132,6 @@ describe('GET /notificaciones/resumen (HTTP)', () => {
 
   // -------- Scenario: 200 with valid X-Predio-Id --------
   testOrSkip('GET /notificaciones/resumen returns 200 with valid X-Predio-Id', async () => {
-    if (!app) return
-
     const response = await app.inject({
       method: 'GET',
       url: '/notificaciones/resumen',
@@ -154,8 +152,6 @@ describe('GET /notificaciones/resumen (HTTP)', () => {
 
   // -------- Scenario: 403 when X-Predio-Id is missing --------
   testOrSkip('GET /notificaciones/resumen returns 403 when X-Predio-Id is missing', async () => {
-    if (!app) return
-
     const response = await app.inject({
       method: 'GET',
       url: '/notificaciones/resumen',
@@ -164,13 +160,12 @@ describe('GET /notificaciones/resumen (HTTP)', () => {
 
     expect(response.statusCode).toBe(403)
     const body = response.json()
+    expect(body.success).toBe(false)
     expect(body.error?.code).toBe('FORBIDDEN')
   })
 
   // -------- Scenario: 401 when auth is missing --------
   testOrSkip('GET /notificaciones/resumen returns 401 when auth is missing', async () => {
-    if (!app) return
-
     const response = await app.inject({
       method: 'GET',
       url: '/notificaciones/resumen',
@@ -178,12 +173,16 @@ describe('GET /notificaciones/resumen (HTTP)', () => {
     })
 
     expect(response.statusCode).toBe(401)
+    // Regression A.W5: the 401 path should follow the same success/error
+    // envelope as 403/404. The error.code 'UNAUTHORIZED' is emitted by
+    // the global error handler for missing/invalid auth.
+    const body = response.json()
+    expect(body.success).toBe(false)
+    expect(body.error?.code).toBe('UNAUTHORIZED')
   })
 
   // -------- Scenario: route ordering — resumen must NOT match :id --------
   testOrSkip('GET /notificaciones/resumen does not match /:id and returns resumen payload', async () => {
-    if (!app) return
-
     const response = await app.inject({
       method: 'GET',
       url: '/notificaciones/resumen',
@@ -193,10 +192,12 @@ describe('GET /notificaciones/resumen (HTTP)', () => {
       },
     })
 
-    // If the request matched :id, the route handler returns { success: true, data: {} }
-    // which lacks noLeidas/porTipo/ultimas. We assert the resumen-specific shape.
+    // Proves the request matched /resumen (with ultimas) NOT /:id
+    // (which returns data: {}). Regression B.W4: assert the routing
+    // invariant explicitly, not just the shape.
     const body = response.json()
     expect(body.success).toBe(true)
+    expect(Object.keys(body.data).length).toBeGreaterThan(0)
     expect(body.data).toHaveProperty('noLeidas')
     expect(body.data).toHaveProperty('porTipo')
     expect(body.data).toHaveProperty('ultimas')
@@ -204,8 +205,6 @@ describe('GET /notificaciones/resumen (HTTP)', () => {
 
   // -------- Scenario: 200 with empty list --------
   testOrSkip('GET /notificaciones/resumen returns empty ultimas and zero counts on empty DB', async () => {
-    if (!app) return
-
     const response = await app.inject({
       method: 'GET',
       url: '/notificaciones/resumen',
@@ -224,8 +223,6 @@ describe('GET /notificaciones/resumen (HTTP)', () => {
 
   // -------- Scenario: ultimas newest-first, max 5 --------
   testOrSkip('GET /notificaciones/resumen returns ultimas newest-first with max 5 items', async () => {
-    if (!app) return
-
     // Seed 12 rows with monotonically increasing timestamps
     const schema = await import('@ganatrack/database/schema')
     const { notificaciones } = schema

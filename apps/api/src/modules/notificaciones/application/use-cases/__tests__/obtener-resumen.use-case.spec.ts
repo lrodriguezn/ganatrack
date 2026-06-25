@@ -121,7 +121,10 @@ describe('ObtenerResumenUseCase', () => {
       expect(mockRepo.findByPredio).toHaveBeenCalledWith(1, { page: 1, limit: 5 })
     })
 
-    it('should cap ultimas to 5 items (enforced by repository limit)', async () => {
+    it('should pass through repository items without modifying count (regression: A.W3)', async () => {
+      // Contract: the use case is a pass-through for `ultimas`. The repository
+      // is responsible for the `limit: 5` cap (via `findByPredio` options).
+      // The use case must not slice, dedupe, or reorder `ultimas`.
       const baseRow = {
         id: 0,
         predioId: 1,
@@ -135,6 +138,8 @@ describe('ObtenerResumenUseCase', () => {
         fechaEvento: null,
         activo: 1,
       }
+
+      // Case 1: repository returns 5 items — use case returns 5.
       const fiveRows = Array.from({ length: 5 }, (_, i) => ({
         ...baseRow,
         id: 100 + i,
@@ -147,10 +152,25 @@ describe('ObtenerResumenUseCase', () => {
       ])
       vi.mocked(mockRepo.findByPredio).mockResolvedValue({ data: fiveRows, total: 5 })
 
-      const result = await useCase.execute(1)
+      const result5 = await useCase.execute(1)
+      expect(result5.ultimas).toHaveLength(5)
 
-      expect(result.ultimas.length).toBeLessThanOrEqual(5)
-      expect(result.ultimas.length).toBe(5)
+      // Case 2: repository returns 10 items — use case still returns 10.
+      // (The cap is the repository's job, not the use case's.)
+      const tenRows = Array.from({ length: 10 }, (_, i) => ({
+        ...baseRow,
+        id: 200 + i,
+        titulo: `t${i}`,
+        createdAt: new Date(2026, 0, 2, 0, 10 - i),
+      }))
+      vi.mocked(mockRepo.countNoLeidas).mockResolvedValue(10)
+      vi.mocked(mockRepo.countByTipo).mockResolvedValue([
+        { tipo: 'PARTO_PROXIMO', count: 10 },
+      ])
+      vi.mocked(mockRepo.findByPredio).mockResolvedValue({ data: tenRows, total: 10 })
+
+      const result10 = await useCase.execute(1)
+      expect(result10.ultimas).toHaveLength(10)
     })
   })
 })
